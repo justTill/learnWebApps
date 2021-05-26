@@ -1,0 +1,30 @@
+version: '3'
+services:
+  node-server:
+    build: ./server
+    ports:
+      - "3080:3080"
+    container_name: learnWebAppsBackend
+    volumes:
+      - ./server:/usr/src/app/server
+      - /usr/src/app/server/node_modules
+  #    depends_on:
+  #     - db
+  vue-client:
+    build: ./client
+    ports:
+      - "8080:8080"
+    container_name: learnWebAppsFrontend
+    volumes:
+      - ./client:/usr/src/app/client
+      - /usr/src/app/client/node_modules
+#  db:
+#    image: postgres:11.0-alpine
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data/
+#    environment:
+#      - POSTGRES_USER=${SQL_USER}
+#      - POSTGRES_PASSWORD=${SQL_PASSWORD}
+#      - POSTGRES_DB=${DATABASE_NAME}
+#volumes:
+#  postgres_data
