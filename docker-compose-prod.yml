@@ -36,7 +36,3 @@ services:
       - POSTGRES_DB=${DATABSE_NAME}
 volumes:
   postgres_data:
-
-# env Datei damit server db daten hat
-# get data into node for db anbindung
-# vue store, routes with user data
