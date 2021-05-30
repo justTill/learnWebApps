@@ -1,5 +1,6 @@
 # Logs
 .idea
+.env.prod
 /client/dist
 logs
 *.log
