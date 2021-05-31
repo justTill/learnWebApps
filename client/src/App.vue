@@ -1,18 +1,29 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <button v-on:click="test">Mein button</button>
+    <p>Startseite</p>
+    <p>{{ username }}</p>
+    <p>{{ userID }}</p>
+    <router-link to="/">Startseite</router-link>
+    <router-link to="/about">Go to about</router-link>
+    <router-link :to="{ name: 'test', params: {name: username, id: userID } }">Go to test</router-link>
+    <router-link to="/hello">Go to Helloworld</router-link>
+    <router-view class="view"></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'app',
-  components: {
-    HelloWorld
+  components: {},
+  computed: {
+    username() {
+      //in Store speichern!!!
+      return this.$route.query.name
+    },
+    userID() {
+      return this.$route.query.userId
+    }
   },
   methods: {
     test: async function () {

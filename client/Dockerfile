@@ -4,6 +4,7 @@ WORKDIR /usr/src/app/client
 
 COPY package.json ./
 COPY package-lock.json ./
+COPY ./src ./
 
 RUN npm install
 
