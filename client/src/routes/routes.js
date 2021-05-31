@@ -1,11 +1,17 @@
 import about from "@/components/about";
 import test from "@/components/Test";
 import hello from "@/components/HelloWorld";
-import App from "@/App";
+import VueRouter from "vue-router";
+import Vue from 'vue'
 
-export const routes = [
-    {path: '/', component: App},
+Vue.use(VueRouter)
+
+const routes = [
     {path: '/about', component: about},
-    {path: '/test/:name/:id', name: "test", component: test, props: true},
+    {path: '/test/', component: test},
     {path: '/hello', component: hello},
 ]
+
+export const router = new VueRouter({
+    routes
+})

@@ -1,17 +1,22 @@
 <template>
   <div class="test">
     <h1>Hier ist ein test</h1>
-    <p>{{ name }}</p>
-    <p>{{ id }}</p>
+    <p>{{ userName }}</p>
+    <p>{{ userId }}</p>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Test',
-  props: {
-    name: String,
-    id: String
+  props: {},
+  computed: {
+    userName() {
+      return this.$store.state.userName
+    },
+    userId() {
+      return this.$store.state.userId
+    }
   }
 }
 </script>

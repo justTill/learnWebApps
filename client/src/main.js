@@ -1,16 +1,21 @@
 import Vue from 'vue'
 import App from './App.vue'
-import VueRouter from 'vue-router'
-import {routes} from '@/routes.js'
+import {router} from '@/./routes/routes'
+import {store} from '@/stores/store.js'
 
-Vue.use(VueRouter)
 Vue.config.productionTip = false
 
-const router = new VueRouter({
-  routes
-})
 
-new Vue({
+let vm = new Vue({
   render: h => h(App),
-  router
+  router,
+  store,
+  beforeCreate() {
+    let userId = this.$route.query.userId;
+    let userName = this.$route.query.userName;
+    this.$store.commit("setUserId", userId ? userId : -1)
+    this.$store.commit("setUserName", userName ? userName : "")
+    console.log("do stuff like collect data")
+  }
 }).$mount('#app')
+
