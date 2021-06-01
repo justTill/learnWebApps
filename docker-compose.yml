@@ -1,0 +1,41 @@
+version: '3'
+services:
+  node-server:
+    build: ./server
+    ports:
+      - "3080:3080"
+    container_name: learnWebAppsBackend
+    environment:
+      - DATABASE=postgres
+      - DB_USER=webAdmin
+      - DB_PASSWORD=defaultPasswort
+      - DB_Name=learnWebApps
+      - DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
+      - SQL_HOST=db
+      - SQL_PORT=5432
+    volumes:
+      - ./server:/usr/src/app/server
+      - /usr/src/app/server/node_modules
+    depends_on:
+      - db
+  vue-client:
+    build: ./client
+    ports:
+      - "8080:8080"
+    container_name: learnWebAppsFrontend
+    volumes:
+      - ./client:/usr/src/app/client
+      - /usr/src/app/client/node_modules
+  db:
+    image: postgres:11.0-alpine
+    container_name: ${DB_CONTAINER_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=webAdmin
+      - POSTGRES_PASSWORD=defaultPasswort
+      - POSTGRES_DB=learnWebApps
+    ports:
+      - 5432:5432
+volumes:
+  postgres_data:

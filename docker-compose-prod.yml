@@ -1,0 +1,38 @@
+version: '3'
+services:
+  node-server:
+    build: ./server
+    ports:
+      - "3080:3080"
+    container_name: learnWebAppsBackendProd
+    volumes:
+      - ./server:/usr/src/app/server
+      - /usr/src/app/server/node_modules
+    environment:
+      - DATABASE=postgres
+      - DB_USER=${SQL_USER}
+      - DB_PASSWORD=${SQL_PW}
+      - DB_Name=${DATABSE_NAME}
+      - DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
+      - SQL_HOST=db
+      - SQL_PORT=5432
+    depends_on:
+      - db
+  vue-nginx-client:
+    container_name: learnWebAppsFrontendProd
+    build:
+      context: ./client
+      dockerfile: Dockerfile-prod
+    ports:
+      - '80:80'
+  db:
+    image: postgres:11.0-alpine
+    container_name: ${DB_CONTAINER_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PW}
+      - POSTGRES_DB=${DATABSE_NAME}
+volumes:
+  postgres_data:
