@@ -3,10 +3,10 @@ on:
   push:
 
 env:
-  DB_CONTAINER_NAME:learnWebAppsDBProd
-  SQL_USER:prodUser
-  SQL_PW:prodPW
-  DATABASE_NAME:LearnWebappsProd
+  DB_CONTAINER_NAME: learnWebAppsDBProd
+  SQL_USER: prodUser
+  SQL_PW: prodPW
+  DATABASE_NAME: LearnWebappsProd
 
 jobs:
   buildAndPush:
