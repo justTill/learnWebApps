@@ -13,7 +13,7 @@ services:
       - DATABASE=postgres
       - DB_USER=${SQL_USER}
       - DB_PASSWORD=${SQL_PW}
-      - DB_Name=${DATABSE_NAME}
+      - DB_Name=${DATABASE_NAME}
       - DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
       - SQL_HOST=db
       - SQL_PORT=5432
