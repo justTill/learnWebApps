@@ -35,6 +35,6 @@ services:
     environment:
       - POSTGRES_USER=${SQL_USER}
       - POSTGRES_PASSWORD=${SQL_PW}
-      - POSTGRES_DB=${DATABSE_NAME}
+      - POSTGRES_DB=${DATABASE_NAME}
 volumes:
   postgres_data:
