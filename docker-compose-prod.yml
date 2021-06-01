@@ -20,7 +20,7 @@ services:
     depends_on:
       - db
   vue-nginx-client:
-    mage: justtill/learn_web_apps:frontend_with_nginx_latest
+    image: justtill/learn_web_apps:frontend_with_nginx_latest
     container_name: learnWebAppsFrontendProd
     build:
       context: ./client
