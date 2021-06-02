@@ -11,6 +11,3 @@ const myConfig = {
 const instTs = new Liquibase(myConfig);
 
 instTs.update().then(r => console.log("Successfully run liquibase")).catch(e => process.exit(1));
-
-
-//yarn node-liquibase --changeLogFile="./changelog.json" --url="jdbc:postgresql://localhost:5432/learnWebApps" --username="webAdmin" --password="defaultPasswort" --classpath=postgresql-42.2.20.jar update
