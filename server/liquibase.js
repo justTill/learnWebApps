@@ -10,4 +10,9 @@ const myConfig = {
 }
 const instTs = new Liquibase(myConfig);
 
-instTs.update().then(r => console.log("Successfully run liquibase")).catch(e => process.exit(1));
+instTs.status()
+    .then(r => {
+        instTs.update()
+            .then(console.log("Successfully run liquibase"))
+            .catch(e => console.log(e))
+    }).catch(e => console.log(e));

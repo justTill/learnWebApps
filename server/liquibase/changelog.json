@@ -4,10 +4,11 @@
       "changeSet": {
         "id": "1",
         "author": "till Pilarczyk",
+        "comment": "add table admins",
         "changes": [
           {
             "createTable": {
-              "tableName": "person",
+              "tableName": "admins",
               "columns": [
                 {
                   "column": {
@@ -22,14 +23,8 @@
                 },
                 {
                   "column": {
-                    "name": "firstname",
-                    "type": "varchar(50)"
-                  }
-                },
-                {
-                  "column": {
-                    "name": "lastname",
-                    "type": "varchar(50)",
+                    "name": "userName",
+                    "type": "varchar(255)",
                     "constraints": {
                       "nullable": false
                     }
@@ -37,8 +32,63 @@
                 },
                 {
                   "column": {
-                    "name": "state",
-                    "type": "char(2)"
+                    "name": "password",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "email",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "changeSet": {
+        "id": "2",
+        "author": "till Pilarczyk",
+        "comment": "add table persons",
+        "changes": [
+          {
+            "createTable": {
+              "tableName": "persons",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "int",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "moodleId",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "moodleName",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
                   }
                 }
               ]
