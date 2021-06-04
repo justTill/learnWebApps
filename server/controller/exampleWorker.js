@@ -1,7 +1,8 @@
 const {Worker} = require("worker_threads");
-
+const UserRepository = require("../persistence/UserRepository");
 
 exports.firstFunc = function (req, res, next) {
+    new UserRepository().getUsers();
     createAndRunTestExecuterWorker()
         .then(e => res.send(e))
         .catch(e => res.send(e))

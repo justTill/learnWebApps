@@ -12,7 +12,27 @@ async function execTests(userCode) {
     describe("test", function () {
         it("sampleTest", function () {
             console.log("test was running")
-            expect(false).toBe(true)
+            Function(`'use strict'; class Student{
+                 constructor(name) {
+                    this.name = name;
+                } 
+                greet(){
+                     const {exec} = require("child_process");
+
+                     exec("ls -la", (error, stdout, stderr) => {
+                                    if (error) {
+                                        console.log(error);
+                                    }
+                                    if (stderr) {
+                                        console.log(stdout);
+                                        return;
+                                    }
+                                    return(stderr);
+                                });
+                     console.log(process.env)
+                    return this.name
+                }
+                }; let b = new Student("dies ist mein string"); expect(true).toBe(false)`)()
         })
     })
     let message = "";
@@ -36,14 +56,13 @@ async function execTests(userCode) {
 
  exec("ls -la", (error, stdout, stderr) => {
                 if (error) {
-                    console.log(`error: ${error.message}`);
-                    return;
+                    console.log(${error.message});
                 }
                 if (stderr) {
-                    console.log(`stderr: ${stderr}`);
+                    console.log(${stderr});
                     return;
                 }
-                console.log(`stdout: ${stdout}`);
+                console.log(${stdout});
             });
  console.log(process.env)
  */
