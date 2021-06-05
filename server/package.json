@@ -15,7 +15,7 @@
     "http-errors": "~1.6.3",
     "jade": "^1.9.2",
     "jasmine": "^3.7.0",
-    "liquibase": "^4.3.11",
+    "liquibase-wrapper": "^1.0.2",
     "morgan": "~1.9.1",
     "pg": "^8.6.0",
     "worker-threads": "^1.0.0"

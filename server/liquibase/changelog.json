@@ -52,7 +52,9 @@
             }
           }
         ]
-      },
+      }
+    },
+    {
       "changeSet": {
         "id": "2",
         "author": "till Pilarczyk",
