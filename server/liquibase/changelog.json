@@ -16,6 +16,15 @@
             }
           },
           {
+            "sqlFile": {
+              "comment": "create session table",
+              "endDelimiter": "GO",
+              "splitStatements": true,
+              "path": "./sessionTable.sql",
+              "stripComments": true
+            }
+          },
+          {
             "createTable": {
               "tableName": "admins",
               "columns": [
@@ -35,7 +44,8 @@
                     "name": "userName",
                     "type": "varchar(255)",
                     "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "unique": true
                     }
                   }
                 },
@@ -53,7 +63,8 @@
                     "name": "email",
                     "type": "varchar(255)",
                     "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "unique": true
                     }
                   }
                 }
