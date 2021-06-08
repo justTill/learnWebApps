@@ -20,6 +20,7 @@
               "comment": "create session table",
               "endDelimiter": "GO",
               "splitStatements": true,
+              "relativeToChangelogFile": "true",
               "path": "./sessionTable.sql",
               "stripComments": true
             }
@@ -41,17 +42,16 @@
                 },
                 {
                   "column": {
-                    "name": "userName",
+                    "name": "hash",
                     "type": "varchar(255)",
                     "constraints": {
-                      "nullable": false,
-                      "unique": true
+                      "nullable": false
                     }
                   }
                 },
                 {
                   "column": {
-                    "name": "password",
+                    "name": "salt",
                     "type": "varchar(255)",
                     "constraints": {
                       "nullable": false

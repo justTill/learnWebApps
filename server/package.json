@@ -13,12 +13,14 @@
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-pg-session": "^1.1.0",
+    "express-session": "^1.17.2",
     "http-errors": "~1.6.3",
     "jade": "^1.9.2",
     "jasmine": "^3.7.0",
     "liquibase-wrapper": "^1.0.2",
     "morgan": "~1.9.1",
     "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "pg": "^8.6.0",
     "worker-threads": "^1.0.0"
   }
