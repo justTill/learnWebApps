@@ -65,17 +65,19 @@ passport.serializeUser(function (user, cb) {
 });
 
 passport.deserializeUser(function (id, cb) {
-    UserRepository.findAdminById(id).then(row => cb(null, row[0])).catch(err => cb(err))
+    UserRepository.findAdminById(id).then(row => {
+        cb(null, row[0]);
+    }).catch(err => console.log("HERERERE" + err))
 });
 
 
 app.use(session({
     store: new pgSession({
-        pool: pgPool,                // Connection pool
-        tableName: 'sessions'   // Use another table-name than the default "session" one
+        pool: pgPool,
+        tableName: 'sessions'
     }),
-    secret: "daksjd",
-    resave: false,
+    secret: process.env.SESSION_KEY,
+    resave: true,
     saveUninitialized: false,
     cookie: {maxAge: 30 * 24 * 60 * 60 * 1000} // 30 days
 }));

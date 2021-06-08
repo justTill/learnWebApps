@@ -36,7 +36,7 @@ class UserRepository {
     }
 
     static async saveAdmin(email, hash, salt) {
-        let query = "INSERT INTO admins (hash, salt, email)VALUES ($1, $2, $3)";
+        let query = "INSERT INTO admins (hash, salt, email) VALUES ($1, $2, $3)";
         this.#pool.query(query, [hash, salt, email])
             .then(res => {
                 return res
