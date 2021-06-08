@@ -1,16 +1,14 @@
-const Liquibase = require('liquibase').Liquibase;
-const POSTGRESQL_DEFAULT_CONFIG = require('liquibase').POSTGRESQL_DEFAULT_CONFIG;
-
-const myConfig = {
-    ...POSTGRESQL_DEFAULT_CONFIG,
+const liquibase = require("liquibase-wrapper");
+const config = {
     changeLogFile: './liquibase/changelog.json',
     url: 'jdbc:postgresql://' + process.env.DB_CONTAINER_NAME + ':5432/' + process.env.DB_Name,
-    username: process.env.DB_USER, //'webAdmin',
+    username: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
+    classpath: "postgres/postgresql-42.2.18.jar"
 }
-const instTs = new Liquibase(myConfig);
 
-instTs.update().then(r => console.log("Successfully run liquibase")).catch(e => process.exit(1));
-
-
-//yarn node-liquibase --changeLogFile="./changelog.json" --url="jdbc:postgresql://localhost:5432/learnWebApps" --username="webAdmin" --password="defaultPasswort" --classpath=postgresql-42.2.20.jar update
+liquibase(config).run("update")
+    .then(() => console.log('success'))
+    .catch((err) => {
+        console.log("Failed to run Liquibase update: ", err);
+    });

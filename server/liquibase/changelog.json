@@ -4,10 +4,20 @@
       "changeSet": {
         "id": "1",
         "author": "till Pilarczyk",
+        "comment": "add table admins",
         "changes": [
           {
+            "sql": {
+              "comment": "create lessons type enum",
+              "endDelimiter": "GO",
+              "splitStatements": true,
+              "sql": "CREATE TYPE verificationType AS ENUM ('JASMINE','SELF')",
+              "stripComments": true
+            }
+          },
+          {
             "createTable": {
-              "tableName": "person",
+              "tableName": "admins",
               "columns": [
                 {
                   "column": {
@@ -22,14 +32,8 @@
                 },
                 {
                   "column": {
-                    "name": "firstname",
-                    "type": "varchar(50)"
-                  }
-                },
-                {
-                  "column": {
-                    "name": "lastname",
-                    "type": "varchar(50)",
+                    "name": "userName",
+                    "type": "varchar(255)",
                     "constraints": {
                       "nullable": false
                     }
@@ -37,8 +41,551 @@
                 },
                 {
                   "column": {
-                    "name": "state",
-                    "type": "char(2)"
+                    "name": "password",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "email",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "createTable": {
+              "tableName": "persons",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "int",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "moodleId",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "moodleName",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "createTable": {
+              "tableName": "chapters",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "int",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "overview",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "name",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "sequenceNumber",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false,
+                      "unique": true
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "createTable": {
+              "tableName": "sections",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "int",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "chapterNumber",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "name",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "sequenceNumber",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "information",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "createTable": {
+              "tableName": "solvedLessons",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "int",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "moodleId",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "lessonsId",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "code",
+                    "type": "varchar(255)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "createTable": {
+              "tableName": "problems",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "int",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "moodleId",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "moodleName",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "message",
+                    "type": "varchar(255)"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "createdAt",
+                    "type": "datetime",
+                    "defaultValueComputed": "CURRENT_TIMESTAMP",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "createTable": {
+              "tableName": "notifications",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "int",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "moodleId",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "answer",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "createdAt",
+                    "type": "datetime",
+                    "defaultValueComputed": "CURRENT_TIMESTAMP",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "createTable": {
+              "tableName": "singleMultipleChoiceLessons",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "int",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "sectionNumber",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "sequenceNumber",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "information",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "answerOptions",
+                    "type": "varchar(255) []",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "correctAnswers",
+                    "type": "varchar(255) []",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "createTable": {
+              "tableName": "codingLessons",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "int",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "sectionNumber",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "sequenceNumber",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "information",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "verificationType",
+                    "type": "verificationType",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "verificationCode",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "exampleSolution",
+                    "type": "varchar(255)"
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "createTable": {
+              "tableName": "fillTheBlankLessons",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "int",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "sectionNumber",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "sequenceNumber",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "information",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "text",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "answers",
+                    "type": "varchar(255) []",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "createTable": {
+              "tableName": "codeExtensionLessons",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "int",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "sectionNumber",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "sequenceNumber",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "information",
+                    "type": "varchar(255)"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "text",
+                    "type": "varchar(255) []",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "answers",
+                    "type": "varchar(255) []",
+                    "constraints": {
+                      "nullable": false
+                    }
                   }
                 }
               ]
