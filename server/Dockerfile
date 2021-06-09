@@ -6,6 +6,7 @@ WORKDIR /usr/src/app/server
 
 COPY package*.json ./
 COPY liquibase/changelog.json ./
+COPY liquibase/sessionTable.sql  ./
 COPY liquibase.js ./
 COPY entrypoint.sh ./
 

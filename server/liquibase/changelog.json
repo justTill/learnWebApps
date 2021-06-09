@@ -16,6 +16,16 @@
             }
           },
           {
+            "sqlFile": {
+              "comment": "create session table",
+              "endDelimiter": "GO",
+              "splitStatements": true,
+              "relativeToChangelogFile": "true",
+              "path": "./sessionTable.sql",
+              "stripComments": true
+            }
+          },
+          {
             "createTable": {
               "tableName": "admins",
               "columns": [
@@ -32,7 +42,7 @@
                 },
                 {
                   "column": {
-                    "name": "userName",
+                    "name": "hash",
                     "type": "varchar(255)",
                     "constraints": {
                       "nullable": false
@@ -41,7 +51,7 @@
                 },
                 {
                   "column": {
-                    "name": "password",
+                    "name": "salt",
                     "type": "varchar(255)",
                     "constraints": {
                       "nullable": false
@@ -53,7 +63,8 @@
                     "name": "email",
                     "type": "varchar(255)",
                     "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "unique": true
                     }
                   }
                 }
@@ -463,6 +474,12 @@
                   "column": {
                     "name": "exampleSolution",
                     "type": "varchar(255)"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "verificationInformations",
+                    "type": "varchar(255) []"
                   }
                 }
               ]
