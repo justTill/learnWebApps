@@ -475,6 +475,12 @@
                     "name": "exampleSolution",
                     "type": "varchar(255)"
                   }
+                },
+                {
+                  "column": {
+                    "name": "verificationInformations",
+                    "type": "varchar(255) []"
+                  }
                 }
               ]
             }

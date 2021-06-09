@@ -4,7 +4,7 @@ var UserRepository = require("../persistence/UserRepository")
 
 exports.authenticate = passport.authenticate('local', {
     failureRedirect: '/',
-    successRedirect: '/protected-route'
+    successRedirect: '/'
 }), (err, req, res, next) => {
     if (err) next(err);
 };

@@ -15,8 +15,19 @@ function isLoggedIn(req, res, next) {
     }
 }
 
+router.get('/notifications', isLoggedIn, (req, res, next) => {
+    res.render('users/notifications')
+})
+router.get('/overview', isLoggedIn, (req, res, next) => {
+    res.render('users/overview')
+})
+router.get('/chapter', isLoggedIn, (req, res, next) => {
+    res.render('create/chapter')
+})
+
 router.get('/', asyncMiddleware(async (req, res, next) => {
-    res.render("index")
+    let isLoggedIn = req.isAuthenticated()
+    res.render("index", {"isLoggedIn": isLoggedIn})
 }));
 
 router.get('/logout', isLoggedIn, userController.logout);
@@ -36,9 +47,5 @@ router.get('/register', (req, res, next) => {
 router.post('/login', userController.authenticate);
 router.post('/register', userController.registerUser);
 
-
-router.get('/protected-route', isLoggedIn, (req, res, next) => {
-    res.send('<h1>You are authenticated</h1><p><a href="/logout">Logout and reload</a></p>');
-});
 
 module.exports = router;
