@@ -6,6 +6,7 @@
     "start": "node server.bundle.js",
     "build": "webpack",
     "dev": "node ./app.js localhost 3080",
+    "dev-nodemon": "nodemon ./app.js localhost 3080",
     "start:prod": "node ./app.js"
   },
   "dependencies": {

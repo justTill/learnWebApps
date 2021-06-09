@@ -1,4 +1,10 @@
 extends ../layout
 
 block content
-    h1 Erstelle ein Kapitel
+    h1 Aktuelle Kapitel
+    each chapter in chapters
+        p= chapter.name
+            span!= chapter.overview
+        a(href='/chapter/#{chapter.id}') Kapitel bearbeiten
+    div
+        a(href='/createChapter') Kapitel erstellen

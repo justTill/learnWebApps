@@ -1,0 +1,20 @@
+extends ../layout
+
+block content
+    h1 Kapitel Erstellen
+    h3 Hinweise an den Dozenten
+    form(action="/saveChapter" method="post")
+        div.input
+            span.label Kapitelname
+            br
+            input(type="text" name="chapterName" required)
+        div.input
+            span.label Übersichtstext
+            br
+            textarea(name="overview" required)
+        div.input
+            span.label Kapitelnummer
+            br
+            input(type="number" name="chapterNumber" required)
+        div.actions
+            input(type="submit" value="Kapitel Speichern")

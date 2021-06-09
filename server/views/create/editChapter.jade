@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+    h1 Kapitel bearbeiten
+    form(action="/saveChapter" method="post")
+        div.input
+            span.label Kapitelname
+            br
+            input(type="text" name="chapterName" required value="#{chapter.name}")
+        div.input
+            span.label Übersichtstext
+            br
+            textarea(name="overview" required) #{chapter.overview}
+        div.input
+            span.label Kapitelnummer
+            br
+            input(type="number" name="chapterNumber" required value="#{chapter.chapternumber}")
+        div.input
+            input(type="hidden" name="id" value="#{chapter.id}")
+        div.actions
+            input(type="submit" value="Kapitel Speichern")
