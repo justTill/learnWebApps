@@ -1,5 +1,8 @@
 var chapterRepository = require("../persistence/ChapterRepository")
-
+var fileRepository = require("../persistence/FileRepository")
+var mv = require('mv');
+const path = require("path");
+const fs = require("fs");
 
 exports.showChapterOverview = async function (req, res, next) {
     chapterRepository.findAll()
@@ -13,9 +16,10 @@ exports.showChapterOverview = async function (req, res, next) {
 
 exports.editChapter = async function (req, res, next) {
     let id = req.params.id
+    let files = await fileRepository.findByChapterId(id)
     chapterRepository.findById(id)
         .then(chapter => {
-            res.render('create/editChapter', {chapter: chapter})
+            res.render('create/editChapter', {chapter: chapter, files: files})
         })
         .catch(err => {
             throw err
@@ -42,4 +46,36 @@ exports.saveChapter = async function (req, res, next) {
     } else {
         res.redirect('/chapter')
     }
+}
+
+exports.uploadMedia = async function (req, res, next) {
+    let id = req.body.chapter
+    let chapter = await chapterRepository.findById(id)
+    let imagePath = chapter.name.split(' ').join('') + "/" + req.file.originalname
+    const tempPath = req.file.path;
+    const targetPath = path.join(__dirname, "../mediafiles/" + imagePath);
+    let allowedFiles = [".gif", ".png", ".jpg", ".jpeg"]
+    if (allowedFiles.includes(path.extname(req.file.originalname).toLowerCase())) {
+        mv(tempPath, targetPath, {mkdirp: true}, err => {
+            if (err) {
+                throw err
+            }
+            fileRepository.insert(id, imagePath)
+            chapterRepository.findAll()
+                .then(rows => res.render('create/chapter', {chapters: rows, fileUploaded: true}))
+        });
+    } else {
+        fs.unlink(tempPath, err => {
+            if (err) {
+                res.redirect("/chapter")
+            }
+            ;
+            chapterRepository.findAll()
+                .then(rows => res.render('create/chapter', {
+                    chapters: rows,
+                    fileError: "Datei ist kein png, jpg, jpeg oder gif"
+                }))
+        });
+    }
+
 }

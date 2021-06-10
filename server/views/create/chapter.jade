@@ -4,7 +4,21 @@ block content
     h1 Aktuelle Kapitel
     each chapter in chapters
         p= chapter.name
-            span!= chapter.overview
-        a(href='/chapter/#{chapter.id}') Kapitel bearbeiten
+            a(href='/chapter/#{chapter.id}') Kapitel bearbeiten
     div
         a(href='/createChapter') Kapitel erstellen
+
+    div
+        h3 Medien datein für ein Kapitel hochladen
+        if fileUploaded
+            p Datei wurde erfolgreich hochgeladen
+        else if fileError
+            p Aus folgendem Grund konnte die Datei nicht hochgeladen werden:
+                b #{fileError}.
+        form(action="/uploadChapterMedia" method="post" enctype="multipart/form-data")
+            div.input
+                select(name="chapter")
+                    each chapter in chapters
+                        option(value="#{chapter.id}") #{chapter.name}
+                input(type="file" name="file")
+                input(type="submit" value="Upload")

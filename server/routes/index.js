@@ -3,8 +3,7 @@ var router = express.Router();
 var userController = require('../controller/userController')
 var lessonsController = require('../controller/lessonsController')
 const asyncMiddleware = require('../utils/asyncMiddleware');
-var passport = require('passport');
-var crypto = require('crypto');
+const multer = require("multer");
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -13,6 +12,10 @@ function isLoggedIn(req, res, next) {
         res.redirect('/')
     }
 }
+
+const upload = multer({
+    dest: "/public"
+});
 
 router.get('/', asyncMiddleware(async (req, res, next) => {
     let isLoggedIn = req.isAuthenticated()
@@ -27,6 +30,7 @@ router.get('/createChapter', isLoggedIn, (req, res, next) => {
 })
 
 router.post('/saveChapter', isLoggedIn, asyncMiddleware(lessonsController.saveChapter))
+router.post('/uploadChapterMedia', isLoggedIn, upload.single("file"), asyncMiddleware(lessonsController.uploadMedia))
 
 //User
 router.get('/overview', isLoggedIn, userController.showUserOverview)
