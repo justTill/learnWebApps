@@ -26,7 +26,7 @@ router.get('/', asyncMiddleware(async (req, res, next) => {
 router.get('/chapter', isLoggedIn, asyncMiddleware(lessonsController.showChapterOverview))
 router.get('/chapter/:id', isLoggedIn, asyncMiddleware(lessonsController.editChapter))
 router.get('/createChapter', isLoggedIn, (req, res, next) => {
-    res.render('create/createChapter')
+    res.render('chapters/createChapter')
 })
 
 router.post('/saveChapter', isLoggedIn, asyncMiddleware(lessonsController.saveChapter))

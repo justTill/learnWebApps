@@ -7,7 +7,7 @@ const fs = require("fs");
 exports.showChapterOverview = async function (req, res, next) {
     chapterRepository.findAll()
         .then(rows => {
-            res.render('create/chapter', {chapters: rows})
+            res.render('chapters/chapter', {chapters: rows})
         })
         .catch(err => {
             throw err
@@ -19,14 +19,14 @@ exports.editChapter = async function (req, res, next) {
     let files = await fileRepository.findByChapterId(id)
     chapterRepository.findById(id)
         .then(chapter => {
-            res.render('create/editChapter', {chapter: chapter, files: files})
+            res.render('chapters/editChapter', {chapter: chapter, files: files})
         })
         .catch(err => {
             throw err
         })
 }
 exports.createChapter = async function (req, res, next) {
-    res.render('create/createChapter')
+    res.render('chapters/createChapter')
 }
 
 exports.saveChapter = async function (req, res, next) {
@@ -62,7 +62,7 @@ exports.uploadMedia = async function (req, res, next) {
             }
             fileRepository.insert(id, imagePath)
             chapterRepository.findAll()
-                .then(rows => res.render('create/chapter', {chapters: rows, fileUploaded: true}))
+                .then(rows => res.render('chapters/chapter', {chapters: rows, fileUploaded: true}))
         });
     } else {
         fs.unlink(tempPath, err => {
@@ -71,7 +71,7 @@ exports.uploadMedia = async function (req, res, next) {
             }
             ;
             chapterRepository.findAll()
-                .then(rows => res.render('create/chapter', {
+                .then(rows => res.render('chapters/chapter', {
                     chapters: rows,
                     fileError: "Datei ist kein png, jpg, jpeg oder gif"
                 }))
