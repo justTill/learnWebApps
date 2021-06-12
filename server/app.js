@@ -67,7 +67,7 @@ passport.serializeUser(function (user, cb) {
 passport.deserializeUser(function (id, cb) {
     UserRepository.findAdminById(id).then(row => {
         cb(null, row[0]);
-    }).catch(err => console.log("HERERERE" + err))
+    }).catch(err => console.log(err))
 });
 
 

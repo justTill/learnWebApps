@@ -1,11 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var controller = require('../controller/exampleWorker')
 var userController = require('../controller/userController')
-var UserRepository = require("../persistence/UserRepository")
+var lessonsController = require('../controller/lessonsController')
 const asyncMiddleware = require('../utils/asyncMiddleware');
-var passport = require('passport');
-var crypto = require('crypto');
+const multer = require("multer");
 
 function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
@@ -15,25 +13,32 @@ function isLoggedIn(req, res, next) {
     }
 }
 
-router.get('/notifications', isLoggedIn, (req, res, next) => {
-    res.render('users/notifications')
-})
-router.get('/overview', isLoggedIn, (req, res, next) => {
-    res.render('users/overview')
-})
-router.get('/chapter', isLoggedIn, (req, res, next) => {
-    res.render('create/chapter')
-})
+const upload = multer({
+    dest: "/public"
+});
 
 router.get('/', asyncMiddleware(async (req, res, next) => {
     let isLoggedIn = req.isAuthenticated()
     res.render("index", {"isLoggedIn": isLoggedIn})
 }));
 
+//Chapters
+router.get('/chapter', isLoggedIn, asyncMiddleware(lessonsController.showChapterOverview))
+router.get('/chapter/:id', isLoggedIn, asyncMiddleware(lessonsController.editChapter))
+router.get('/createChapter', isLoggedIn, (req, res, next) => {
+    res.render('chapters/createChapter')
+})
+
+router.post('/saveChapter', isLoggedIn, asyncMiddleware(lessonsController.saveChapter))
+router.post('/uploadChapterMedia', isLoggedIn, upload.single("file"), asyncMiddleware(lessonsController.uploadMedia))
+
+//User
+router.get('/overview', isLoggedIn, userController.showUserOverview)
+router.get('/notifications', isLoggedIn, userController.showUserNotifications)
 router.get('/logout', isLoggedIn, userController.logout);
 
-router.get('/register', (req, res, next) => {
 
+router.get('/register', (req, res, next) => {
     const form = '<h1>Register Page</h1><form method="post" action="register">\
                     Enter Email:<br><input type="text" name="email">\
                     <br>Enter Password:<br><input type="password" name="password">\
@@ -46,6 +51,5 @@ router.get('/register', (req, res, next) => {
 
 router.post('/login', userController.authenticate);
 router.post('/register', userController.registerUser);
-
 
 module.exports = router;

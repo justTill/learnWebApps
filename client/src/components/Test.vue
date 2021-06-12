@@ -3,6 +3,7 @@
     <h1>Hier ist ein test</h1>
     <p>{{ userName }}</p>
     <p>{{ userId }}</p>
+    <!--<img src="mediafiles/Hallo/Meilenstein_WV.png">-->
   </div>
 </template>
 

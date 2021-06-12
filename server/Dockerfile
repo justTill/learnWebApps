@@ -10,6 +10,7 @@ COPY liquibase/sessionTable.sql  ./
 COPY liquibase.js ./
 COPY entrypoint.sh ./
 
+RUN npm install nodemon
 RUN npm install
 
 EXPOSE 3080

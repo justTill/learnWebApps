@@ -10,6 +10,7 @@ services:
     volumes:
       - ./server:/usr/src/app/server
       - /usr/src/app/server/node_modules
+      - media_volume:/usr/src/app/server/mediafiles
     environment:
       - DATABASE=postgres
       - DB_USER=${SQL_USER}
@@ -25,6 +26,8 @@ services:
     restart: always
     image: justtill/learn_web_apps:frontend_with_nginx_latest
     container_name: learnWebAppsFrontendProd
+    volumes:
+      - media_volume:/usr/src/app/client/mediafiles
     build:
       context: ./client
       dockerfile: Dockerfile-prod
@@ -40,5 +43,8 @@ services:
       - POSTGRES_USER=${SQL_USER}
       - POSTGRES_PASSWORD=${SQL_PW}
       - POSTGRES_DB=${DATABASE_NAME}
+    ports:
+      - 5432:5432
 volumes:
   postgres_data:
+  media_volume:

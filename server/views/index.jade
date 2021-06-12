@@ -3,13 +3,16 @@ extends layout
 block content
     h1= title
     p Welcome to #{title}
+
     if !isLoggedIn
         form(action="/login" method="post")
             div.input
                 span.label Username
+                br
                 input(type="text" name="username")
             div.input
                 span.label Password
+                br
                 input(type="password" name="password")
             div.actions
                 input(type="submit" value="Log In")

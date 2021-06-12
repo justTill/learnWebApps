@@ -9,6 +9,13 @@ exports.authenticate = passport.authenticate('local', {
     if (err) next(err);
 };
 
+exports.showUserOverview = function (req, res, next) {
+    res.render('users/overview')
+}
+exports.showUserNotifications = function (req, res, next) {
+    res.render('users/notifications')
+}
+
 exports.registerUser = function (req, res, next) {
 
     const saltHash = genPassword(req.body.password);
