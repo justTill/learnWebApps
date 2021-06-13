@@ -5,8 +5,13 @@ block content
     each chapter in chapters
         p= chapter.name
             a(href='/chapter/#{chapter.id}') Kapitel bearbeiten
+            br
+            a(href='/deleteChapter/#{chapter.id}') Löschen
     div
         a(href='/createChapter') Kapitel erstellen
+        br
+        form(action="")
+            input(type="submit" value="Löschen")
 
     div
         h3 Medien datein für ein Kapitel hochladen

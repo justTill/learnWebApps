@@ -14,6 +14,17 @@ exports.showChapterOverview = async function (req, res, next) {
         })
 }
 
+exports.deleteChapter = async function (req, res, next) {
+    let id = req.params.id
+    chapterRepository.deleteById(id)
+        .then(rows => {
+            res.redirect("/chapter")
+        })
+        .catch(err => {
+            throw err
+        })
+}
+
 exports.editChapter = async function (req, res, next) {
     let id = req.params.id
     let files = await fileRepository.findByChapterId(id)
@@ -30,13 +41,22 @@ exports.createChapter = async function (req, res, next) {
 }
 
 exports.saveChapter = async function (req, res, next) {
-    let id = req.body.id
+    let chapterId = req.body.id
     let name = req.body.chapterName
     let overview = req.body.overview
     let chapterNumber = req.body.chapterNumber
-    console.log(id)
+    if (!chapterId) {
+        let chapter = await chapterRepository.findByChapterNumber(chapterNumber)
+        if (Object.keys(chapter).length !== 0) {
+            res.render('chapters/createChapter', {
+                error: "Kapitelnummer ist schon vergeben, bitte eine andere wählen",
+                chapterData: {name: name, overview: overview, chapterNumber: chapterNumber}
+            })
+            return
+        }
+    }
     if (name && overview && chapterNumber) {
-        chapterRepository.insertOrUpdateChapter(id, name, overview, chapterNumber)
+        chapterRepository.insertOrUpdateChapter(chapterId, name, overview, chapterNumber)
             .then(result => {
                 res.redirect('/chapter')
             })

@@ -25,13 +25,13 @@ router.get('/', asyncMiddleware(async (req, res, next) => {
 //Chapters
 router.get('/chapter', isLoggedIn, asyncMiddleware(lessonsController.showChapterOverview))
 router.get('/chapter/:id', isLoggedIn, asyncMiddleware(lessonsController.editChapter))
-router.get('/createChapter', isLoggedIn, (req, res, next) => {
-    res.render('chapters/createChapter')
-})
+router.get('/createChapter', isLoggedIn, lessonsController.createChapter)
 
-router.post('/saveChapter', isLoggedIn, asyncMiddleware(lessonsController.saveChapter))
+router.post('/saveChapter', isLoggedIn, asyncMiddleware(lessonsController.saveChapter)
+)
 router.post('/uploadChapterMedia', isLoggedIn, upload.single("file"), asyncMiddleware(lessonsController.uploadMedia))
 
+router.get('/deleteChapter/:id', isLoggedIn, asyncMiddleware(lessonsController.deleteChapter))
 //User
 router.get('/overview', isLoggedIn, userController.showUserOverview)
 router.get('/notifications', isLoggedIn, userController.showUserNotifications)

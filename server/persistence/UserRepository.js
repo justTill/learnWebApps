@@ -1,5 +1,4 @@
 const DbConnector = require("./DbConnector");
-const {Pool} = require('pg')
 
 class UserRepository {
 
@@ -8,12 +7,9 @@ class UserRepository {
     constructor() {
     }
 
-    getUsers() {
-    }
-
     static async findAdminByEmail(email) {
         let query = "SELECT * FROM admins WHERE email = $1";
-        let result = []
+        let result = {}
         result = await this.#pool.query(query, [email])
             .then(res => {
                 return res.rows
@@ -25,7 +21,7 @@ class UserRepository {
 
     static async findAdminById(id) {
         let query = "SELECT * FROM admins WHERE id = $1";
-        let result = []
+        let result = {}
         result = await this.#pool.query(query, [id])
             .then(res => {
                 return res.rows
