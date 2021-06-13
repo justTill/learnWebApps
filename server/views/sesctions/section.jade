@@ -1,9 +1,0 @@
-extends ../layout
-
-block content
-    h1 Aktuelle Kapitel
-    each section in sections
-        p= section.name
-            a(href='/section/#{section.id}') Unterthema bearbeiten
-    div
-        a(href='/createSection') Kapitel erstellen

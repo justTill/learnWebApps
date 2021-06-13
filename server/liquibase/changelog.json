@@ -170,7 +170,7 @@
                 },
                 {
                   "column": {
-                    "name": "chapternumber",
+                    "name": "chapterid",
                     "type": "int",
                     "constraints": {
                       "nullable": false

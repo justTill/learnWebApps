@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+    h1 Unterthema bearbeiten
+    h3 Hinweise an den Dozenten
+        form(action="/saveSection" method="post")
+            div.input
+                span.label Name
+                br
+                input(type="text" name="sectionName" required value="#{sectionData ? sectionData.name : ''}")
+            div.input
+                span.label Informationen
+                br
+                textarea(name="information" required) #{sectionData ? sectionData.information : ''}
+            div.input
+                span.label Unterhema nummer
+                br
+                input(type="number" name="sectionNumber" required value="#{sectionData ? sectionData.sectionNumber : 0}")
+                input(type="hidden" name="chapterId" value="#{chapterId}")
+            div.input
+                span.label Unterhema nummer
+                br
+            div.actions
+                input(type="submit" value="Unterhemea Speichern")
+
+        if error
+            p #{error}

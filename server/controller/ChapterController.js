@@ -1,5 +1,6 @@
 var chapterRepository = require("../persistence/ChapterRepository")
 var fileRepository = require("../persistence/FileRepository")
+var sectionRepository = require("../persistence/SectionRepository")
 var mv = require('mv');
 const path = require("path");
 const fs = require("fs");
@@ -28,9 +29,10 @@ exports.deleteChapter = async function (req, res, next) {
 exports.editChapter = async function (req, res, next) {
     let id = req.params.id
     let files = await fileRepository.findByChapterId(id)
+    let sections = await sectionRepository.findByChapterId(id)
     chapterRepository.findById(id)
         .then(chapter => {
-            res.render('chapters/editChapter', {chapter: chapter, files: files})
+            res.render('chapters/editChapter', {chapter: chapter, files: files, sections: sections})
         })
         .catch(err => {
             throw err

@@ -16,13 +16,22 @@ block content
             br
             input(type="number" name="chapterNumber" required value="#{chapter.chapternumber}")
         div.input
-            input(type="hidden" name="id" value="#{chapter.id}")
+            input(type="hidden" name="chapterId" value="#{chapter.id}")
         div.actions
             input(type="submit" value="Kapitel Speichern")
 
+    h1 Unterthemen
     div
-        h3 Verfügbare bilder
-        div mit img tag und src="angezeigter NAME" einbinden
+        a(href='/createSection/#{chapter.id}') Unterhema erstellen
+
+    each section in sections
+        p= section.name
+            a(href='/section/#{section.id}') Unterthema bearbeiten
+            br
+            a(href='/deleteSection/#{chapter.id}/#{section.id}') Löschen
+
+    h1 Verfügbaren bilder
+    div mit img tag und src="angezeigter NAME" einbinden
     ul
     each file in files
         li #{file.path}
