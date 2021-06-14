@@ -2,7 +2,7 @@ const DbConnector = require("./DbConnector");
 const pool = DbConnector.getDBConnectionPool();
 
 exports.findByChapterId = async function (chapterId) {
-    let query = "SELECT * from sections where chapterid= $1;"
+    let query = "SELECT * from sections where chapterid= $1 ORDER BY sectionnumber;"
     let result = {}
     result = await pool.query(query, [chapterId])
         .then(res => {
@@ -60,7 +60,7 @@ exports.findById = async function (id) {
 exports.insertOrUpdateChapter = async function (id, chapterId, name, information, sectionNumber) {
     let result = false
     if (id) {
-        let query = "UPDATE sections SET name=$1, chapterid=$2 information=$3, sectionnumber=$4 WHERE id=$5;"
+        let query = "UPDATE sections SET name=$1, chapterid=$2, information=$3, sectionnumber=$4 WHERE id=$5;"
         result = await pool.query(query, [name, chapterId, information, sectionNumber, id])
             .then(res => {
                 return true

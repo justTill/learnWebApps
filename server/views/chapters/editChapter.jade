@@ -26,7 +26,7 @@ block content
 
     each section in sections
         p= section.name
-            a(href='/section/#{section.id}') Unterthema bearbeiten
+            a(href='/section/#{chapter.id}/#{section.id}') Unterthema bearbeiten
             br
             a(href='/deleteSection/#{chapter.id}/#{section.id}') Löschen
 

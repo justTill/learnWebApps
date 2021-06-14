@@ -2,3 +2,35 @@ extends ../layout
 
 block content
     h1 Unterthema bearbeiten
+    h3 Hinweise an den Dozenten
+    br
+    form(action="/saveEditedSection" method="post")
+        div.input
+            span.label Name
+            br
+            input(type="text" name="sectionName" required value="#{section.name}")
+        div.input
+            span.label Informationen
+            br
+            textarea(name="information" required) #{section.information }
+        div.input
+            span.label Unterhema nummer
+            br
+            input(type="number" name="updatedSectionNumber" required value="#{section.sectionnumber}")
+            input(type="hidden" name="sectionNumber" value="#{section.sectionnumber}")
+        div.input
+            span.label Kapitel
+            br
+            select(name="chapterId")
+                each chapter in chapters
+                    option(value="#{chapter.id}" selected=chapter.id == currentChapterId) #{chapter.name}
+            br
+            input(type="hidden" name="sectionId" value="#{section.id}" required)
+            input(type="hidden" name="currentChapterId" value="#{currentChapterId}" required)
+        div.actions
+            input(type="submit" value="Unterhemea Speichern")
+
+        if error
+            p #{error}
+
+//name, information, chapternumber, untherhena nummer

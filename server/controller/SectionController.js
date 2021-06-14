@@ -1,8 +1,10 @@
 var sectionRepository = require("../persistence/SectionRepository")
+var chapterRepository = require("../persistence/ChapterRepository")
 
 
 async function isSectionNumberOccupied(number) {
     let section = await sectionRepository.findBySectionNumber(number);
+    console.log(section)
     return Object.keys(section).length !== 0
 }
 
@@ -22,26 +24,62 @@ exports.createSection = async function (req, res, next) {
 
 }
 
-exports.saveSection = async function (req, res, next) {
+exports.saveNewSection = async function (req, res, next) {
     let chapterId = req.body.chapterId
-    let updatedChapterId = req.body.updatedChapterId
-    let sectionId = req.body.sectionId
     let name = req.body.sectionName
     let information = req.body.information
     let sectionNumber = req.body.sectionNumber
-    if (!sectionId && sectionNumber) {
+    if (chapterId && name && information && sectionNumber) {
         let numberOccupied = await isSectionNumberOccupied(sectionNumber);
         if (numberOccupied) {
             res.render('sections/createSection', {
                 error: "Unterthema Nummer ist schon vergeben, bitte eine andere wählen",
-                sectionData: {name: name, information: information, sectionNumber: sectionNumber}
+                sectionData: {name: name, information: information, sectionNumber: sectionNumber},
+                chapterId: chapterId
+            })
+        } else {
+            sectionRepository.insertOrUpdateChapter(null, chapterId, name, information, sectionNumber)
+                .then(result => {
+                    res.redirect('/chapter/' + chapterId)
+                })
+                .catch(err => {
+                    throw err
+                })
+        }
+    } else {
+        res.redirect('/chapter/' + chapterId)
+    }
+}
+
+exports.saveEditedSection = async function (req, res, next) {
+    let name = req.body.sectionName
+    let information = req.body.information
+    let sectionNumber = req.body.sectionNumber
+    let updatedSectionNumber = req.body.updatedSectionNumber
+    let chapterId = req.body.chapterId
+    let currentChapterId = req.body.currentChapterId
+    let sectionId = req.body.sectionId
+    if (sectionNumber !== updatedSectionNumber) {
+        let numberOccupied = await isSectionNumberOccupied(updatedSectionNumber);
+        if (numberOccupied) {
+            let chapters = await chapterRepository.findAll()
+            res.render('sections/editSection', {
+                error: "Unterthema Nummer ist schon vergeben, bitte eine andere wählen",
+                section: {
+                    id: sectionId,
+                    name: name,
+                    information: information,
+                    sectionnumber: sectionNumber
+                },
+                chapters: chapters,
+                currentChapterId: currentChapterId,
             })
             return
         }
-
     }
-    if (name && information && sectionNumber) {
-        sectionRepository.insertOrUpdateChapter(sectionId, chapterId, name, information, sectionNumber)
+    if (chapterId && sectionId && name && information && updatedSectionNumber) {
+        console.log()
+        sectionRepository.insertOrUpdateChapter(sectionId, chapterId, name, information, updatedSectionNumber)
             .then(result => {
                 res.redirect('/chapter/' + chapterId)
             })
@@ -54,10 +92,16 @@ exports.saveSection = async function (req, res, next) {
 
 }
 exports.editSection = async function (req, res, next) {
-    let sectionId = req.params.id
+    let chapterId = req.params.chapterId
+    let sectionId = req.params.sectionId
+    let chapters = await chapterRepository.findAll();
     sectionRepository.findById(sectionId)
         .then(result => {
-            res.render('sections/editSection')
+            res.render('sections/editSection', {
+                section: result,
+                chapters: chapters,
+                currentChapterId: chapterId
+            })
         })
         .catch(err => {
             throw err

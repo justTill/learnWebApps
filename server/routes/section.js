@@ -7,7 +7,9 @@ const isLoggedIn = require('../utils/logIn').loggedIn;
 
 
 router.get('/deleteSection/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(sectionController.deleteSection))
-router.get('/section/:id', isLoggedIn, asyncMiddleware(sectionController.editSection))
+router.get('/section/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(sectionController.editSection))
 router.get('/createSection/:chapterId', isLoggedIn, asyncMiddleware(sectionController.createSection))
-router.post('/saveSection', isLoggedIn, asyncMiddleware(sectionController.saveSection))
+
+router.post('/saveEditedSection', isLoggedIn, asyncMiddleware(sectionController.saveEditedSection))
+router.post('/saveNewSection', isLoggedIn, asyncMiddleware(sectionController.saveNewSection))
 module.exports = router;
