@@ -42,22 +42,48 @@ exports.createChapter = async function (req, res, next) {
     res.render('chapters/createChapter')
 }
 
-exports.saveChapter = async function (req, res, next) {
-    let chapterId = req.body.id
+exports.saveNewChapter = async function (req, res, next) {
     let name = req.body.chapterName
     let overview = req.body.overview
     let chapterNumber = req.body.chapterNumber
-    if (!chapterId) {
+    let chapter = await chapterRepository.findByChapterNumber(chapterNumber)
+    if (Object.keys(chapter).length !== 0) {
+        res.render('chapters/createChapter', {
+            error: "Kapitelnummer ist schon vergeben, bitte eine andere wählen",
+            chapterData: {name: name, overview: overview, chapterNumber: chapterNumber}
+        })
+    } else if (name && overview && chapterNumber) {
+        chapterRepository.insertOrUpdateChapter(null, name, overview, chapterNumber)
+            .then(result => {
+                res.redirect('/chapter')
+            })
+            .catch(err => {
+                throw err
+            })
+    } else {
+        res.redirect('/chapter')
+    }
+
+}
+
+exports.saveEditedChapter = async function (req, res, next) {
+    let name = req.body.chapterName
+    let overview = req.body.overview
+    let chapterNumber = req.body.chapterNumber
+    let chapterId = req.body.chapterId
+    if (chapterId && name && overview && chapterNumber) {
         let chapter = await chapterRepository.findByChapterNumber(chapterNumber)
         if (Object.keys(chapter).length !== 0) {
-            res.render('chapters/createChapter', {
+            let sections = await sectionRepository.findByChapterId(chapterId)
+            let files = await fileRepository.findByChapterId(chapterId)
+            res.render('chapters/editChapter', {
                 error: "Kapitelnummer ist schon vergeben, bitte eine andere wählen",
-                chapterData: {name: name, overview: overview, chapterNumber: chapterNumber}
+                chapter: {id: chapterId, name: name, overview: overview, chapternumber: chapterNumber},
+                sections: sections,
+                files: files
             })
             return
         }
-    }
-    if (name && overview && chapterNumber) {
         chapterRepository.insertOrUpdateChapter(chapterId, name, overview, chapterNumber)
             .then(result => {
                 res.redirect('/chapter')

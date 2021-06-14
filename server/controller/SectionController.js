@@ -59,33 +59,32 @@ exports.saveEditedSection = async function (req, res, next) {
     let chapterId = req.body.chapterId
     let currentChapterId = req.body.currentChapterId
     let sectionId = req.body.sectionId
-    if (sectionNumber !== updatedSectionNumber) {
-        let numberOccupied = await isSectionNumberOccupied(updatedSectionNumber);
-        if (numberOccupied) {
-            let chapters = await chapterRepository.findAll()
-            res.render('sections/editSection', {
-                error: "Unterthema Nummer ist schon vergeben, bitte eine andere wählen",
-                section: {
-                    id: sectionId,
-                    name: name,
-                    information: information,
-                    sectionnumber: sectionNumber
-                },
-                chapters: chapters,
-                currentChapterId: currentChapterId,
-            })
-            return
+    if (chapterId && sectionId && name && sectionNumber && currentChapterId && information && updatedSectionNumber) {
+        if (sectionNumber !== updatedSectionNumber) {
+            let numberOccupied = await isSectionNumberOccupied(updatedSectionNumber);
+            if (numberOccupied) {
+                let chapters = await chapterRepository.findAll()
+                res.render('sections/editSection', {
+                    error: "Unterthema Nummer ist schon vergeben, bitte eine andere wählen",
+                    section: {
+                        id: sectionId,
+                        name: name,
+                        information: information,
+                        sectionnumber: sectionNumber
+                    },
+                    chapters: chapters,
+                    currentChapterId: currentChapterId,
+                })
+            }
+        } else {
+            sectionRepository.insertOrUpdateChapter(sectionId, chapterId, name, information, updatedSectionNumber)
+                .then(result => {
+                    res.redirect('/chapter/' + chapterId)
+                })
+                .catch(err => {
+                    throw err
+                })
         }
-    }
-    if (chapterId && sectionId && name && information && updatedSectionNumber) {
-        console.log()
-        sectionRepository.insertOrUpdateChapter(sectionId, chapterId, name, information, updatedSectionNumber)
-            .then(result => {
-                res.redirect('/chapter/' + chapterId)
-            })
-            .catch(err => {
-                throw err
-            })
     } else {
         res.redirect('/chapter/' + chapterId)
     }

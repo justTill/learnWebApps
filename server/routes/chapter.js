@@ -23,7 +23,8 @@ router.get('/createChapter', isLoggedIn, chapterController.createChapter)
 
 router.get('/deleteChapter/:id', isLoggedIn, asyncMiddleware(chapterController.deleteChapter))
 
-router.post('/saveChapter', isLoggedIn, asyncMiddleware(chapterController.saveChapter))
+router.post('/editChapter', isLoggedIn, asyncMiddleware(chapterController.saveEditedChapter))
+router.post('/saveNewChapter', isLoggedIn, asyncMiddleware(chapterController.saveNewChapter))
 router.post('/uploadChapterMedia', isLoggedIn, upload.single("file"), asyncMiddleware(chapterController.uploadMedia))
 
 

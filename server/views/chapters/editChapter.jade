@@ -2,7 +2,7 @@ extends ../layout
 
 block content
     h1 Kapitel bearbeiten
-    form(action="/saveChapter" method="post")
+    form(action="/editChapter" method="post")
         div.input
             span.label Kapitelname
             br
@@ -19,6 +19,9 @@ block content
             input(type="hidden" name="chapterId" value="#{chapter.id}")
         div.actions
             input(type="submit" value="Kapitel Speichern")
+
+    if error
+        p #{error}
 
     h1 Unterthemen
     div
