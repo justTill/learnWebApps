@@ -23,7 +23,7 @@ exports.registerUser = function (req, res, next) {
     const salt = saltHash.salt;
     const hash = saltHash.hash;
 
-    UserRepository.saveAdmin(req.body.email, hash, salt).then(res => console.log(res))
+    UserRepository.saveAdmin(req.body.email, hash, salt).then(res => res)
 
     res.redirect('/');
 

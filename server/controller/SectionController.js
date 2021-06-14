@@ -4,7 +4,6 @@ var chapterRepository = require("../persistence/ChapterRepository")
 
 async function isSectionNumberOccupied(number) {
     let section = await sectionRepository.findBySectionNumber(number);
-    console.log(section)
     return Object.keys(section).length !== 0
 }
 

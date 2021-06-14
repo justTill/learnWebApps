@@ -91,7 +91,8 @@
                     "name": "moodleid",
                     "type": "int",
                     "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "unique": true
                     }
                   }
                 },
@@ -173,7 +174,10 @@
                     "name": "chapterid",
                     "type": "int",
                     "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "foreignKeyName": "fk_section_chapter",
+                      "references": "chapters(id)",
+                      "deleteCascade": true
                     }
                   }
                 },
@@ -191,7 +195,8 @@
                     "name": "sectionnumber",
                     "type": "int",
                     "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "unique": true
                     }
                   }
                 },
@@ -209,7 +214,7 @@
           },
           {
             "createTable": {
-              "tableName": "solvedLessons",
+              "tableName": "lessons",
               "columns": [
                 {
                   "column": {
@@ -224,26 +229,34 @@
                 },
                 {
                   "column": {
-                    "name": "moodleid",
+                    "name": "sectionid",
                     "type": "int",
                     "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "unique": true,
+                      "foreignKeyName": "fk_lesson_section",
+                      "references": "sections(id)",
+                      "deleteCascade": true
                     }
                   }
                 },
                 {
                   "column": {
-                    "name": "lessonid",
+                    "name": "lessonnumber",
                     "type": "int",
                     "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "unique": true
                     }
                   }
                 },
                 {
                   "column": {
-                    "name": "code",
-                    "type": "varchar(255)"
+                    "name": "information",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
                   }
                 }
               ]
@@ -269,16 +282,10 @@
                     "name": "moodleid",
                     "type": "int",
                     "constraints": {
-                      "nullable": false
-                    }
-                  }
-                },
-                {
-                  "column": {
-                    "name": "moodlename",
-                    "type": "varchar(255)",
-                    "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "foreignKeyName": "fk_problem_person",
+                      "references": "persons(moodleid)",
+                      "deleteCascade": true
                     }
                   }
                 },
@@ -321,7 +328,10 @@
                     "name": "moodleid",
                     "type": "int",
                     "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "foreignKeyName": "fk_notification_person",
+                      "references": "persons(moodleid)",
+                      "deleteCascade": true
                     }
                   }
                 },
@@ -364,28 +374,13 @@
                 },
                 {
                   "column": {
-                    "name": "sectionnumber",
+                    "name": "lessonid",
                     "type": "int",
                     "constraints": {
-                      "nullable": false
-                    }
-                  }
-                },
-                {
-                  "column": {
-                    "name": "lessonnumber",
-                    "type": "int",
-                    "constraints": {
-                      "nullable": false
-                    }
-                  }
-                },
-                {
-                  "column": {
-                    "name": "information",
-                    "type": "varchar(255)",
-                    "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "foreignKeyName": "fk_smclesson_lesson",
+                      "deleteCascade": true,
+                      "references": "lessons(id)"
                     }
                   }
                 },
@@ -427,28 +422,13 @@
                 },
                 {
                   "column": {
-                    "name": "sectionnumber",
+                    "name": "lessionid",
                     "type": "int",
                     "constraints": {
-                      "nullable": false
-                    }
-                  }
-                },
-                {
-                  "column": {
-                    "name": "lessonnumber",
-                    "type": "int",
-                    "constraints": {
-                      "nullable": false
-                    }
-                  }
-                },
-                {
-                  "column": {
-                    "name": "information",
-                    "type": "varchar(255)",
-                    "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "foreignKeyName": "fk_codelesson_lesson",
+                      "deleteCascade": true,
+                      "references": "lessons(id)"
                     }
                   }
                 },
@@ -502,28 +482,13 @@
                 },
                 {
                   "column": {
-                    "name": "sectionnumber",
+                    "name": "lessonid",
                     "type": "int",
                     "constraints": {
-                      "nullable": false
-                    }
-                  }
-                },
-                {
-                  "column": {
-                    "name": "lessonnumber",
-                    "type": "int",
-                    "constraints": {
-                      "nullable": false
-                    }
-                  }
-                },
-                {
-                  "column": {
-                    "name": "information",
-                    "type": "varchar(255)",
-                    "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "references": "lessons(id)",
+                      "foreignKeyName": "fk_ftblesson_lesson",
+                      "deleteCascade": true
                     }
                   }
                 },
@@ -565,26 +530,14 @@
                 },
                 {
                   "column": {
-                    "name": "sectionnumber",
+                    "name": "lessonid",
                     "type": "int",
                     "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "foreignKeyName": "fk_extensionlesson_lesson",
+                      "deleteCascade": true,
+                      "references": "lessons(id)"
                     }
-                  }
-                },
-                {
-                  "column": {
-                    "name": "lessonnumber",
-                    "type": "int",
-                    "constraints": {
-                      "nullable": false
-                    }
-                  }
-                },
-                {
-                  "column": {
-                    "name": "information",
-                    "type": "varchar(255)"
                   }
                 },
                 {
@@ -628,7 +581,10 @@
                     "name": "chapterid",
                     "type": "int",
                     "constraints": {
-                      "nullable": false
+                      "nullable": false,
+                      "references": "chapters(id)",
+                      "foreignKeyName": "fk_files_chapter",
+                      "deleteCascade": true
                     }
                   }
                 },
@@ -639,6 +595,54 @@
                     "constraints": {
                       "nullable": false
                     }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "createTable": {
+              "tableName": "solvedLessons",
+              "columns": [
+                {
+                  "column": {
+                    "name": "id",
+                    "type": "int",
+                    "autoIncrement": true,
+                    "constraints": {
+                      "primaryKey": true,
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "moodleid",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false,
+                      "references": "persons(moodleid)",
+                      "foreignKeyName": "fk_solvedlessons_person",
+                      "deleteCascade": true
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "lessonid",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false,
+                      "references": "lessons(id)",
+                      "foreignKeyName": "fk_solvedlessons_lesson",
+                      "deleteCascade": true
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "code",
+                    "type": "varchar(255)"
                   }
                 }
               ]
