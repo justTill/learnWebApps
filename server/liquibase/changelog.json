@@ -252,6 +252,15 @@
                 },
                 {
                   "column": {
+                    "name": "name",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
                     "name": "information",
                     "type": "varchar(255)",
                     "constraints": {
@@ -422,7 +431,7 @@
                 },
                 {
                   "column": {
-                    "name": "lessionid",
+                    "name": "lessonid",
                     "type": "int",
                     "constraints": {
                       "nullable": false,

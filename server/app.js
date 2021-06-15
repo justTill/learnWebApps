@@ -7,6 +7,7 @@ var indexRouter = require('./routes/index');
 var chapterRouter = require('./routes/chapter');
 var apiRouter = require('./routes/api');
 var sectionRouter = require('./routes/section');
+var lessonRouter = require('./routes/lesson');
 var pg = require('pg');
 var session = require('express-session');
 var pgSession = require('express-pg-session')(session);
@@ -90,6 +91,7 @@ app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/', chapterRouter);
 app.use('/', sectionRouter);
+app.use('/', lessonRouter);
 app.use('/api/', apiRouter);
 
 

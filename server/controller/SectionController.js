@@ -1,5 +1,6 @@
 var sectionRepository = require("../persistence/SectionRepository")
 var chapterRepository = require("../persistence/ChapterRepository")
+var lessonsRepository = require("../persistence/LessonRepository")
 
 
 async function isSectionNumberOccupied(number) {
@@ -20,7 +21,6 @@ exports.deleteSection = async function (req, res, next) {
 }
 exports.createSection = async function (req, res, next) {
     res.render('sections/createSection', {chapterId: req.params.chapterId})
-
 }
 
 exports.saveNewSection = async function (req, res, next) {
@@ -34,7 +34,7 @@ exports.saveNewSection = async function (req, res, next) {
             res.render('sections/createSection', {
                 error: "Unterthema Nummer ist schon vergeben, bitte eine andere wählen",
                 sectionData: {name: name, information: information, sectionNumber: sectionNumber},
-                chapterId: chapterId
+                chapterId: chapterId,
             })
         } else {
             sectionRepository.insertOrUpdateChapter(null, chapterId, name, information, sectionNumber)
@@ -63,6 +63,10 @@ exports.saveEditedSection = async function (req, res, next) {
             let numberOccupied = await isSectionNumberOccupied(updatedSectionNumber);
             if (numberOccupied) {
                 let chapters = await chapterRepository.findAll()
+                let codingLessons = await lessonsRepository.findCoding();
+                let fillTheBlankLessons = await lessonsRepository.findFillTheBlank();
+                let codeExtensionLessons = await lessonsRepository.findCodeExtentions();
+                let singleMultipleChoiceLessons = await lessonsRepository.findSingleMultipleChoice();
                 res.render('sections/editSection', {
                     error: "Unterthema Nummer ist schon vergeben, bitte eine andere wählen",
                     section: {
@@ -73,6 +77,10 @@ exports.saveEditedSection = async function (req, res, next) {
                     },
                     chapters: chapters,
                     currentChapterId: currentChapterId,
+                    codingLessons: codingLessons,
+                    fillTheBlankLessons: fillTheBlankLessons,
+                    codeExtensionLessons: codeExtensionLessons,
+                    singleMultipleChoiceLessons: singleMultipleChoiceLessons
                 })
             }
         } else {
@@ -93,12 +101,20 @@ exports.editSection = async function (req, res, next) {
     let chapterId = req.params.chapterId
     let sectionId = req.params.sectionId
     let chapters = await chapterRepository.findAll();
+    let codingLessons = await lessonsRepository.findCoding();
+    let fillTheBlankLessons = await lessonsRepository.findFillTheBlank();
+    let codeExtensionLessons = await lessonsRepository.findCodeExtentions();
+    let singleMultipleChoiceLessons = await lessonsRepository.findSingleMultipleChoice();
     sectionRepository.findById(sectionId)
         .then(result => {
             res.render('sections/editSection', {
                 section: result,
                 chapters: chapters,
-                currentChapterId: chapterId
+                currentChapterId: chapterId,
+                codingLessons: codingLessons,
+                fillTheBlankLessons: fillTheBlankLessons,
+                codeExtensionLessons: codeExtensionLessons,
+                singleMultipleChoiceLessons: singleMultipleChoiceLessons
             })
         })
         .catch(err => {
