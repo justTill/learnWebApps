@@ -1,12 +1,7 @@
 var lessonsRepository = require("../persistence/LessonRepository")
 var fileRepository = require("../persistence/FileRepository")
 var sectionRepository = require("../persistence/SectionRepository")
-
-
-async function isLessonNumberOccupied(number) {
-    let lesson = await lessonsRepository.findCodingByLessonNumber(number)
-    return Object.keys(lesson).length !== 0
-}
+var isLessonNumberOccupied = require("../utils/lessons").isLessonNumberOccupied
 
 exports.deleteLesson = async function (req, res, next) {
     let chapterId = req.params.chapterId

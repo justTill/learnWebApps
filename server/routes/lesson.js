@@ -17,7 +17,8 @@ router.post('/saveEditCodingLesson/', isLoggedIn, asyncMiddleware(codingControll
 
 router.get('/editCodeExtensionLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(codeExtensionController.editCodeExtensionLesson))
 router.get('/createCodeExtensionLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(codeExtensionController.createCodeExtensionLesson))
-router.post('/saveCreateCodeExtensionLesson/', isLoggedIn, asyncMiddleware(codeExtensionController.saveCreateCodingLesson))
+router.post('/saveCreateCodeExtensionLesson/', isLoggedIn, asyncMiddleware(codeExtensionController.saveCreateCodeExtensionLesson))
+router.post('/saveEditCodeExtensionLesson/', isLoggedIn, asyncMiddleware(codeExtensionController.saveEditCodeExtensionLesson))
 
 router.get('/editFillTheBlankLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(fillTheBlankController.editFillTheBlankLesson))
 router.get('/createFillTheBlankLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(fillTheBlankController.createFillTheBlankLesson))

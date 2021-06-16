@@ -83,15 +83,15 @@ exports.insertOrUpdateCodingLesson = async function (lessonId, codingLessonId, s
     return result
 }
 
-exports.insertOrUpdateCodeExtensionLesson = async function (lessonId, codingLessonId, sectionId, lessonNumber, information, name, unfinishedCode, answers) {
+exports.insertOrUpdateCodeExtensionLesson = async function (lessonId, codeExtensionLessonId, sectionId, lessonNumber, information, name, unfinishedCode, answers) {
     let result
-    if (lessonId && codingLessonId) {
+    if (lessonId && codeExtensionLessonId) {
         result = pool.query('BEGIN', err => {
             let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4 WHERE id=$5";
             pool.query(query, [sectionId, lessonNumber, information, name, lessonId])
                 .then(res => {
-                    let childUpdate = 'UPDATE "codingLessons" SET verificationtype=$1::verificationtype, verificationcode=$2, examplesolution=$3, verificationinformation=$4 WHERE id=$5'
-                    pool.query(childUpdate, [])
+                    let childUpdate = 'UPDATE "codeExtensionLessons" SET unfinishedcode=$1, answers=$2 WHERE id=$3'
+                    pool.query(childUpdate, [unfinishedCode, answers, codeExtensionLessonId])
                         .then(result => {
                             pool.query("COMMIT", err => {
                                 if (err) {
@@ -125,7 +125,7 @@ exports.insertOrUpdateCodeExtensionLesson = async function (lessonId, codingLess
     return result
 }
 
-exports.findCodingByLessonNumber = async function (number) {
+exports.findByLessonNumber = async function (number) {
     let query = 'SELECT * from lessons l where l.lessonnumber=$1'
     let result = {}
     result = await pool.query(query, [number])
@@ -141,7 +141,22 @@ exports.findCodingByLessonNumber = async function (number) {
 
 }
 exports.findCodingByLessonId = async function (id) {
-    let query = 'SELECT * from lessons l INNER JOIN "codingLessons" cl ON l.id = cl.lessonid where l.id=$1 ORDER BY lessonnumber'
+    let query = 'SELECT * from lessons l INNER JOIN "codingLessons" cl ON l.id = cl.lessonid where l.id=$1'
+    let result = {}
+    result = await pool.query(query, [id])
+        .then(res => {
+            if (res.rows[0]) {
+                return res.rows[0]
+            }
+            return result
+        }).catch(err => {
+            throw  err
+        })
+    return result
+
+}
+exports.findCodeExtensionByLessonId = async function (id) {
+    let query = 'SELECT * from lessons l INNER JOIN "codeExtensionLessons" cel ON l.id = cel.lessonid where l.id=$1'
     let result = {}
     result = await pool.query(query, [id])
         .then(res => {
