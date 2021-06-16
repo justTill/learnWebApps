@@ -8,6 +8,19 @@ async function isLessonNumberOccupied(number) {
     return Object.keys(lesson).length !== 0
 }
 
+exports.deleteCodingLesson = async function (req, res, next) {
+    let chapterId = req.params.chapterId
+    let sectionId = req.params.sectionId
+    let lessonId = req.params.lessonId
+    lessonsRepository.deleteById(lessonId)
+        .then(rows => {
+            res.redirect("/section/" + chapterId + "/" + sectionId)
+        })
+        .catch(err => {
+            throw err
+        })
+
+}
 exports.editCodingLesson = async function (req, res, next) {
     let chapterId = req.params.chapterId
     let sectionId = req.params.sectionId
@@ -24,26 +37,10 @@ exports.editCodingLesson = async function (req, res, next) {
         files: files
     })
 }
-
-exports.editFillTheBlankLesson = async function (req, res, next) {
-    let chapterId = req.params.chapterId
-    let sectionId = req.params.sectionId
-    res.render('lessons/editFillTheBlankLesson')
-}
-
-exports.editSingleMultipleChoiceLesson = async function (req, res, next) {
-    let chapterId = req.params.chapterId
-    let sectionId = req.params.sectionId
-    res.render('lessons/editSingleMultipleChoiceLesson')
-}
-
-exports.editCodeExtensionLesson = async function (req, res, next) {
-    res.render('lessons/editCodeExtensionLesson')
-}
-
 exports.createCodingLesson = async function (req, res, next) {
     res.render('lessons/createCodingLesson', {chapterId: req.params.chapterId, sectionId: req.params.sectionId})
 }
+
 exports.saveEditCodingLesson = async function (req, res, next) {
     let chapterId = req.body.chapterId
     let sectionId = req.body.sectionId
@@ -137,19 +134,4 @@ exports.saveCreateCodingLesson = async function (req, res, next) {
     } else {
         res.redirect('/section/' + chapterId + '/' + sectionId)
     }
-}
-
-exports.createFillTheBlankLesson = async function (req, res, next) {
-    res.render('lessons/createFillTheBlankLesson', {chapterId: req.params.chapterId, sectionId: req.params.sectionId})
-}
-
-exports.createSingleMultipleChoiceLesson = async function (req, res, next) {
-    res.render('lessons/createSingleMultipleChoiceLesson', {
-        chapterId: req.params.chapterId,
-        sectionId: req.params.sectionId
-    })
-}
-
-exports.createCodeExtensionLesson = async function (req, res, next) {
-    res.render('lessons/createCodeExtensionLesson', {chapterId: req.params.chapterId, sectionId: req.params.sectionId})
 }

@@ -1,6 +1,15 @@
 const DbConnector = require("./DbConnector");
 const pool = DbConnector.getDBConnectionPool();
 
+
+exports.deleteById = async function (id) {
+    let query = "DELETE from lessons WHERE id=$1"
+    return pool.query(query, [id])
+        .then(res => res)
+        .catch(err => {
+            throw err
+        })
+}
 exports.findCodeExtention = async function () {
     let query = 'SELECT * from lessons l INNER JOIN "codeExtensionLessons" cel ON l.id = cel.lessonid ORDER BY lessonnumber'
     let result = {}

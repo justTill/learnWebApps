@@ -46,6 +46,7 @@ block content
         each codeLesson in codingLessons
             p #{codeLesson.name}
                 a(href='/editCodingLesson/#{currentChapterId}/#{section.id}/#{codeLesson.lessonid}') Bearbeiten
+                    a(href='/deleteCodingLesson/#{currentChapterId}/#{section.id}/#{codeLesson.lessonid}')  Löschen
 
         h4 Code extension Aufgaben
         a(href='/createCodeExtensionLesson/#{currentChapterId}/#{section.id}') Erstellen

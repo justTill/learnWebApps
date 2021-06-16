@@ -1,22 +1,26 @@
 var express = require('express');
 var router = express.Router();
 const asyncMiddleware = require('../utils/asyncMiddleware');
-const lessonController = require('../controller/LessonController');
+const codingController = require('../controller/codingLessonController');
+const codeExtensionController = require('../controller/CodeExtensionController');
+const singleMultipleChoiceController = require('../controller/SingleMultipleChoiceController');
+const fillTheBlankController = require('../controller/FillTheBlankLessonController');
 const isLoggedIn = require('../utils/logIn').loggedIn;
 
 
-router.get('/editCodingLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(lessonController.editCodingLesson))
-router.get('/createCodingLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(lessonController.createCodingLesson))
-router.post('/saveCreateCodingLesson/', isLoggedIn, asyncMiddleware(lessonController.saveCreateCodingLesson))
-router.post('/saveEditCodingLesson/', isLoggedIn, asyncMiddleware(lessonController.saveEditCodingLesson))
+router.get('/editCodingLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(codingController.editCodingLesson))
+router.get('/createCodingLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(codingController.createCodingLesson))
+router.get('/deleteCodingLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(codingController.deleteCodingLesson))
+router.post('/saveCreateCodingLesson/', isLoggedIn, asyncMiddleware(codingController.saveCreateCodingLesson))
+router.post('/saveEditCodingLesson/', isLoggedIn, asyncMiddleware(codingController.saveEditCodingLesson))
 
-router.get('/editCodeExtensionLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(lessonController.editCodeExtensionLesson))
-router.get('/createCodeExtensionLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(lessonController.createCodeExtensionLesson))
+router.get('/editCodeExtensionLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(codeExtensionController.editCodeExtensionLesson))
+router.get('/createCodeExtensionLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(codeExtensionController.createCodeExtensionLesson))
 
-router.get('/editFillTheBlankLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(lessonController.editFillTheBlankLesson))
-router.get('/createFillTheBlankLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(lessonController.createFillTheBlankLesson))
+router.get('/editFillTheBlankLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(fillTheBlankController.editFillTheBlankLesson))
+router.get('/createFillTheBlankLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(fillTheBlankController.createFillTheBlankLesson))
 
-router.get('/editSingleMultipleChoiceLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(lessonController.editSingleMultipleChoiceLesson))
-router.get('/createSingleMultipleChoiceLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(lessonController.createSingleMultipleChoiceLesson))
+router.get('/editSingleMultipleChoiceLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(singleMultipleChoiceController.editSingleMultipleChoiceLesson))
+router.get('/createSingleMultipleChoiceLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(singleMultipleChoiceController.createSingleMultipleChoiceLesson))
 
 module.exports = router;
