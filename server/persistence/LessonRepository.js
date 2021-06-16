@@ -83,6 +83,48 @@ exports.insertOrUpdateCodingLesson = async function (lessonId, codingLessonId, s
     return result
 }
 
+exports.insertOrUpdateCodeExtensionLesson = async function (lessonId, codingLessonId, sectionId, lessonNumber, information, name, unfinishedCode, answers) {
+    let result
+    if (lessonId && codingLessonId) {
+        result = pool.query('BEGIN', err => {
+            let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4 WHERE id=$5";
+            pool.query(query, [sectionId, lessonNumber, information, name, lessonId])
+                .then(res => {
+                    let childUpdate = 'UPDATE "codingLessons" SET verificationtype=$1::verificationtype, verificationcode=$2, examplesolution=$3, verificationinformation=$4 WHERE id=$5'
+                    pool.query(childUpdate, [])
+                        .then(result => {
+                            pool.query("COMMIT", err => {
+                                if (err) {
+                                    console.log("could not commit")
+                                }
+                            })
+                        })
+                        .catch(err => {
+                            throw err
+                        })
+                })
+                .catch(error => {
+                    pool.query('ROLLBACK', err => {
+                        if (err) {
+                            console.error('Error rolling back client', err.stack)
+                        }
+                    })
+                })
+        })
+    } else {
+        let insertLessonQuery = "INSERT INTO lessons (sectionid, lessonnumber, information, name) VALUES ($1, $2, $3, $4) RETURNING id"
+        let insertCodingLessonQuery = 'INSERT INTO "codeExtensionLessons" (lessonid, unfinishedcode, answers)'
+        let query = 'WITH new_lesson AS (' + insertLessonQuery + '),v (a,b) as (VALUES($5, $6))' + insertCodingLessonQuery + ' SELECT new_lesson.id, a,b from v, new_lesson;'
+        result = pool.query(query, [sectionId, lessonNumber, information, name, unfinishedCode, answers])
+            .then(res => {
+                return res
+            }).catch(err => {
+                throw  err
+            })
+    }
+    return result
+}
+
 exports.findCodingByLessonNumber = async function (number) {
     let query = 'SELECT * from lessons l where l.lessonnumber=$1'
     let result = {}

@@ -8,7 +8,7 @@ async function isLessonNumberOccupied(number) {
     return Object.keys(lesson).length !== 0
 }
 
-exports.deleteCodingLesson = async function (req, res, next) {
+exports.deleteLesson = async function (req, res, next) {
     let chapterId = req.params.chapterId
     let sectionId = req.params.sectionId
     let lessonId = req.params.lessonId
@@ -38,7 +38,12 @@ exports.editCodingLesson = async function (req, res, next) {
     })
 }
 exports.createCodingLesson = async function (req, res, next) {
-    res.render('lessons/createCodingLesson', {chapterId: req.params.chapterId, sectionId: req.params.sectionId})
+    let files = await fileRepository.findByChapterId(req.params.chapterId)
+    res.render('lessons/createCodingLesson', {
+        chapterId: req.params.chapterId,
+        sectionId: req.params.sectionId,
+        files: files
+    })
 }
 
 exports.saveEditCodingLesson = async function (req, res, next) {
@@ -108,6 +113,7 @@ exports.saveCreateCodingLesson = async function (req, res, next) {
     if (chapterId && sectionId && lessonName && lessonNumber && lessonInformation && verificationType && exampleSolution && verificationCode && verificationInformation) {
         let lessonNumberOccupied = await isLessonNumberOccupied(lessonNumber);
         if (lessonNumberOccupied) {
+            let files = await fileRepository.findByChapterId(chapterId)
             res.render("lessons/createCodingLesson", {
                 error: "Aufgaben Nummer ist schon vergeben, bitte eine andere wählen",
                 codinglesson: {
@@ -120,7 +126,8 @@ exports.saveCreateCodingLesson = async function (req, res, next) {
                     verificationinformation: verificationInformation
                 },
                 chapterId: chapterId,
-                sectionId: sectionId
+                sectionId: sectionId,
+                files: files
             })
         } else {
             lessonsRepository.insertOrUpdateCodingLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, verificationType, verificationCode, exampleSolution, verificationInformation)

@@ -46,7 +46,7 @@ block content
         each codeLesson in codingLessons
             p #{codeLesson.name}
                 a(href='/editCodingLesson/#{currentChapterId}/#{section.id}/#{codeLesson.lessonid}') Bearbeiten
-                    a(href='/deleteCodingLesson/#{currentChapterId}/#{section.id}/#{codeLesson.lessonid}')  Löschen
+                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{codeLesson.lessonid}')  Löschen
 
         h4 Code extension Aufgaben
         a(href='/createCodeExtensionLesson/#{currentChapterId}/#{section.id}') Erstellen
@@ -54,6 +54,7 @@ block content
         each codeExtensionLesson in codeExtensionLessons
             p #{codeExtensionLesson.name}
                 a(href='/editCodeExtensionLesson/#{currentChapterId}/#{section.id}/#{codeExtensionLesson.lessonid}') Bearbeiten
+                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{codeExtensionLesson.lessonid}')  Löschen
 
         h4 Fill the blank Aufgaben
         a(href='/createFillTheBlankLesson/#{currentChapterId}/#{section.id}') Erstellen
@@ -61,6 +62,7 @@ block content
         each fillTheBlankLesson in fillTheBlankLessons
             p #{fillTheBlankLesson.name}
                 a(href='/editFillTheBlankLesson/#{currentChapterId}/#{section.id}/#{fillTheBlankLesson.lessonid}') Bearbeiten
+                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{fillTheBlankLesson.lessonid}')  Löschen
 
         h4 Single- und Multiplechoice Aufgaben
         a(href='/createSingleMultipleChoiceLesson/#{currentChapterId}/#{section.id}') Erstellen
@@ -68,3 +70,4 @@ block content
         each singleMultipleChoiceLesson in singleMultipleChoiceLessons
             p #{singleMultipleChoiceLesson.name}
                 a(href='/SingleMultipleChoiceLesson/#{currentChapterId}/#{section.id}/singleMultipleChoiceLesson') Bearbeiten
+                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{singleMultipleChoiceLesson.lessonid}')  Löschen

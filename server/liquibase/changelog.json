@@ -550,8 +550,8 @@
                 },
                 {
                   "column": {
-                    "name": "text",
-                    "type": "varchar(255) []",
+                    "name": "unfinishedcode",
+                    "type": "varchar(255)",
                     "constraints": {
                       "nullable": false
                     }
@@ -560,7 +560,7 @@
                 {
                   "column": {
                     "name": "answers",
-                    "type": "varchar(255) []",
+                    "type": "varchar(255)",
                     "constraints": {
                       "nullable": false
                     }

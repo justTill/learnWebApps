@@ -8,14 +8,16 @@ const fillTheBlankController = require('../controller/FillTheBlankLessonControll
 const isLoggedIn = require('../utils/logIn').loggedIn;
 
 
+router.get('/deleteLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(codingController.deleteLesson))
+
 router.get('/editCodingLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(codingController.editCodingLesson))
 router.get('/createCodingLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(codingController.createCodingLesson))
-router.get('/deleteCodingLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(codingController.deleteCodingLesson))
 router.post('/saveCreateCodingLesson/', isLoggedIn, asyncMiddleware(codingController.saveCreateCodingLesson))
 router.post('/saveEditCodingLesson/', isLoggedIn, asyncMiddleware(codingController.saveEditCodingLesson))
 
 router.get('/editCodeExtensionLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(codeExtensionController.editCodeExtensionLesson))
 router.get('/createCodeExtensionLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(codeExtensionController.createCodeExtensionLesson))
+router.post('/saveCreateCodeExtensionLesson/', isLoggedIn, asyncMiddleware(codeExtensionController.saveCreateCodingLesson))
 
 router.get('/editFillTheBlankLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(fillTheBlankController.editFillTheBlankLesson))
 router.get('/createFillTheBlankLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(fillTheBlankController.createFillTheBlankLesson))
