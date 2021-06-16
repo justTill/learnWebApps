@@ -70,21 +70,24 @@ exports.saveEditedChapter = async function (req, res, next) {
     let name = req.body.chapterName
     let overview = req.body.overview
     let chapterNumber = req.body.chapterNumber
+    let updatedChapterNumber = req.body.updatedChapterNumber
     let chapterId = req.body.chapterId
-    if (chapterId && name && overview && chapterNumber) {
-        let chapter = await chapterRepository.findByChapterNumber(chapterNumber)
-        if (Object.keys(chapter).length !== 0) {
-            let sections = await sectionRepository.findByChapterId(chapterId)
-            let files = await fileRepository.findByChapterId(chapterId)
-            res.render('chapters/editChapter', {
-                error: "Kapitelnummer ist schon vergeben, bitte eine andere wählen",
-                chapter: {id: chapterId, name: name, overview: overview, chapternumber: chapterNumber},
-                sections: sections,
-                files: files
-            })
-            return
+    if (chapterId && name && overview && chapterNumber && updatedChapterNumber) {
+        if (chapterNumber !== updatedChapterNumber) {
+            let chapter = await chapterRepository.findByChapterNumber(chapterNumber)
+            if (Object.keys(chapter).length !== 0) {
+                let sections = await sectionRepository.findByChapterId(chapterId)
+                let files = await fileRepository.findByChapterId(chapterId)
+                res.render('chapters/editChapter', {
+                    error: "Kapitelnummer ist schon vergeben, bitte eine andere wählen",
+                    chapter: {id: chapterId, name: name, overview: overview, chapternumber: chapterNumber},
+                    sections: sections,
+                    files: files
+                })
+                return
+            }
         }
-        chapterRepository.insertOrUpdateChapter(chapterId, name, overview, chapterNumber)
+        chapterRepository.insertOrUpdateChapter(chapterId, name, overview, updatedChapterNumber)
             .then(result => {
                 res.redirect('/chapter')
             })

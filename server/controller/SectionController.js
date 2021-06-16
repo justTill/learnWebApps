@@ -1,6 +1,7 @@
 var sectionRepository = require("../persistence/SectionRepository")
 var chapterRepository = require("../persistence/ChapterRepository")
 var lessonsRepository = require("../persistence/LessonRepository")
+var fileRepository = require("../persistence/FileRepository")
 
 
 async function isSectionNumberOccupied(number) {
@@ -65,8 +66,9 @@ exports.saveEditedSection = async function (req, res, next) {
                 let chapters = await chapterRepository.findAll()
                 let codingLessons = await lessonsRepository.findCoding();
                 let fillTheBlankLessons = await lessonsRepository.findFillTheBlank();
-                let codeExtensionLessons = await lessonsRepository.findCodeExtentions();
+                let codeExtensionLessons = await lessonsRepository.findCodeExtention();
                 let singleMultipleChoiceLessons = await lessonsRepository.findSingleMultipleChoice();
+                let files = await fileRepository.findByChapterId(chapterId)
                 res.render('sections/editSection', {
                     error: "Unterthema Nummer ist schon vergeben, bitte eine andere wählen",
                     section: {
@@ -80,18 +82,19 @@ exports.saveEditedSection = async function (req, res, next) {
                     codingLessons: codingLessons,
                     fillTheBlankLessons: fillTheBlankLessons,
                     codeExtensionLessons: codeExtensionLessons,
-                    singleMultipleChoiceLessons: singleMultipleChoiceLessons
+                    singleMultipleChoiceLessons: singleMultipleChoiceLessons,
+                    files: files
                 })
+                return
             }
-        } else {
-            sectionRepository.insertOrUpdateChapter(sectionId, chapterId, name, information, updatedSectionNumber)
-                .then(result => {
-                    res.redirect('/chapter/' + chapterId)
-                })
-                .catch(err => {
-                    throw err
-                })
         }
+        sectionRepository.insertOrUpdateChapter(sectionId, chapterId, name, information, updatedSectionNumber)
+            .then(result => {
+                res.redirect('/chapter/' + chapterId)
+            })
+            .catch(err => {
+                throw err
+            })
     } else {
         res.redirect('/chapter/' + chapterId)
     }
@@ -103,8 +106,9 @@ exports.editSection = async function (req, res, next) {
     let chapters = await chapterRepository.findAll();
     let codingLessons = await lessonsRepository.findCoding();
     let fillTheBlankLessons = await lessonsRepository.findFillTheBlank();
-    let codeExtensionLessons = await lessonsRepository.findCodeExtentions();
+    let codeExtensionLessons = await lessonsRepository.findCodeExtention();
     let singleMultipleChoiceLessons = await lessonsRepository.findSingleMultipleChoice();
+    let files = await fileRepository.findByChapterId(chapterId)
     sectionRepository.findById(sectionId)
         .then(result => {
             res.render('sections/editSection', {
@@ -114,7 +118,8 @@ exports.editSection = async function (req, res, next) {
                 codingLessons: codingLessons,
                 fillTheBlankLessons: fillTheBlankLessons,
                 codeExtensionLessons: codeExtensionLessons,
-                singleMultipleChoiceLessons: singleMultipleChoiceLessons
+                singleMultipleChoiceLessons: singleMultipleChoiceLessons,
+                files: files
             })
         })
         .catch(err => {

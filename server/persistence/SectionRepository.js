@@ -32,10 +32,9 @@ exports.findBySectionNumber = async function (sectionNumber) {
 
 exports.deleteById = async function (id) {
     let query = "DELETE from sections where id= $1;"
-    let result = {}
-    result = await pool.query(query, [id])
+    let result = await pool.query(query, [id])
         .then(res => {
-            return true
+            return res
         }).catch(err => {
             throw  err
         })
@@ -58,20 +57,20 @@ exports.findById = async function (id) {
 
 
 exports.insertOrUpdateChapter = async function (id, chapterId, name, information, sectionNumber) {
-    let result = false
+    let result
     if (id) {
         let query = "UPDATE sections SET name=$1, chapterid=$2, information=$3, sectionnumber=$4 WHERE id=$5;"
-        result = await pool.query(query, [name, chapterId, information, sectionNumber, id])
+        result = pool.query(query, [name, chapterId, information, sectionNumber, id])
             .then(res => {
-                return true
+                return res
             }).catch(err => {
                 throw  err
             })
     } else {
         let query = "INSERT INTO sections (chapterid, name,information, sectionnumber) VALUES ($1,$2,$3,$4);"
-        result = await pool.query(query, [chapterId, name, information, sectionNumber])
+        result = pool.query(query, [chapterId, name, information, sectionNumber])
             .then(res => {
-                return true
+                return res
             }).catch(err => {
                 throw  err
             })

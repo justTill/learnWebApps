@@ -33,31 +33,37 @@ block content
         if error
             p #{error}
 
+        h1 Verfügbaren bilder
+        div mit img tag und src="angezeigter NAME" einbinden
+            ul
+            each file in files
+                li #{file.path}
+
         h3 Aufgaben
         h4 Code Aufgaben
         a(href='/createCodingLesson/#{currentChapterId}/#{section.id}') Erstellen
         br
         each codeLesson in codingLessons
             p #{codeLesson.name}
-                a(href='/editCodingLesson/#{currentChapterId}/#{section.id}') Bearbeiten
+                a(href='/editCodingLesson/#{currentChapterId}/#{section.id}/#{codeLesson.lessonid}') Bearbeiten
 
         h4 Code extension Aufgaben
         a(href='/createCodeExtensionLesson/#{currentChapterId}/#{section.id}') Erstellen
         br
         each codeExtensionLesson in codeExtensionLessons
             p #{codeExtensionLesson.name}
-                a(href='/editCodeExtensionLesson/#{currentChapterId}/#{section.id}') Bearbeiten
+                a(href='/editCodeExtensionLesson/#{currentChapterId}/#{section.id}/#{codeExtensionLesson.lessonid}') Bearbeiten
 
         h4 Fill the blank Aufgaben
         a(href='/createFillTheBlankLesson/#{currentChapterId}/#{section.id}') Erstellen
         br
         each fillTheBlankLesson in fillTheBlankLessons
             p #{fillTheBlankLesson.name}
-                a(href='/editFillTheBlankLesson/#{currentChapterId}/#{section.id}') Bearbeiten
+                a(href='/editFillTheBlankLesson/#{currentChapterId}/#{section.id}/#{fillTheBlankLesson.lessonid}') Bearbeiten
 
         h4 Single- und Multiplechoice Aufgaben
         a(href='/createSingleMultipleChoiceLesson/#{currentChapterId}/#{section.id}') Erstellen
         br
         each singleMultipleChoiceLesson in singleMultipleChoiceLessons
             p #{singleMultipleChoiceLesson.name}
-                a(href='/SingleMultipleChoiceLesson/#{currentChapterId}/#{section.id}') Bearbeiten
+                a(href='/SingleMultipleChoiceLesson/#{currentChapterId}/#{section.id}/singleMultipleChoiceLesson') Bearbeiten

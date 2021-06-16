@@ -233,7 +233,6 @@
                     "type": "int",
                     "constraints": {
                       "nullable": false,
-                      "unique": true,
                       "foreignKeyName": "fk_lesson_section",
                       "references": "sections(id)",
                       "deleteCascade": true
@@ -467,8 +466,8 @@
                 },
                 {
                   "column": {
-                    "name": "verificationinformations",
-                    "type": "varchar(255) []"
+                    "name": "verificationinformation",
+                    "type": "varchar(255)"
                   }
                 }
               ]
