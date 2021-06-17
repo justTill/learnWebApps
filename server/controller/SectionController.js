@@ -64,10 +64,10 @@ exports.saveEditedSection = async function (req, res, next) {
             let numberOccupied = await isSectionNumberOccupied(updatedSectionNumber);
             if (numberOccupied) {
                 let chapters = await chapterRepository.findAll()
-                let codingLessons = await lessonsRepository.findCoding();
-                let fillTheBlankLessons = await lessonsRepository.findFillTheBlank();
-                let codeExtensionLessons = await lessonsRepository.findCodeExtention();
-                let singleMultipleChoiceLessons = await lessonsRepository.findSingleMultipleChoice();
+                let codingLessons = await lessonsRepository.findCodingBySectionId(sectionId);
+                let fillTheBlankLessons = await lessonsRepository.findFillTheBlankBySectionId(sectionId);
+                let codeExtensionLessons = await lessonsRepository.findCodeExtensionBySectionId(sectionId);
+                let singleMultipleChoiceLessons = await lessonsRepository.findSingleMultipleChoiceBySectionId(sectionId);
                 let files = await fileRepository.findByChapterId(chapterId)
                 res.render('sections/editSection', {
                     error: "Unterthema Nummer ist schon vergeben, bitte eine andere wählen",
@@ -104,10 +104,10 @@ exports.editSection = async function (req, res, next) {
     let chapterId = req.params.chapterId
     let sectionId = req.params.sectionId
     let chapters = await chapterRepository.findAll();
-    let codingLessons = await lessonsRepository.findCoding();
-    let fillTheBlankLessons = await lessonsRepository.findFillTheBlank();
-    let codeExtensionLessons = await lessonsRepository.findCodeExtention();
-    let singleMultipleChoiceLessons = await lessonsRepository.findSingleMultipleChoice();
+    let codingLessons = await lessonsRepository.findCodingBySectionId(sectionId);
+    let fillTheBlankLessons = await lessonsRepository.findFillTheBlankBySectionId(sectionId);
+    let codeExtensionLessons = await lessonsRepository.findCodeExtensionBySectionId(sectionId);
+    let singleMultipleChoiceLessons = await lessonsRepository.findSingleMultipleChoiceBySectionId(sectionId);
     let files = await fileRepository.findByChapterId(chapterId)
     sectionRepository.findById(sectionId)
         .then(result => {

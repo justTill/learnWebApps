@@ -10,10 +10,10 @@ exports.deleteById = async function (id) {
             throw err
         })
 }
-exports.findCodeExtention = async function () {
-    let query = 'SELECT * from lessons l INNER JOIN "codeExtensionLessons" cel ON l.id = cel.lessonid ORDER BY lessonnumber'
+exports.findCodeExtensionBySectionId = async function (sectionId) {
+    let query = 'SELECT * from lessons l INNER JOIN "codeExtensionLessons" cel ON l.id = cel.lessonid WHERE l.sectionid=$1 ORDER BY lessonnumber'
     let result = {}
-    result = await pool.query(query, [])
+    result = await pool.query(query, [sectionId])
         .then(res => {
             if (res.rows) {
                 return res.rows
@@ -25,10 +25,10 @@ exports.findCodeExtention = async function () {
     return result
 
 }
-exports.findCoding = async function () {
-    let query = 'SELECT * from lessons l INNER JOIN "codingLessons" cl ON l.id = cl.lessonid ORDER BY lessonnumber'
+exports.findCodingBySectionId = async function (sectionId) {
+    let query = 'SELECT * from lessons l INNER JOIN "codingLessons" cl ON l.id = cl.lessonid WHERE l.sectionid=$1 ORDER BY lessonnumber'
     let result = {}
-    result = await pool.query(query, [])
+    result = await pool.query(query, [sectionId])
         .then(res => {
             if (res.rows) {
                 return res.rows
@@ -170,10 +170,10 @@ exports.findCodeExtensionByLessonId = async function (id) {
     return result
 
 }
-exports.findFillTheBlank = async function () {
-    let query = 'SELECT * from lessons l INNER JOIN "fillTheBlankLessons" ftbl ON l.id = ftbl.lessonid ORDER BY lessonnumber'
+exports.findFillTheBlankBySectionId = async function (sectionId) {
+    let query = 'SELECT * from lessons l INNER JOIN "fillTheBlankLessons" ftbl ON l.id = ftbl.lessonid WHERE l.sectionid=$1 ORDER BY lessonnumber'
     let result = {}
-    result = await pool.query(query, [])
+    result = await pool.query(query, [sectionId])
         .then(res => {
             if (res.rows) {
                 return res.rows
@@ -185,10 +185,10 @@ exports.findFillTheBlank = async function () {
     return result
 
 }
-exports.findSingleMultipleChoice = async function () {
-    let query = 'SELECT * from lessons l INNER JOIN "singleMultipleChoiceLessons" smcl ON l.id = smcl.lessonid ORDER BY lessonnumber'
+exports.findSingleMultipleChoiceBySectionId = async function (sectionId) {
+    let query = 'SELECT * from lessons l INNER JOIN "singleMultipleChoiceLessons" smcl ON l.id = smcl.lessonid WHERE l.sectionid=$1 ORDER BY lessonnumber'
     let result = {}
-    result = await pool.query(query, [])
+    result = await pool.query(query, [sectionId])
         .then(res => {
             if (res.rows) {
                 return res.rows

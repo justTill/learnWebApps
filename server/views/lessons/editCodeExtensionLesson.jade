@@ -17,15 +17,15 @@ block content
             br
             input(type="number" name="updatedLessonNumber" required value="#{codeExtensionLesson.lessonnumber}")
         div.input
+            span.label Aufgabentext
+            br
+            textarea(name="lessonInformation" required) #{codeExtensionLesson.information}
+        div.input
             span.label Unterthema
             br
             select(name="sectionId" required)
                 each section in sections
                     option(value="#{section.id}" selected=sectionId == section.id) #{section.name}
-        div.input
-            span.label Aufgabentext
-            br
-            textarea(name="lessonInformation" required) #{codeExtensionLesson.information}
         div.input
             span.label Zu ergänzenden Code mit [input] als lücken
             br
