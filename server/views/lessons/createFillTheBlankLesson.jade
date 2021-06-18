@@ -20,11 +20,11 @@ block content
         div.input
             span.label Zu ergänzenden Text mit [input] als lücken
             br
-            textarea(name="unfinishedCode" required) #{fillTheBlankLesson ? fillTheBlankLesson.unfinishedcode : ''}
+            textarea(name="textWithBlanks" required) #{fillTheBlankLesson ? fillTheBlankLesson.textWithBlanks : ''}
         div.input
             span.label Mögliche Antworte  (pro Antwort eine Zeile (mindestens so viele wie es Inputs gibt)
             br
-            textarea
+            textarea(name="possibleAnswers" required) #{fillTheBlankLesson ? fillTheBlankLesson.possibleAnswers : ''}
         div.input
             span.label Richtige Antworten (pro Input eine Antwort (eine Zeile) in richtiger Reihenfolge)
             br

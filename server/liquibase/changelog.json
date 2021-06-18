@@ -500,7 +500,7 @@
                 },
                 {
                   "column": {
-                    "name": "textWithBlanks",
+                    "name": "textwithblanks",
                     "type": "varchar(255)",
                     "constraints": {
                       "nullable": false
@@ -509,7 +509,7 @@
                 },
                 {
                   "column": {
-                    "name": "possibleAnswers",
+                    "name": "possibleanswers",
                     "type": "varchar(255)",
                     "constraints": {
                       "nullable": false

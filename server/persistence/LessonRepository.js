@@ -199,3 +199,45 @@ exports.findSingleMultipleChoiceBySectionId = async function (sectionId) {
         })
     return result
 }
+
+exports.insertOrUpdateFillTheBlankLesson = async function (lessonId, fillTheBlankLessonId, sectionId, lessonNumber, lessonInformation, name, textWithBlanks, possibleAnswers, answers) {
+    let result
+    if (lessonId && codeExtensionLessonId) {
+        result = pool.query('BEGIN', err => {
+            let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4 WHERE id=$5";
+            pool.query(query, [sectionId, lessonNumber, lessonInformation, name, lessonId])
+                .then(res => {
+                    let childUpdate = 'UPDATE "fillTheBlankLessons" SET textwithBlanks=$1, possibleAnswers=$2, answers=$3 WHERE id=$3'
+                    pool.query(childUpdate, [textWithBlanks, possibleAnswers, answers])
+                        .then(result => {
+                            pool.query("COMMIT", err => {
+                                if (err) {
+                                    console.log("could not commit")
+                                }
+                            })
+                        })
+                        .catch(err => {
+                            throw err
+                        })
+                })
+                .catch(error => {
+                    pool.query('ROLLBACK', err => {
+                        if (err) {
+                            console.error('Error rolling back client', err.stack)
+                        }
+                    })
+                })
+        })
+    } else {
+        let insertLessonQuery = "INSERT INTO lessons (sectionid, lessonnumber, information, name) VALUES ($1, $2, $3, $4) RETURNING id"
+        let insertCodingLessonQuery = 'INSERT INTO "fillTheBlankLessons" (lessonid, textwithBlanks, possibleAnswers, answers)'
+        let query = 'WITH new_lesson AS (' + insertLessonQuery + '),v (a,b,c) as (VALUES($5, $6, $7))' + insertCodingLessonQuery + ' SELECT new_lesson.id, a,b,c from v, new_lesson;'
+        result = pool.query(query, [sectionId, lessonNumber, lessonInformation, name, textWithBlanks, possibleAnswers, answers])
+            .then(res => {
+                return res
+            }).catch(err => {
+                throw  err
+            })
+    }
+    return result
+}
