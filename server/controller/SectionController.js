@@ -4,8 +4,8 @@ var lessonsRepository = require("../persistence/LessonRepository")
 var fileRepository = require("../persistence/FileRepository")
 
 
-async function isSectionNumberOccupied(number) {
-    let section = await sectionRepository.findBySectionNumber(number);
+async function isSectionNumberOccupied(number, chapterId) {
+    let section = await sectionRepository.findBySectionNumber(number, chapterId);
     return Object.keys(section).length !== 0
 }
 
@@ -30,7 +30,7 @@ exports.saveNewSection = async function (req, res, next) {
     let information = req.body.information
     let sectionNumber = req.body.sectionNumber
     if (chapterId && name && information && sectionNumber) {
-        let numberOccupied = await isSectionNumberOccupied(sectionNumber);
+        let numberOccupied = await isSectionNumberOccupied(sectionNumber, chapterId);
         if (numberOccupied) {
             res.render('sections/createSection', {
                 error: "Unterthema Nummer ist schon vergeben, bitte eine andere wählen",
@@ -56,45 +56,45 @@ exports.saveEditedSection = async function (req, res, next) {
     let information = req.body.information
     let sectionNumber = req.body.sectionNumber
     let updatedSectionNumber = req.body.updatedSectionNumber
-    let chapterId = req.body.chapterId
+    let updatedChapterId = req.body.chapterId
     let currentChapterId = req.body.currentChapterId
     let sectionId = req.body.sectionId
-    if (chapterId && sectionId && name && sectionNumber && currentChapterId && information && updatedSectionNumber) {
-        if (sectionNumber !== updatedSectionNumber) {
-            let numberOccupied = await isSectionNumberOccupied(updatedSectionNumber);
-            if (numberOccupied) {
-                let chapters = await chapterRepository.findAll()
-                let codingLessons = await lessonsRepository.findCodingBySectionId(sectionId);
-                let fillTheBlankLessons = await lessonsRepository.findFillTheBlankBySectionId(sectionId);
-                let codeExtensionLessons = await lessonsRepository.findCodeExtensionBySectionId(sectionId);
-                let singleMultipleChoiceLessons = await lessonsRepository.findSingleMultipleChoiceBySectionId(sectionId);
-                let files = await fileRepository.findByChapterId(chapterId)
-                res.render('sections/editSection', {
-                    error: "Unterthema Nummer ist schon vergeben, bitte eine andere wählen",
-                    section: {
-                        id: sectionId,
-                        name: name,
-                        information: information,
-                        sectionnumber: sectionNumber
-                    },
-                    chapters: chapters,
-                    currentChapterId: currentChapterId,
-                    codingLessons: codingLessons,
-                    fillTheBlankLessons: fillTheBlankLessons,
-                    codeExtensionLessons: codeExtensionLessons,
-                    singleMultipleChoiceLessons: singleMultipleChoiceLessons,
-                    files: files
+    if (updatedChapterId && sectionId && name && sectionNumber && currentChapterId && information && updatedSectionNumber) {
+        let errorMessage = "";
+        let sectionNumberOccupied = currentChapterId !== updatedChapterId ? await isSectionNumberOccupied(updatedSectionNumber, updatedChapterId) : await isSectionNumberOccupied(updatedSectionNumber, currentChapterId);
+        if ((sectionNumberOccupied && sectionNumber !== updatedSectionNumber) || (sectionNumberOccupied && currentChapterId !== updatedChapterId)) errorMessage = "Unterthema Nummer ist schon vergeben, bitte eine andere wählen"
+        if (errorMessage) {
+            let chapters = await chapterRepository.findAll()
+            let codingLessons = await lessonsRepository.findCodingBySectionId(sectionId);
+            let fillTheBlankLessons = await lessonsRepository.findFillTheBlankBySectionId(sectionId);
+            let codeExtensionLessons = await lessonsRepository.findCodeExtensionBySectionId(sectionId);
+            let singleMultipleChoiceLessons = await lessonsRepository.findSingleMultipleChoiceBySectionId(sectionId);
+            let files = await fileRepository.findByChapterId(currentChapterId)
+            res.render('sections/editSection', {
+                error: errorMessage,
+                section: {
+                    id: sectionId,
+                    name: name,
+                    information: information,
+                    sectionnumber: sectionNumber
+                },
+                chapters: chapters,
+                currentChapterId: currentChapterId,
+                codingLessons: codingLessons,
+                fillTheBlankLessons: fillTheBlankLessons,
+                codeExtensionLessons: codeExtensionLessons,
+                singleMultipleChoiceLessons: singleMultipleChoiceLessons,
+                files: files
+            })
+        } else {
+            sectionRepository.insertOrUpdateChapter(sectionId, updatedChapterId, name, information, updatedSectionNumber)
+                .then(result => {
+                    res.redirect('/chapter/' + updatedChapterId)
                 })
-                return
-            }
+                .catch(err => {
+                    throw err
+                })
         }
-        sectionRepository.insertOrUpdateChapter(sectionId, chapterId, name, information, updatedSectionNumber)
-            .then(result => {
-                res.redirect('/chapter/' + chapterId)
-            })
-            .catch(err => {
-                throw err
-            })
     } else {
         res.redirect('/chapter/' + chapterId)
     }

@@ -74,7 +74,7 @@ exports.saveEditedChapter = async function (req, res, next) {
     let chapterId = req.body.chapterId
     if (chapterId && name && overview && chapterNumber && updatedChapterNumber) {
         if (chapterNumber !== updatedChapterNumber) {
-            let chapter = await chapterRepository.findByChapterNumber(chapterNumber)
+            let chapter = await chapterRepository.findByChapterNumber(updatedChapterNumber)
             if (Object.keys(chapter).length !== 0) {
                 let sections = await sectionRepository.findByChapterId(chapterId)
                 let files = await fileRepository.findByChapterId(chapterId)

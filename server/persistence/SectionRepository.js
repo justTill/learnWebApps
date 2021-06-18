@@ -15,10 +15,10 @@ exports.findByChapterId = async function (chapterId) {
         })
     return result
 }
-exports.findBySectionNumber = async function (sectionNumber) {
-    let query = "SELECT * from sections where sectionnumber= $1;"
+exports.findBySectionNumber = async function (sectionNumber, chapterId) {
+    let query = "SELECT * from sections where sectionnumber=$1 AND chapterid=$2;"
     let result = {}
-    result = await pool.query(query, [sectionNumber])
+    result = await pool.query(query, [sectionNumber, chapterId])
         .then(res => {
             if (res.rows[0]) {
                 return res.rows[0]
