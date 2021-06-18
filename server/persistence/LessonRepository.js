@@ -185,6 +185,21 @@ exports.findFillTheBlankBySectionId = async function (sectionId) {
     return result
 
 }
+exports.findFillTheBlankByLessonId = async function (lessonId) {
+    let query = 'SELECT * from lessons l INNER JOIN "fillTheBlankLessons" ftbl ON l.id = ftbl.lessonid WHERE ftbl.lessonId=$1 ORDER BY lessonnumber'
+    let result = {}
+    result = await pool.query(query, [lessonId])
+        .then(res => {
+            if (res.rows[0]) {
+                return res.rows[0]
+            }
+            return result
+        }).catch(err => {
+            throw  err
+        })
+    return result
+
+}
 exports.findSingleMultipleChoiceBySectionId = async function (sectionId) {
     let query = 'SELECT * from lessons l INNER JOIN "singleMultipleChoiceLessons" smcl ON l.id = smcl.lessonid WHERE l.sectionid=$1 ORDER BY lessonnumber'
     let result = {}
@@ -202,13 +217,13 @@ exports.findSingleMultipleChoiceBySectionId = async function (sectionId) {
 
 exports.insertOrUpdateFillTheBlankLesson = async function (lessonId, fillTheBlankLessonId, sectionId, lessonNumber, lessonInformation, name, textWithBlanks, possibleAnswers, answers) {
     let result
-    if (lessonId && codeExtensionLessonId) {
+    if (lessonId && fillTheBlankLessonId) {
         result = pool.query('BEGIN', err => {
             let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4 WHERE id=$5";
             pool.query(query, [sectionId, lessonNumber, lessonInformation, name, lessonId])
                 .then(res => {
-                    let childUpdate = 'UPDATE "fillTheBlankLessons" SET textwithBlanks=$1, possibleAnswers=$2, answers=$3 WHERE id=$3'
-                    pool.query(childUpdate, [textWithBlanks, possibleAnswers, answers])
+                    let childUpdate = 'UPDATE "fillTheBlankLessons" SET textwithBlanks=$1, possibleAnswers=$2, answers=$3 WHERE id=$4'
+                    pool.query(childUpdate, [textWithBlanks, possibleAnswers, answers, fillTheBlankLessonId])
                         .then(result => {
                             pool.query("COMMIT", err => {
                                 if (err) {

@@ -2,3 +2,51 @@ extends ../layout
 
 block content
     h1 Fill the Blank Aufgabe bearbeiten
+
+    form(action="/saveEditFillTheBlankLesson" method="post")
+        input(type="hidden" name="chapterId" value="#{chapterId}")
+        input(type="hidden" name="lessonId" value="#{lessonId}")
+        input(type="hidden" name="sectionId" value="#{sectionId}")
+        input(type="hidden" name="lessonNumber" value="#{fillTheBlankLesson.lessonnumber}")
+        input(type="hidden" name="fillTheBlankLessonId" value="#{fillTheBlankLesson.id}")
+        div.input
+            span.label Aufgabenname
+            br
+            input(type="text" name="lessonName" required value="#{fillTheBlankLesson.name}")
+        div.input
+            span.label Aufgabennummer
+            br
+            input(type="number" min=1 name="updatedLessonNumber" required value="#{fillTheBlankLesson.lessonnumber}")
+        div.input
+            span.label Aufgabentext
+            br
+            textarea(name="lessonInformation" required) #{fillTheBlankLesson.information}
+        div.input
+            span.label Unterthema
+            br
+            select(name="updatedSectionId" required)
+                each section in sections
+                    option(value="#{section.id}" selected=sectionId == section.id) #{section.name}
+        div.input
+            span.label Zu ergänzenden Text mit [input] als lücken
+            br
+            textarea(name="textWithBlanks" required) #{fillTheBlankLesson.textwithblanks}
+        div.input
+            span.label Mögliche Antworte  (pro Antwort eine Zeile (mindestens so viele wie es Inputs gibt)
+            br
+            textarea(name="possibleAnswers" required) #{fillTheBlankLesson.possibleanswers}
+        div.input
+            span.label Richtige Antworten (pro Input eine Antwort (eine Zeile) in richtiger Reihenfolge)
+            br
+            textarea(name="answers" required) #{fillTheBlankLesson.answers}
+        div.actions
+            input(type="submit" value="Aufagbe Speichern")
+
+    if error
+        p #{error}
+
+    h1 Verfügbaren bilder
+    div mit img tag und src="angezeigter NAME" einbinden
+        ul
+        each file in files
+            li #{file.path}
