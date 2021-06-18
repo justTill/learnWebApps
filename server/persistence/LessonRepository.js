@@ -125,10 +125,10 @@ exports.insertOrUpdateCodeExtensionLesson = async function (lessonId, codeExtens
     return result
 }
 
-exports.findByLessonNumber = async function (number) {
-    let query = 'SELECT * from lessons l where l.lessonnumber=$1'
+exports.findByLessonNumber = async function (number, sectionId) {
+    let query = 'SELECT * from lessons l where l.lessonnumber=$1 AND l.sectionid=$2'
     let result = {}
-    result = await pool.query(query, [number])
+    result = await pool.query(query, [number, sectionId])
         .then(res => {
             if (res.rows[0]) {
                 return res.rows[0]

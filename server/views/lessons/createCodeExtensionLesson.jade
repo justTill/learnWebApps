@@ -1,8 +1,6 @@
 extends ../layout
-
 block content
     h1 Code extension Aufgabe erstellen
-
     form(action="/saveCreateCodeExtensionLesson" method="post")
         input(type="hidden" name="chapterId" value="#{chapterId}")
         input(type="hidden" name="sectionId" value="#{sectionId}")
@@ -13,7 +11,7 @@ block content
         div.input
             span.label Aufgabennummer
             br
-            input(type="number" name="lessonNumber" required value="#{codeExtensionLesson ? codeExtensionLesson.lessonnumber : 0")
+            input(type="number" min=1 name="lessonNumber" required value="#{codeExtensionLesson ? codeExtensionLesson.lessonnumber : 0")
         div.input
             span.label Aufgabentext
             br

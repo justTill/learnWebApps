@@ -10,7 +10,7 @@ block content
         div.input
             span.label Aufgabennummer
             br
-            input(type="number" name="updatedLessonNumber" required value="#{codingLesson.lessonnumber}")
+            input(type="number" min=1 name="updatedLessonNumber" required value="#{codingLesson.lessonnumber}")
             input(type="hidden" name="lessonNumber" value="#{codingLesson.lessonnumber}")
         div.input
             span.label Informationstext
@@ -19,7 +19,7 @@ block content
         div.input
             span.label Unterthema
             br
-            select(name="sectionId" required)
+            select(name="updatedSectionId" required)
                 each section in sections
                     option(value="#{section.id}" selected=sectionId == section.id) #{section.name}
         div.input
@@ -43,6 +43,7 @@ block content
         div.input
             input(type="hidden" name="chapterId" value="#{chapterId}")
             input(type="hidden" name="lessonId" value="#{lessonId}")
+            input(type="hidden" name="sectionId" value="#{sectionId}")
             input(type="hidden" name="codingLessonId" value="#{codingLesson.id}")
         div.actions
             input(type="submit" value="Aufgabe Speichern")

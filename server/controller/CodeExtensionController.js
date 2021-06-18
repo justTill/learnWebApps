@@ -26,6 +26,7 @@ exports.editCodeExtensionLesson = async function (req, res, next) {
     res.render('lessons/editCodeExtensionLesson', {
         chapterId: req.params.chapterId,
         sectionId: req.params.sectionId,
+        updatedSectionId: req.params.sectionId,
         lessonId: req.params.lessonId,
         files: files,
         sections: sections,
@@ -42,10 +43,10 @@ exports.saveCreateCodeExtensionLesson = async function (req, res, next) {
     let unfinishedCode = req.body.unfinishedCode
     let answers = req.body.answers
     if (chapterId && sectionId && lessonName && lessonNumber && lessonInformation && answers) {
-        let lessonNumberOccupied = await isLessonNumberOccupied(lessonNumber);
+        let lessonNumberOccupied = await isLessonNumberOccupied(lessonNumber, sectionId);
         let errorMessage = ""
         if (lessonNumberOccupied) errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen";
-        if (correctNumberOfBlanksAndAnswers(unfinishedCode, answers)) errorMessage = "Anzahl an [input]'s und Antworten stimmt nicht überein "
+        if (!correctNumberOfBlanksAndAnswers(unfinishedCode, answers)) errorMessage = "Anzahl an [input]'s und Antworten stimmt nicht überein "
         if (errorMessage) {
             let files = await fileRepository.findByChapterId(chapterId)
             res.render("lessons/createCodeExtensionLesson", {
@@ -78,6 +79,7 @@ exports.saveCreateCodeExtensionLesson = async function (req, res, next) {
 exports.saveEditCodeExtensionLesson = async function (req, res, next) {
     let chapterId = req.body.chapterId
     let sectionId = req.body.sectionId
+    let updatedSectionId = req.body.updatedSectionId
     let codeExtensionLessonId = req.body.codeExtensionLessonId
     let lessonId = req.body.lessonId
     let lessonName = req.body.lessonName
@@ -86,10 +88,10 @@ exports.saveEditCodeExtensionLesson = async function (req, res, next) {
     let lessonInformation = req.body.lessonInformation
     let unfinishedCode = req.body.unfinishedCode
     let answers = req.body.answers
-    if (chapterId && sectionId && codeExtensionLessonId && updatedLessonNumber && lessonId && lessonName && lessonNumber && lessonInformation && answers) {
-        let lessonNumberOccupied = await isLessonNumberOccupied(updatedLessonNumber);
+    if (chapterId && sectionId && updatedSectionId && codeExtensionLessonId && updatedLessonNumber && lessonId && lessonName && lessonNumber && lessonInformation && answers) {
         let errorMessage = ""
-        if (lessonNumberOccupied && lessonNumber !== updatedLessonNumber) errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen";
+        let lessonNumberOccupied = sectionId !== updatedSectionId ? await isLessonNumberOccupied(updatedLessonNumber, updatedSectionId) : await isLessonNumberOccupied(updatedLessonNumber, sectionId);
+        if ((lessonNumberOccupied && lessonNumber !== updatedLessonNumber) || (lessonNumberOccupied && sectionId !== updatedSectionId)) errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen";
         if (!correctNumberOfBlanksAndAnswers(unfinishedCode, answers)) errorMessage = "Anzahl an [input]'s und Antworten stimmt nicht überein "
         if (errorMessage) {
             let files = await fileRepository.findByChapterId(chapterId)
@@ -107,13 +109,14 @@ exports.saveEditCodeExtensionLesson = async function (req, res, next) {
                 sections: sections,
                 chapterId: chapterId,
                 sectionId: sectionId,
+                updatedSectionId: sectionId,
                 lessonId: lessonId,
                 files: files
             })
         } else {
-            lessonsRepository.insertOrUpdateCodeExtensionLesson(lessonId, codeExtensionLessonId, sectionId, updatedLessonNumber, lessonInformation, lessonName, unfinishedCode, answers)
+            lessonsRepository.insertOrUpdateCodeExtensionLesson(lessonId, codeExtensionLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, unfinishedCode, answers)
                 .then(result => {
-                    res.redirect('/section/' + chapterId + '/' + sectionId)
+                    res.redirect('/section/' + chapterId + '/' + updatedSectionId)
                 })
                 .catch(err => {
                     throw err

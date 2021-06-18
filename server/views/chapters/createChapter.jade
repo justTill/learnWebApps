@@ -15,7 +15,7 @@ block content
         div.input
             span.label Kapitelnummer
             br
-            input(type="number" name="chapterNumber" required value="#{chapterData ? chapterData.chapterNumber : 0}")
+            input(type="number" min=1 name="chapterNumber" required value="#{chapterData ? chapterData.chapterNumber : 0}")
         div.actions
             input(type="submit" value="Kapitel Speichern")
 

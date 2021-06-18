@@ -6,6 +6,7 @@ block content
     form(action="/saveEditCodeExtensionLesson" method="post")
         input(type="hidden" name="chapterId" value="#{chapterId}")
         input(type="hidden" name="lessonId" value="#{lessonId}")
+        input(type="hidden" name="sectionId" value="#{sectionId}")
         input(type="hidden" name="lessonNumber" value="#{codeExtensionLesson.lessonnumber}")
         input(type="hidden" name="codeExtensionLessonId" value="#{codeExtensionLesson.id}")
         div.input
@@ -15,7 +16,7 @@ block content
         div.input
             span.label Aufgabennummer
             br
-            input(type="number" name="updatedLessonNumber" required value="#{codeExtensionLesson.lessonnumber}")
+            input(type="number" min=1 name="updatedLessonNumber" required value="#{codeExtensionLesson.lessonnumber}")
         div.input
             span.label Aufgabentext
             br
@@ -23,7 +24,7 @@ block content
         div.input
             span.label Unterthema
             br
-            select(name="sectionId" required)
+            select(name="updatedSectionId" required)
                 each section in sections
                     option(value="#{section.id}" selected=sectionId == section.id) #{section.name}
         div.input

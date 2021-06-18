@@ -196,7 +196,6 @@
                     "type": "int",
                     "constraints": {
                       "nullable": false,
-                      "unique": true
                     }
                   }
                 },
@@ -245,7 +244,6 @@
                     "type": "int",
                     "constraints": {
                       "nullable": false,
-                      "unique": true
                     }
                   }
                 },
@@ -502,7 +500,16 @@
                 },
                 {
                   "column": {
-                    "name": "text",
+                    "name": "textWithBlanks",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "possibleAnswers",
                     "type": "varchar(255)",
                     "constraints": {
                       "nullable": false
@@ -512,7 +519,7 @@
                 {
                   "column": {
                     "name": "answers",
-                    "type": "varchar(255) []",
+                    "type": "varchar(255)",
                     "constraints": {
                       "nullable": false
                     }

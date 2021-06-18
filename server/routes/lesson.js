@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const asyncMiddleware = require('../utils/asyncMiddleware');
-const codingController = require('../controller/codingLessonController');
+const codingController = require('../controller/CodingLessonController');
 const codeExtensionController = require('../controller/CodeExtensionController');
 const singleMultipleChoiceController = require('../controller/SingleMultipleChoiceController');
 const fillTheBlankController = require('../controller/FillTheBlankLessonController');
@@ -22,6 +22,8 @@ router.post('/saveEditCodeExtensionLesson/', isLoggedIn, asyncMiddleware(codeExt
 
 router.get('/editFillTheBlankLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(fillTheBlankController.editFillTheBlankLesson))
 router.get('/createFillTheBlankLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(fillTheBlankController.createFillTheBlankLesson))
+router.post('/saveCreateFillTheBlankLesson/', isLoggedIn, asyncMiddleware(fillTheBlankController.saveCreateFillTheBlankLesson))
+router.post('/saveEditFillTheBlankLesson/', isLoggedIn, asyncMiddleware(fillTheBlankController.saveEditFillTheBlankLesson()))
 
 router.get('/editSingleMultipleChoiceLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(singleMultipleChoiceController.editSingleMultipleChoiceLesson))
 router.get('/createSingleMultipleChoiceLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(singleMultipleChoiceController.createSingleMultipleChoiceLesson))

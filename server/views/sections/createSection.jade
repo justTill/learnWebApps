@@ -16,7 +16,7 @@ block content
         div.input
             span.label Unterhema nummer
             br
-            input(type="number" name="sectionNumber" required value="#{sectionData ? sectionData.sectionNumber : 0}")
+            input(type="number" min=1 name="sectionNumber" required value="#{sectionData ? sectionData.sectionNumber : 0}")
             input(type="hidden" name="chapterId" value="#{chapterId}")
         div.actions
             input(type="submit" value="Unterhemea Speichern")

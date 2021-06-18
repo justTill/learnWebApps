@@ -16,7 +16,7 @@ block content
         div.input
             span.label Unterhema nummer
             br
-            input(type="number" name="updatedSectionNumber" required value="#{section.sectionnumber}")
+            input(type="number" min=1 name="updatedSectionNumber" required value="#{section.sectionnumber}")
             input(type="hidden" name="sectionNumber" value="#{section.sectionnumber}")
         div.input
             span.label Kapitel
