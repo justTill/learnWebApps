@@ -1,10 +1,7 @@
 extends ../layout
 
 block content
-    h1 Aktuelle Kapitel
-    each chapter in chapters
-        p= chapter.name
-            a(href='/chapter/#{chapter.id}') Kapitel bearbeiten
+    h1 Aktuelle Kapitel und Kapitel Medien
     div
         a(href='/createChapter') Kapitel erstellen
 
@@ -22,3 +19,8 @@ block content
                         option(value="#{chapter.id}") #{chapter.name}
                 input(type="file" name="file")
                 input(type="submit" value="Upload")
+    each chapter in chapters
+        p= chapter.name
+            a(href='/chapter/#{chapter.id}') Kapitel bearbeiten
+            br
+            a(href='/deleteChapter/#{chapter.id}') Löschen

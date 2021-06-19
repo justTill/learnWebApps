@@ -1,36 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var userController = require('../controller/userController')
-var lessonsController = require('../controller/lessonsController')
-const asyncMiddleware = require('../utils/asyncMiddleware');
-const multer = require("multer");
-
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        next()
-    } else {
-        res.redirect('/')
-    }
-}
-
-const upload = multer({
-    dest: "/public"
-});
-
-router.get('/', asyncMiddleware(async (req, res, next) => {
-    let isLoggedIn = req.isAuthenticated()
-    res.render("index", {"isLoggedIn": isLoggedIn})
-}));
-
-//Chapters
-router.get('/chapter', isLoggedIn, asyncMiddleware(lessonsController.showChapterOverview))
-router.get('/chapter/:id', isLoggedIn, asyncMiddleware(lessonsController.editChapter))
-router.get('/createChapter', isLoggedIn, (req, res, next) => {
-    res.render('chapters/createChapter')
-})
-
-router.post('/saveChapter', isLoggedIn, asyncMiddleware(lessonsController.saveChapter))
-router.post('/uploadChapterMedia', isLoggedIn, upload.single("file"), asyncMiddleware(lessonsController.uploadMedia))
+var userController = require('../controller/UserController')
+const isLoggedIn = require('../utils/logIn').loggedIn;
 
 //User
 router.get('/overview', isLoggedIn, userController.showUserOverview)
@@ -46,7 +17,7 @@ router.get('/register', (req, res, next) => {
 
     //res.render("register")
     res.send(form);
-
+    
 });
 
 router.post('/login', userController.authenticate);

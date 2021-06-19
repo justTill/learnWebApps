@@ -1,0 +1,73 @@
+extends ../layout
+
+block content
+    h1 Unterthema bearbeiten
+    h3 Hinweise an den Dozenten
+    br
+    form(action="/saveEditedSection" method="post")
+        div.input
+            span.label Name
+            br
+            input(type="text" name="sectionName" required value="#{section.name}")
+        div.input
+            span.label Informationen
+            br
+            textarea(name="information" required) #{section.information }
+        div.input
+            span.label Unterhema nummer
+            br
+            input(type="number" min=1 name="updatedSectionNumber" required value="#{section.sectionnumber}")
+            input(type="hidden" name="sectionNumber" value="#{section.sectionnumber}")
+        div.input
+            span.label Kapitel
+            br
+            select(name="chapterId")
+                each chapter in chapters
+                    option(value="#{chapter.id}" selected=chapter.id == currentChapterId) #{chapter.name}
+            br
+            input(type="hidden" name="sectionId" value="#{section.id}" required)
+            input(type="hidden" name="currentChapterId" value="#{currentChapterId}" required)
+        div.actions
+            input(type="submit" value="Unterhemea Speichern")
+
+        if error
+            p #{error}
+
+        h1 Verfügbaren bilder
+        div mit img tag und src="angezeigter NAME" einbinden
+            ul
+            each file in files
+                li #{file.path}
+
+        h3 Aufgaben
+        h4 Code Aufgaben
+        a(href='/createCodingLesson/#{currentChapterId}/#{section.id}') Erstellen
+        br
+        each codeLesson in codingLessons
+            p #{codeLesson.name}
+                a(href='/editCodingLesson/#{currentChapterId}/#{section.id}/#{codeLesson.lessonid}') Bearbeiten
+                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{codeLesson.lessonid}')  Löschen
+
+        h4 Code extension Aufgaben
+        a(href='/createCodeExtensionLesson/#{currentChapterId}/#{section.id}') Erstellen
+        br
+        each codeExtensionLesson in codeExtensionLessons
+            p #{codeExtensionLesson.name}
+                a(href='/editCodeExtensionLesson/#{currentChapterId}/#{section.id}/#{codeExtensionLesson.lessonid}') Bearbeiten
+                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{codeExtensionLesson.lessonid}')  Löschen
+
+        h4 Fill the blank Aufgaben
+        a(href='/createFillTheBlankLesson/#{currentChapterId}/#{section.id}') Erstellen
+        br
+        each fillTheBlankLesson in fillTheBlankLessons
+            p #{fillTheBlankLesson.name}
+                a(href='/editFillTheBlankLesson/#{currentChapterId}/#{section.id}/#{fillTheBlankLesson.lessonid}') Bearbeiten
+                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{fillTheBlankLesson.lessonid}')  Löschen
+
+        h4 Single- und Multiplechoice Aufgaben
+        a(href='/createSingleMultipleChoiceLesson/#{currentChapterId}/#{section.id}') Erstellen
+        br
+        each singleMultipleChoiceLesson in singleMultipleChoiceLessons
+            p #{singleMultipleChoiceLesson.name}
+                a(href='/SingleMultipleChoiceLesson/#{currentChapterId}/#{section.id}/singleMultipleChoiceLesson') Bearbeiten
+                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{singleMultipleChoiceLesson.lessonid}')  Löschen

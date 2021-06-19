@@ -3,18 +3,21 @@ extends ../layout
 block content
     h1 Kapitel Erstellen
     h3 Hinweise an den Dozenten
-    form(action="/saveChapter" method="post")
+    form(action="/saveNewChapter" method="post")
         div.input
             span.label Kapitelname
             br
-            input(type="text" name="chapterName" required)
+            input(type="text" name="chapterName" required value="#{chapterData ? chapterData.name : ''}")
         div.input
             span.label Übersichtstext
             br
-            textarea(name="overview" required)
+            textarea(name="overview" required) #{chapterData ? chapterData.overview : ''}
         div.input
             span.label Kapitelnummer
             br
-            input(type="number" name="chapterNumber" required)
+            input(type="number" min=1 name="chapterNumber" required value="#{chapterData ? chapterData.chapterNumber : 0}")
         div.actions
             input(type="submit" value="Kapitel Speichern")
+
+    if error
+        p #{error}

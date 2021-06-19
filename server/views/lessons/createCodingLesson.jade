@@ -1,0 +1,51 @@
+extends ../layout
+
+block content
+    h1 Coding Aufgabe erstellen
+
+    form(action="/saveCreateCodingLesson" method="post")
+        input(type="hidden" name="chapterId" value="#{chapterId}")
+        input(type="hidden" name="sectionId" value="#{sectionId}")
+        div.input
+            span.label Aufgabenname
+            br
+            input(type="text" name="lessonName" required value="#{codinglesson ? codinglesson.name : ''}")
+        div.input
+            span.label Aufgabennummer
+            br
+            input(type="number" min=1 name="lessonNumber" required value="#{codinglesson ? codinglesson.lessonnumber : 0")
+        div.input
+            span.label Aufgabentext
+            br
+            textarea(name="lessonInformation" required) #{codinglesson ? codinglesson.information : ''}
+
+        div.input
+            span.label Aufgabenüberprüfungstyp
+            br
+            select(name="verificationtype" required)
+                option(value="JASMINE") Jasmine
+                option(value="SELF") Selbst
+        div.input
+            span.label Musterlösung
+            br
+            textarea(name="examplesolution" required) #{codinglesson ? codinglesson.examplesolution : ''}
+        div.input
+            span.label Überprüfungscode
+            br
+            textarea(name="verificationCode" required) #{codinglesson ? codinglesson.verificationcode : ''}
+        div.input
+            span.label Überprüfungsinformationen
+            br
+            textarea(name="verificationInformation" required) #{codinglesson ? codinglesson.verificationinformation : ''}
+        div.actions
+            input(type="submit" value="Aufagbe Speichern")
+
+
+    if error
+        p #{error}
+
+    h1 Verfügbaren bilder
+    div mit img tag und src="angezeigter NAME" einbinden
+        ul
+        each file in files
+            li #{file.path}
