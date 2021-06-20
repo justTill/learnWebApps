@@ -9,7 +9,7 @@ env:
   DATABASE_NAME: LearnWebappsProd
 
 jobs:
-  healtcheck:
+  healthcheck:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
