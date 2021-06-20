@@ -19,7 +19,10 @@ sleep 2
 yarn node-liquibase --changeLogFile="./liquibase/changelog.json" --url="jdbc:postgresql://$SQL_HOST:$SQL_PORT/test_database" --username="test_user" --password="test_password" --classpath=./node_modules/liquibase-wrapper/lib/postgres/postgresql-42.2.18.jar update
 
 #insert Data
+jasmine || status=$?
 
-jasmine --config=spec/support/jasmine.json
 
 docker rm -f $(docker ps -a -q --filter="name=$DB_CONTAINER_NAME")
+
+echo "EXIT CODE $status"
+exit $status

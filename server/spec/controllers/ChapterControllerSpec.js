@@ -48,5 +48,3 @@ describe("ChapterController: ", function () {
         expect(true).toBe(true);
     });
 });
-
-//https://stackoverflow.com/questions/9517880/how-does-one-unit-test-routes-with-express
