@@ -39,7 +39,7 @@ describe("ChapterController: ", function () {
     });
     
     it("Edit Chapter", function () {
-        expect(true).toBe(true);
+        expect(true).toBe(false);
     });
     it("Sections are there", function () {
         expect(true).toBe(true);
