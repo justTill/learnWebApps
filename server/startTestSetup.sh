@@ -24,5 +24,4 @@ jasmine || status=$?
 
 docker rm -f $(docker ps -a -q --filter="name=$DB_CONTAINER_NAME")
 
-echo "EXIT CODE $status"
 exit $status
