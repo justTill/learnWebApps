@@ -11,13 +11,13 @@ env:
 jobs:
   healtcheck:
     runs-on: ubuntu-latest
-      steps:
-          - uses: actions/checkout@v2
-            - name: run Tests
-                run: |
-                  cd server
-                  npm install
-                  npm run test
+    steps:
+      - uses: actions/checkout@v2
+      - name: run Tests
+        run: |
+          cd server
+          npm install
+          npm run test
   buildAndPush:
     runs-on: ubuntu-latest
     steps:
