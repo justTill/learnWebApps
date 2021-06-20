@@ -8,6 +8,7 @@ exports.findAll = async function () {
         .then(res => {
             return res.rows
         }).catch(err => {
+            return result
             throw  err
         })
     return result
@@ -48,6 +49,7 @@ exports.findByChapterNumber = async function (chapterNumber) {
             }
             return result
         }).catch(err => {
+            console.log(process.env.DB_CONTAINER_NAME)
             throw  err
         })
     return result

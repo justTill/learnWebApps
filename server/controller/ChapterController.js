@@ -6,7 +6,7 @@ const path = require("path");
 const fs = require("fs");
 
 exports.showChapterOverview = async function (req, res, next) {
-    chapterRepository.findAll()
+    await chapterRepository.findAll()
         .then(rows => {
             res.render('chapters/chapter', {chapters: rows})
         })
@@ -53,7 +53,7 @@ exports.saveNewChapter = async function (req, res, next) {
             chapterData: {name: name, overview: overview, chapterNumber: chapterNumber}
         })
     } else if (name && overview && chapterNumber) {
-        chapterRepository.insertOrUpdateChapter(null, name, overview, chapterNumber)
+        await chapterRepository.insertOrUpdateChapter(null, name, overview, chapterNumber)
             .then(result => {
                 res.redirect('/chapter')
             })
