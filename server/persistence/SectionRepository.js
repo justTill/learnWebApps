@@ -56,7 +56,7 @@ exports.findById = async function (id) {
 }
 
 
-exports.insertOrUpdateChapter = async function (id, chapterId, name, information, sectionNumber) {
+exports.insertOrUpdateSection = async function (id, chapterId, name, information, sectionNumber) {
     let result
     if (id) {
         let query = "UPDATE sections SET name=$1, chapterid=$2, information=$3, sectionnumber=$4 WHERE id=$5;"

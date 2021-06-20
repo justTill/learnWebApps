@@ -59,7 +59,7 @@ exports.insertOrUpdateChapter = async function (id, name, overview, chapterNumbe
     let result;
     if (id) {
         let query = "UPDATE chapters SET name=$1, overview=$2, chapternumber=$3 WHERE id=$4;"
-        result = pool.query(query, [name, overview, chapterNumber, id])
+        result = await pool.query(query, [name, overview, chapterNumber, id])
             .then(res => {
                 return res
             }).catch(err => {
@@ -67,7 +67,7 @@ exports.insertOrUpdateChapter = async function (id, name, overview, chapterNumbe
             })
     } else {
         let query = "INSERT INTO chapters (name, overview, chapternumber) VALUES ($1,$2, $3);"
-        result = pool.query(query, [name, overview, chapterNumber])
+        result = await pool.query(query, [name, overview, chapterNumber])
             .then(res => {
                 return res
             }).catch(err => {
