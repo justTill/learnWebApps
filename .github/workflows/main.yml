@@ -19,6 +19,7 @@ jobs:
           npm install
           npm run test
   buildAndPush:
+    needs: healthcheck
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
