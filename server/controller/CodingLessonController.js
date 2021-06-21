@@ -7,7 +7,7 @@ exports.deleteLesson = async function (req, res, next) {
     let chapterId = req.params.chapterId
     let sectionId = req.params.sectionId
     let lessonId = req.params.lessonId
-    lessonsRepository.deleteById(lessonId)
+    await lessonsRepository.deleteById(lessonId)
         .then(rows => {
             res.redirect("/section/" + chapterId + "/" + sectionId)
         })
@@ -86,8 +86,9 @@ exports.saveEditCodingLesson = async function (req, res, next) {
             })
             return
         }
-        lessonsRepository.insertOrUpdateCodingLesson(lessonId, codingLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, verificationType, verificationCode, exampleSolution, verificationInformation)
+        await lessonsRepository.insertOrUpdateCodingLesson(lessonId, codingLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, verificationType, verificationCode, exampleSolution, verificationInformation)
             .then(result => {
+                console.log("")
                 res.redirect('/section/' + chapterId + '/' + updatedSectionId)
             })
             .catch(err => {
@@ -128,7 +129,7 @@ exports.saveCreateCodingLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            lessonsRepository.insertOrUpdateCodingLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, verificationType, verificationCode, exampleSolution, verificationInformation)
+            await lessonsRepository.insertOrUpdateCodingLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, verificationType, verificationCode, exampleSolution, verificationInformation)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + sectionId)
                 })
