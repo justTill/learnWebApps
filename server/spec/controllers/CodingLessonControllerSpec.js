@@ -1,20 +1,16 @@
 var sectionRoutes = require("../../controller/SectionController")
-var chapterRoutes = require("../../controller/ChapterController")
 var codingLessonRoutes = require("../../controller/CodingLessonController")
-var firstChapter = require('../support/cannedData').firstChpater
 var firstSectionToChapterOne = require('../support/cannedData').firstSectionToChapterOne
-var secondSectionToChapterOne = require('../support/cannedData').secondSectionToChapterOne
 var classSectionOneLessonOne = require('../support/cannedData').classSectionOneLessonOne
 var classSectionOneLessonTwo = require('../support/cannedData').classSectionOneLessonTwo
 var classSectionTwoLessonOne = require('../support/cannedData').classSectionTwoLessonOne
-var secondChapter = require('../support/cannedData').secondChapter
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 describe("CodingLessonController: ", function () {
-    it("Lessons can be edited with correct data (editSection)", async function () {
+    it("Lessons can be edited with correct data (editCodingLesson)", async function () {
         let request = {
             params: {
                 chapterId: firstSectionToChapterOne.chapterId,
@@ -36,7 +32,7 @@ describe("CodingLessonController: ", function () {
         expect(response.data.chapterId).toEqual(firstSectionToChapterOne.chapterId)
         expect(response.data.sectionId).toEqual(classSectionOneLessonOne.sectionid)
     });
-    it("Lessons can be created and Deleted (saveNewSection / deleteSection )", async function () {
+    it("Lessons can be created and Deleted (saveNewCodingLesson / deleteCodingLesson )", async function () {
         let request = {
             body: {
                 chapterId: firstSectionToChapterOne.chapterId,
@@ -89,7 +85,7 @@ describe("CodingLessonController: ", function () {
         await sectionRoutes.editSection(request, response)
         expect(response.data.codingLessons.length).toEqual(1)
     });
-    it("Creating Lessons with an existing lessonnumber throws an error (saveNewSection)", async function () {
+    it("Creating Lessons with an existing lessonnumber throws an error (saveNewCodingLesson)", async function () {
         let request = {
             body: {
                 chapterId: firstSectionToChapterOne.chapterId,
@@ -119,7 +115,7 @@ describe("CodingLessonController: ", function () {
         expect(response.data.error).toContain('Aufgaben Nummer ist schon vergeben')
 
     });
-    it("Saving an edited Lesson with different lessonnumber works and shows correct data", async function () {
+    it("Saving an edited Lesson with different lessonnumber works and shows correct data (saveEditCodingLesson)", async function () {
         let codingLessonRequest = {
             params: {
                 chapterId: firstSectionToChapterOne.chapterId,
@@ -228,7 +224,7 @@ describe("CodingLessonController: ", function () {
         expect(response.data.codingLesson.lessonnumber).toEqual(classSectionOneLessonOne.lessonnumber)
         expect(response.data.codingLesson.information).toEqual(classSectionOneLessonOne.information)
     });
-    it("Trying so save an edited Lesson to different Section with lessonnumber taken shows an error", async function () {
+    it("Trying so save an edited Lesson to different Section with lessonnumber taken shows an error (saveEditCodingLesson)", async function () {
         let codingLessonRequest = {
             params: {
                 chapterId: firstSectionToChapterOne.chapterId,
