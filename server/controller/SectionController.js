@@ -12,7 +12,7 @@ async function isSectionNumberOccupied(number, chapterId) {
 exports.deleteSection = async function (req, res, next) {
     let sectionId = req.params.sectionId
     let chapterId = req.params.chapterId
-    sectionRepository.deleteById(sectionId)
+    await sectionRepository.deleteById(sectionId)
         .then(rows => {
             res.redirect("/chapter/" + chapterId)
         })
@@ -38,7 +38,7 @@ exports.saveNewSection = async function (req, res, next) {
                 chapterId: chapterId,
             })
         } else {
-            sectionRepository.insertOrUpdateChapter(null, chapterId, name, information, sectionNumber)
+            await sectionRepository.insertOrUpdateSection(null, chapterId, name, information, sectionNumber)
                 .then(result => {
                     res.redirect('/chapter/' + chapterId)
                 })
@@ -87,7 +87,7 @@ exports.saveEditedSection = async function (req, res, next) {
                 files: files
             })
         } else {
-            sectionRepository.insertOrUpdateChapter(sectionId, updatedChapterId, name, information, updatedSectionNumber)
+            await sectionRepository.insertOrUpdateSection(sectionId, updatedChapterId, name, information, updatedSectionNumber)
                 .then(result => {
                     res.redirect('/chapter/' + updatedChapterId)
                 })
@@ -96,7 +96,7 @@ exports.saveEditedSection = async function (req, res, next) {
                 })
         }
     } else {
-        res.redirect('/chapter/' + chapterId)
+        res.redirect('/chapter/' + currentChapterId)
     }
 
 }
@@ -109,7 +109,7 @@ exports.editSection = async function (req, res, next) {
     let codeExtensionLessons = await lessonsRepository.findCodeExtensionBySectionId(sectionId);
     let singleMultipleChoiceLessons = await lessonsRepository.findSingleMultipleChoiceBySectionId(sectionId);
     let files = await fileRepository.findByChapterId(chapterId)
-    sectionRepository.findById(sectionId)
+    await sectionRepository.findById(sectionId)
         .then(result => {
             res.render('sections/editSection', {
                 section: result,
@@ -119,7 +119,9 @@ exports.editSection = async function (req, res, next) {
                 fillTheBlankLessons: fillTheBlankLessons,
                 codeExtensionLessons: codeExtensionLessons,
                 singleMultipleChoiceLessons: singleMultipleChoiceLessons,
-                files: files
+                files: files,
+                sectionId: sectionId,
+                chapterId: chapterId
             })
         })
         .catch(err => {

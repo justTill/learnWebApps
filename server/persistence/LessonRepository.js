@@ -44,7 +44,7 @@ exports.findCodingBySectionId = async function (sectionId) {
 exports.insertOrUpdateCodingLesson = async function (lessonId, codingLessonId, sectionId, lessonNumber, information, name, verificationType, verificationCode, exampleSolution, verificationInformation) {
     let result
     if (lessonId && codingLessonId) {
-        result = pool.query('BEGIN', err => {
+        result = await pool.query('BEGIN', err => {
             let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4 WHERE id=$5";
             pool.query(query, [sectionId, lessonNumber, information, name, lessonId])
                 .then(res => {
@@ -73,7 +73,7 @@ exports.insertOrUpdateCodingLesson = async function (lessonId, codingLessonId, s
         let insertLessonQuery = "INSERT INTO lessons (sectionid, lessonnumber, information, name) VALUES ($1, $2, $3, $4) RETURNING id"
         let insertCodingLessonQuery = 'INSERT INTO "codingLessons" (lessonid, verificationtype, verificationcode, examplesolution,verificationinformation)'
         let query = 'WITH new_lesson AS (' + insertLessonQuery + '),v (a,b,c,d) as (VALUES($5::verificationtype, $6, $7, $8))' + insertCodingLessonQuery + ' SELECT new_lesson.id, a,b,c,d from v, new_lesson;'
-        result = pool.query(query, [sectionId, lessonNumber, information, name, verificationType.toUpperCase(), verificationCode, exampleSolution, verificationInformation])
+        result = await pool.query(query, [sectionId, lessonNumber, information, name, verificationType.toUpperCase(), verificationCode, exampleSolution, verificationInformation])
             .then(res => {
                 return res
             }).catch(err => {

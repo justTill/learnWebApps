@@ -6,7 +6,7 @@ const path = require("path");
 const fs = require("fs");
 
 exports.showChapterOverview = async function (req, res, next) {
-    chapterRepository.findAll()
+    await chapterRepository.findAll()
         .then(rows => {
             res.render('chapters/chapter', {chapters: rows})
         })
@@ -17,7 +17,7 @@ exports.showChapterOverview = async function (req, res, next) {
 
 exports.deleteChapter = async function (req, res, next) {
     let id = req.params.id
-    chapterRepository.deleteById(id)
+    await chapterRepository.deleteById(id)
         .then(rows => {
             res.redirect("/chapter")
         })
@@ -30,7 +30,7 @@ exports.editChapter = async function (req, res, next) {
     let id = req.params.id
     let files = await fileRepository.findByChapterId(id)
     let sections = await sectionRepository.findByChapterId(id)
-    chapterRepository.findById(id)
+    await chapterRepository.findById(id)
         .then(chapter => {
             res.render('chapters/editChapter', {chapter: chapter, files: files, sections: sections})
         })
@@ -53,7 +53,7 @@ exports.saveNewChapter = async function (req, res, next) {
             chapterData: {name: name, overview: overview, chapterNumber: chapterNumber}
         })
     } else if (name && overview && chapterNumber) {
-        chapterRepository.insertOrUpdateChapter(null, name, overview, chapterNumber)
+        await chapterRepository.insertOrUpdateChapter(null, name, overview, chapterNumber)
             .then(result => {
                 res.redirect('/chapter')
             })
@@ -87,7 +87,7 @@ exports.saveEditedChapter = async function (req, res, next) {
                 return
             }
         }
-        chapterRepository.insertOrUpdateChapter(chapterId, name, overview, updatedChapterNumber)
+        await chapterRepository.insertOrUpdateChapter(chapterId, name, overview, updatedChapterNumber)
             .then(result => {
                 res.redirect('/chapter')
             })

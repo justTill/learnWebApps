@@ -9,9 +9,24 @@ env:
   DATABASE_NAME: LearnWebappsProd
 
 jobs:
-  buildAndPush:
+  healthcheck:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        node-version: [15.0]
+    steps:
+      - uses: actions/checkout@v2
+      - name: run Test with Node verison 15
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: |
+          cd server
+          npm install
+          npm run test
+  buildAndPush:
+    needs: healthcheck
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Log into registry
