@@ -67,7 +67,9 @@ exports.saveCreateFillTheBlankLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            lessonsRepository.insertOrUpdateFillTheBlankLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, textWithBlanks, possibleAnswers, answers)
+            console.log("saved")
+
+            await lessonsRepository.insertOrUpdateFillTheBlankLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, textWithBlanks, possibleAnswers, answers)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + sectionId)
                 })
@@ -76,6 +78,7 @@ exports.saveCreateFillTheBlankLesson = async function (req, res, next) {
                 })
         }
     } else {
+        console.log("redirected")
         res.redirect('/section/' + chapterId + '/' + sectionId)
     }
 
@@ -122,7 +125,7 @@ exports.saveEditFillTheBlankLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            lessonsRepository.insertOrUpdateFillTheBlankLesson(lessonId, fillTheBlankLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, textWithBlanks, possibleAnswers, answers)
+            await lessonsRepository.insertOrUpdateFillTheBlankLesson(lessonId, fillTheBlankLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, textWithBlanks, possibleAnswers, answers)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + updatedSectionId)
                 })
