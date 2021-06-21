@@ -11,12 +11,16 @@ env:
 jobs:
   healthcheck:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [15.0]
     steps:
       - uses: actions/checkout@v2
+      - name: run Test with Node verison 15
+        uses: actions/setup-node@v1
         with:
-          - node-version: 15
-      - name: run Tests
-        run: |
+          node-version: ${{ matrix.node-version }}
+      - run: |
           cd server
           npm install
           npm run test
