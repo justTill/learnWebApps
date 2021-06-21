@@ -114,7 +114,7 @@ exports.saveEditCodeExtensionLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            lessonsRepository.insertOrUpdateCodeExtensionLesson(lessonId, codeExtensionLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, unfinishedCode, answers)
+            await lessonsRepository.insertOrUpdateCodeExtensionLesson(lessonId, codeExtensionLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, unfinishedCode, answers)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + updatedSectionId)
                 })

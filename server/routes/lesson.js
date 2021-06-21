@@ -27,5 +27,7 @@ router.post('/saveEditFillTheBlankLesson/', isLoggedIn, asyncMiddleware(fillTheB
 
 router.get('/editSingleMultipleChoiceLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(singleMultipleChoiceController.editSingleMultipleChoiceLesson))
 router.get('/createSingleMultipleChoiceLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(singleMultipleChoiceController.createSingleMultipleChoiceLesson))
+router.post('/saveCreateSingleMultipleChoiceLesson/', isLoggedIn, asyncMiddleware(singleMultipleChoiceController.saveCreateSingleMultipleChoiceLesson))
+router.post('/saveEditSingleMultipleChoiceLesson/', isLoggedIn, asyncMiddleware(singleMultipleChoiceController.saveEditSingleMultipleChoiceLesson))
 
 module.exports = router;

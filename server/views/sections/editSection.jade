@@ -69,5 +69,5 @@ block content
         br
         each singleMultipleChoiceLesson in singleMultipleChoiceLessons
             p #{singleMultipleChoiceLesson.name}
-                a(href='/SingleMultipleChoiceLesson/#{currentChapterId}/#{section.id}/singleMultipleChoiceLesson') Bearbeiten
+                a(href='/editSingleMultipleChoiceLesson/#{currentChapterId}/#{section.id}/#{singleMultipleChoiceLesson.lessonid}') Bearbeiten
                     a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{singleMultipleChoiceLesson.lessonid}')  Löschen
