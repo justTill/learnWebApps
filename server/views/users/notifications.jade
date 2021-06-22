@@ -1,4 +1,44 @@
 extends ../layout
 
 block content
-    h1 Antworten auf Probleme
+
+    h1 Auf neue Probleme Antworten
+    each problem in unansweredProblems
+        span <b> #{problem.moodlename} </b> hat ein Problem beim Aufgabe <b> #{problem.lessonname} </b>
+        a() Antworten #{problem.moodleid}
+        form(action="/saveAnswerOnProblem" method="post")
+            input(type="hidden" name="problemId" value="#{problem.id}")
+            input(type="hidden" name="moodleId" value="#{problem.moodleid}")
+            div.input
+                span.label Nachrichten Text
+                br
+                textarea(name="answer" value="" required)
+            div.actions
+                input(type="submit" value="Antwort speichern")
+
+    h1 Antworten auf Probleme bearbeiten
+    each key in answeredProblemKeys
+        b Meldungen vom #{key}
+        br
+        each problem in answeredProblems.get(key)
+            div Von #{problem.moodlename} öffnen
+                div
+                    span=problem.lessonname
+                    //span=problem.message
+                    //span=problem.answer
+                button Antwort bearbeiten
+            form(action="/saveAnswerOnProblem" method="post")
+                input(type="hidden" name="problemId" value="#{problem.problemid}")
+                input(type="hidden" name="moodleId" value="#{problem.moodleid}")
+                input(type="hidden" name="notificationId" value="#{problem.notificationid}")
+                div.input
+                    span.label Nachrichten Text
+                    br
+                    textarea(name="answer" value="" required) #{problem.answer}
+                div.actions
+                    input(type="submit" value="Antwort speichern")
+            form(action="/deleteProblem" method="post")
+                input(type="hidden" name="problemId" value="#{problem.problemid}")
+                div.actions
+                    input(type="submit" value="Problem löschen")
+            br

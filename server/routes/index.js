@@ -17,10 +17,13 @@ router.get('/register', (req, res, next) => {
 
     //res.render("register")
     res.send(form);
-    
+
 });
 
 router.post('/login', userController.authenticate);
 router.post('/register', userController.registerUser);
+
+router.post('/deleteProblem', userController.deleteProblem);
+router.post('/saveAnswerOnProblem', userController.saveAnswerOnProblem);
 
 module.exports = router;
