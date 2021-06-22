@@ -195,7 +195,7 @@
                     "name": "sectionnumber",
                     "type": "int",
                     "constraints": {
-                      "nullable": false,
+                      "nullable": false
                     }
                   }
                 },
@@ -243,7 +243,7 @@
                     "name": "lessonnumber",
                     "type": "int",
                     "constraints": {
-                      "nullable": false,
+                      "nullable": false
                     }
                   }
                 },
@@ -297,6 +297,18 @@
                 },
                 {
                   "column": {
+                    "name": "lessonid",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false,
+                      "foreignKeyName": "fk_problem_lesson",
+                      "references": "lessons(id)",
+                      "deleteCascade": true
+                    }
+                  }
+                },
+                {
+                  "column": {
                     "name": "message",
                     "type": "varchar(255)"
                   }
@@ -337,6 +349,19 @@
                       "nullable": false,
                       "foreignKeyName": "fk_notification_person",
                       "references": "persons(moodleid)",
+                      "deleteCascade": true
+                    }
+                  }
+                },
+                ,
+                {
+                  "column": {
+                    "name": "problemid",
+                    "type": "int",
+                    "constraints": {
+                      "nullable": false,
+                      "foreignKeyName": "fk_notification_problem",
+                      "references": "problems(id)",
                       "deleteCascade": true
                     }
                   }
@@ -398,7 +423,7 @@
                       "nullable": false
                     }
                   }
-                },
+                }
               ]
             }
           },

@@ -56,6 +56,10 @@ async function getUsersThatSolvedLessonsByChapter() {
     return solvedByChapter
 }
 
+exports.deleteProblem = async function (req, res, next) {
+    await userRepository.deleteProblemById(req.body.problemId)
+    res.redirect('/notifications')
+}
 exports.showUserOverview = async function (req, res, next) {
     let solvedLessonsByChapter = await getUsersThatSolvedLessonsByChapter();
     let userThatSolvedEveryLesson = await getUserThatSolvedEveryLesson();
@@ -65,20 +69,42 @@ exports.showUserOverview = async function (req, res, next) {
     })
 }
 exports.showUserNotifications = async function (req, res, next) {
-    res.render('users/notifications')
+    let unansweredProblems = await userRepository.findUnansweredProblem()
+    let answeredProblems = await userRepository.findAnsweredProblems()
+    let answeredProblemsKey = []
+    let mappedProblems = new Map()
+    for (let problem of answeredProblems) {
+        let dateString = new Date(problem.createdat).toISOString().split('T')[0]
+        if (mappedProblems.has(dateString)) {
+            mappedProblems.get(dateString).push(problem)
+        } else {
+            answeredProblemsKey.push(dateString)
+            mappedProblems.set(dateString, [problem])
+        }
+    }
+    res.render('users/notifications', {
+        answeredProblemKeys: answeredProblemsKey,
+        answeredProblems: mappedProblems,
+        unansweredProblems: unansweredProblems
+    })
+}
+exports.saveAnswerOnProblem = async function (req, res, next) {
+    let problemId = req.body.problemId
+    let moodleId = req.body.moodleId
+    let answer = req.body.answer
+    let notificationId = req.body.notificationId
+    if (problemId && moodleId && answer) {
+        await userRepository.insertOrUpdateUserNotifications(notificationId, moodleId, answer, problemId)
+    }
+    res.redirect('/notifications')
 }
 
 exports.registerUser = function (req, res, next) {
-
     const saltHash = genPassword(req.body.password);
-
     const salt = saltHash.salt;
     const hash = saltHash.hash;
-
     userRepository.saveAdmin(req.body.email, hash, salt).then(res => res)
-
     res.redirect('/');
-
 }
 exports.logout = function (req, res, next) {
     req.logout();
