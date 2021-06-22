@@ -392,22 +392,13 @@
                 },
                 {
                   "column": {
-                    "name": "answeroptions",
-                    "type": "varchar(255) []",
+                    "name": "markedoptions",
+                    "type": "varchar(255)",
                     "constraints": {
                       "nullable": false
                     }
                   }
                 },
-                {
-                  "column": {
-                    "name": "correctanswers",
-                    "type": "varchar(255) []",
-                    "constraints": {
-                      "nullable": false
-                    }
-                  }
-                }
               ]
             }
           },

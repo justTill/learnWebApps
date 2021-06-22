@@ -8,7 +8,6 @@ function correctNumberOfBlanksAndAnswersAndPossibleAnswers(textWithBlanks, answe
     let numberOfPossibleAnswers = possibleAnswers.replaceAll("\n", "").split('\r').length
     let numberOfInputs = (textWithBlanks.match(/\[input]/g) || []).length
     return numberOfAnswers === numberOfInputs && numberOfPossibleAnswers >= numberOfInputs
-
 }
 
 
