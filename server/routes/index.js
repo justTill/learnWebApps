@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 var userController = require('../controller/UserController')
 const isLoggedIn = require('../utils/logIn').loggedIn;
-
+const asyncMiddleware = require('../utils/asyncMiddleware');
 //User
-router.get('/overview', isLoggedIn, userController.showUserOverview)
-router.get('/notifications', isLoggedIn, userController.showUserNotifications)
+router.get('/overview', isLoggedIn, asyncMiddleware(userController.showUserOverview))
+router.get('/notifications', isLoggedIn, asyncMiddleware(userController.showUserNotifications))
 router.get('/logout', isLoggedIn, userController.logout);
 
 

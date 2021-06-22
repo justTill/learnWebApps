@@ -312,4 +312,50 @@ exports.insertOrUpdateSingleMultipleChoiceLesson = async function (lessonId, sin
     }
     return result
 }
+exports.findAllBySectionId = async function (sectionId) {
+    let query = 'SELECT * from lessons WHERE sectionid=$1 ORDER BY lessonnumber'
+    let result = {}
+    result = await pool.query(query, [sectionId])
+        .then(res => {
+            if (res.rows) {
+                return res.rows
+            }
+            return result
+        }).catch(err => {
+            throw  err
+        })
+    return result
+
+}
+
+exports.findAllLessonIds = async function () {
+    let query = 'SELECT id from lessons '
+    let result = {}
+    result = await pool.query(query, [])
+        .then(res => {
+            if (res.rows) {
+                return res.rows
+            }
+            return result
+        }).catch(err => {
+            throw  err
+        })
+    return result
+
+}
+exports.findSolvedByLessonIdAndMoodleId = async function (lessonId, moodleId) {
+    let query = 'SELECT * from "solvedLessons" WHERE lessonid=$1 AND moodleid=$2 '
+    let result = []
+    result = await pool.query(query, [lessonId, moodleId])
+        .then(res => {
+            if (res.rows) {
+                return res.rows
+            }
+            return result
+        }).catch(err => {
+            throw  err
+        })
+    return result
+
+}
 

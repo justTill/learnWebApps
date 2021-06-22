@@ -2,3 +2,16 @@ extends ../layout
 
 block content
     h1 Sehen wer was gemacht hat
+    each chapter in solvedByChapter
+        div #{chapter.chapterName}
+            each section in chapter.sections
+                div #{section.sectionName}
+                    each lesson in section.lessons
+                        div #{lesson.lessonName}
+                            each person in lesson.solvedBy
+                                div=person.moodlename
+                            br
+
+    h2r Folgende Studenten haben alle Aufgaben gelöst
+    each user in solvedEveryLesson
+        div=user.moodlename

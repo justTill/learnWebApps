@@ -107,7 +107,6 @@ exports.saveEditSingleMultipleChoiceLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            console.log(updatedSectionId)
             await lessonsRepository.insertOrUpdateSingleMultipleChoiceLesson(lessonId, singleMultipleChoiceLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, markedOptions)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + updatedSectionId)

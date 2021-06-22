@@ -66,8 +66,6 @@ exports.saveCreateFillTheBlankLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            console.log("saved")
-
             await lessonsRepository.insertOrUpdateFillTheBlankLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, textWithBlanks, possibleAnswers, answers)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + sectionId)
@@ -77,7 +75,6 @@ exports.saveCreateFillTheBlankLesson = async function (req, res, next) {
                 })
         }
     } else {
-        console.log("redirected")
         res.redirect('/section/' + chapterId + '/' + sectionId)
     }
 
@@ -104,7 +101,6 @@ exports.saveEditFillTheBlankLesson = async function (req, res, next) {
         if (errorMessage) {
             let files = await fileRepository.findByChapterId(chapterId)
             let sections = await sectionRepository.findByChapterId(chapterId)
-            console.log(textWithBlanks, possibleAnswers, answers)
             res.render("lessons/editFillTheBlankLesson", {
                 error: errorMessage,
                 fillTheBlankLesson: {
