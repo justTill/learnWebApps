@@ -88,7 +88,6 @@ exports.saveEditCodingLesson = async function (req, res, next) {
         }
         await lessonsRepository.insertOrUpdateCodingLesson(lessonId, codingLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, verificationType, verificationCode, exampleSolution, verificationInformation)
             .then(result => {
-                console.log("")
                 res.redirect('/section/' + chapterId + '/' + updatedSectionId)
             })
             .catch(err => {
