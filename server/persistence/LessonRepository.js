@@ -200,6 +200,21 @@ exports.findFillTheBlankBySectionId = async function (sectionId) {
     return result
 
 }
+exports.findInformationsBySectionId = async function (sectionId) {
+    let query = 'select l.id, l.sectionid , l.lessonnumber, l.name, l.information from lessons l  left outer join "codingLessons" cl on cl.lessonid = l.id left outer join "codeExtensionLessons" cel on cel.lessonid =l.id left outer join "fillTheBlankLessons" ftbl on ftbl.lessonid = l.id left outer join "singleMultipleChoiceLessons" smcl on smcl.lessonid = l.id where smcl.lessonid is null and ftbl.lessonid is null and cl.lessonid is null and cel.lessonid is NULL and l.sectionid=$1 ORDER BY lessonnumber'
+    let result = {}
+    result = await pool.query(query, [sectionId])
+        .then(res => {
+            if (res.rows) {
+                return res.rows
+            }
+            return result
+        }).catch(err => {
+            throw  err
+        })
+    return result
+
+}
 exports.findFillTheBlankByLessonId = async function (lessonId) {
     let query = 'SELECT * from lessons l INNER JOIN "fillTheBlankLessons" ftbl ON l.id = ftbl.lessonid WHERE ftbl.lessonId=$1 ORDER BY lessonnumber'
     let result = {}
@@ -312,6 +327,27 @@ exports.insertOrUpdateSingleMultipleChoiceLesson = async function (lessonId, sin
     }
     return result
 }
+exports.insertOrUpdateInformationLesson = async function (lessonId, sectionId, lessonNumber, lessonInformation, name) {
+    let result
+    if (lessonId) {
+        let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4 WHERE id=$5";
+        result = pool.query(query, [sectionId, lessonNumber, lessonInformation, name, lessonId])
+            .then(res => {
+                return res
+            }).catch(err => {
+                throw  err
+            })
+    } else {
+        let query = "INSERT INTO lessons (sectionid, lessonnumber, information, name) VALUES ($1, $2, $3, $4)"
+        result = pool.query(query, [sectionId, lessonNumber, lessonInformation, name])
+            .then(res => {
+                return res
+            }).catch(err => {
+                throw  err
+            })
+    }
+    return result
+}
 exports.findAllBySectionId = async function (sectionId) {
     let query = 'SELECT * from lessons WHERE sectionid=$1 ORDER BY lessonnumber'
     let result = {}
@@ -350,6 +386,21 @@ exports.findSolvedByLessonIdAndMoodleId = async function (lessonId, moodleId) {
         .then(res => {
             if (res.rows) {
                 return res.rows
+            }
+            return result
+        }).catch(err => {
+            throw  err
+        })
+    return result
+
+}
+exports.findById = async function (lessonId) {
+    let query = 'SELECT * from "lessons" WHERE id=$1'
+    let result = []
+    result = await pool.query(query, [lessonId])
+        .then(res => {
+            if (res.rows[0]) {
+                return res.rows[0]
             }
             return result
         }).catch(err => {
