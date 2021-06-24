@@ -16,10 +16,10 @@ div.input
     span.label Schwierigkeitsgrad
     br
     select(name="difficultyLevel" required)
-        option(value="#{EASY}" selected=lesson.difficultylevel == 'EASY') Einfach
-        option(value="#{MIDDLE}" selected=lesson.difficultylevel == 'MIDDLE') Mittel
-        option(value="#{HARD}" selected=lesson.difficultylevel == 'HARD') Schwer
+        option(value="EASY" selected=lesson && lesson.difficultylevel == 'EASY') Einfach
+        option(value="MIDDLE" selected=lesson && lesson.difficultylevel == 'MIDDLE') Mittel
+        option(value="HARD" selected=lesson && lesson.difficultylevel == 'HARD') Schwer
 div.input
     span.label Rückmeldung beim Erfolgreichen lösen
     br
-    textarea(name="feedback" required) #{lesson ? lesson.feedback : ''}
+    textarea(name="feedback") #{lesson ? lesson.feedback : ''}

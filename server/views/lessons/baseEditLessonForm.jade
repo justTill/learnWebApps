@@ -1,0 +1,35 @@
+input(type="hidden" name="chapterId" value="#{chapterId}")
+input(type="hidden" name="lessonId" value="#{lessonId}")
+input(type="hidden" name="sectionId" value="#{sectionId}")
+input(type="hidden" name="lessonNumber" value="#{lesson.lessonnumber}")
+input(type="hidden" name="lessonTypeId" value="#{lesson.id}")
+
+div.input
+    span.label Aufgabenname
+    br
+    input(type="text" name="lessonName" required value="#{lesson ? lesson.name : ''}")
+div.input
+    span.label Aufgabennummer
+    br
+    input(type="number" min=1 name="updatedLessonNumber" required value="#{lesson.lessonnumber}")
+div.input
+    span.label Informationen
+    br
+    textarea(name="lessonInformation" required) #{lesson.information}
+div.input
+    span.label Unterthema
+    br
+    select(name="updatedSectionId" required)
+        each section in sections
+            option(value="#{section.id}" selected=sectionId == section.id) #{section.name}
+div.input
+    span.label Schwierigkeitsgrad
+    br
+    select(name="difficultyLevel" required)
+        option(value="EASY" selected=lesson.difficultylevel == 'EASY') Einfach
+        option(value="MIDDLE" selected=lesson.difficultylevel == 'MIDDLE') Mittel
+        option(value="HARD" selected=lesson.difficultylevel == 'HARD') Schwer
+div.input
+    span.label Rückmeldung beim Erfolgreichen lösen
+    br
+    textarea(name="feedback") #{lesson.feedback}
