@@ -3,48 +3,25 @@ extends ../layout
 block content
     h1 Coding Aufgabe bearbeiten
     form(action="/saveEditCodingLesson" method="post")
-        div.input
-            span.label Aufgabename
-            br
-            input(type="text" name="lessonName" required value="#{codingLesson.name}")
-        div.input
-            span.label Aufgabennummer
-            br
-            input(type="number" min=1 name="updatedLessonNumber" required value="#{codingLesson.lessonnumber}")
-            input(type="hidden" name="lessonNumber" value="#{codingLesson.lessonnumber}")
-        div.input
-            span.label Informationstext
-            br
-            textarea(name="lessonInformation" required) #{codingLesson.information}
-        div.input
-            span.label Unterthema
-            br
-            select(name="updatedSectionId" required)
-                each section in sections
-                    option(value="#{section.id}" selected=sectionId == section.id) #{section.name}
+        include baseEditLessonForm
         div.input
             span.label Aufgabenüberprüfungstyp
             br
             select(name="verificationType" required)
-                option(value="JASMINE" selected=codingLesson.verificationtype === 'JASMINE') Jasmine
-                option(value="SELF" selected=codingLesson.verificationtype === 'SELF') Selbst
+                option(value="JASMINE" selected=lesson.verificationtype === 'JASMINE') Jasmine
+                option(value="SELF" selected=lesson.verificationtype === 'SELF') Selbst
         div.input
             span.label Überprüfungscode
             br
-            textarea(name="verificationCode" required) #{codingLesson.verificationcode}
+            textarea(name="verificationCode" required) #{lesson.verificationcode}
         div.input
             span.label Musterlösung
             br
-            textarea(name="exampleSolution" required) #{codingLesson.examplesolution}
+            textarea(name="exampleSolution" required) #{lesson.examplesolution}
         div.input
             span.label Überprüfungsinformationen
             br
-            textarea(name="verificationInformation" required) #{codingLesson.verificationinformation}
-        div.input
-            input(type="hidden" name="chapterId" value="#{chapterId}")
-            input(type="hidden" name="lessonId" value="#{lessonId}")
-            input(type="hidden" name="sectionId" value="#{sectionId}")
-            input(type="hidden" name="codingLessonId" value="#{codingLesson.id}")
+            textarea(name="verificationInformation" required) #{lesson.verificationinformation}
         div.actions
             input(type="submit" value="Aufgabe Speichern")
 

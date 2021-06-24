@@ -28,7 +28,7 @@ describe("CodingLessonController: ", function () {
         };
         await codingLessonRoutes.editCodingLesson(request, response)
         expect(response.viewName).toEqual("lessons/editCodingLesson")
-        expect(response.data.codingLesson.name).toEqual(classSectionOneLessonOne.name)
+        expect(response.data.lesson.name).toEqual(classSectionOneLessonOne.name)
         expect(response.data.chapterId).toEqual(firstSectionToChapterOne.chapterId)
         expect(response.data.sectionId).toEqual(classSectionOneLessonOne.sectionid)
     });
@@ -42,6 +42,8 @@ describe("CodingLessonController: ", function () {
                 lessonNumber: 12,
                 lessonInformation: "Informationen",
                 verificationtype: "SELF",
+                difficultyLevel: "EASY",
+                feedback: "",
                 examplesolution: "Solution",
                 verificationCode: "Code",
                 verificationInformation: "Informationen für den Nutzer, was geprüft wird",
@@ -95,6 +97,8 @@ describe("CodingLessonController: ", function () {
                 lessonNumber: classSectionOneLessonTwo.lessonnumber,
                 lessonInformation: "Informationen",
                 verificationtype: "SELF",
+                difficultyLevel: "EASY",
+                feedback: "",
                 examplesolution: "Solution",
                 verificationCode: "Code",
                 verificationInformation: "Informationen für den Nutzer, was geprüft wird",
@@ -141,9 +145,11 @@ describe("CodingLessonController: ", function () {
                 sectionId: classSectionOneLessonOne.sectionid,
                 updatedSectionId: classSectionOneLessonOne.sectionid,
                 lessonId: classSectionOneLessonOne.id, //
-                codingLessonId: codingLessonId,
+                lessonTypeId: codingLessonId,
                 lessonName: classSectionOneLessonOne.name,
                 updatedLessonNumber: 12,
+                difficultyLevel: classSectionOneLessonOne.difficultylevel,
+                feedback: classSectionOneLessonOne.feedback,
                 lessonNumber: classSectionOneLessonOne.lessonnumber,
                 lessonInformation: "neue Informationen",
                 verificationType: classSectionOneLessonOne.verificationtype,
@@ -171,24 +177,26 @@ describe("CodingLessonController: ", function () {
         request.params.sectionId = classSectionOneLessonOne.sectionid
         request.params.lessonId = classSectionOneLessonOne.id
         await codingLessonRoutes.editCodingLesson(request, response)
-        expect(response.data.codingLesson.lessonnumber).toEqual(12)
-        expect(response.data.codingLesson.information).toEqual("neue Informationen")
+        expect(response.data.lesson.lessonnumber).toEqual(12)
+        expect(response.data.lesson.information).toEqual("neue Informationen")
         //change back
         let requestChangeBack = {
             body: {
                 chapterId: firstSectionToChapterOne.chapterId,
-                sectionId: response.data.codingLesson.sectionid,
-                updatedSectionId: response.data.codingLesson.sectionid,
-                lessonId: response.data.codingLesson.lessonid, //
-                codingLessonId: response.data.codingLesson.id,
-                lessonName: response.data.codingLesson.name,
+                sectionId: response.data.lesson.sectionid,
+                updatedSectionId: response.data.lesson.sectionid,
+                lessonId: response.data.lesson.lessonid, //
+                lessonTypeId: response.data.lesson.id,
+                lessonName: response.data.lesson.name,
                 updatedLessonNumber: classSectionOneLessonOne.lessonnumber,
-                lessonNumber: response.data.codingLesson.lessonnumber,
+                lessonNumber: response.data.lesson.lessonnumber,
+                difficultyLevel: response.data.lesson.difficultylevel,
+                feedback: response.data.lesson.feedback,
                 lessonInformation: classSectionOneLessonOne.information,
-                verificationType: response.data.codingLesson.verificationtype,
-                exampleSolution: response.data.codingLesson.examplesolution,
-                verificationCode: response.data.codingLesson.verificationcode,
-                verificationInformation: response.data.codingLesson.verificationinformation,
+                verificationType: response.data.lesson.verificationtype,
+                exampleSolution: response.data.lesson.examplesolution,
+                verificationCode: response.data.lesson.verificationcode,
+                verificationInformation: response.data.lesson.verificationinformation,
             }
         };
         response = {
@@ -221,8 +229,8 @@ describe("CodingLessonController: ", function () {
         };
         await sleep(1000)
         await codingLessonRoutes.editCodingLesson(requestChangeBack, response)
-        expect(response.data.codingLesson.lessonnumber).toEqual(classSectionOneLessonOne.lessonnumber)
-        expect(response.data.codingLesson.information).toEqual(classSectionOneLessonOne.information)
+        expect(response.data.lesson.lessonnumber).toEqual(classSectionOneLessonOne.lessonnumber)
+        expect(response.data.lesson.information).toEqual(classSectionOneLessonOne.information)
     });
     it("Trying so save an edited Lesson to different Section with lessonnumber taken shows an error (saveEditCodingLesson)", async function () {
         let codingLessonRequest = {
@@ -249,10 +257,12 @@ describe("CodingLessonController: ", function () {
                 sectionId: classSectionOneLessonOne.sectionid,
                 lessonId: classSectionOneLessonOne.id,
                 updatedSectionId: classSectionTwoLessonOne.sectionid,
-                codingLessonId: codingLessonResponse.data.codingLessons[0].id,
+                lessonTypeId: codingLessonResponse.data.codingLessons[0].id,
                 lessonName: classSectionOneLessonOne.name,
                 updatedLessonNumber: classSectionOneLessonOne.lessonnumber,
                 lessonNumber: classSectionOneLessonOne.lessonnumber,
+                difficultyLevel: classSectionOneLessonOne.difficultylevel,
+                feedback: classSectionOneLessonOne.feedback,
                 lessonInformation: classSectionOneLessonOne.information,
                 verificationType: classSectionOneLessonOne.verificationtype,
                 exampleSolution: classSectionOneLessonOne.examplsolution,

@@ -4,21 +4,7 @@ block content
     h1 Coding Aufgabe erstellen
 
     form(action="/saveCreateCodingLesson" method="post")
-        input(type="hidden" name="chapterId" value="#{chapterId}")
-        input(type="hidden" name="sectionId" value="#{sectionId}")
-        div.input
-            span.label Aufgabenname
-            br
-            input(type="text" name="lessonName" required value="#{codinglesson ? codinglesson.name : ''}")
-        div.input
-            span.label Aufgabennummer
-            br
-            input(type="number" min=1 name="lessonNumber" required value="#{codinglesson ? codinglesson.lessonnumber : 0")
-        div.input
-            span.label Aufgabentext
-            br
-            textarea(name="lessonInformation" required) #{codinglesson ? codinglesson.information : ''}
-
+        include baseCreateLessonForm
         div.input
             span.label Aufgabenüberprüfungstyp
             br
@@ -28,15 +14,15 @@ block content
         div.input
             span.label Musterlösung
             br
-            textarea(name="examplesolution" required) #{codinglesson ? codinglesson.examplesolution : ''}
+            textarea(name="examplesolution" required) #{lesson ? lesson.examplesolution : ''}
         div.input
             span.label Überprüfungscode
             br
-            textarea(name="verificationCode" required) #{codinglesson ? codinglesson.verificationcode : ''}
+            textarea(name="verificationCode" required) #{lesson ? lesson.verificationcode : ''}
         div.input
             span.label Überprüfungsinformationen
             br
-            textarea(name="verificationInformation" required) #{codinglesson ? codinglesson.verificationinformation : ''}
+            textarea(name="verificationInformation" required) #{lesson ? lesson.verificationinformation : ''}
         div.actions
             input(type="submit" value="Aufagbe Speichern")
 
