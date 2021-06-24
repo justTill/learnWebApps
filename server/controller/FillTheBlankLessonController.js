@@ -34,7 +34,7 @@ exports.editFillTheBlankLesson = async function (req, res, next) {
         chapterId: req.params.chapterId,
         sectionId: req.params.sectionId,
         lessonId: req.params.lessonId,
-        fillTheBlankLesson: fillTheBlankLesson,
+        lesson: fillTheBlankLesson,
         files: files,
         sections: sections,
     })
@@ -48,7 +48,9 @@ exports.saveCreateFillTheBlankLesson = async function (req, res, next) {
     let lessonInformation = req.body.lessonInformation
     let textWithBlanks = req.body.textWithBlanks
     let markedAnswers = req.body.markedAnswers
-    if (chapterId && sectionId && textWithBlanks && lessonName && lessonNumber && lessonInformation && markedAnswers) {
+    let difficultyLevel = req.body.difficultyLevel
+    let feedback = req.body.feedback === "" ? null : req.body.feedback
+    if (chapterId && sectionId && textWithBlanks && difficultyLevel && lessonName && lessonNumber && lessonInformation && markedAnswers) {
         let lessonNumberOccupied = await isLessonNumberOccupied(lessonNumber, sectionId);
         let errorMessage = ""
         if (lessonNumberOccupied) errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen";
@@ -57,19 +59,21 @@ exports.saveCreateFillTheBlankLesson = async function (req, res, next) {
             let files = await fileRepository.findByChapterId(chapterId)
             res.render("lessons/createFillTheBlankLesson", {
                 error: errorMessage,
-                fillTheBlankLesson: {
+                lesson: {
                     name: lessonName,
                     lessonnumber: lessonNumber,
                     information: lessonInformation,
                     textWithBlanks: textWithBlanks,
                     markedanswers: markedAnswers,
+                    difficultylevel: difficultyLevel,
+                    feedback: feedback
                 },
                 chapterId: chapterId,
                 sectionId: sectionId,
                 files: files
             })
         } else {
-            await lessonsRepository.insertOrUpdateFillTheBlankLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, textWithBlanks, markedAnswers)
+            await lessonsRepository.insertOrUpdateFillTheBlankLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, textWithBlanks, markedAnswers)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + sectionId)
                 })
@@ -87,7 +91,7 @@ exports.saveEditFillTheBlankLesson = async function (req, res, next) {
     let chapterId = req.body.chapterId
     let sectionId = req.body.sectionId
     let updatedSectionId = req.body.updatedSectionId
-    let fillTheBlankLessonId = req.body.fillTheBlankLessonId
+    let fillTheBlankLessonId = req.body.lessonTypeId
     let lessonId = req.body.lessonId
     let lessonName = req.body.lessonName
     let lessonNumber = req.body.lessonNumber
@@ -95,7 +99,9 @@ exports.saveEditFillTheBlankLesson = async function (req, res, next) {
     let lessonInformation = req.body.lessonInformation
     let textWithBlanks = req.body.textWithBlanks
     let markedAnswers = req.body.markedAnswers
-    if (chapterId && sectionId && updatedSectionId && fillTheBlankLessonId && updatedLessonNumber && lessonId && lessonName && lessonNumber && textWithBlanks && lessonInformation && markedAnswers) {
+    let difficultyLevel = req.body.difficultyLevel
+    let feedback = req.body.feedback === "" ? null : req.body.feedback
+    if (chapterId && sectionId && difficultyLevel && updatedSectionId && fillTheBlankLessonId && updatedLessonNumber && lessonId && lessonName && lessonNumber && textWithBlanks && lessonInformation && markedAnswers) {
         let errorMessage = ""
         let lessonNumberOccupied = sectionId !== updatedSectionId ? await isLessonNumberOccupied(updatedLessonNumber, updatedSectionId) : await isLessonNumberOccupied(updatedLessonNumber, sectionId);
         if ((lessonNumberOccupied && lessonNumber !== updatedLessonNumber) || (lessonNumberOccupied && sectionId !== updatedSectionId)) errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen";
@@ -105,13 +111,15 @@ exports.saveEditFillTheBlankLesson = async function (req, res, next) {
             let sections = await sectionRepository.findByChapterId(chapterId)
             res.render("lessons/editFillTheBlankLesson", {
                 error: errorMessage,
-                fillTheBlankLesson: {
+                lesson: {
                     id: fillTheBlankLessonId,
                     name: lessonName,
                     lessonnumber: lessonNumber,
                     information: lessonInformation,
                     textwithblanks: textWithBlanks,
                     markedanswers: markedAnswers,
+                    difficultylevel: difficultyLevel,
+                    feedback: feedback
                 },
                 sections: sections,
                 chapterId: chapterId,
@@ -121,7 +129,7 @@ exports.saveEditFillTheBlankLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            await lessonsRepository.insertOrUpdateFillTheBlankLesson(lessonId, fillTheBlankLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, textWithBlanks, markedAnswers)
+            await lessonsRepository.insertOrUpdateFillTheBlankLesson(lessonId, fillTheBlankLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, textWithBlanks, markedAnswers)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + updatedSectionId)
                 })

@@ -27,7 +27,7 @@ describe("FillTheBlank: ", function () {
         };
         await fillTheBlankLessonRoutes.editFillTheBlankLesson(request, response)
         expect(response.viewName).toEqual("lessons/editFillTheBlankLesson")
-        expect(response.data.fillTheBlankLesson.name).toEqual(classSectionOneLessonTwo.name)
+        expect(response.data.lesson.name).toEqual(classSectionOneLessonTwo.name)
         expect(response.data.chapterId).toEqual(secondSectionToChapterOne.chapterId)
         expect(response.data.sectionId).toEqual(classSectionOneLessonTwo.sectionid)
     });
@@ -39,6 +39,8 @@ describe("FillTheBlank: ", function () {
                 lessonId: classSectionOneLessonTwo.id,
                 lessonName: "Neuer Name",
                 lessonNumber: 12,
+                difficultyLevel: "EASY",
+                feedback: "",
                 lessonInformation: "Informationen",
                 textWithBlanks: "[input]",
                 markedAnswers: "[X]first answer \n [X]second answer",
@@ -71,18 +73,6 @@ describe("FillTheBlank: ", function () {
         request.params.sectionId = classSectionOneLessonTwo.sectionid
         await sectionRoutes.editSection(request, response)
         expect(response.data.fillTheBlankLessons.length).toEqual(2)
-        /*
-
-        request.params = {}
-        request.params.chapterId = firstSectionToChapterOne.chapterId
-        request.params.sectionId = classSectionOneLessonOne.sectionid
-        request.params.lessonId = response.data.fillTheBlankLesson[1].lessonid
-        await fillTheBlankLessonRoutes.deleteLesson(request, response)
-
-        request.params = {}
-        request.params.chapterId = firstSectionToChapterOne.chapterId
-        request.params.sectionId = classSectionOneLessonOne.sectionid
-        await sectionRoutes.editSection(request, response)
-        expect(response.data.codingLessons.length).toEqual(1)*/
+    
     });
 });
