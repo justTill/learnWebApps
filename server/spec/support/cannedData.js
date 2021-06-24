@@ -42,6 +42,8 @@ let asyncCodeLesson = {
     verificationcode: "hier ist der Code",
     examplsolution: "Lösung",
     verificationinformation: "Was wird geprüft",
+    feedback: null,
+    difficultylevel: 'EASY'
 };
 let asyncFillTheBlank = {
     id: 2,
@@ -51,6 +53,8 @@ let asyncFillTheBlank = {
     information: "Ergänze die lücken",
     textwithblanks: "Text mit Lücken [input] [input]",
     markedanswers: " [X]Antwortmöglichkeit 1\n [X]Antwortmöglichkeit 2",
+    feedback: null,
+    difficultylevel: 'EASY'
 };
 //async section two
 let asyncCodeExtensions = {
@@ -61,6 +65,8 @@ let asyncCodeExtensions = {
     information: "Ergänze folgenden Code",
     unfinishedcode: "function ([input]) {\n return a+b \n}",
     answers: "a,b",
+    feedback: null,
+    difficultylevel: 'EASY'
 };
 
 //class section One
@@ -74,6 +80,8 @@ let classCodeLesson = {
     verificationcode: "hier ist der Code",
     examplsolution: "Lösung",
     verificationinformation: "Was wird geprüft",
+    feedback: null,
+    difficultylevel: 'EASY'
 };
 let classFillTheBlank = {
     id: 5,
@@ -83,6 +91,8 @@ let classFillTheBlank = {
     information: "Ergänze die lücken",
     textwithblanks: "Text mit Lücken [input] [input]",
     markedanswers: " [X]Antwortmöglichkeit 1\n [X]Antwortmöglichkeit 2",
+    feedback: null,
+    difficultylevel: 'EASY'
 };
 //class section two
 let classCodeExtensions = {
@@ -93,6 +103,8 @@ let classCodeExtensions = {
     information: "Ergänze folgenden Code",
     unfinishedcode: "function ([input]) {\n return a+b \n}",
     answers: "a,b",
+    feedback: null,
+    difficultylevel: 'EASY'
 };
 
 exports.firstChpater = classChapter;

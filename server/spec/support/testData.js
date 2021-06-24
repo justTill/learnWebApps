@@ -1,7 +1,6 @@
 const chapterRepository = require('../../persistence/ChapterRepository')
 const sectionRepository = require('../../persistence/SectionRepository')
 const lessonRepository = require('../../persistence/LessonRepository')
-const userRepository = require('../../persistence/UserRepository')
 const fileRepository = require('../../persistence/FileRepository')
 
 const classChapter = require('./cannedData').firstChpater
@@ -32,11 +31,11 @@ const classCodeExtensions = require('./cannedData').classSectionTwoLessonOne;
 
     await lessonRepository.insertOrUpdateCodingLesson(null, null, asyncCodeLesson.sectionid, asyncCodeLesson.lessonnumber, asyncCodeLesson.information, asyncCodeLesson.name, asyncCodeLesson.verificationtype, asyncCodeLesson.verificationcode, asyncCodeLesson.examplsolution, asyncCodeLesson.verificationinformation)
     await lessonRepository.insertOrUpdateFillTheBlankLesson(null, null, asyncFillTheBlank.sectionid, asyncFillTheBlank.lessonnumber, asyncFillTheBlank.information, asyncFillTheBlank.name, asyncFillTheBlank.textwithblanks, asyncFillTheBlank.markedanswers)
-    await lessonRepository.insertOrUpdateCodeExtensionLesson(null, null, asyncCodeExtensions.sectionid, asyncCodeExtensions.lessonnumber, asyncCodeExtensions.information, asyncCodeExtensions.name, asyncCodeExtensions.unfinishedcode, asyncCodeExtensions.answers)
+    await lessonRepository.insertOrUpdateCodeExtensionLesson(null, null, asyncCodeExtensions.sectionid, asyncCodeExtensions.lessonnumber, asyncCodeExtensions.information, asyncCodeExtensions.name, asyncCodeExtensions.difficultylevel, asyncCodeExtensions.feedback, asyncCodeExtensions.unfinishedcode, asyncCodeExtensions.answers)
 
     await lessonRepository.insertOrUpdateCodingLesson(null, null, classCodeLesson.sectionid, classCodeLesson.lessonnumber, classCodeLesson.information, classCodeLesson.name, classCodeLesson.verificationtype, classCodeLesson.verificationcode, classCodeLesson.examplsolution, classCodeLesson.verificationinformation)
     await lessonRepository.insertOrUpdateFillTheBlankLesson(null, null, classFillTheBlank.sectionid, classFillTheBlank.lessonnumber, classFillTheBlank.information, classFillTheBlank.name, classFillTheBlank.textwithblanks, classFillTheBlank.markedanswers)
-    await lessonRepository.insertOrUpdateCodeExtensionLesson(null, null, classCodeExtensions.sectionid, classCodeExtensions.lessonnumber, classCodeExtensions.information, classCodeExtensions.name, classCodeExtensions.unfinishedcode, classCodeExtensions.answers).then(res => res).catch(err => err)
+    await lessonRepository.insertOrUpdateCodeExtensionLesson(null, null, classCodeExtensions.sectionid, classCodeExtensions.lessonnumber, classCodeExtensions.information, classCodeExtensions.name, classCodeExtensions.difficultylevel, classCodeExtensions.feedback, classCodeExtensions.unfinishedcode, classCodeExtensions.answers)
 
     await fileRepository.insert(1, "myImagePath")
 })();
