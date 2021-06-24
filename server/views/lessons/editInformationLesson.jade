@@ -1,0 +1,39 @@
+extends ../layout
+
+block content
+    h1 Code extension Aufgabe bearbeiten
+
+    form(action="/saveEditInformationLesson" method="post")
+        input(type="hidden" name="chapterId" value="#{chapterId}")
+        input(type="hidden" name="lessonId" value="#{informationLesson.id}")
+        input(type="hidden" name="sectionId" value="#{sectionId}")
+        input(type="hidden" name="lessonNumber" value="#{informationLesson.lessonnumber}")
+        div.input
+            span.label Aufgabenname
+            br
+            input(type="text" name="lessonName" required value="#{informationLesson.name}")
+        div.input
+            span.label Aufgabennummer
+            br
+            input(type="number" min=1 name="updatedLessonNumber" required value="#{informationLesson.lessonnumber}")
+        div.input
+            span.label Informationen
+            br
+            textarea(name="lessonInformation" required) #{informationLesson.information}
+        div.input
+            span.label Unterthema
+            br
+            select(name="updatedSectionId" required)
+                each section in sections
+                    option(value="#{section.id}" selected=sectionId == section.id) #{section.name}
+        div.actions
+            input(type="submit" value="Aufagbe Speichern")
+
+    if error
+        p #{error}
+
+    h1 Verfügbaren bilder
+    div mit img tag und src="angezeigter NAME" einbinden
+        ul
+        each file in files
+            li #{file.path}

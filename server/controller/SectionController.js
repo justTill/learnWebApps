@@ -104,6 +104,7 @@ exports.editSection = async function (req, res, next) {
     let chapterId = req.params.chapterId
     let sectionId = req.params.sectionId
     let chapters = await chapterRepository.findAll();
+    let informationLessons = await lessonsRepository.findInformationsBySectionId(sectionId);
     let codingLessons = await lessonsRepository.findCodingBySectionId(sectionId);
     let fillTheBlankLessons = await lessonsRepository.findFillTheBlankBySectionId(sectionId);
     let codeExtensionLessons = await lessonsRepository.findCodeExtensionBySectionId(sectionId);
@@ -115,6 +116,7 @@ exports.editSection = async function (req, res, next) {
                 section: result,
                 chapters: chapters,
                 currentChapterId: chapterId,
+                informationLessons: informationLessons,
                 codingLessons: codingLessons,
                 fillTheBlankLessons: fillTheBlankLessons,
                 codeExtensionLessons: codeExtensionLessons,

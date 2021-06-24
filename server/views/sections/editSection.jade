@@ -40,6 +40,13 @@ block content
                 li #{file.path}
 
         h3 Aufgaben
+        h4 Informationseinheiten
+        a(href='/createInformationLesson/#{currentChapterId}/#{section.id}') Erstellen
+        br
+        each informationLesson in informationLessons
+            p #{informationLesson.name}
+                a(href='/editInformationLesson/#{currentChapterId}/#{section.id}/#{informationLesson.id}') Bearbeiten
+                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{informationLesson.id}')  Löschen
         h4 Code Aufgaben
         a(href='/createCodingLesson/#{currentChapterId}/#{section.id}') Erstellen
         br

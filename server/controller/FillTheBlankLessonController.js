@@ -3,11 +3,16 @@ var fileRepository = require("../persistence/FileRepository")
 var sectionRepository = require("../persistence/SectionRepository")
 var isLessonNumberOccupied = require("../utils/lessons").isLessonNumberOccupied
 
-function correctNumberOfBlanksAndAnswersAndPossibleAnswers(textWithBlanks, answers, possibleAnswers) {
-    let numberOfAnswers = answers.replaceAll("\n", "").split('\r').length
-    let numberOfPossibleAnswers = possibleAnswers.replaceAll("\n", "").split('\r').length
+function correctNumberOfBlanksAndAnswers(textWithBlanks, markedAnswers) {
+    let possibleAnswers = markedAnswers.replaceAll("\n", "").split('\r')
     let numberOfInputs = (textWithBlanks.match(/\[input]/g) || []).length
-    return numberOfAnswers === numberOfInputs && numberOfPossibleAnswers >= numberOfInputs
+    let numberOfAnswers = 0
+    possibleAnswers.forEach(a => {
+        if (a.includes('[X]' || a.includes('[x]'))) {
+            numberOfAnswers++
+        }
+    })
+    return numberOfAnswers === numberOfInputs && possibleAnswers.length >= numberOfInputs
 }
 
 
@@ -42,13 +47,12 @@ exports.saveCreateFillTheBlankLesson = async function (req, res, next) {
     let lessonNumber = req.body.lessonNumber
     let lessonInformation = req.body.lessonInformation
     let textWithBlanks = req.body.textWithBlanks
-    let possibleAnswers = req.body.possibleAnswers
-    let answers = req.body.answers
-    if (chapterId && sectionId && textWithBlanks && possibleAnswers && lessonName && lessonNumber && lessonInformation && answers) {
+    let markedAnswers = req.body.markedAnswers
+    if (chapterId && sectionId && textWithBlanks && lessonName && lessonNumber && lessonInformation && markedAnswers) {
         let lessonNumberOccupied = await isLessonNumberOccupied(lessonNumber, sectionId);
         let errorMessage = ""
         if (lessonNumberOccupied) errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen";
-        if (!correctNumberOfBlanksAndAnswersAndPossibleAnswers(textWithBlanks, answers, possibleAnswers)) errorMessage = "Anzahl an [input]'s und Antworten stimmt nicht überein oder Anzahl an möglich Antworten ist geringer als Anzahl an Inputs"
+        if (!correctNumberOfBlanksAndAnswers(textWithBlanks, markedAnswers)) errorMessage = "Anzahl an [input]'s und Antworten stimmt nicht überein oder Anzahl an möglich Antworten ist geringer als Anzahl an Inputs"
         if (errorMessage) {
             let files = await fileRepository.findByChapterId(chapterId)
             res.render("lessons/createFillTheBlankLesson", {
@@ -58,15 +62,14 @@ exports.saveCreateFillTheBlankLesson = async function (req, res, next) {
                     lessonnumber: lessonNumber,
                     information: lessonInformation,
                     textWithBlanks: textWithBlanks,
-                    possibleAnswers: possibleAnswers,
-                    answers: answers,
+                    markedanswers: markedAnswers,
                 },
                 chapterId: chapterId,
                 sectionId: sectionId,
                 files: files
             })
         } else {
-            await lessonsRepository.insertOrUpdateFillTheBlankLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, textWithBlanks, possibleAnswers, answers)
+            await lessonsRepository.insertOrUpdateFillTheBlankLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, textWithBlanks, markedAnswers)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + sectionId)
                 })
@@ -91,13 +94,12 @@ exports.saveEditFillTheBlankLesson = async function (req, res, next) {
     let updatedLessonNumber = req.body.updatedLessonNumber
     let lessonInformation = req.body.lessonInformation
     let textWithBlanks = req.body.textWithBlanks
-    let possibleAnswers = req.body.possibleAnswers
-    let answers = req.body.answers
-    if (chapterId && sectionId && updatedSectionId && fillTheBlankLessonId && updatedLessonNumber && lessonId && lessonName && lessonNumber && textWithBlanks && lessonInformation && possibleAnswers && answers) {
+    let markedAnswers = req.body.markedAnswers
+    if (chapterId && sectionId && updatedSectionId && fillTheBlankLessonId && updatedLessonNumber && lessonId && lessonName && lessonNumber && textWithBlanks && lessonInformation && markedAnswers) {
         let errorMessage = ""
         let lessonNumberOccupied = sectionId !== updatedSectionId ? await isLessonNumberOccupied(updatedLessonNumber, updatedSectionId) : await isLessonNumberOccupied(updatedLessonNumber, sectionId);
         if ((lessonNumberOccupied && lessonNumber !== updatedLessonNumber) || (lessonNumberOccupied && sectionId !== updatedSectionId)) errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen";
-        if (!correctNumberOfBlanksAndAnswersAndPossibleAnswers(textWithBlanks, answers, possibleAnswers)) errorMessage = "Anzahl an [input]'s und Antworten stimmt nicht überein oder Anzahl an möglich Antworten ist geringer als Anzahl an Inputs"
+        if (!correctNumberOfBlanksAndAnswers(textWithBlanks, markedAnswers)) errorMessage = "Anzahl an [input]'s und Antworten stimmt nicht überein oder Anzahl an möglich Antworten ist geringer als Anzahl an Inputs"
         if (errorMessage) {
             let files = await fileRepository.findByChapterId(chapterId)
             let sections = await sectionRepository.findByChapterId(chapterId)
@@ -109,8 +111,7 @@ exports.saveEditFillTheBlankLesson = async function (req, res, next) {
                     lessonnumber: lessonNumber,
                     information: lessonInformation,
                     textwithblanks: textWithBlanks,
-                    possibleanswers: possibleAnswers,
-                    answers: answers,
+                    markedanswers: markedAnswers,
                 },
                 sections: sections,
                 chapterId: chapterId,
@@ -120,7 +121,7 @@ exports.saveEditFillTheBlankLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            await lessonsRepository.insertOrUpdateFillTheBlankLesson(lessonId, fillTheBlankLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, textWithBlanks, possibleAnswers, answers)
+            await lessonsRepository.insertOrUpdateFillTheBlankLesson(lessonId, fillTheBlankLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, textWithBlanks, markedAnswers)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + updatedSectionId)
                 })

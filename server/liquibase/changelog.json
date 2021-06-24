@@ -524,16 +524,7 @@
                 },
                 {
                   "column": {
-                    "name": "possibleanswers",
-                    "type": "varchar(255)",
-                    "constraints": {
-                      "nullable": false
-                    }
-                  }
-                },
-                {
-                  "column": {
-                    "name": "answers",
+                    "name": "markedanswers",
                     "type": "varchar(255)",
                     "constraints": {
                       "nullable": false

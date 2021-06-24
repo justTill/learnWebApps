@@ -5,6 +5,7 @@ const codingController = require('../controller/CodingLessonController');
 const codeExtensionController = require('../controller/CodeExtensionController');
 const singleMultipleChoiceController = require('../controller/SingleMultipleChoiceController');
 const fillTheBlankController = require('../controller/FillTheBlankLessonController');
+const lessonController = require('../controller/LessonController');
 const isLoggedIn = require('../utils/logIn').loggedIn;
 
 
@@ -30,4 +31,9 @@ router.get('/createSingleMultipleChoiceLesson/:chapterId/:sectionId', isLoggedIn
 router.post('/saveCreateSingleMultipleChoiceLesson/', isLoggedIn, asyncMiddleware(singleMultipleChoiceController.saveCreateSingleMultipleChoiceLesson))
 router.post('/saveEditSingleMultipleChoiceLesson/', isLoggedIn, asyncMiddleware(singleMultipleChoiceController.saveEditSingleMultipleChoiceLesson))
 
+
+router.get('/editInformationLesson/:chapterId/:sectionId/:lessonId', isLoggedIn, asyncMiddleware(lessonController.editInformationLesson))
+router.get('/createInformationLesson/:chapterId/:sectionId', isLoggedIn, asyncMiddleware(lessonController.createInformationLesson))
+router.post('/saveCreateInformationLesson/', isLoggedIn, asyncMiddleware(lessonController.saveCreateInformationLesson))
+router.post('/saveEditInformationLesson/', isLoggedIn, asyncMiddleware(lessonController.saveEditInformationLesson))
 module.exports = router;
