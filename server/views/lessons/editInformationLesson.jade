@@ -1,25 +1,25 @@
 extends ../layout
 
 block content
-    h1 Code extension Aufgabe bearbeiten
+    h1 Informations einheit bearbeiten
 
     form(action="/saveEditInformationLesson" method="post")
         input(type="hidden" name="chapterId" value="#{chapterId}")
-        input(type="hidden" name="lessonId" value="#{informationLesson.id}")
+        input(type="hidden" name="lessonId" value="#{lesson.id}")
         input(type="hidden" name="sectionId" value="#{sectionId}")
-        input(type="hidden" name="lessonNumber" value="#{informationLesson.lessonnumber}")
+        input(type="hidden" name="lessonNumber" value="#{lesson.lessonnumber}")
         div.input
             span.label Aufgabenname
             br
-            input(type="text" name="lessonName" required value="#{informationLesson.name}")
+            input(type="text" name="lessonName" required value="#{lesson.name}")
         div.input
             span.label Aufgabennummer
             br
-            input(type="number" min=1 name="updatedLessonNumber" required value="#{informationLesson.lessonnumber}")
+            input(type="number" min=1 name="updatedLessonNumber" required value="#{lesson.lessonnumber}")
         div.input
             span.label Informationen
             br
-            textarea(name="lessonInformation" required) #{informationLesson.information}
+            textarea(name="lessonInformation" required) #{lesson.information}
         div.input
             span.label Unterthema
             br
@@ -29,11 +29,6 @@ block content
         div.actions
             input(type="submit" value="Aufagbe Speichern")
 
-    if error
-        p #{error}
+    include ../formError
 
-    h1 Verfügbaren bilder
-    div mit img tag und src="angezeigter NAME" einbinden
-        ul
-        each file in files
-            li #{file.path}
+    include ../files

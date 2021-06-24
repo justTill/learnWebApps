@@ -19,14 +19,13 @@ exports.saveCreateInformationLesson = async function (req, res, next) {
     let lessonName = req.body.lessonName
     let lessonNumber = req.body.lessonNumber
     let lessonInformation = req.body.lessonInformation
-    console.log(chapterId, sectionId, lessonName, lessonNumber, lessonInformation)
     if (chapterId && sectionId && lessonName && lessonNumber && lessonInformation) {
         let lessonNumberOccupied = await isLessonNumberOccupied(lessonNumber, sectionId);
         if (lessonNumberOccupied) {
             let files = await fileRepository.findByChapterId(chapterId)
             res.render("lessons/createInformationLesson", {
                 error: "Aufgabennummer ist schon vergeben, bitte eine andere wählen",
-                informationLesson: {
+                lesson: {
                     name: lessonName,
                     lessonnumber: lessonNumber,
                     information: lessonInformation,
@@ -82,7 +81,7 @@ exports.saveEditInformationLesson = async function (req, res, next) {
             let sections = await sectionRepository.findByChapterId(chapterId)
             res.render("lessons/editInformationLesson", {
                 error: errorMessage,
-                informationLesson: {
+                lesson: {
                     id: lessonId,
                     name: lessonName,
                     lessonnumber: lessonNumber,

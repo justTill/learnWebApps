@@ -27,7 +27,7 @@ exports.editCodingLesson = async function (req, res, next) {
         chapterId: chapterId,
         sectionId: sectionId,
         lessonId: lessonId,
-        codingLesson: codingLesson,
+        lesson: codingLesson,
         updatedSectionId: req.params.sectionId,
         sections: sections,
         files: files
@@ -47,7 +47,7 @@ exports.saveEditCodingLesson = async function (req, res, next) {
     let sectionId = req.body.sectionId
     let lessonId = req.body.lessonId
     let updatedSectionId = req.body.updatedSectionId
-    let codingLessonId = req.body.codingLessonId
+    let codingLessonId = req.body.lessonTypeId
     let lessonName = req.body.lessonName
     let updatedLessonNumber = req.body.updatedLessonNumber
     let lessonNumber = req.body.lessonNumber
@@ -56,7 +56,9 @@ exports.saveEditCodingLesson = async function (req, res, next) {
     let verificationCode = req.body.verificationCode
     let exampleSolution = req.body.exampleSolution
     let verificationInformation = req.body.verificationInformation
-    if (chapterId && codingLessonId && sectionId && lessonId && lessonName && lessonNumber && lessonInformation && updatedLessonNumber && verificationType && verificationCode && exampleSolution && verificationInformation) {
+    let difficultyLevel = req.body.difficultyLevel
+    let feedback = req.body.feedback === "" ? null : req.body.feedback
+    if (chapterId && codingLessonId && difficultyLevel && sectionId && lessonId && lessonName && lessonNumber && lessonInformation && updatedLessonNumber && verificationType && verificationCode && exampleSolution && verificationInformation) {
         let errorMessage = "";
         let lessonNumberOccupied = sectionId !== updatedSectionId ? await isLessonNumberOccupied(updatedLessonNumber, updatedSectionId) : await isLessonNumberOccupied(updatedLessonNumber, sectionId);
         if ((lessonNumberOccupied && lessonNumber !== updatedLessonNumber) || (lessonNumberOccupied && sectionId !== updatedSectionId)) errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen";
@@ -68,12 +70,14 @@ exports.saveEditCodingLesson = async function (req, res, next) {
                 chapterId: chapterId,
                 sectionId: sectionId,
                 lessonId: lessonId,
-                codingLesson: {
+                lesson: {
                     id: codingLessonId,
                     sectionid: sectionId,
                     lessonnumber: lessonNumber,
                     information: lessonInformation,
                     name: lessonName,
+                    difficultylevel: difficultyLevel,
+                    feedback: feedback,
                     lessonid: lessonId,
                     verificationtype: verificationType,
                     verificationcode: verificationCode,
@@ -86,7 +90,7 @@ exports.saveEditCodingLesson = async function (req, res, next) {
             })
             return
         }
-        await lessonsRepository.insertOrUpdateCodingLesson(lessonId, codingLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, verificationType, verificationCode, exampleSolution, verificationInformation)
+        await lessonsRepository.insertOrUpdateCodingLesson(lessonId, codingLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, verificationType, verificationCode, exampleSolution, verificationInformation)
             .then(result => {
                 res.redirect('/section/' + chapterId + '/' + updatedSectionId)
             })
@@ -108,16 +112,20 @@ exports.saveCreateCodingLesson = async function (req, res, next) {
     let exampleSolution = req.body.examplesolution
     let verificationCode = req.body.verificationCode
     let verificationInformation = req.body.verificationInformation
-    if (chapterId && sectionId && lessonName && lessonNumber && lessonInformation && verificationType && exampleSolution && verificationCode && verificationInformation) {
+    let difficultyLevel = req.body.difficultyLevel
+    let feedback = req.body.feedback === "" ? null : req.body.feedback
+    if (chapterId && sectionId && lessonName && difficultyLevel && lessonNumber && lessonInformation && verificationType && exampleSolution && verificationCode && verificationInformation) {
         let lessonNumberOccupied = await isLessonNumberOccupied(lessonNumber, sectionId);
         if (lessonNumberOccupied) {
             let files = await fileRepository.findByChapterId(chapterId)
             res.render("lessons/createCodingLesson", {
                 error: "Aufgaben Nummer ist schon vergeben, bitte eine andere wählen",
-                codinglesson: {
+                lesson: {
                     name: lessonName,
                     lessonnumber: lessonNumber,
                     information: lessonInformation,
+                    difficultylevel: difficultyLevel,
+                    feedback: feedback,
                     verificationtype: verificationType,
                     examplesolution: exampleSolution,
                     verificationcode: verificationCode,
@@ -128,7 +136,7 @@ exports.saveCreateCodingLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            await lessonsRepository.insertOrUpdateCodingLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, verificationType, verificationCode, exampleSolution, verificationInformation)
+            await lessonsRepository.insertOrUpdateCodingLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, verificationType, verificationCode, exampleSolution, verificationInformation)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + sectionId)
                 })

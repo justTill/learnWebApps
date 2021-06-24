@@ -30,7 +30,7 @@ exports.editCodeExtensionLesson = async function (req, res, next) {
         lessonId: req.params.lessonId,
         files: files,
         sections: sections,
-        codeExtensionLesson: codeExtensionLesson
+        lesson: codeExtensionLesson
     })
 }
 
@@ -42,7 +42,9 @@ exports.saveCreateCodeExtensionLesson = async function (req, res, next) {
     let lessonInformation = req.body.lessonInformation
     let unfinishedCode = req.body.unfinishedCode
     let answers = req.body.answers
-    if (chapterId && sectionId && lessonName && lessonNumber && lessonInformation && answers) {
+    let difficultyLevel = req.body.difficultyLevel
+    let feedback = req.body.feedback === "" ? null : req.body.feedback
+    if (chapterId && sectionId && difficultyLevel && lessonName && lessonNumber && lessonInformation && answers) {
         let lessonNumberOccupied = await isLessonNumberOccupied(lessonNumber, sectionId);
         let errorMessage = ""
         if (lessonNumberOccupied) errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen";
@@ -51,19 +53,21 @@ exports.saveCreateCodeExtensionLesson = async function (req, res, next) {
             let files = await fileRepository.findByChapterId(chapterId)
             res.render("lessons/createCodeExtensionLesson", {
                 error: errorMessage,
-                codeExtensionLesson: {
+                lesson: {
                     name: lessonName,
                     lessonnumber: lessonNumber,
                     information: lessonInformation,
                     unfinishedcode: unfinishedCode,
                     answers: answers,
+                    difficultylevel: difficultyLevel,
+                    feedback: feedback,
                 },
                 chapterId: chapterId,
                 sectionId: sectionId,
                 files: files
             })
         } else {
-            lessonsRepository.insertOrUpdateCodeExtensionLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, unfinishedCode, answers)
+            lessonsRepository.insertOrUpdateCodeExtensionLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, unfinishedCode, answers)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + sectionId)
                 })
@@ -80,7 +84,7 @@ exports.saveEditCodeExtensionLesson = async function (req, res, next) {
     let chapterId = req.body.chapterId
     let sectionId = req.body.sectionId
     let updatedSectionId = req.body.updatedSectionId
-    let codeExtensionLessonId = req.body.codeExtensionLessonId
+    let codeExtensionLessonId = req.body.lessonTypeId
     let lessonId = req.body.lessonId
     let lessonName = req.body.lessonName
     let lessonNumber = req.body.lessonNumber
@@ -88,7 +92,9 @@ exports.saveEditCodeExtensionLesson = async function (req, res, next) {
     let lessonInformation = req.body.lessonInformation
     let unfinishedCode = req.body.unfinishedCode
     let answers = req.body.answers
-    if (chapterId && sectionId && updatedSectionId && codeExtensionLessonId && updatedLessonNumber && lessonId && lessonName && lessonNumber && lessonInformation && answers) {
+    let difficultyLevel = req.body.difficultyLevel
+    let feedback = req.body.feedback === "" ? null : req.body.feedback
+    if (chapterId && sectionId && difficultyLevel && updatedSectionId && codeExtensionLessonId && updatedLessonNumber && lessonId && lessonName && lessonNumber && lessonInformation && answers) {
         let errorMessage = ""
         let lessonNumberOccupied = sectionId !== updatedSectionId ? await isLessonNumberOccupied(updatedLessonNumber, updatedSectionId) : await isLessonNumberOccupied(updatedLessonNumber, sectionId);
         if ((lessonNumberOccupied && lessonNumber !== updatedLessonNumber) || (lessonNumberOccupied && sectionId !== updatedSectionId)) errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen";
@@ -98,13 +104,15 @@ exports.saveEditCodeExtensionLesson = async function (req, res, next) {
             let sections = await sectionRepository.findByChapterId(chapterId)
             res.render("lessons/editCodeExtensionLesson", {
                 error: errorMessage,
-                codeExtensionLesson: {
+                lesson: {
                     id: codeExtensionLessonId,
                     name: lessonName,
                     lessonnumber: lessonNumber,
                     information: lessonInformation,
                     unfinishedcode: unfinishedCode,
                     answers: answers,
+                    difficultylevel: difficultyLevel,
+                    feedback: feedback,
                 },
                 sections: sections,
                 chapterId: chapterId,
@@ -114,7 +122,7 @@ exports.saveEditCodeExtensionLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            await lessonsRepository.insertOrUpdateCodeExtensionLesson(lessonId, codeExtensionLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, unfinishedCode, answers)
+            await lessonsRepository.insertOrUpdateCodeExtensionLesson(lessonId, codeExtensionLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, unfinishedCode, answers)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + updatedSectionId)
                 })

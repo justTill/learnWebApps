@@ -3,36 +3,18 @@ extends ../layout
 block content
     h1 Fill the Blank Aufgabe erstellen
     form(action="/saveCreateFillTheBlankLesson" method="post")
-        input(type="hidden" name="chapterId" value="#{chapterId}")
-        input(type="hidden" name="sectionId" value="#{sectionId}")
-        div.input
-            span.label Aufgabenname
-            br
-            input(type="text" name="lessonName" required value="#{fillTheBlankLesson ? fillTheBlankLesson.name : ''}")
-        div.input
-            span.label Aufgabennummer
-            br
-            input(type="number" min=1 name="lessonNumber" required value="#{fillTheBlankLesson ? fillTheBlankLesson.lessonnumber : 0")
-        div.input
-            span.label Aufgabentext
-            br
-            textarea(name="lessonInformation" required) #{fillTheBlankLesson ? fillTheBlankLesson.information : ''}
+        include baseCreateLessonForm
         div.input
             span.label Zu ergänzenden Text mit [input] als lücken
             br
-            textarea(name="textWithBlanks" required) #{fillTheBlankLesson ? fillTheBlankLesson.textWithBlanks : ''}
+            textarea(name="textWithBlanks" required) #{lesson ? lesson.textWithBlanks : ''}
         div.input
             span.label Mögliche Antworte  (pro Antwort eine Zeile (mindestens so viele wie es Inputs gibt, richtige antworten mit einem [X] makieren)
             br
-            textarea(name="markedAnswers" required) #{fillTheBlankLesson ? fillTheBlankLesson.markedanswers : ''}
+            textarea(name="markedAnswers" required) #{lesson ? lesson.markedanswers : ''}
         div.actions
             input(type="submit" value="Aufagbe Speichern")
 
-    if error
-        p #{error}
+    include ../formError
 
-    h1 Verfügbaren bilder
-    div mit img tag und src="angezeigter NAME" einbinden
-        ul
-        each file in files
-            li #{file.path}
+    include ../files

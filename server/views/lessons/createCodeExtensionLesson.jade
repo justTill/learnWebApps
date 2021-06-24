@@ -2,36 +2,19 @@ extends ../layout
 block content
     h1 Code extension Aufgabe erstellen
     form(action="/saveCreateCodeExtensionLesson" method="post")
-        input(type="hidden" name="chapterId" value="#{chapterId}")
-        input(type="hidden" name="sectionId" value="#{sectionId}")
-        div.input
-            span.label Aufgabenname
-            br
-            input(type="text" name="lessonName" required value="#{codeExtensionLesson ? codeExtensionLesson.name : ''}")
-        div.input
-            span.label Aufgabennummer
-            br
-            input(type="number" min=1 name="lessonNumber" required value="#{codeExtensionLesson ? codeExtensionLesson.lessonnumber : 0")
-        div.input
-            span.label Aufgabentext
-            br
-            textarea(name="lessonInformation" required) #{codeExtensionLesson ? codeExtensionLesson.information : ''}
+
+        include ./baseCreateLessonForm
+
         div.input
             span.label Zu ergänzenden Code mit [input] als lücken
             br
-            textarea(name="unfinishedCode" required) #{codeExtensionLesson ? codeExtensionLesson.unfinishedcode : ''}
+            textarea(name="unfinishedCode" required) #{lesson ? lesson.unfinishedcode : ''}
         div.input
             span.label Zu ergänzender Code (pro Input eine Zeile in richtiger Reihenfolge)
             br
-            textarea(name="answers" required) #{codeExtensionLesson ? codeExtensionLesson.answers : ''}
+            textarea(name="answers" required) #{lesson ? lesson.answers : ''}
         div.actions
             input(type="submit" value="Aufagbe Speichern")
 
-    if error
-        p #{error}
-
-    h1 Verfügbaren bilder
-    div mit img tag und src="angezeigter NAME" einbinden
-        ul
-        each file in files
-            li #{file.path}
+    include ../formError
+    include ../files

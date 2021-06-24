@@ -16,6 +16,15 @@
             }
           },
           {
+            "sql": {
+              "comment": "create lessons type enum",
+              "endDelimiter": "GO",
+              "splitStatements": true,
+              "sql": "CREATE TYPE difficultyLevelType AS ENUM ('EASY','MIDDLE', 'HARD')",
+              "stripComments": true
+            }
+          },
+          {
             "sqlFile": {
               "comment": "create session table",
               "endDelimiter": "GO",
@@ -262,6 +271,24 @@
                     "type": "varchar(255)",
                     "constraints": {
                       "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "difficultylevel",
+                    "type": "difficultyLevelType",
+                    "constraints": {
+                      "nullable": true
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "feedback",
+                    "type": "varchar(255)",
+                    "constraints": {
+                      "nullable": true
                     }
                   }
                 }
