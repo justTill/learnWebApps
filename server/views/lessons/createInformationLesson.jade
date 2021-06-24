@@ -8,23 +8,18 @@ block content
         div.input
             span.label Aufgabenname
             br
-            input(type="text" name="lessonName" required value="#{informationLesson ? informationLesson.name : ''}")
+            input(type="text" name="lessonName" required value="#{lesson ? lesson.name : ''}")
         div.input
             span.label Aufgabennummer
             br
-            input(type="number" min=1 name="lessonNumber" required value="#{informationLesson ? informationLesson.lessonnumber : 1")
+            input(type="number" min=1 name="lessonNumber" required value="#{lesson ? lesson.lessonnumber : 1")
         div.input
             span.label Informationen
             br
-            textarea(name="lessonInformation" required) #{informationLesson ? informationLesson.information : ''}
+            textarea(name="lessonInformation" required) #{lesson ? lesson.information : ''}
         div.actions
             input(type="submit" value="Aufagbe Speichern")
 
-    if error
-        p #{error}
+    include ../formError
 
-    h1 Verfügbaren bilder
-    div mit img tag und src="angezeigter NAME" einbinden
-        ul
-        each file in files
-            li #{file.path}
+    include ../files

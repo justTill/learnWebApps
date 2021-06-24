@@ -24,11 +24,6 @@ block content
         div.actions
             input(type="submit" value="Aufagbe Speichern")
 
-    if error
-        p #{error}
+    include ../formError
 
-    h1 Verfügbaren bilder
-    div mit img tag und src="angezeigter NAME" einbinden
-        ul
-        each file in files
-            li #{file.path}
+    include ../files
