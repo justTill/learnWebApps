@@ -3,24 +3,11 @@ extends ../layout
 block content
     h1 Single- oder Multiple-Choice Aufgabe erstellen
     form(action="/saveCreateSingleMultipleChoiceLesson" method="post")
-        input(type="hidden" name="sectionId" value="#{sectionId}")
-        input(type="hidden" name="chapterId" value="#{chapterId}")
-        div.input
-            span.label Aufgabenname
-            br
-            input(type="text" name="lessonName" required value="#{singleMultipleChoice ? singleMultipleChoice.name : ''}")
-        div.input
-            span.label Aufgabennummer
-            br
-            input(type="number" min=1 name="lessonNumber" required value="#{singleMultipleChoice ? singleMultipleChoice.lessonnumber : 1")
-        div.input
-            span.label Aufgabentext
-            br
-            textarea(name="lessonInformation" required) #{singleMultipleChoice ? singleMultipleChoice.information : ''}
+        include baseCreateLessonForm
         div.input
             span.label Mögliche Antworten mit [X] makieren wenn eine Lösung Richtig ist
             br
-            textarea(name="markedOptions" required) #{singleMultipleChoice ? singleMultipleChoice.markedoptions : ''}
+            textarea(name="markedOptions" required) #{lesson ? lesson.markedoptions : ''}
         div.actions
             input(type="submit" value="Aufagbe Speichern")
 

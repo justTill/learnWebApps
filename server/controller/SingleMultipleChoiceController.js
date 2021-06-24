@@ -28,7 +28,7 @@ exports.editSingleMultipleChoiceLesson = async function (req, res, next) {
         lessonId: req.params.lessonId,
         files: files,
         sections: sections,
-        singleMultipleChoice: singleMultipleChoiceLessons
+        lesson: singleMultipleChoiceLessons
     })
 }
 
@@ -39,6 +39,8 @@ exports.saveCreateSingleMultipleChoiceLesson = async function (req, res, next) {
     let lessonNumber = req.body.lessonNumber
     let lessonInformation = req.body.lessonInformation
     let markedOptions = req.body.markedOptions
+    let difficultyLevel = req.body.difficultyLevel
+    let feedback = req.body.feedback === "" ? null : req.body.feedback
     if (chapterId && sectionId && lessonName && lessonNumber && lessonInformation && markedOptions) {
         let errorMessage = ""
         if (await isLessonNumberOccupied(lessonNumber, sectionId)) errorMessage = "Aufgaben Nummer ist schon vergeben, bitte eine andere wählen"
@@ -47,18 +49,20 @@ exports.saveCreateSingleMultipleChoiceLesson = async function (req, res, next) {
             let files = await fileRepository.findByChapterId(chapterId)
             res.render('lessons/createSingleMultipleChoiceLesson', {
                 error: errorMessage,
-                singleMultipleChoice: {
+                lesson: {
                     name: lessonName,
                     lessonnumber: lessonNumber,
                     information: lessonInformation,
                     markedoptions: markedOptions,
+                    difficultylevel: difficultyLevel,
+                    feedback: feedback,
                 },
                 chapterId: chapterId,
                 sectionId: sectionId,
                 files: files
             })
         } else {
-            await lessonsRepository.insertOrUpdateSingleMultipleChoiceLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, markedOptions)
+            await lessonsRepository.insertOrUpdateSingleMultipleChoiceLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, markedOptions)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + sectionId)
                 })
@@ -75,14 +79,16 @@ exports.saveEditSingleMultipleChoiceLesson = async function (req, res, next) {
     let chapterId = req.body.chapterId
     let sectionId = req.body.sectionId
     let updatedSectionId = req.body.updatedSectionId
-    let singleMultipleChoiceLessonId = req.body.singleMultipleChoiceLessonId
+    let singleMultipleChoiceLessonId = req.body.lessonTypeId
     let lessonId = req.body.lessonId
     let lessonName = req.body.lessonName
     let lessonNumber = req.body.lessonNumber
     let updatedLessonNumber = req.body.updatedLessonNumber
     let lessonInformation = req.body.lessonInformation
     let markedOptions = req.body.markedoptions
-    if (chapterId && sectionId && updatedSectionId && singleMultipleChoiceLessonId && lessonId && lessonName && lessonNumber && updatedLessonNumber && lessonInformation && markedOptions) {
+    let difficultyLevel = req.body.difficultyLevel
+    let feedback = req.body.feedback === "" ? null : req.body.feedback
+    if (chapterId && sectionId && difficultyLevel && updatedSectionId && singleMultipleChoiceLessonId && lessonId && lessonName && lessonNumber && updatedLessonNumber && lessonInformation && markedOptions) {
         let errorMessage = ""
         let lessonNumberOccupied = sectionId !== updatedSectionId ? await isLessonNumberOccupied(updatedLessonNumber, updatedSectionId) : await isLessonNumberOccupied(updatedLessonNumber, sectionId);
         if ((lessonNumberOccupied && lessonNumber !== updatedLessonNumber) || (lessonNumberOccupied && sectionId !== updatedSectionId)) errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen";
@@ -92,12 +98,14 @@ exports.saveEditSingleMultipleChoiceLesson = async function (req, res, next) {
             let sections = await sectionRepository.findByChapterId(chapterId)
             res.render("lessons/editSingleMultipleChoiceLesson", {
                 error: errorMessage,
-                singleMultipleChoice: {
+                lesson: {
                     id: singleMultipleChoiceLessonId,
                     name: lessonName,
                     lessonnumber: lessonNumber,
                     information: lessonInformation,
                     markedoptions: markedOptions,
+                    difficultylevel: difficultyLevel,
+                    feedback: feedback,
                 },
                 sections: sections,
                 chapterId: chapterId,
@@ -107,7 +115,7 @@ exports.saveEditSingleMultipleChoiceLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            await lessonsRepository.insertOrUpdateSingleMultipleChoiceLesson(lessonId, singleMultipleChoiceLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, markedOptions)
+            await lessonsRepository.insertOrUpdateSingleMultipleChoiceLesson(lessonId, singleMultipleChoiceLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, markedOptions)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + updatedSectionId)
                 })
