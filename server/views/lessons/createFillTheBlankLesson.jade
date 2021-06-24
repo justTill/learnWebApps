@@ -22,13 +22,9 @@ block content
             br
             textarea(name="textWithBlanks" required) #{fillTheBlankLesson ? fillTheBlankLesson.textWithBlanks : ''}
         div.input
-            span.label Mögliche Antworte  (pro Antwort eine Zeile (mindestens so viele wie es Inputs gibt)
+            span.label Mögliche Antworte  (pro Antwort eine Zeile (mindestens so viele wie es Inputs gibt, richtige antworten mit einem [X] makieren)
             br
-            textarea(name="possibleAnswers" required) #{fillTheBlankLesson ? fillTheBlankLesson.possibleAnswers : ''}
-        div.input
-            span.label Richtige Antworten (pro Input eine Antwort (eine Zeile) in richtiger Reihenfolge)
-            br
-            textarea(name="answers" required) #{fillTheBlankLesson ? fillTheBlankLesson.answers : ''}
+            textarea(name="markedAnswers" required) #{fillTheBlankLesson ? fillTheBlankLesson.markedanswers : ''}
         div.actions
             input(type="submit" value="Aufagbe Speichern")
 

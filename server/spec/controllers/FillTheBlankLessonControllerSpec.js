@@ -41,8 +41,7 @@ describe("FillTheBlank: ", function () {
                 lessonNumber: 12,
                 lessonInformation: "Informationen",
                 textWithBlanks: "[input]",
-                possibleAnswers: "first answer \n second answer",
-                answers: "first answer",
+                markedAnswers: "[X]first answer \n [X]second answer",
             }
         };
         let response = {
@@ -66,6 +65,7 @@ describe("FillTheBlank: ", function () {
         response.path = ""
         await fillTheBlankLessonRoutes.saveCreateFillTheBlankLesson(request, response)
         expect(response.path).toEqual('/section/' + firstSectionToChapterOne.chapterId + '/' + classSectionOneLessonTwo.sectionid)
+        console.log(response)
         request.params = {}
         request.params.chapterId = firstSectionToChapterOne.chapterId
         request.params.sectionId = classSectionOneLessonTwo.sectionid

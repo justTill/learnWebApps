@@ -50,8 +50,7 @@ let asyncFillTheBlank = {
     name: "Async Fill the Blank",
     information: "Ergänze die lücken",
     textwithblanks: "Text mit Lücken [input] [input]",
-    possibleAnswers: "Antwortmöglichkeit 1\n Antwortmöglichkeit 2",
-    answers: "Antwortmöglichkeit 1",
+    markedanswers: " [X]Antwortmöglichkeit 1\n [X]Antwortmöglichkeit 2",
 };
 //async section two
 let asyncCodeExtensions = {
@@ -83,8 +82,7 @@ let classFillTheBlank = {
     name: "Class Fill the Blank",
     information: "Ergänze die lücken",
     textwithblanks: "Text mit Lücken [input] [input]",
-    possibleAnswers: "Antwortmöglichkeit 1\n Antwortmöglichkeit 2",
-    answers: "Antwortmöglichkeit 1",
+    markedanswers: " [X]Antwortmöglichkeit 1\n [X]Antwortmöglichkeit 2",
 };
 //class section two
 let classCodeExtensions = {
