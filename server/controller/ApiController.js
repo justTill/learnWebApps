@@ -1,5 +1,4 @@
 var chapterRepository = require("../persistence/ChapterRepository")
-var fileRepository = require("../persistence/FileRepository")
 var sectionRepository = require("../persistence/SectionRepository")
 var userRepository = require("../persistence/UserRepository")
 var lessonRepository = require("../persistence/LessonRepository")
@@ -37,6 +36,17 @@ exports.createUserIfNotExist = function (req, res, next) {
         next()
     }
 }
+exports.getProblemsWithAnswers = async function (req, res, next) {
+    let moodleId = parseInt(req.params.moodleId)
+    let moodleName = req.params.moodleName
+    let data = {problems: []}
+    if (moodleId !== -1 && moodleName !== "default") {
+        let problemsWithAnswers = await userRepository.findProblemsAndAnswersByUser(moodleId, moodleName)
+        data.problem = mapToOutputProblem(problemsWithAnswers)
+    }
+    res.send(data, 200)
+}
+
 exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
     let data = {chapters: []}
     let chapters = await chapterRepository.findAll()
@@ -45,6 +55,13 @@ exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
         data.chapters.push(mappedChapter)
     }
     res.send(data)
+}
+
+exports.testCodingLesson = async function (req, res, next) {
+
+}
+exports.saveNotes = async function (req, res, next) {
+
 }
 
 async function mapToOutputChapter(chapter) {
@@ -89,7 +106,6 @@ async function getMappedLessonsForSectionId(sectionId) {
         .concat(mappedCodeExtensionLessons)
         .concat(mappedSingleMultipleChoiceLessons)
     let sortedLessons = sortLessonsByNumber(mappedLessons)
-    console.log(sortedLessons)
     return sortedLessons
 }
 
@@ -167,4 +183,19 @@ function mapMarkedAnswers(answers) {
         })
     }
     return mappedAnswers
+}
+
+function mapToOutputProblem(problemsWithAnswers) {
+    let mapped = []
+    for (let problem of problemsWithAnswers) {
+        mapped.push({
+            problemMessage: problem.message,
+            answer: problem.answer,
+            LessonId: problem.lessonid,
+            LessonName: problem.name,
+            createdAt: problem.createdat,
+
+        })
+    }
+    return mapped
 }

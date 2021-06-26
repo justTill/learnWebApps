@@ -133,3 +133,14 @@ exports.createPerson = async function (moodleId, moodleName) {
         })
     return result
 }
+exports.findProblemsAndAnswersByUser = async function (moodleId, moodleName) {
+    let query = 'select p.id,p.createdat, p.message, p.lessonid, n.answer, l."name", l.id as lessonid from problems p left join notifications n on p.id = n.problemid join persons pe on p.moodleid = pe.moodleid join lessons l on l.id = p.lessonid where p.moodleid=$1 and pe.moodlename=$2 order by p.createdat DESC  ';
+    let result = []
+    result = await pool.query(query, [moodleId, moodleName])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
