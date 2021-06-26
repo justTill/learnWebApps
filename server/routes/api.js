@@ -1,7 +1,8 @@
 var express = require('express');
 var router = express.Router();
-var controller = require('../controller/exampleWorker')
+var apiController = require('../controller/ApiController')
+const asyncMiddleware = require('../utils/asyncMiddleware');
 
-router.get('/', controller.firstFunc);
+router.get('/chapters/', apiController.createUserIfNotExist, asyncMiddleware(apiController.getChapterDataWithSectionsAndLessons));
 
 module.exports = router;

@@ -111,3 +111,25 @@ exports.insertOrUpdateUserNotifications = async function (id, moodleId, answer, 
     }
     return result
 }
+exports.findUserByMoodleIdAndMoodleName = async function (moodleId, moodleName) {
+    let query = 'SELECT * from persons where moodleid=$1 and moodlename=$2';
+    let result = []
+    result = await pool.query(query, [moodleId, moodleName])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
+exports.createPerson = async function (moodleId, moodleName) {
+    let query = 'INSERT INTO persons (moodleid, moodlename) VALUES ($1, $2)';
+    let result = []
+    result = await pool.query(query, [moodleId, moodleName])
+        .then(res => {
+            return res
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
