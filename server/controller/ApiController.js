@@ -61,7 +61,37 @@ exports.testCodingLesson = async function (req, res, next) {
 
 }
 exports.saveNotes = async function (req, res, next) {
+    let moodleId = parseInt(req.params.moodleId)
+    let moodleName = req.params.moodleName
+    let note = req.body.note
+    if (moodleId !== -1 && moodleName !== "default" && note) {
+        userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+            .then(result => {
+                if (result.length !== 0) {
+                    userRepository.insertNotesForUser(moodleId).then(result => {
+                        res.send({}, 201)
+                    })
+                } else {
+                    res.send({}, 400)
+                }
+            })
+            .catch(err => {
+                res.send({}, 500)
+            })
+    } else {
+        res.send({}, 400)
+    }
+}
+exports.getNotes = async function (req, res, next) {
+    let moodleId = parseInt(req.params.moodleId)
+    let moodleName = req.params.moodleName
+    if (moodleId !== -1 && moodleName !== "default") {
+        let notes = await userRepository.findNotesByUser(moodleId, moodleName)
 
+        res.send({data: mapToOutputNotes(notes)}, 200)
+    } else {
+        res.send({}, 400)
+    }
 }
 
 async function mapToOutputChapter(chapter) {
@@ -195,6 +225,17 @@ function mapToOutputProblem(problemsWithAnswers) {
             LessonName: problem.name,
             createdAt: problem.createdat,
 
+        })
+    }
+    return mapped
+}
+
+function mapToOutputNotes(notes) {
+    let mapped = []
+    for (let note of notes) {
+        mapped.push({
+            notesId: note.id,
+            note: note.note,
         })
     }
     return mapped

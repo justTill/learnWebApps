@@ -144,3 +144,25 @@ exports.findProblemsAndAnswersByUser = async function (moodleId, moodleName) {
         })
     return result
 }
+exports.insertNotesForUser = async function (moodleId, note) {
+    let query = 'INSERT INTO notes (moodleid, note) VALUES ($1, $2)';
+    let result = []
+    result = await pool.query(query, [moodleId, note])
+        .then(res => {
+            return res
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
+exports.findNotesByUser = async function (moodleId, moodlename) {
+    let query = 'SELECT * from notes n join persons p on p.moodleid = n.moodleid where n.moodleid=$1 and p.moodlename=$2 order by n.id';
+    let result = []
+    result = await pool.query(query, [moodleId, moodlename])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}

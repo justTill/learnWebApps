@@ -9,6 +9,7 @@ router.get('/users/problems/:moodleId/:moodleName', asyncMiddleware(apiControlle
 
 router.get('/codingLessons/check/:moodleId/:moodleName', asyncMiddleware(apiController.testCodingLesson));
 
-router.post('/users/notes/:moodleId/:moodleName', asyncMiddleware(apiController.saveNotes()));
+router.post('/users/notes/:moodleId/:moodleName', asyncMiddleware(apiController.saveNotes));
+router.get('/users/notes/:moodleId/:moodleName', asyncMiddleware(apiController.getNotes));
 
 module.exports = router;
