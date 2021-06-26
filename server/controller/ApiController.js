@@ -58,7 +58,7 @@ exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
 }
 
 exports.testCodingLesson = async function (req, res, next) {
-
+    res.send("TODO", 200)
 }
 exports.saveNotes = async function (req, res, next) {
     let moodleId = parseInt(req.params.moodleId)
