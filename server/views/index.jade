@@ -1,9 +1,6 @@
 extends layout
 
 block content
-    h1= title
-    p Welcome to #{title}
-
     if !isLoggedIn
         form(action="/login" method="post")
             div.input

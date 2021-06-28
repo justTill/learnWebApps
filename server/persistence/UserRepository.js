@@ -111,3 +111,70 @@ exports.insertOrUpdateUserNotifications = async function (id, moodleId, answer, 
     }
     return result
 }
+exports.findUserByMoodleIdAndMoodleName = async function (moodleId, moodleName) {
+    let query = 'SELECT * from persons where moodleid=$1 and moodlename=$2';
+    let result = []
+    result = await pool.query(query, [moodleId, moodleName])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
+exports.createPerson = async function (moodleId, moodleName) {
+    let query = 'INSERT INTO persons (moodleid, moodlename) VALUES ($1, $2)';
+    let result = []
+    result = await pool.query(query, [moodleId, moodleName])
+        .then(res => {
+            return res
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
+exports.findProblemsAndAnswersByUser = async function (moodleId, moodleName) {
+    let query = 'select p.id,p.createdat, p.message, p.lessonid, n.answer, l."name", l.id as lessonid from problems p left join notifications n on p.id = n.problemid join persons pe on p.moodleid = pe.moodleid join lessons l on l.id = p.lessonid where p.moodleid=$1 and pe.moodlename=$2 order by p.createdat DESC  ';
+    let result = []
+    result = await pool.query(query, [moodleId, moodleName])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
+exports.insertNotesForUser = async function (moodleId, note) {
+    let query = 'INSERT INTO notes (moodleid, note) VALUES ($1, $2)';
+    let result = []
+    result = await pool.query(query, [moodleId, note])
+        .then(res => {
+            return res
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
+exports.findNotesByUser = async function (moodleId, moodlename) {
+    let query = 'SELECT * from notes n join persons p on p.moodleid = n.moodleid where n.moodleid=$1 and p.moodlename=$2 order by n.id';
+    let result = []
+    result = await pool.query(query, [moodleId, moodlename])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
+
+exports.insertSolvedLessonForUser = async function (lessonId, moodleId, userCode) {
+    let result = []
+    let query = 'INSERT INTO "solvedLessons" (moodleid, lessonid, code) VALUES ($1, $2, $3)';
+    result = await pool.query(query, [moodleId, lessonId, userCode])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}

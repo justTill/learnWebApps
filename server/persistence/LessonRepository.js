@@ -187,13 +187,12 @@ exports.findCodeExtensionByLessonId = async function (id) {
 }
 exports.findFillTheBlankBySectionId = async function (sectionId) {
     let query = 'SELECT * from lessons l INNER JOIN "fillTheBlankLessons" ftbl ON l.id = ftbl.lessonid WHERE l.sectionid=$1 ORDER BY lessonnumber'
-    let result = {}
+    let result = {};
     result = await pool.query(query, [sectionId])
         .then(res => {
             if (res.rows) {
                 return res.rows
             }
-            return result
         }).catch(err => {
             throw  err
         })

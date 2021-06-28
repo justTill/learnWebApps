@@ -8,7 +8,7 @@ function correctNumberOfBlanksAndAnswers(textWithBlanks, markedAnswers) {
     let numberOfInputs = (textWithBlanks.match(/\[input]/g) || []).length
     let numberOfAnswers = 0
     possibleAnswers.forEach(a => {
-        if (a.includes('[X]' || a.includes('[x]'))) {
+        if (a.includes('[X]') || a.includes('[x]')) {
             numberOfAnswers++
         }
     })

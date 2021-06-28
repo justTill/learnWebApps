@@ -5,8 +5,8 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state: {
-        userId: 0,
-        userName: ""
+        userId: -1,
+        userName: "default"
     },
     mutations: {
         setUserId(state, id) {
