@@ -2,6 +2,7 @@ var chapterRepository = require("../persistence/ChapterRepository")
 var sectionRepository = require("../persistence/SectionRepository")
 var userRepository = require("../persistence/UserRepository")
 var lessonRepository = require("../persistence/LessonRepository")
+var codeExecutionService = require("../service/CodeExecutionService")
 
 const LessonTypes = Object.freeze({
     CODE: "codingLesson",
@@ -58,7 +59,35 @@ exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
 }
 
 exports.testCodingLesson = async function (req, res, next) {
-    res.send("TODO", 200)
+    let moodleId = parseInt(req.body.moodleId)
+    let moodleName = req.body.moodleName
+    let code = req.body.userCode;
+    let lessonId = req.body.lessonId;
+    if (code && lessonId) {
+        let codingLesson = await lessonRepository.findCodingByLessonId(lessonId)
+        if (codingLesson) {
+            await codeExecutionService.runTestForCodingLesson(codingLesson, code)
+                .then(result => {
+                    if (result.errors.length === 0 && moodleId && moodleName && moodleId !== -1 && moodleName !== "default") {
+                        userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+                            .then(userResult => {
+                                if (userResult.length !== 0) {
+                                    userRepository.insertSolvedLessonForUser(lessonId, moodleId, code)
+                                }
+                            })
+                    }
+                    res.send(result, 200)
+                })
+                .catch(err => {
+                    res.send("unknown error please try again later", 500)
+                })
+        } else {
+            res.send("No lesson found with given id", 400)
+        }
+    } else {
+        res.send("Missing field lessonId or code", 400)
+    }
+    //res.status(status).send(body)
 }
 exports.saveNotes = async function (req, res, next) {
     let moodleId = parseInt(req.params.moodleId)

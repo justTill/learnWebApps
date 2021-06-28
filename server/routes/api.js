@@ -7,7 +7,7 @@ router.get('/chapters/', apiController.createUserIfNotExist, asyncMiddleware(api
 router.get('/users/problems/:moodleId/:moodleName', asyncMiddleware(apiController.getProblemsWithAnswers));
 
 
-router.get('/codingLessons/check/:moodleId/:moodleName', asyncMiddleware(apiController.testCodingLesson));
+router.post('/codingLessons/check/', asyncMiddleware(apiController.testCodingLesson));
 
 router.post('/users/notes/:moodleId/:moodleName', asyncMiddleware(apiController.saveNotes));
 router.get('/users/notes/:moodleId/:moodleName', asyncMiddleware(apiController.getNotes));

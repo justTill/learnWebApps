@@ -166,3 +166,15 @@ exports.findNotesByUser = async function (moodleId, moodlename) {
         })
     return result
 }
+
+exports.insertSolvedLessonForUser = async function (lessonId, moodleId, userCode) {
+    let result = []
+    let query = 'INSERT INTO "solvedLessons" (moodleid, lessonid, code) VALUES ($1, $2, $3)';
+    result = await pool.query(query, [moodleId, lessonId, userCode])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
