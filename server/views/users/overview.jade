@@ -1,17 +1,44 @@
 extends ../layout
 
 block content
-    h1 Sehen wer was gemacht hat
+    script.
+        let displayOrHideElement = function (element) {
+            if (element.style.display === 'block') {
+                element.style.display = 'none'
+            } else {
+                element.style.display = 'block'
+            }
+        }
+        let showOrHideField = function (id, type) {
+            let el = null;
+            if (type === 'CHAPTER') {
+                el = document.getElementById("chapter" + id)
+            } else if (type === "SECTION") {
+                el = document.getElementById("section" + id)
+            } else if (type === "LESSON") {
+                el = document.getElementById("lesson" + id)
+            }
+            if (el) displayOrHideElement(el)
+        }
+    h3 Sehen wer was gemacht hat
     each chapter in solvedByChapter
-        div #{chapter.chapterName}
-            each section in chapter.sections
-                div #{section.sectionName}
-                    each lesson in section.lessons
-                        div #{lesson.lessonName}
-                            each person in lesson.solvedBy
-                                div=person.moodlename
-                            br
+        div
+            a(onclick="showOrHideField(#{chapter.id}, 'CHAPTER')") #{chapter.chapterName}
+            div(id="chapter#{chapter.id}" class="hidden")
+                each section in chapter.sections
+                    div
+                        a(onclick="showOrHideField(#{section.id}, 'SECTION')") #{section.sectionName}
+                        div(id="section#{section.id}" class="hidden")
+                            each lesson in section.lessons
+                                div
+                                    a(onclick="showOrHideField(#{lesson.id}, 'LESSON')") #{lesson.lessonName}
+                                    div(id="lesson#{lesson.id}" class="hidden")
+                                        if lesson.solvedBy.length === 0
+                                            span Noch kein Student hat die Aufgabe richtig gelöst
+                                        each person in lesson.solvedBy
+                                            div=person.moodlename
+                                        br
 
-    h2r Folgende Studenten haben alle Aufgaben gelöst
+    h3 Folgende Studenten haben alle Aufgaben gelöst
     each user in solvedEveryLesson
         div=user.moodlename

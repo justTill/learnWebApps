@@ -36,17 +36,18 @@ async function getUsersThatSolvedLessonsByChapter() {
     let lessonIds = []
     for (let chapter of chapters) {
         let sections = await sectionRepository.findByChapterId(chapter.id)
-        solvedByChapter.push({chapterName: chapter.name, sections: []})
+        solvedByChapter.push({id: chapter.id, chapterName: chapter.name, sections: []})
         let sectionCounter = 0
         for (let section of sections) {
-            solvedByChapter[chapterCounter].sections.push({sectionName: section.name, lessons: []})
+            solvedByChapter[chapterCounter].sections.push({id: section.id, sectionName: section.name, lessons: []})
             let lessons = await lessonRepository.findAllBySectionId(section.id)
             for (let lesson of lessons) {
                 lessonIds.push(lesson.id)
                 let users = await userRepository.findUserThatSolvedLesson(lesson.id)
                 solvedByChapter[chapterCounter].sections[sectionCounter].lessons.push({
                     lessonName: lesson.name,
-                    solvedBy: users
+                    solvedBy: users,
+                    id: lesson.id
                 })
             }
             sectionCounter++

@@ -1,20 +1,40 @@
 extends ../layout
 
 block content
+    script.
+        let displayOrHideElement = function (element) {
+            if (element.style.display === 'block') {
+                element.style.display = 'none'
+            } else {
+                element.style.display = 'block'
+            }
+        }
+        let showOrHideAnswerForm = function (problemId, type) {
+            if (type === 'ANSWER') {
+                let element = document.getElementById("problem" + problemId)
+                displayOrHideElement(element)
+            } else if (type === 'EDIT') {
+                let element = document.getElementById("problemEdit" + problemId)
+                displayOrHideElement(element)
+            }
+        }
+
 
     h1 Auf neue Probleme Antworten
     each problem in unansweredProblems
-        span <b> #{problem.moodlename} </b> hat ein Problem beim Aufgabe <b> #{problem.lessonname} </b>
-        a() Antworten #{problem.moodleid}
-        form(action="/saveAnswerOnProblem" method="post")
-            input(type="hidden" name="problemId" value="#{problem.id}")
-            input(type="hidden" name="moodleId" value="#{problem.moodleid}")
-            div.input
-                span.label Nachrichten Text
-                br
-                textarea(name="answer" value="" required)
-            div.actions
-                input(type="submit" value="Antwort speichern")
+        div
+            span <b> #{problem.moodlename} </b> hat ein Problem beim Aufgabe <b> #{problem.lessonname} </b>
+            button(onclick="showOrHideAnswerForm(#{problem.id}, 'ANSWER')") Antworten #{problem.moodleid}
+            div(id="problem#{problem.id}" class="hidden")
+                form(action="/saveAnswerOnProblem" method="post")
+                    input(type="hidden" name="problemId" value="#{problem.id}")
+                    input(type="hidden" name="moodleId" value="#{problem.moodleid}")
+                    div.input
+                        span.label Nachrichten Text
+                        br
+                        textarea(name="answer" value="" required)
+                    div.actions
+                        input(type="submit" value="Antwort speichern")
 
     h1 Antworten auf Probleme bearbeiten
     each key in answeredProblemKeys
@@ -24,21 +44,20 @@ block content
             div Von #{problem.moodlename} öffnen
                 div
                     span=problem.lessonname
-                    //span=problem.message
-                    //span=problem.answer
-                button Antwort bearbeiten
-            form(action="/saveAnswerOnProblem" method="post")
-                input(type="hidden" name="problemId" value="#{problem.problemid}")
-                input(type="hidden" name="moodleId" value="#{problem.moodleid}")
-                input(type="hidden" name="notificationId" value="#{problem.notificationid}")
-                div.input
-                    span.label Nachrichten Text
-                    br
-                    textarea(name="answer" value="" required) #{problem.answer}
-                div.actions
-                    input(type="submit" value="Antwort speichern")
-            form(action="/deleteProblem" method="post")
-                input(type="hidden" name="problemId" value="#{problem.problemid}")
-                div.actions
-                    input(type="submit" value="Problem löschen")
-            br
+                    button(onclick="showOrHideAnswerForm(#{problem.id}, 'EDIT')") Antwort bearbeiten
+                    div(id="problemEdit#{problem.id}" class="hidden")
+                        form(action="/saveAnswerOnProblem" method="post")
+                            input(type="hidden" name="problemId" value="#{problem.problemid}")
+                            input(type="hidden" name="moodleId" value="#{problem.moodleid}")
+                            input(type="hidden" name="notificationId" value="#{problem.notificationid}")
+                            div.input
+                                span.label Nachrichten Text
+                                br
+                                textarea(name="answer" value="" required) #{problem.answer}
+                            div.actions
+                                input(type="submit" value="Antwort speichern")
+                        form(action="/deleteProblem" method="post")
+                            input(type="hidden" name="problemId" value="#{problem.problemid}")
+                            div.actions
+                                input(type="submit" value="Problem löschen")
+                        br
