@@ -1,63 +1,107 @@
 extends ../layout
 
 block content
-    script.
-        let displayOrHideElement = function (element) {
-            if (element.style.display === 'block') {
-                element.style.display = 'none'
-            } else {
-                element.style.display = 'block'
-            }
-        }
-        let showOrHideAnswerForm = function (problemId, type) {
-            if (type === 'ANSWER') {
-                let element = document.getElementById("problem" + problemId)
-                displayOrHideElement(element)
-            } else if (type === 'EDIT') {
-                let element = document.getElementById("problemEdit" + problemId)
-                displayOrHideElement(element)
-            }
-        }
-
 
     h1 Auf neue Probleme Antworten
     each problem in unansweredProblems
         div
             span <b> #{problem.moodlename} </b> hat ein Problem beim Aufgabe <b> #{problem.lessonname} </b>
-            button(onclick="showOrHideAnswerForm(#{problem.id}, 'ANSWER')") Antworten #{problem.moodleid}
-            div(id="problem#{problem.id}" class="hidden")
-                form(action="/saveAnswerOnProblem" method="post")
-                    input(type="hidden" name="problemId" value="#{problem.id}")
-                    input(type="hidden" name="moodleId" value="#{problem.moodleid}")
-                    div.input
-                        span.label Nachrichten Text
-                        br
-                        textarea(name="answer" value="" required)
-                    div.actions
-                        input(type="submit" value="Antwort speichern")
+            button(type="button" class="btn btn-primary" data-toggle="modal" data-target="#answerModal" data-problemlessonname="#{problem.lessonname}" data-problemmessage="#{problem.message}" data-problemid="#{problem.id}" data-problemmoodlename="#{problem.moodlename}" data-problemmoodleid="#{problem.moodleid}") Antworten
+    div
+        div(class="modal fade" id="answerModal" tabindex="-1" role="dialog" aria-hidden="true")
+            div(class="modal-dialog modal-dialog-centered" role="document")
+                div(class="modal-content")
+                    div(class="modal-header")
+                        h5(class="modal-title") Antworten
+                        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                            span(aria-hidden="true") &times;
+                    div(class="modal-body")
+                        form(action="/saveAnswerOnProblem" method="post")
+                            input(class="modalProblemId" type="hidden" name="problemId")
+                            input(class="modalProblemMoodleId" type="hidden" name="moodleId")
+                            div.input
+                                span.label(class="form-lessonName") Nachrichten Text
+                                br
+                                span.label(class="form-message") Nachrichten Text
+                                br
+                                textarea(name="answer" value="" required)
+                            div.actions
+                                button(class="btn btn-primary" type="submit") Senden
+    script.
+        $('#answerModal').on('show.bs.modal', function (event) {
+            let button = $(event.relatedTarget)
+            let problemId = button.data('problemid')
+            let problemMoodleId = button.data('problemmoodleid')
+            let problemMoodleName = button.data('problemmoodlename')
+            let problemLessonName = button.data('problemlessonname')
+            let problemMessage = button.data('problemmessage')
+            let modal = $(this)
+            modal.find('.modal-title').text(problemMoodleName + " Antworten")
+            modal.find('.modalProblemId').val(problemId)
+            modal.find('.form-lessonName').text('Aufgabe: ' + problemLessonName)
+            modal.find('.form-message').text('Frage: ' + problemMessage)
+            modal.find('.modalProblemMoodleId').val(problemMoodleId)
+        })
 
     h1 Antworten auf Probleme bearbeiten
     each key in answeredProblemKeys
         b Meldungen vom #{key}
         br
         each problem in answeredProblems.get(key)
-            div Von #{problem.moodlename} öffnen
+            div Problem von <b> #{problem.moodlename} </b> bei der Aufgabe <b> #{problem.lessonname}</b>
                 div
-                    span=problem.lessonname
-                    button(onclick="showOrHideAnswerForm(#{problem.id}, 'EDIT')") Antwort bearbeiten
-                    div(id="problemEdit#{problem.id}" class="hidden")
+                    button(class="btn btn-primary" type="button" data-toggle="modal" data-target="#problemEditModal"
+                        data-problemlessonname="#{problem.lessonname}"
+                        data-problemmessage="#{problem.message}"
+                        data-problemid="#{problem.problemid}"
+                        data-problemmoodlename="#{problem.moodlename}"
+                        data-problemmoodleid="#{problem.moodleid}"
+                        data-problemanswer="#{problem.answer}"
+                        data-problemnotificationid="#{problem.notificationid}") Antwort bearbeiten
+
+    div
+        div(class="modal fade" id="problemEditModal" tabindex="-1" role="dialog" aria-hidden="true")
+            div(class="modal-dialog modal-dialog-centered" role="document")
+                div(class="modal-content")
+                    div(class="modal-header")
+                        h5(class="modal-title") Antworten
+                        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                            span(aria-hidden="true") &times;
+                    div(class="modal-body")
                         form(action="/saveAnswerOnProblem" method="post")
-                            input(type="hidden" name="problemId" value="#{problem.problemid}")
-                            input(type="hidden" name="moodleId" value="#{problem.moodleid}")
-                            input(type="hidden" name="notificationId" value="#{problem.notificationid}")
+                            input(class="editAnswerProblemId" type="hidden" name="problemId")
+                            input(class="editAnswerProblemMoodleId" type="hidden" name="moodleId")
+                            input(class="editAnswerProblemNotificationId" type="hidden" name="notificationId")
                             div.input
-                                span.label Nachrichten Text
+                                span.label(class="formLessonName") Nachrichten Text
                                 br
-                                textarea(name="answer" value="" required) #{problem.answer}
+                                span.label(class="formProblemText") Nachrichten Text
+                                br
+                                textarea(class="formAnswerText" name="answer" value="" required) Text
                             div.actions
-                                input(type="submit" value="Antwort speichern")
+                                button(class="btn btn-primary" type="submit") Speichern
                         form(action="/deleteProblem" method="post")
-                            input(type="hidden" name="problemId" value="#{problem.problemid}")
+                            input(class="deleteAnswerProblemId" type="hidden" name="problemId")
                             div.actions
-                                input(type="submit" value="Problem löschen")
-                        br
+                                button(class="btn btn-primary" type="submit") Löschen
+
+    script.
+        $('#problemEditModal').on('show.bs.modal', function (event) {
+            let button = $(event.relatedTarget)
+            let problemId = button.data('problemid')
+            let problemMoodleId = button.data('problemmoodleid')
+            let problemMoodleName = button.data('problemmoodlename')
+            let problemLessonName = button.data('problemlessonname')
+            let problemMessage = button.data('problemmessage')
+            let problemNotificationId = button.data('problemnotificationid')
+            let problemAnswer = button.data('problemanswer')
+            let modal = $(this)
+            modal.find('.modal-title').text(problemMoodleName + " Antworten")
+            modal.find('.editAnswerProblemId').val(problemId)
+            modal.find('.editAnswerProblemMoodleId').val(problemMoodleId)
+            modal.find('.editAnswerProblemNotificationId').val(problemNotificationId)
+            modal.find('.formLessonName').text('Aufgabe: ' + problemLessonName)
+            modal.find('.formProblemText').text('Frage: ' + problemMessage)
+            modal.find('.formAnswerText').text(problemAnswer)
+            modal.find('.deleteAnswerProblemId').val(problemId)
+        })

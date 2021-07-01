@@ -10,3 +10,7 @@ a {
 .hidden {
   display: none;
 }
+
+.navigation {
+  margin: auto;
+}

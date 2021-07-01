@@ -4,6 +4,8 @@ var apiController = require('../controller/ApiController')
 const asyncMiddleware = require('../utils/asyncMiddleware');
 
 router.get('/chapters/', apiController.createUserIfNotExist, asyncMiddleware(apiController.getChapterDataWithSectionsAndLessons));
+
+//save Problems
 router.get('/users/problems/:moodleId/:moodleName', asyncMiddleware(apiController.getProblemsWithAnswers));
 
 
@@ -11,5 +13,6 @@ router.post('/codingLessons/check/', asyncMiddleware(apiController.testCodingLes
 
 router.post('/users/notes/:moodleId/:moodleName', asyncMiddleware(apiController.saveNotes));
 router.get('/users/notes/:moodleId/:moodleName', asyncMiddleware(apiController.getNotes));
+
 
 module.exports = router;
