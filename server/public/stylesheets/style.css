@@ -26,53 +26,44 @@ a {
   height: 100px;
 }
 
-.problemForm, .addChapterForm, .uploadForm {
-  display: inline;
-}
-
-.problemForm > span {
-  padding-bottom: 5px;
-  padding-left: 5px;
-  display: block;
-}
-
-.problemForm > textarea {
+.modalForm > input {
   display: block;
   margin-left: auto;
   margin-right: auto;
 }
 
-.addChapterForm > span {
+.modalForm > select {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modalForm {
+  display: inline;
+}
+
+.modalForm > textarea {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 300px;
+  height: 300px;
+}
+
+.modalForm > span {
   padding-bottom: 5px;
   padding-left: 5px;
   display: block;
   text-align: center;
 }
 
-.addChapterForm > input, .addChapterForm > textarea, .uploadForm > select {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.uploadForm > input {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.addChapterForm > textarea {
-  width: 300px;
-  height: 300px;
+.saveBt {
+  float: right;
 }
 
 .deleteProblemBt {
   float: left;
   margin-right: 100px;
-}
-
-.saveEditProblemBt, .saveProblemAnswerBt, .saveChapterBt {
-  float: right;
 }
 
 .tilesContainer {
@@ -83,12 +74,15 @@ a {
 }
 
 .tile {
-  border: black;
   border-style: solid !important;
   border-color: lightblue;
   margin: 50px;
   width: 250px;
   height: 250px;
+}
+
+select {
+  max-width: 150px;
 }
 
 .add-image {
@@ -103,7 +97,7 @@ a {
   margin-left: 9px;
 }
 
-.content h1 {
+.content > h1, .content > h5 {
   text-align: center;
 }
 
@@ -131,4 +125,16 @@ a {
   top: 175px;
   position: relative;
   margin-left: 10px;
+}
+
+.filePath {
+  margin: 5px;
+  padding: 1px;
+  display: inline-block;
+  border-color: lightblue;
+  border-style: solid !important;
+}
+
+#errorMessages {
+  color: red;
 }

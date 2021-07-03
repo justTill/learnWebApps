@@ -13,7 +13,8 @@ block content
                             button(type="button" class="close" data-dismiss="modal" aria-label="Close")
                                 span(aria-hidden="true") &times;
                         div(class="modal-body")
-                            form(class="addChapterForm" action="/saveNewChapter" method="post")
+                            include ../formError
+                            form(class="modalForm" action="/saveNewChapter" method="post")
                                 span.label Kapitelname
                                 br
                                 input(type="text" name="chapterName" required value="#{chapterData ? chapterData.name : ''}")
@@ -27,11 +28,7 @@ block content
                                 input(type="number" min=1 name="chapterNumber" required value="#{chapterData ? chapterData.chapterNumber : 1}")
                                 br
                                 button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch
-                                button(class="btn btn-primary saveChapterBt" type="submit") Speichern
-                                br
-                        div(class="modal-footer")
-                            include ../formError
-
+                                button(class="btn btn-primary saveBt" type="submit") Speichern
         div(class="tile")
             if fileUploaded
                 span(class="successMessage") Uploaded
@@ -45,14 +42,14 @@ block content
                             button(type="button" class="close" data-dismiss="modal" aria-label="Close")
                                 span(aria-hidden="true") &times;
                         div(class="modal-body")
-                            form(action="/uploadChapterMedia" class="uploadForm" method="post" enctype="multipart/form-data")
-                                select(name="chapter")
+                            form(action="/uploadChapterMedia" class="modalForm" method="post" enctype="multipart/form-data")
+                                select(class="chapterSelect" name="chapter")
                                     each chapter in chapters
                                         option(value="#{chapter.id}") #{chapter.name}
                                 br
                                 input(type="file" name="file" required)
                                 br
-                                button(class="btn btn-primary saveChapterBt" type="submit") Speichern
+                                button(class="btn btn-primary saveBt" type="submit") Speichern
                         div(class="modal-footer")
                             div(id="uploadError")
                                 if fileError
@@ -73,4 +70,3 @@ block content
                 a(type="button" class="btn btn-danger deleteChapter" href='/deleteChapter/#{chapter.id}') Löschen
                 a(type="button" class="btn btn-primary editChapter" href='/chapter/#{chapter.id}') Bearbeiten
                 span #{chapter.name}
-

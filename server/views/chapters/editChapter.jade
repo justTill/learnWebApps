@@ -1,37 +1,89 @@
 extends ../layout
 
 block content
-    h1 Kapitel bearbeiten
-    form(action="/editChapter" method="post")
-        div.input
-            span.label Kapitelname
-            br
-            input(type="text" name="chapterName" required value="#{chapter.name}")
-        div.input
-            span.label Übersichtstext
-            br
-            textarea(name="overview" required) #{chapter.overview}
-        div.input
-            span.label Kapitelnummer
-            br
-            input(type="number" min=1 name="updatedChapterNumber" required value="#{chapter.chapternumber}")
-            input(type="hidden" name="chapterNumber" value="#{chapter.chapternumber}")
-        div.input
-            input(type="hidden" name="chapterId" value="#{chapter.id}")
-        div.actions
-            input(type="submit" value="Kapitel Speichern")
+    h1(class="headline") #{chapter.name}
+    h5(class="headline") Bearbeiten und neue Unterthemen erstellen
+    div(class="tilesContainer")
+        div(class="tile")
+            button(type="button" class="btn createButton" data-toggle="modal" data-target="#editChapter")
+                img(class="add-image" src="/images/edit-icon.png")
+            div(class="modal fade" id="editChapter" tabindex="-1" role="dialog" aria-hidden="true")
+                div(class="modal-dialog modal-dialog-centered" role="document")
+                    div(class="modal-content")
+                        div(class="modal-header")
+                            h5(class="modal-title") Kapitel Bearbeiten
+                            button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                                span(aria-hidden="true") &times;
+                        div(class="modal-body")
+                            include ../formError
+                            form(class="modalForm" action="/editChapter" method="post")
+                                span.label Kapitelname
+                                br
+                                input(type="text" name="chapterName" required value="#{chapter.name}")
+                                br
+                                span.label Übersichtstext
+                                br
+                                textarea(name="overview" required) #{chapter.overview}
+                                br
+                                span.label Kapitelnummer
+                                br
+                                input(type="number" min=1 name="updatedChapterNumber" required value="#{chapter.chapternumber}")
+                                input(type="hidden" name="chapterNumber" value="#{chapter.chapternumber}")
+                                input(type="hidden" name="chapterId" value="#{chapter.id}")
+                                br
+                                button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch
+                                button(class="btn btn-primary saveBt" type="submit") Speichern
+                                br
+                        div(class="modal-footer")
+                            include ../files
 
+        each section in sections
+            div(class="tile chapterTile")
+                a(type="button" class="btn btn-danger deleteChapter"  href='/deleteSection/#{chapter.id}/#{section.id}') Löschen
+                a(type="button" class="btn btn-primary editChapter" href='/section/#{chapter.id}/#{section.id}') Bearbeiten
+                span #{section.name}
 
-    include ../formError
+        div(class="tile")
+            button(type="button" class="btn createButton" data-toggle="modal" data-target="#createSection")
+                img(class="add-image" src="/images/plus-icon.png")
+            div(class="modal fade" id="createSection" tabindex="-1" role="dialog" aria-hidden="true")
+                div(class="modal-dialog modal-dialog-centered" role="document")
+                    div(class="modal-content")
+                        div(class="modal-header")
+                            h5(class="modal-title") Untertheme Erstellen
+                            button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                                span(aria-hidden="true") &times;
+                        div(class="modal-body")
+                            include ../formError
+                            form(class="modalForm" action="/saveNewSection" method="post")
+                                span.label Unterkapitel Name
+                                br
+                                input(type="text" name="sectionName" required value="#{sectionData ? sectionData.name : ''}")
+                                br
+                                span.label Übersichtstext
+                                br
+                                textarea(name="information" required) #{sectionData ? sectionData.information : ''}
+                                br
+                                span.label Unterhema nummer
+                                br
+                                input(type="number" min=1 name="sectionNumber" required value="#{sectionData ? sectionData.sectionNumber : 1}")
+                                input(type="hidden" name="chapterId" value="#{chapter.id}")
+                                br
+                                button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch
+                                button(class="btn btn-primary saveBt" type="submit") Speichern
+                                br
+                        div(class="modal-footer")
+                            include ../files
 
-    include ../files
-
-    h1 Unterthemen
-    div
-        a(href='/createSection/#{chapter.id}') Unterhema erstellen
-
-    each section in sections
-        p= section.name
-            a(href='/section/#{chapter.id}/#{section.id}') Unterthema bearbeiten
-            br
-            a(href='/deleteSection/#{chapter.id}/#{section.id}') Löschen
+        script.
+            $(window).on('load', function () {
+                if ($('#errorMessages').children().length > 0) {
+                    for (let error of $('#errorMessages').children()) {
+                        if (error.innerText.includes("Unterthema")) {
+                            $('#createSection').modal('show');
+                            return
+                        }
+                    }
+                    $('#editChapter').modal('show');
+                }
+            });

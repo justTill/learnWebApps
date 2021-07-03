@@ -1,5 +1,6 @@
-h1 Verfügbaren bilder
-div mit img tag und src="angezeigter NAME" einbinden
-    ul
+div(class="files")
+    b
+        span="mit <img> src='angezeigter Name'> einbinden"
+    br
     each file in files
-        li #{file.path}
+        span(class="filePath") #{file.path}

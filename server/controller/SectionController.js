@@ -20,9 +20,6 @@ exports.deleteSection = async function (req, res, next) {
             throw err
         })
 }
-exports.createSection = async function (req, res, next) {
-    res.render('sections/createSection', {chapterId: req.params.chapterId})
-}
 
 exports.saveNewSection = async function (req, res, next) {
     let chapterId = req.body.chapterId
@@ -31,11 +28,17 @@ exports.saveNewSection = async function (req, res, next) {
     let sectionNumber = req.body.sectionNumber
     if (chapterId && name && information && sectionNumber) {
         let numberOccupied = await isSectionNumberOccupied(sectionNumber, chapterId);
+        let files = await fileRepository.findByChapterId(chapterId)
+        let sections = await sectionRepository.findByChapterId(chapterId)
+        let chapter = await chapterRepository.findById(chapterId)
         if (numberOccupied) {
-            res.render('sections/createSection', {
+            res.render('chapters/editChapter', {
                 error: "Unterthema Nummer ist schon vergeben, bitte eine andere wählen",
                 sectionData: {name: name, information: information, sectionNumber: sectionNumber},
                 chapterId: chapterId,
+                chapter: chapter,
+                files: files,
+                sections: sections
             })
         } else {
             await sectionRepository.insertOrUpdateSection(null, chapterId, name, information, sectionNumber)
