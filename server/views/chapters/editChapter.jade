@@ -18,15 +18,12 @@ block content
                             include ../formError
                             form(class="modalForm" action="/editChapter" method="post")
                                 span.label Kapitelname
-                                br
                                 input(type="text" name="chapterName" required value="#{chapter.name}")
                                 br
                                 span.label Übersichtstext
-                                br
                                 textarea(name="overview" required) #{chapter.overview}
                                 br
                                 span.label Kapitelnummer
-                                br
                                 input(type="number" min=1 name="updatedChapterNumber" required value="#{chapter.chapternumber}")
                                 input(type="hidden" name="chapterNumber" value="#{chapter.chapternumber}")
                                 input(type="hidden" name="chapterId" value="#{chapter.id}")

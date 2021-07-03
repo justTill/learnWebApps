@@ -2,21 +2,13 @@ var lessonsRepository = require("../persistence/LessonRepository")
 var fileRepository = require("../persistence/FileRepository")
 var sectionRepository = require("../persistence/SectionRepository")
 var isLessonNumberOccupied = require("../utils/lessons").isLessonNumberOccupied
+var getEditSectionData = require("../utils/sectionData").getEditSectionData
 
 function correctNumberOfBlanksAndAnswers(unfinishedCode, answers) {
     let numberOfAnswers = answers.replaceAll("\n", "").split('\r').length
     let numberOfInputs = (unfinishedCode.match(/\[input]/g) || []).length
     return numberOfAnswers === numberOfInputs
 
-}
-
-exports.createCodeExtensionLesson = async function (req, res, next) {
-    let files = await fileRepository.findByChapterId(req.params.chapterId)
-    res.render('lessons/createCodeExtensionLesson', {
-        chapterId: req.params.chapterId,
-        sectionId: req.params.sectionId,
-        files: files
-    })
 }
 
 exports.editCodeExtensionLesson = async function (req, res, next) {
@@ -50,22 +42,18 @@ exports.saveCreateCodeExtensionLesson = async function (req, res, next) {
         if (lessonNumberOccupied) errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen";
         if (!correctNumberOfBlanksAndAnswers(unfinishedCode, answers)) errorMessage = "Anzahl an [input]'s und Antworten stimmt nicht überein "
         if (errorMessage) {
-            let files = await fileRepository.findByChapterId(chapterId)
-            res.render("lessons/createCodeExtensionLesson", {
-                error: errorMessage,
-                lesson: {
-                    name: lessonName,
-                    lessonnumber: lessonNumber,
-                    information: lessonInformation,
-                    unfinishedcode: unfinishedCode,
-                    answers: answers,
-                    difficultylevel: difficultyLevel,
-                    feedback: feedback,
-                },
-                chapterId: chapterId,
-                sectionId: sectionId,
-                files: files
-            })
+            let lesson = {
+                name: lessonName,
+                lessonnumber: lessonNumber,
+                information: lessonInformation,
+                unfinishedcode: unfinishedCode,
+                answers: answers,
+                difficultylevel: difficultyLevel,
+                feedback: feedback,
+            }
+            let data = await getEditSectionData(sectionId, chapterId, lesson)
+            data.codeExtensionErrorMessages = errorMessage
+            res.render('sections/editSection', data)
         } else {
             lessonsRepository.insertOrUpdateCodeExtensionLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, unfinishedCode, answers)
                 .then(result => {

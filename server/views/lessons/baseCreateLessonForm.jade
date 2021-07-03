@@ -1,25 +1,20 @@
 input(type="hidden" name="chapterId" value="#{chapterId}")
 input(type="hidden" name="sectionId" value="#{sectionId}")
-div.input
-    span.label Aufgabenname
-    br
-    input(type="text" name="lessonName" required value="#{lesson ? lesson.name : ''}")
-div.input
-    span.label Aufgabennummer
-    br
-    input(type="number" min=1 name="lessonNumber" required value="#{lesson ? lesson.lessonnumber : 1")
-div.input
-    span.label Informationen
-    br
-    textarea(name="lessonInformation" required) #{lesson ? lesson.information : ''}
-div.input
-    span.label Schwierigkeitsgrad
-    br
-    select(name="difficultyLevel" required)
-        option(value="EASY" selected=lesson && lesson.difficultylevel == 'EASY') Einfach
-        option(value="MIDDLE" selected=lesson && lesson.difficultylevel == 'MIDDLE') Mittel
-        option(value="HARD" selected=lesson && lesson.difficultylevel == 'HARD') Schwer
-div.input
-    span.label Rückmeldung beim Erfolgreichen lösen
-    br
-    textarea(name="feedback") #{lesson ? lesson.feedback : ''}
+span.label Aufgabenname
+input(type="text" name="lessonName" required value="#{lesson ? lesson.name : ''}")
+br
+span.label Aufgabennummer
+input(type="number" min=1 name="lessonNumber" required value="#{lesson ? lesson.lessonnumber : 1")
+br
+span.label Informationen
+textarea(name="lessonInformation" required) #{lesson ? lesson.information : ''}
+br
+span.label Schwierigkeitsgrad
+select(name="difficultyLevel" required)
+    option(value="EASY" selected=lesson && lesson.difficultylevel == 'EASY') Einfach
+    option(value="MIDDLE" selected=lesson && lesson.difficultylevel == 'MIDDLE') Mittel
+    option(value="HARD" selected=lesson && lesson.difficultylevel == 'HARD') Schwer
+br
+span.label Rückmeldung beim Erfolgreichen lösen
+textarea(name="feedback") #{lesson ? lesson.feedback : ''}
+br

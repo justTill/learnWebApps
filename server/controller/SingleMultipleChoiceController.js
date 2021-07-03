@@ -2,18 +2,11 @@ var lessonsRepository = require("../persistence/LessonRepository")
 var fileRepository = require("../persistence/FileRepository")
 var sectionRepository = require("../persistence/SectionRepository")
 var isLessonNumberOccupied = require("../utils/lessons").isLessonNumberOccupied
+var getEditSectionData = require("../utils/sectionData").getEditSectionData
+
 
 let containsAnswers = function (markedAnswerText) {
     return markedAnswerText.includes('[X]') || markedAnswerText.includes('[x]')
-}
-
-exports.createSingleMultipleChoiceLesson = async function (req, res, next) {
-    let files = await fileRepository.findByChapterId(req.params.chapterId)
-    res.render('lessons/createSingleMultipleChoiceLesson', {
-        chapterId: req.params.chapterId,
-        sectionId: req.params.sectionId,
-        files: files
-    })
 }
 
 
@@ -46,21 +39,17 @@ exports.saveCreateSingleMultipleChoiceLesson = async function (req, res, next) {
         if (await isLessonNumberOccupied(lessonNumber, sectionId)) errorMessage = "Aufgaben Nummer ist schon vergeben, bitte eine andere wählen"
         if (!containsAnswers(markedOptions)) errorMessage = "Bitte mindestens eine Antwort mit [X] als richtige Antwort makrieren"
         if (errorMessage) {
-            let files = await fileRepository.findByChapterId(chapterId)
-            res.render('lessons/createSingleMultipleChoiceLesson', {
-                error: errorMessage,
-                lesson: {
-                    name: lessonName,
-                    lessonnumber: lessonNumber,
-                    information: lessonInformation,
-                    markedoptions: markedOptions,
-                    difficultylevel: difficultyLevel,
-                    feedback: feedback,
-                },
-                chapterId: chapterId,
-                sectionId: sectionId,
-                files: files
-            })
+            let lesson = {
+                name: lessonName,
+                lessonnumber: lessonNumber,
+                information: lessonInformation,
+                markedoptions: markedOptions,
+                difficultylevel: difficultyLevel,
+                feedback: feedback,
+            }
+            let data = await getEditSectionData(sectionId, chapterId, lesson)
+            data.singleMultipleChoiceError = errorMessage
+            res.render('sections/editSection', data)
         } else {
             await lessonsRepository.insertOrUpdateSingleMultipleChoiceLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, markedOptions)
                 .then(result => {

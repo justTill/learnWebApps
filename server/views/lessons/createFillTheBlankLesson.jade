@@ -1,20 +1,26 @@
-extends ../layout
-
 block content
-    h1 Fill the Blank Aufgabe erstellen
-    form(action="/saveCreateFillTheBlankLesson" method="post")
-        include baseCreateLessonForm
-        div.input
-            span.label Zu ergänzenden Text mit [input] als lücken
-            br
-            textarea(name="textWithBlanks" required) #{lesson ? lesson.textWithBlanks : ''}
-        div.input
-            span.label Mögliche Antworte  (pro Antwort eine Zeile (mindestens so viele wie es Inputs gibt, richtige antworten mit einem [X] makieren)
-            br
-            textarea(name="markedAnswers" required) #{lesson ? lesson.markedanswers : ''}
-        div.actions
-            input(type="submit" value="Aufagbe Speichern")
-
-    include ../formError
-
-    include ../files
+    button(type="button" class="btn createButton" data-toggle="modal" data-target="#createFillTheBlankLesson")
+        img(class="add-image" src="/images/plus-icon.png")
+    div(class="modal fade" id="createFillTheBlankLesson" tabindex="-1" role="dialog" aria-hidden="true")
+        div(class="modal-dialog modal-dialog-centered" role="document")
+            div(class="modal-content")
+                div(class="modal-header")
+                    h5(class="modal-title") Lückentext Aufgabe erstellen
+                    button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                        span(aria-hidden="true") &times;
+                div(class="modal-body")
+                    div(id="errorFillTheBlankMessages" class="errorMessage")
+                        if fillTheBlankError
+                            p #{fillTheBlankError}
+                    form(class="modalForm" action="/saveCreateFillTheBlankLesson" method="post")
+                        include baseCreateLessonForm
+                        span.label Zu ergänzenden Text mit [input] als lücken
+                        textarea(name="textWithBlanks" required) #{lesson ? lesson.textWithBlanks : ''}
+                        br
+                        span.label Mögliche Antworte  (pro Antwort eine Zeile (mindestens so viele wie es Inputs gibt, richtige antworten mit einem [X] makieren)
+                        textarea(name="markedAnswers" required) #{lesson ? lesson.markedanswers : ''}
+                        br
+                        button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch
+                        button(class="btn btn-primary saveBt" type="submit") Speichern
+                div(class="modal-footer")
+                    include ../files
