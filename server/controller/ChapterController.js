@@ -47,10 +47,12 @@ exports.saveNewChapter = async function (req, res, next) {
     let overview = req.body.overview
     let chapterNumber = req.body.chapterNumber
     let chapter = await chapterRepository.findByChapterNumber(chapterNumber)
+    let chapters = await chapterRepository.findAll()
     if (Object.keys(chapter).length !== 0) {
-        res.render('chapters/createChapter', {
+        res.render('chapters/chapter', {
             error: "Kapitelnummer ist schon vergeben, bitte eine andere wählen",
-            chapterData: {name: name, overview: overview, chapterNumber: chapterNumber}
+            chapterData: {name: name, overview: overview, chapterNumber: chapterNumber},
+            chapters: chapters,
         })
     } else if (name && overview && chapterNumber) {
         await chapterRepository.insertOrUpdateChapter(null, name, overview, chapterNumber)

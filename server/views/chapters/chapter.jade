@@ -1,26 +1,76 @@
 extends ../layout
-
 block content
-    h1 Aktuelle Kapitel und Kapitel Medien
-    div
-        a(href='/createChapter') Kapitel erstellen
+    h1(class="headline") Aktuelle Kapitel und Kapitel Medien
+    div(class="tilesContainer")
+        div(class="tile")
+            button(type="button" class="btn createButton" data-toggle="modal" data-target="#createChapter")
+                img(class="add-image" src="/images/plus-icon.png")
+            div(class="modal fade" id="createChapter" tabindex="-1" role="dialog" aria-hidden="true")
+                div(class="modal-dialog modal-dialog-centered" role="document")
+                    div(class="modal-content")
+                        div(class="modal-header")
+                            h5(class="modal-title") Neues Kapitel erstellen
+                            button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                                span(aria-hidden="true") &times;
+                        div(class="modal-body")
+                            form(class="addChapterForm" action="/saveNewChapter" method="post")
+                                span.label Kapitelname
+                                br
+                                input(type="text" name="chapterName" required value="#{chapterData ? chapterData.name : ''}")
+                                br
+                                span.label Übersichtstext
+                                br
+                                textarea(name="overview" required) #{chapterData ? chapterData.overview : ''}
+                                br
+                                span.label Kapitelnummer
+                                br
+                                input(type="number" min=1 name="chapterNumber" required value="#{chapterData ? chapterData.chapterNumber : 1}")
+                                br
+                                button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch
+                                button(class="btn btn-primary saveChapterBt" type="submit") Speichern
+                                br
+                        div(class="modal-footer")
+                            include ../formError
 
-    div
-        h3 Medien datein für ein Kapitel hochladen
-        if fileUploaded
-            p Datei wurde erfolgreich hochgeladen
-        else if fileError
-            p Aus folgendem Grund konnte die Datei nicht hochgeladen werden:
-                b #{fileError}.
-        form(action="/uploadChapterMedia" method="post" enctype="multipart/form-data")
-            div.input
-                select(name="chapter")
-                    each chapter in chapters
-                        option(value="#{chapter.id}") #{chapter.name}
-                input(type="file" name="file")
-                input(type="submit" value="Upload")
-    each chapter in chapters
-        p= chapter.name
-            a(href='/chapter/#{chapter.id}') Kapitel bearbeiten
-            br
-            a(href='/deleteChapter/#{chapter.id}') Löschen
+        div(class="tile")
+            if fileUploaded
+                span(class="successMessage") Uploaded
+            button(type="button" class="btn createButton" data-toggle="modal" data-target="#mediaUpload")
+                img(class="add-image" src="/images/upload-icon.png")
+            div(class="modal fade" id="mediaUpload" tabindex="-1" role="dialog" aria-hidden="true")
+                div(class="modal-dialog modal-dialog-centered" role="document")
+                    div(class="modal-content")
+                        div(class="modal-header")
+                            h5(class="modal-title") Meidendatei hochladen
+                            button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                                span(aria-hidden="true") &times;
+                        div(class="modal-body")
+                            form(action="/uploadChapterMedia" class="uploadForm" method="post" enctype="multipart/form-data")
+                                select(name="chapter")
+                                    each chapter in chapters
+                                        option(value="#{chapter.id}") #{chapter.name}
+                                br
+                                input(type="file" name="file" required)
+                                br
+                                button(class="btn btn-primary saveChapterBt" type="submit") Speichern
+                        div(class="modal-footer")
+                            div(id="uploadError")
+                                if fileError
+                                    span Aus folgendem Grund konnte die Datei nicht hochgeladen werden:
+                                        b #{fileError}.
+        script.
+            $(window).on('load', function () {
+                if ($('#errorMessages').children().length > 0) {
+                    $('#createChapter').modal('show');
+                }
+                if ($('#uploadError').children().length > 0) {
+                    $('#mediaUpload').modal('show');
+                }
+            });
+
+        each chapter in chapters
+            div(class="tile chapterTile")
+                a(type="button" class="btn btn-danger deleteChapter" href='/deleteChapter/#{chapter.id}') Löschen
+                a(type="button" class="btn btn-primary editChapter" href='/chapter/#{chapter.id}') Bearbeiten
+                span #{chapter.name}
+

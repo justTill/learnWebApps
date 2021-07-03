@@ -14,3 +14,121 @@ a {
 .navigation {
   margin: auto;
 }
+
+.content {
+  max-width: 1200px;
+  margin: auto;
+
+}
+
+.formAnswerText {
+  width: 300px;
+  height: 100px;
+}
+
+.problemForm, .addChapterForm, .uploadForm {
+  display: inline;
+}
+
+.problemForm > span {
+  padding-bottom: 5px;
+  padding-left: 5px;
+  display: block;
+}
+
+.problemForm > textarea {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.addChapterForm > span {
+  padding-bottom: 5px;
+  padding-left: 5px;
+  display: block;
+  text-align: center;
+}
+
+.addChapterForm > input, .addChapterForm > textarea, .uploadForm > select {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.uploadForm > input {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.addChapterForm > textarea {
+  width: 300px;
+  height: 300px;
+}
+
+.deleteProblemBt {
+  float: left;
+  margin-right: 100px;
+}
+
+.saveEditProblemBt, .saveProblemAnswerBt, .saveChapterBt {
+  float: right;
+}
+
+.tilesContainer {
+  max-width: 1500px;
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+}
+
+.tile {
+  border: black;
+  border-style: solid !important;
+  border-color: lightblue;
+  margin: 50px;
+  width: 250px;
+  height: 250px;
+}
+
+.add-image {
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+}
+
+.createButton {
+  display: block;
+  margin-top: 15px;
+  margin-left: 9px;
+}
+
+.content h1 {
+  text-align: center;
+}
+
+.successMessage {
+  position: absolute;
+  margin-left: 80px;
+}
+
+.chapterTile > span {
+  display: inline-block;
+  font-weight: bold;
+}
+
+.chapterTile {
+  text-align: center;
+}
+
+.deleteChapter {
+  position: relative;
+  margin-right: 10px;
+  top: 175px
+}
+
+.editChapter {
+  top: 175px;
+  position: relative;
+  margin-left: 10px;
+}

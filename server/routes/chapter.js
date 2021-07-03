@@ -19,7 +19,6 @@ router.get('/', asyncMiddleware(async (req, res, next) => {
 //Chapters
 router.get('/chapter', isLoggedIn, asyncMiddleware(chapterController.showChapterOverview))
 router.get('/chapter/:id', isLoggedIn, asyncMiddleware(chapterController.editChapter))
-router.get('/createChapter', isLoggedIn, chapterController.createChapter)
 
 router.get('/deleteChapter/:id', isLoggedIn, asyncMiddleware(chapterController.deleteChapter))
 
