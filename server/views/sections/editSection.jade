@@ -40,7 +40,8 @@ block content
                     div(class="modal-footer")
                         include ../files
     div(class="tilesContainer")
-        div(class="tile")
+        div(class="tile iconTile")
+            img(class="icon" src="/images/information-icon.png")
             span Informationseinheiten
         div(class="tile")
             include ../lessons/createInformationLesson
@@ -51,8 +52,9 @@ block content
                 span #{informationLesson.name}
 
     div(class="tilesContainer")
-        div(class="tile")
-            span Code Aufgaben
+        div(class="tile iconTile")
+            img(class="icon iconMargin" src="/images/code-icon.png" style="padding-top=5px")
+            span Code&nbsp;Aufgaben
         div(class="tile")
             include ../lessons/createCodingLesson
         each codeLesson in codingLessons
@@ -61,8 +63,9 @@ block content
                 a(type="button" class="btn btn-primary editChapter" href='/editCodingLesson/#{currentChapterId}/#{section.id}/#{codeLesson.lessonid}') Bearbeiten
                 span #{codeLesson.name}
     div(class="tilesContainer")
-        div(class="tile")
-            span Code Extension Aufgaben
+        div(class="tile iconTile")
+            img(class="icon iconMargin" src="/images/codeExtension-icon.png" style="padding-top=5px")
+            span Code&nbsp;Ergänzungs&nbsp;Aufgaben
         div(class="tile")
             include ../lessons/createCodeExtensionLesson
         each codeExtensionLesson in codeExtensionLessons
@@ -70,9 +73,12 @@ block content
                 a(type="button" class="btn btn-danger deleteChapter" href='/deleteLesson/#{currentChapterId}/#{section.id}/#{codeExtensionLesson.lessonid}')  Löschen
                 a(type="button" class="btn btn-primary editChapter" href='/editCodeExtensionLesson/#{currentChapterId}/#{section.id}/#{codeExtensionLesson.lessonid}') Bearbeiten
                 span #{codeExtensionLesson.name}
+
     div(class="tilesContainer")
-        div(class="tile")
-            span Fill The Blank Aufgaben
+        div(class="tile iconTile")
+            img(class="icon iconMargin" src="/images/fill-the-blanks-icon.png" style="padding-top=5px")
+
+            span Lückentext&nbsp;Aufagben
         div(class="tile")
             include ../lessons/createFillTheBlankLesson
         each fillTheBlankLesson in fillTheBlankLessons
@@ -82,8 +88,9 @@ block content
                 span #{fillTheBlankLesson.name}
 
     div(class="tilesContainer")
-        div(class="tile")
-            span Single-Multiple-Choice Aufgaben
+        div(class="tile iconTile")
+            img(class="icon iconMargin" src="/images/single-multiple-choice-icon.png" style="padding-top=5px")
+            span Single-Multiple-Choice&nbsp;Aufgaben
         div(class="tile")
             include ../lessons/createSingleMultipleChoiceLesson
         each singleMultipleChoiceLesson in singleMultipleChoiceLessons

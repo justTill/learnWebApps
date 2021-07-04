@@ -1,30 +1,27 @@
 extends ../layout
 
 block content
-    h1 Coding Aufgabe bearbeiten
-    form(action="/saveEditCodingLesson" method="post")
-        include baseEditLessonForm
-        div.input
-            span.label Aufgabenüberprüfungstyp
-            br
-            select(name="verificationType" required)
-                option(value="JASMINE" selected=lesson.verificationtype === 'JASMINE') Jasmine
-                option(value="SELF" selected=lesson.verificationtype === 'SELF') Selbst
-        div.input
-            span.label Überprüfungscode
-            br
-            textarea(name="verificationCode" required) #{lesson.verificationcode}
-        div.input
-            span.label Musterlösung
-            br
-            textarea(name="exampleSolution" required) #{lesson.examplesolution}
-        div.input
-            span.label Überprüfungsinformationen
-            br
-            textarea(name="verificationInformation" required) #{lesson.verificationinformation}
-        div.actions
-            input(type="submit" value="Aufgabe Speichern")
+    h1(class="headline") Coding Aufgabe bearbeiten
+    div(class="editLessonTileContainer")
+        div(class="editLessonTile")
+            form(class="modalForm" action="/saveEditCodingLesson" method="post")
+                include ../formError
+                include baseEditLessonForm
+                span.label Aufgabenüberprüfungstyp
+                select(name="verificationType" required)
+                    option(value="JASMINE" selected=lesson.verificationtype === 'JASMINE') Jasmine
+                    option(value="SELF" selected=lesson.verificationtype === 'SELF') Selbst
+                br
+                span.label Überprüfungscode
+                textarea(name="verificationCode" required) #{lesson.verificationcode}
+                br
+                span.label Musterlösung
+                textarea(name="exampleSolution" required) #{lesson.examplesolution}
+                br
+                span.label Überprüfungsinformationen
+                textarea(name="verificationInformation" required) #{lesson.verificationinformation}
+                br
+                button(class="btn btn-primary saveBt" type="submit") Speichern
 
-    include ../formError
-
-    include ../files
+        div(class="editLessonTile")
+            include ../files

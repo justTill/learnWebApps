@@ -1,21 +1,19 @@
 extends ../layout
 
 block content
-    h1 Code extension Aufgabe bearbeiten
+    h1(class="headline") Code extension Aufgabe bearbeiten
+    div(class="editLessonTileContainer")
+        div(class="editLessonTile")
+            form(class="modalForm" action="/saveEditCodeExtensionLesson" method="post")
+                include ../formError
+                include baseEditLessonForm
+                span.label Zu ergänzenden Code mit [input] als lücken
+                textarea(name="unfinishedCode" required) #{lesson.unfinishedcode}
+                br
+                span.label Zu ergänzender Code (pro Input eine Zeile in richtiger Reihenfolge)
+                textarea(name="answers" required) #{lesson.answers}
+                br
+                button(class="btn btn-primary saveBt" type="submit") Speichern
 
-    form(action="/saveEditCodeExtensionLesson" method="post")
-        include baseEditLessonForm
-        div.input
-            span.label Zu ergänzenden Code mit [input] als lücken
-            br
-            textarea(name="unfinishedCode" required) #{lesson.unfinishedcode}
-        div.input
-            span.label Zu ergänzender Code (pro Input eine Zeile in richtiger Reihenfolge)
-            br
-            textarea(name="answers" required) #{lesson.answers}
-        div.actions
-            input(type="submit" value="Aufagbe Speichern")
-
-    include ../formError
-
-    include ../files
+        div(class="editLessonTile")
+            include ../files

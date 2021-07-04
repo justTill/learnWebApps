@@ -81,7 +81,7 @@ exports.saveEditedChapter = async function (req, res, next) {
                 let sections = await sectionRepository.findByChapterId(chapterId)
                 let files = await fileRepository.findByChapterId(chapterId)
                 res.render('chapters/editChapter', {
-                    error: "Kapitelnummer ist schon vergeben, bitte eine andere wählen",
+                    editChapterErrorMessage: "Kapitelnummer ist schon vergeben, bitte eine andere wählen",
                     chapter: {id: chapterId, name: name, overview: overview, chapternumber: chapterNumber},
                     sections: sections,
                     files: files

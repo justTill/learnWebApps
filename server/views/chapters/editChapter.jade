@@ -15,7 +15,9 @@ block content
                             button(type="button" class="close" data-dismiss="modal" aria-label="Close")
                                 span(aria-hidden="true") &times;
                         div(class="modal-body")
-                            include ../formError
+                            div(id="editChapterError" class="errorMessage")
+                                if editChapterErrorMessage
+                                    p #{editChapterErrorMessage}
                             form(class="modalForm" action="/editChapter" method="post")
                                 span.label Kapitelname
                                 input(type="text" name="chapterName" required value="#{chapter.name}")
@@ -53,7 +55,7 @@ block content
                         div(class="modal-body")
                             include ../formError
                             form(class="modalForm" action="/saveNewSection" method="post")
-                                span.label Unterkapitel Name
+                                span.label Unterthemaname
                                 br
                                 input(type="text" name="sectionName" required value="#{sectionData ? sectionData.name : ''}")
                                 br
@@ -75,12 +77,9 @@ block content
         script.
             $(window).on('load', function () {
                 if ($('#errorMessages').children().length > 0) {
-                    for (let error of $('#errorMessages').children()) {
-                        if (error.innerText.includes("Unterthema")) {
-                            $('#createSection').modal('show');
-                            return
-                        }
-                    }
+                    $('#createSection').modal('show');
+                }
+                if ($('#editChapterError').children().length > 0) {
                     $('#editChapter').modal('show');
                 }
             });

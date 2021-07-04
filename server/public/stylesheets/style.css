@@ -69,14 +69,14 @@ a {
 .tilesContainer {
   max-width: 1500px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   flex-wrap: wrap;
 }
 
 .tile {
   border-style: solid !important;
   border-color: lightblue;
-  margin: 50px;
+  margin: 20px;
   width: 250px;
   height: 250px;
 }
@@ -141,4 +141,26 @@ select {
 
 .errorMessage {
   color: red;
+}
+
+.editLessonTileContainer {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.editLessonTile {
+  max-width: 300px;
+}
+
+.icon {
+  width: 200px;
+  height: 200px;
+}
+
+.iconTile {
+  text-align: center;
+}
+
+.iconMargin {
+  margin-top: 10px;
 }

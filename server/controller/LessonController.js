@@ -44,7 +44,7 @@ exports.editInformationLesson = async function (req, res, next) {
         chapterId: req.params.chapterId,
         sectionId: req.params.sectionId,
         lessonId: req.params.lessonId,
-        informationLesson: informationLesson,
+        lesson: informationLesson,
         files: files,
         sections: sections,
     })
@@ -75,6 +75,7 @@ exports.saveEditInformationLesson = async function (req, res, next) {
                     lessonnumber: lessonNumber,
                     information: lessonInformation,
                 },
+                lessonId: lessonId,
                 sections: sections,
                 chapterId: chapterId,
                 sectionId: sectionId,
