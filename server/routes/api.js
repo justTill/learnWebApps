@@ -5,8 +5,9 @@ const asyncMiddleware = require('../utils/asyncMiddleware');
 
 router.get('/chapters/', apiController.createUserIfNotExist, asyncMiddleware(apiController.getChapterDataWithSectionsAndLessons));
 
-//save Problems
 router.get('/users/problems/:moodleId/:moodleName', asyncMiddleware(apiController.getProblemsWithAnswers));
+
+router.post('/users/problems/', asyncMiddleware(apiController.saveProblem));
 
 
 router.post('/codingLessons/check/', asyncMiddleware(apiController.testCodingLesson));

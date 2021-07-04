@@ -121,6 +121,31 @@ exports.getNotes = async function (req, res, next) {
         res.send({}, 400)
     }
 }
+exports.saveProblem = async function (req, res, next) {
+    let moodleId = parseInt(req.body.moodleId)
+    let moodleName = req.body.moodleName
+    let lessonId = req.body.lessonId
+    let problem = req.body.problem
+    if (moodleId !== -1 && moodleName !== "default" && problem && lessonId) {
+        let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+        let lesson = await lessonRepository.findById(lessonId)
+        if (user.length !== 0 && lesson.length !== 0) {
+            userRepository.insertProblemForUser(moodleId, lessonId, problem)
+                .then(result => {
+                    res.status(201).send({message: "Problem created"})
+
+                })
+                .catch(err => {
+                    res.status(500).send({message: "Unknown error try again later"})
+
+                })
+        } else {
+            res.status(404).send({message: "User or Lesson not found"})
+        }
+    } else {
+        res.status(400).send({message: "Could not save Problem for default User"})
+    }
+}
 
 async function mapToOutputChapter(chapter) {
     let mappedSections = []
