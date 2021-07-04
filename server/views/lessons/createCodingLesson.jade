@@ -14,19 +14,19 @@ block content
                             p #{codingErrorMessages}
                     form(class="modalForm" action="/saveCreateCodingLesson" method="post")
                         include baseCreateLessonForm
-                        span.label Aufgabenüberprüfungstyp
-                        select(name="verificationtype" required)
+                        span.label(class="input-group-text") Aufgabenüberprüfungstyp
+                        select(class="form-select" name="verificationtype" required)
                             option(value="JASMINE") Jasmine
                             option(value="SELF") Selbst
                         br
-                        span.label Musterlösung
-                        textarea(name="examplesolution" required) #{lesson ? lesson.examplesolution : ''}
+                        span.label(class="input-group-text") Musterlösung
+                        textarea(class="form-control" name="examplesolution" required) #{lesson ? lesson.examplesolution : ''}
                         br
-                        span.label Überprüfungscode
-                        textarea(name="verificationCode" required) #{lesson ? lesson.verificationcode : ''}
+                        span.label(class="input-group-text") Überprüfungscode
+                        textarea(class="form-control" name="verificationCode" required) #{lesson ? lesson.verificationcode : ''}
                         br
-                        span.label Überprüfungsinformationen
-                        textarea(name="verificationInformation" required) #{lesson ? lesson.verificationinformation : ''}
+                        span.label(class="input-group-text") Überprüfungsinformationen
+                        textarea(class="form-control" name="verificationInformation" required) #{lesson ? lesson.verificationinformation : ''}
                         br
                         button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch
                         button(class="btn btn-primary saveBt" type="submit") Speichern

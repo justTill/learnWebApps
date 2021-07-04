@@ -16,14 +16,14 @@ block content
                     form(class="modalForm" action="/saveCreateInformationLesson" method="post")
                         input(type="hidden" name="chapterId" value="#{section.chapterid}")
                         input(type="hidden" name="sectionId" value="#{section.id}")
-                        span.label Aufgabenname
-                        input(type="text" name="lessonName" required value="#{lesson ? lesson.name : ''}")
+                        span.label(class="input-group-text") Aufgabenname
+                        input(class="form-control" type="text" name="lessonName" required value="#{lesson ? lesson.name : ''}")
                         br
-                        span.label Aufgabennummer
-                        input(type="number" min=1 name="lessonNumber" required value="#{lesson ? lesson.lessonnumber : 1")
+                        span.label(class="input-group-text") Aufgabennummer
+                        input(class="form-control" type="number" min=1 name="lessonNumber" required value="#{lesson ? lesson.lessonnumber : 1")
                         br
-                        span.label Informationen
-                        textarea(name="lessonInformation" required) #{lesson ? lesson.information : ''}
+                        span.label(class="input-group-text") Informationen
+                        textarea(class="form-control" name="lessonInformation" required) #{lesson ? lesson.information : ''}
                         br
                         button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch
                         button(class="btn btn-primary saveBt" type="submit") Speichern

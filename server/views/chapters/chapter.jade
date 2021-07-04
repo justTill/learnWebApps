@@ -15,17 +15,14 @@ block content
                         div(class="modal-body")
                             include ../formError
                             form(class="modalForm" action="/saveNewChapter" method="post")
-                                span.label Kapitelname
+                                span.label(class="input-group-text") Kapitelname
+                                input(class="form-control" type="text" name="chapterName" required value="#{chapterData ? chapterData.name : ''}")
                                 br
-                                input(type="text" name="chapterName" required value="#{chapterData ? chapterData.name : ''}")
+                                span.label(class="input-group-text") Übersichtstext
+                                textarea(class="form-control" name="overview" required) #{chapterData ? chapterData.overview : ''}
                                 br
-                                span.label Übersichtstext
-                                br
-                                textarea(name="overview" required) #{chapterData ? chapterData.overview : ''}
-                                br
-                                span.label Kapitelnummer
-                                br
-                                input(type="number" min=1 name="chapterNumber" required value="#{chapterData ? chapterData.chapterNumber : 1}")
+                                span.label(class="input-group-text") Kapitelnummer
+                                input(class="form-control" type="number" min=1 name="chapterNumber" required value="#{chapterData ? chapterData.chapterNumber : 1}")
                                 br
                                 button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch
                                 button(class="btn btn-primary saveBt" type="submit") Speichern
@@ -43,11 +40,12 @@ block content
                                 span(aria-hidden="true") &times;
                         div(class="modal-body")
                             form(action="/uploadChapterMedia" class="modalForm" method="post" enctype="multipart/form-data")
-                                select(class="chapterSelect" name="chapter")
+                                span.label(class="input-group-text") Kapitel
+                                select(class="form-select" class="chapterSelect" name="chapter")
                                     each chapter in chapters
                                         option(value="#{chapter.id}") #{chapter.name}
                                 br
-                                input(type="file" name="file" required)
+                                input(class="form-control" type="file" name="file" required)
                                 br
                                 button(class="btn btn-primary saveBt" type="submit") Speichern
                         div(class="modal-footer")

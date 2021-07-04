@@ -7,11 +7,11 @@ block content
             form(class="modalForm" action="/saveEditFillTheBlankLesson" method="post")
                 include ../formError
                 include baseEditLessonForm
-                span.label Zu ergänzenden Text mit [input] als lücken
-                textarea(name="textWithBlanks" required) #{lesson.textwithblanks}
+                span.label(class="input-group-text") Zu ergänzenden Text mit [input] als lücken
+                textarea(class="form-control" name="textWithBlanks" required) #{lesson.textwithblanks}
                 br
-                span.label Mögliche Antworte  (pro Antwort eine Zeile (mindestens so viele wie es Inputs gibt, richtige antworten mit einem [X] makieren)
-                textarea(name="markedAnswers" required) #{lesson.markedanswers}
+                span.label(class="input-group-text") Mögliche Antworte <br> 1x [input] = min 1x Zeile <br> Richtige Antworten mit [X] makieren
+                textarea(class="form-control" name="markedAnswers" required) #{lesson.markedanswers}
                 br
                 button(class="btn btn-primary saveBt" type="submit") Speichern
 

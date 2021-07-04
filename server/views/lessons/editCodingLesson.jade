@@ -7,19 +7,19 @@ block content
             form(class="modalForm" action="/saveEditCodingLesson" method="post")
                 include ../formError
                 include baseEditLessonForm
-                span.label Aufgabenüberprüfungstyp
-                select(name="verificationType" required)
+                span.label(class="input-group-text") Aufgabenüberprüfungstyp
+                select(class="form-select" name="verificationType" required)
                     option(value="JASMINE" selected=lesson.verificationtype === 'JASMINE') Jasmine
                     option(value="SELF" selected=lesson.verificationtype === 'SELF') Selbst
                 br
-                span.label Überprüfungscode
-                textarea(name="verificationCode" required) #{lesson.verificationcode}
+                span.label(class="input-group-text") Überprüfungscode
+                textarea(class="form-control" name="verificationCode" required) #{lesson.verificationcode}
                 br
-                span.label Musterlösung
-                textarea(name="exampleSolution" required) #{lesson.examplesolution}
+                span.label(class="input-group-text") Musterlösung
+                textarea(class="form-control" name="exampleSolution" required) #{lesson.examplesolution}
                 br
-                span.label Überprüfungsinformationen
-                textarea(name="verificationInformation" required) #{lesson.verificationinformation}
+                span.label(class="input-group-text") Überprüfungsinformationen
+                textarea(class="form-control" name="verificationInformation" required) #{lesson.verificationinformation}
                 br
                 button(class="btn btn-primary saveBt" type="submit") Speichern
 

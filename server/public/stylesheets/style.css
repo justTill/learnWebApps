@@ -11,6 +11,10 @@ a {
   display: none;
 }
 
+.headline {
+  margin-top: 10px;
+}
+
 .navigation {
   margin: auto;
 }
@@ -46,8 +50,7 @@ a {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 300px;
-  height: 300px;
+  height: 200px;
 }
 
 .modalForm > span {
@@ -82,7 +85,7 @@ a {
 }
 
 select {
-  max-width: 150px;
+  max-width: 466px;
 }
 
 .add-image {

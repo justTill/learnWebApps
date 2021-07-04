@@ -19,14 +19,14 @@ block content
                                 if editChapterErrorMessage
                                     p #{editChapterErrorMessage}
                             form(class="modalForm" action="/editChapter" method="post")
-                                span.label Kapitelname
-                                input(type="text" name="chapterName" required value="#{chapter.name}")
+                                span.label(class="input-group-text") Kapitelname
+                                input(class="form-control" type="text" name="chapterName" required value="#{chapter.name}")
                                 br
-                                span.label Übersichtstext
-                                textarea(name="overview" required) #{chapter.overview}
+                                span.label(class="input-group-text") Übersichtstext
+                                textarea(class="form-control" name="overview" required) #{chapter.overview}
                                 br
-                                span.label Kapitelnummer
-                                input(type="number" min=1 name="updatedChapterNumber" required value="#{chapter.chapternumber}")
+                                span.label(class="input-group-text") Kapitelnummer
+                                input(class="form-control" type="number" min=1 name="updatedChapterNumber" required value="#{chapter.chapternumber}")
                                 input(type="hidden" name="chapterNumber" value="#{chapter.chapternumber}")
                                 input(type="hidden" name="chapterId" value="#{chapter.id}")
                                 br
@@ -55,17 +55,17 @@ block content
                         div(class="modal-body")
                             include ../formError
                             form(class="modalForm" action="/saveNewSection" method="post")
-                                span.label Unterthemaname
+                                span.label(class="input-group-text") Unterthemaname
                                 br
-                                input(type="text" name="sectionName" required value="#{sectionData ? sectionData.name : ''}")
+                                input(class="form-control" type="text" name="sectionName" required value="#{sectionData ? sectionData.name : ''}")
                                 br
-                                span.label Übersichtstext
+                                span.label(class="input-group-text") Übersichtstext
                                 br
-                                textarea(name="information" required) #{sectionData ? sectionData.information : ''}
+                                textarea(class="form-control" name="information" required) #{sectionData ? sectionData.information : ''}
                                 br
-                                span.label Unterhema nummer
+                                span.label(class="input-group-text") Unterhema nummer
                                 br
-                                input(type="number" min=1 name="sectionNumber" required value="#{sectionData ? sectionData.sectionNumber : 1}")
+                                input(class="form-control" type="number" min=1 name="sectionNumber" required value="#{sectionData ? sectionData.sectionNumber : 1}")
                                 input(type="hidden" name="chapterId" value="#{chapter.id}")
                                 br
                                 button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch

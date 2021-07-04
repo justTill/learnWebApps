@@ -7,11 +7,11 @@ block content
             form(class="modalForm" action="/saveEditCodeExtensionLesson" method="post")
                 include ../formError
                 include baseEditLessonForm
-                span.label Zu ergänzenden Code mit [input] als lücken
-                textarea(name="unfinishedCode" required) #{lesson.unfinishedcode}
+                span.label(class="input-group-text") Zu ergänzenden Code <br> [input] = zu füllende Lücke
+                textarea(class="form-control" name="unfinishedCode" required) #{lesson.unfinishedcode}
                 br
-                span.label Zu ergänzender Code (pro Input eine Zeile in richtiger Reihenfolge)
-                textarea(name="answers" required) #{lesson.answers}
+                span.label(class="input-group-text") Zu ergänzender Code <br> 1x [Input] = 1 Zeile <br> Die Reihenfolge ist wichtig
+                textarea(class="form-control" name="answers" required) #{lesson.answers}
                 br
                 button(class="btn btn-primary saveBt" type="submit") Speichern
 

@@ -14,11 +14,11 @@ block content
                             p #{codeExtensionErrorMessages}
                     form(class="modalForm" action="/saveCreateCodeExtensionLesson" method="post")
                         include ./baseCreateLessonForm
-                        span.label Zu ergänzenden Code mit [input] als lücken
-                        textarea(name="unfinishedCode" required) #{lesson ? lesson.unfinishedcode : ''}
+                        span.label(class="input-group-text") Zu ergänzenden Code mit [input] als lücken
+                        textarea(class="form-control" name="unfinishedCode" required) #{lesson ? lesson.unfinishedcode : ''}
                         br
-                        span.label Zu ergänzender Code (pro Input eine Zeile in richtiger Reihenfolge)
-                        textarea(name="answers" required) #{lesson ? lesson.answers : ''}
+                        span.label(class="input-group-text") Zu ergänzender Code <br> (pro Input eine Zeile in richtiger Reihenfolge)
+                        textarea(class="form-control" name="answers" required) #{lesson ? lesson.answers : ''}
                         br
                         button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch
                         button(class="btn btn-primary saveBt" type="submit") Speichern

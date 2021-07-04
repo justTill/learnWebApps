@@ -10,17 +10,17 @@ block content
                 input(type="hidden" name="lessonId" value="#{lessonId}")
                 input(type="hidden" name="sectionId" value="#{sectionId}")
                 input(type="hidden" name="lessonNumber" value="#{lesson.lessonnumber}")
-                span.label Aufgabenname
-                input(type="text" name="lessonName" required value="#{lesson.name}")
+                span.label(class="input-group-text") Aufgabenname
+                input(class="form-control" type="text" name="lessonName" required value="#{lesson.name}")
                 br
-                span.label Aufgabennummer
-                input(type="number" min=1 name="updatedLessonNumber" required value="#{lesson.lessonnumber}")
+                span.label(class="input-group-text") Aufgabennummer
+                input(class="form-control" type="number" min=1 name="updatedLessonNumber" required value="#{lesson.lessonnumber}")
                 br
-                span.label Informationen
+                span.label(class="input-group-text") Informationen
                 textarea(name="lessonInformation" required) #{lesson.information}
                 br
-                span.label Unterthema
-                select(name="updatedSectionId" required)
+                span.label(class="input-group-text") Unterthema
+                select(class="form-select" name="updatedSectionId" required)
                     each section in sections
                         option(value="#{section.id}" selected=sectionId == section.id) #{section.name}
                 br

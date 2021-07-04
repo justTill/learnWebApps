@@ -4,26 +4,26 @@ input(type="hidden" name="sectionId" value="#{sectionId}")
 input(type="hidden" name="lessonNumber" value="#{lesson.lessonnumber}")
 input(type="hidden" name="lessonTypeId" value="#{lesson.id}")
 
-span.label Aufgabenname
-input(type="text" name="lessonName" required value="#{lesson ? lesson.name : ''}")
+span.label(class="input-group-text") Aufgabenname
+input(class="form-control" type="text" name="lessonName" required value="#{lesson ? lesson.name : ''}")
 br
-span.label Aufgabennummer
-input(type="number" min=1 name="updatedLessonNumber" required value="#{lesson.lessonnumber}")
+span.label(class="input-group-text") Aufgabennummer
+input(class="form-control" type="number" min=1 name="updatedLessonNumber" required value="#{lesson.lessonnumber}")
 br
-span.label Informationen
-textarea(name="lessonInformation" required) #{lesson.information}
+span.label(class="input-group-text") Informationen
+textarea(class="form-control" name="lessonInformation" required) #{lesson.information}
 br
-span.label Unterthema
-select(name="updatedSectionId" required)
+span.label(class="input-group-text") Unterthema
+select(class="form-select" name="updatedSectionId" required)
     each section in sections
         option(value="#{section.id}" selected=sectionId == section.id) #{section.name}
 br
-span.label Schwierigkeitsgrad
-select(name="difficultyLevel" required)
+span.label(class="input-group-text") Schwierigkeitsgrad
+select(class="form-select" name="difficultyLevel" required)
     option(value="EASY" selected=lesson.difficultylevel == 'EASY') Einfach
     option(value="MIDDLE" selected=lesson.difficultylevel == 'MIDDLE') Mittel
     option(value="HARD" selected=lesson.difficultylevel == 'HARD') Schwer
 br
-span.label Rückmeldung beim Erfolgreichen lösen
-textarea(name="feedback") #{lesson.feedback}
+span.label(class="input-group-text") Rückmeldung beim Erfolgreichen lösen
+textarea(class="form-control" name="feedback") #{lesson.feedback}
 br

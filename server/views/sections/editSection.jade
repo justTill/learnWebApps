@@ -19,17 +19,18 @@ block content
                             if editSectionErrorMessage
                                 p #{editSectionErrorMessage}
                         form(class="modalForm" action="/saveEditedSection" method="post")
-                            span.label Name
-                            input(type="text" name="sectionName" required value="#{section.name}")
+                            span.label(class="input-group-text") Name
+                            input(class="form-control" type="text" name="sectionName" required value="#{section.name}")
                             br
-                            span.label Informationen
-                            textarea(name="information" required) #{section.information }
-                            span.label Unterhema nummer
-                            input(type="number" min=1 name="updatedSectionNumber" required value="#{section.sectionnumber}")
+                            span.label(class="input-group-text") Informationen
+                            textarea(class="form-control" name="information" required) #{section.information }
+                            br
+                            span.label(class="input-group-text") Unterhema nummer
+                            input(class="form-control" type="number" min=1 name="updatedSectionNumber" required value="#{section.sectionnumber}")
                             input(type="hidden" name="sectionNumber" value="#{section.sectionnumber}")
-                            span.label Kapitel
                             br
-                            select(name="chapterId")
+                            span.label(class="input-group-text") Kapitel
+                            select(class="form-select" name="chapterId")
                                 each chapter in chapters
                                     option(value="#{chapter.id}" selected=chapter.id == currentChapterId) #{chapter.name}
                             br
