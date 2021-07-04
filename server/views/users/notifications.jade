@@ -24,8 +24,8 @@ block content
                             br
                             span.label(class="form-message") Nachrichten Text
                             br
-                            span.label() Antwort:
-                            textarea(class="formAnswerText" name="answer" value="" required)
+                            span.label(class="input-group-text") Antwort:
+                            textarea(class="formAnswerText form-control" name="answer" value="" required)
                             button(class="btn btn-primary saveBt" type="submit") Senden
         script.
             $('#answerModal').on('show.bs.modal', function (event) {
@@ -80,8 +80,8 @@ block content
                                 br
                                 span.label(class="formProblemText") Nachrichten Text
                                 br
-                                span.label(class="") Antwort:
-                                textarea(class="formAnswerText" name="answer" value="" required) Text
+                                span.label(class="input-group-text") Antwort:
+                                textarea(class="form-control" class="formAnswerText" name="answer" value="" required) Text
                                 br
                                 button(class="btn btn-primary saveBt" type="submit") Speichern
                             form(class="problemForm" action="/deleteProblem" method="post")
