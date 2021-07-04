@@ -109,11 +109,14 @@ exports.uploadMedia = async function (req, res, next) {
     const targetPath = path.join(__dirname, "../mediafiles/" + imagePath);
     let allowedFiles = [".gif", ".png", ".jpg", ".jpeg"]
     if (allowedFiles.includes(path.extname(req.file.originalname).toLowerCase())) {
-        mv(tempPath, targetPath, {mkdirp: true}, err => {
+        mv(tempPath, targetPath, {mkdirp: true}, async err => {
             if (err) {
                 throw err
             }
-            fileRepository.insert(id, imagePath)
+            let pathExist = await fileRepository.findByChapterIdAndPath(id, imagePath)
+            if (!pathExist) {
+                await fileRepository.insert(id, imagePath)
+            }
             chapterRepository.findAll()
                 .then(rows => res.render('chapters/chapter', {chapters: rows, fileUploaded: true}))
         });
