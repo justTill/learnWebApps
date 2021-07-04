@@ -3,29 +3,29 @@ extends ../layout
 block content
 
     if unansweredProblems.length !== 0
-        h1 Auf neue Probleme Antworten
-        each problem in unansweredProblems
-            div
-                span <b> #{problem.moodlename} </b> hat ein Problem beim Aufgabe <b> #{problem.lessonname} </b>
-                button(type="button" class="btn btn-primary" data-toggle="modal" data-target="#answerModal" data-problemlessonname="#{problem.lessonname}" data-problemmessage="#{problem.message}" data-problemid="#{problem.id}" data-problemmoodlename="#{problem.moodlename}" data-problemmoodleid="#{problem.moodleid}") Antworten
-        div
-            div(class="modal fade" id="answerModal" tabindex="-1" role="dialog" aria-hidden="true")
-                div(class="modal-dialog modal-dialog-centered" role="document")
-                    div(class="modal-content")
-                        div(class="modal-header")
-                            h5(class="modal-title") Antworten
-                            button(type="button" class="close" data-dismiss="modal" aria-label="Close")
-                                span(aria-hidden="true") &times;
-                        div(class="modal-body")
-                            form(class="problemForm" action="/saveAnswerOnProblem" method="post")
-                                input(class="modalProblemId" type="hidden" name="problemId")
-                                input(class="modalProblemMoodleId" type="hidden" name="moodleId")
-                                span.label(class="form-lessonName") Nachrichten Text
-                                br
-                                span.label(class="form-message") Nachrichten Text
-                                br
-                                textarea(class="formAnswerText" name="answer" value="" required)
-                                button(class="btn btn-primary saveProblemAnswerBt" type="submit") Senden
+        h1(class="headline") Auf neue Probleme Antworten
+        div(class="tilesContainer")
+            each problem in unansweredProblems
+                div(class="tile problemTile")
+                    button(type="button" class="btn btn-primary editChapter" data-toggle="modal" data-target="#answerModal" data-problemlessonname="#{problem.lessonname}" data-problemmessage="#{problem.message}" data-problemid="#{problem.id}" data-problemmoodlename="#{problem.moodlename}" data-problemmoodleid="#{problem.moodleid}") Antworten
+                    span <b> #{problem.moodlename} </b> hat ein Problem beim Aufgabe <b> #{problem.lessonname} </b>
+        div(class="modal fade" id="answerModal" tabindex="-1" role="dialog" aria-hidden="true")
+            div(class="modal-dialog modal-dialog-centered" role="document")
+                div(class="modal-content")
+                    div(class="modal-header")
+                        h5(class="modal-title") Antworten
+                        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                            span(aria-hidden="true") &times;
+                    div(class="modal-body")
+                        form(class="modalForm" action="/saveAnswerOnProblem" method="post")
+                            input(class="modalProblemId" type="hidden" name="problemId")
+                            input(class="modalProblemMoodleId" type="hidden" name="moodleId")
+                            span.label(class="form-lessonName") Nachrichten Text
+                            br
+                            span.label(class="form-message") Nachrichten Text
+                            br
+                            textarea(class="formAnswerText" name="answer" value="" required)
+                            button(class="btn btn-primary saveBt" type="submit") Senden
         script.
             $('#answerModal').on('show.bs.modal', function (event) {
                 let button = $(event.relatedTarget)
@@ -42,17 +42,17 @@ block content
                 modal.find('.modalProblemMoodleId').val(problemMoodleId)
             })
     else
-        h1 Es gibt keine neuen Probleme
+        h1(class="headline") Es gibt keine neuen Probleme
 
     if answeredProblemKeys.length !== 0
-        h1 Antworten auf Probleme bearbeiten
+        h1(class="headline") Antworten auf Probleme bearbeiten
         each key in answeredProblemKeys
-            b Meldungen vom #{key}
-            br
-            each problem in answeredProblems.get(key)
-                div Problem von <b> #{problem.moodlename} </b> bei der Aufgabe <b> #{problem.lessonname}</b>
-                    div
-                        button(class="btn btn-primary" type="button" data-toggle="modal" data-target="#problemEditModal"
+            div(class="tilesContainer")
+                div(class="tile problemTile")
+                    span(style="margin-top: 40px") Vom <b>#{key}</b>
+                each problem in answeredProblems.get(key)
+                    div(class="tile problemTile")
+                        button(class="btn btn-primary editChapter" type="button" data-toggle="modal" data-target="#problemEditModal"
                             data-problemlessonname="#{problem.lessonname}"
                             data-problemmessage="#{problem.message}"
                             data-problemid="#{problem.problemid}"
@@ -60,6 +60,7 @@ block content
                             data-problemmoodleid="#{problem.moodleid}"
                             data-problemanswer="#{problem.answer}"
                             data-problemnotificationid="#{problem.notificationid}") Antwort bearbeiten
+                        span Problem von <b> #{problem.moodlename} </b> bei der Aufgabe <b> #{problem.lessonname}</b>
 
         div
             div(class="modal fade" id="problemEditModal" tabindex="-1" role="dialog" aria-hidden="true")

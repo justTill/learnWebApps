@@ -111,7 +111,7 @@ select {
   font-weight: bold;
 }
 
-.chapterTile {
+.chapterTile, .problemTile {
   text-align: center;
 }
 
@@ -163,4 +163,19 @@ select {
 
 .iconMargin {
   margin-top: 10px;
+}
+
+.problemTile > span {
+  display: inline-block;
+}
+
+.overview {
+  max-width: 1500px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.overview > div {
+  display: block;
 }

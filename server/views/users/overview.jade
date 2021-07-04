@@ -20,36 +20,38 @@ block content
             }
             if (el) displayOrHideElement(el)
         }
-    h3 Erledigte Aufgaben
-    each chapter in solvedByChapter
-        div(class="list-group")
-            a(class="list-group-item list-group-item-primary list-group-item-action" onclick="showOrHideField(#{chapter.id}, 'CHAPTER')") #{chapter.chapterName}
-            div(id="chapter#{chapter.id}" class="hidden")
-                each section in chapter.sections
-                    div
-                        a(class="list-group-item list-group-item-action list-group-item-dark " onclick="showOrHideField(#{section.id}, 'SECTION')") #{section.sectionName}
-                        div(id="section#{section.id}" class="hidden")
-                            each lesson in section.lessons
-                                div
-                                    a(class="list-group-item list-group-item-action list-group-item-secondary" onclick="showOrHideField(#{lesson.id}, 'LESSON')") #{lesson.lessonName}
-                                    div(id="lesson#{lesson.id}" class="hidden")
-                                        div(class="list-group-item list-group-item-action")
-                                            if lesson.solvedBy.length === 0
-                                                span Noch kein Student hat die Aufgabe richtig gelöst
-                                            each person in lesson.solvedBy
-                                                span  #{person.moodlename},
-            br
+    h1 Erledigte Aufgaben
+    div(class="overview")
+        div
+            each chapter in solvedByChapter
+                div(class="list-group")
+                    a(class="list-group-item list-group-item-primary list-group-item-action" onclick="showOrHideField(#{chapter.id}, 'CHAPTER')") #{chapter.chapterName}
+                    div(id="chapter#{chapter.id}" class="hidden")
+                        each section in chapter.sections
+                            div
+                                a(class="list-group-item list-group-item-action list-group-item-dark " onclick="showOrHideField(#{section.id}, 'SECTION')") #{section.sectionName}
+                                div(id="section#{section.id}" class="hidden")
+                                    each lesson in section.lessons
+                                        div
+                                            a(class="list-group-item list-group-item-action list-group-item-info" onclick="showOrHideField(#{lesson.id}, 'LESSON')") #{lesson.lessonName}
+                                            div(id="lesson#{lesson.id}" class="hidden")
+                                                div(class="list-group-item list-group-item-action")
+                                                    if lesson.solvedBy.length === 0
+                                                        span Noch kein Student hat die Aufgabe richtig gelöst
+                                                    each person in lesson.solvedBy
+                                                        span  #{person.moodlename},
+                    br
 
-    button(class="btn btn-primary" data-toggle="modal" data-target="#solvedEveryLesson") Alle Aufgaben gelöst
-    div(class="modal fade" id="solvedEveryLesson" tabindex="-1" role="dialog" aria-hidden="true")
-        div(class="modal-dialog modal-dialog-centered" role="document")
-            div(class="modal-content")
-                div(class="modal-header")
-                    h5(class="modal-title") Studenten die Alle Aufgaben gelöst haben
-                    button(type="button" class="close" data-dismiss="modal" aria-label="Close")
-                        span(aria-hidden="true") &times;
-                div(class="modal-body")
-                    each user in solvedEveryLesson
-                        div=user.moodlename
-                div(class="modal-footer")
-                    button(type="button" class="btn btn-secondary" data-dismiss="modal") Schließen
+            button(class="btn btn-primary" data-toggle="modal" data-target="#solvedEveryLesson") Alle Aufgaben gelöst
+            div(class="modal fade" id="solvedEveryLesson" tabindex="-1" role="dialog" aria-hidden="true")
+                div(class="modal-dialog modal-dialog-centered" role="document")
+                    div(class="modal-content")
+                        div(class="modal-header")
+                            h5(class="modal-title") Studenten die Alle Aufgaben gelöst haben
+                            button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                                span(aria-hidden="true") &times;
+                        div(class="modal-body")
+                            each user in solvedEveryLesson
+                                div=user.moodlename
+                        div(class="modal-footer")
+                            button(type="button" class="btn btn-secondary" data-dismiss="modal") Schließen
