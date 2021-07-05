@@ -6,7 +6,10 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
         userId: -1,
-        userName: "default"
+        userName: "default",
+        notes: [],
+        problems: [],
+        chapters: []
     },
     mutations: {
         setUserId(state, id) {
@@ -15,5 +18,20 @@ export const store = new Vuex.Store({
         setUserName(state, name) {
             state.userName = name
         },
+        setNotes(state, notes) {
+            state.notes = notes
+        },
+        setProblems(state, problems) {
+            state.notes = problems
+        },
+        setChapters(state, chapters) {
+            state.chapters = chapters
+        },
+        addNotes(state, note) {
+            state.notes.push(note)
+        },
+        addProblem(state, problem) {
+            state.problems.push(problem)
+        }
     }
 })

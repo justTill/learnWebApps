@@ -11,30 +11,28 @@ const LessonTypes = Object.freeze({
     SINGLEMULTIPLECHOICE: "singleMultipleChoiceLesson"
 })
 exports.createUserIfNotExist = function (req, res, next) {
-    let moodleId = req.query.moodleId
-    let moodleName = req.query.moodleName
+    let moodleId = req.body.moodleId
+    let moodleName = req.body.moodleName
     if (moodleId && moodleName && moodleId !== -1 && moodleName !== "default") {
         userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
             .then(result => {
                 if (result.length === 0) {
                     userRepository.createPerson(moodleId, moodleName)
-                        .then(res => {
-                            next()
+                        .then(result => {
+                            res.status(201).send({message: "created"})
                         })
                         .catch(err => {
                             res.status(500).send({message: "unknown error"})
                         })
                 } else {
-                    next()
+                    res.status(201).send({message: "created"})
                 }
             })
             .catch(err => {
                 res.status(500).send({message: "unknown error"})
             })
     } else {
-        req.query.moodleId = -1
-        req.query.moodleName = "default"
-        next()
+        res.status(400).send({message: "default user given or missing field"})
     }
 }
 exports.getProblemsWithAnswers = async function (req, res, next) {
@@ -43,16 +41,32 @@ exports.getProblemsWithAnswers = async function (req, res, next) {
     let data = {problems: []}
     if (moodleId !== -1 && moodleName !== "default") {
         let problemsWithAnswers = await userRepository.findProblemsAndAnswersByUser(moodleId, moodleName)
-        data.problem = mapToOutputProblem(problemsWithAnswers)
+        data.problems = mapToOutputProblem(problemsWithAnswers)
     }
     res.send(data, 200)
+}
+exports.getChapterDataWithSectionsAndLessonsForUser = async function (req, res, next) {
+    let data = {chapters: []}
+    let moodleId = parseInt(req.params.moodleId)
+    let moodleName = req.params.moodleName
+    if (moodleId && moodleName) {
+        let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+        if (user.length !== 0) {
+            let chapters = await chapterRepository.findAll()
+            for (let chapter of chapters) {
+                let mappedChapter = await mapToOutputChapter(chapter, moodleId)
+                data.chapters.push(mappedChapter)
+            }
+        }
+    }
+    res.send(data)
 }
 
 exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
     let data = {chapters: []}
     let chapters = await chapterRepository.findAll()
     for (let chapter of chapters) {
-        let mappedChapter = await mapToOutputChapter(chapter)
+        let mappedChapter = await mapToOutputChapter(chapter, null)
         data.chapters.push(mappedChapter)
     }
     res.send(data)
@@ -115,8 +129,7 @@ exports.getNotes = async function (req, res, next) {
     let moodleName = req.params.moodleName
     if (moodleId !== -1 && moodleName !== "default") {
         let notes = await userRepository.findNotesByUser(moodleId, moodleName)
-
-        res.send({data: mapToOutputNotes(notes)}, 200)
+        res.send({notes: mapToOutputNotes(notes)}, 200)
     } else {
         res.send({}, 400)
     }
@@ -147,11 +160,11 @@ exports.saveProblem = async function (req, res, next) {
     }
 }
 
-async function mapToOutputChapter(chapter) {
+async function mapToOutputChapter(chapter, moodleId) {
     let mappedSections = []
     let sections = await sectionRepository.findByChapterId(chapter.id)
     for (let section of sections) {
-        let mappedSection = await mapToOutputSection(section)
+        let mappedSection = await mapToOutputSection(section, moodleId)
         mappedSections.push(mappedSection)
     }
     return {
@@ -163,8 +176,8 @@ async function mapToOutputChapter(chapter) {
     }
 }
 
-async function mapToOutputSection(section) {
-    let mappedLessons = await getMappedLessonsForSectionId(section.id)
+async function mapToOutputSection(section, moodleId) {
+    let mappedLessons = await getMappedLessonsForSectionId(section.id, moodleId)
     return {
         sectionId: section.id,
         chapterId: section.chapterId,
@@ -175,7 +188,7 @@ async function mapToOutputSection(section) {
     }
 }
 
-async function getMappedLessonsForSectionId(sectionId) {
+async function getMappedLessonsForSectionId(sectionId, moodleId) {
     let fillTheBlankLessons = await lessonRepository.findFillTheBlankBySectionId(sectionId)
     let mappedFillTheBlankLessons = mapToOutputFillTheBlankLessons(fillTheBlankLessons)
     let codingLessons = await lessonRepository.findCodingBySectionId(sectionId)
@@ -189,6 +202,17 @@ async function getMappedLessonsForSectionId(sectionId) {
         .concat(mappedCodeExtensionLessons)
         .concat(mappedSingleMultipleChoiceLessons)
     let sortedLessons = sortLessonsByNumber(mappedLessons)
+    if (moodleId) {
+        let solvedLessons = await lessonRepository.findSolvedByMoodleId(moodleId)
+        for (let lesson of sortedLessons) {
+            for (let solvedLesson of solvedLessons) {
+                lesson.done = solvedLesson.lessonId === lesson.id
+                if (lesson.type === LessonTypes.CODE) {
+                    lesson.userCode = solvedLesson.code
+                }
+            }
+        }
+    }
     return sortedLessons
 }
 
@@ -205,6 +229,7 @@ function mapDefaultLesson(lesson) {
         information: lesson.information,
         difficultyLevel: lesson.difficultylevel,
         feedback: lesson.feedback,
+        done: false,
     }
 }
 
@@ -227,6 +252,7 @@ function mapToOutputCodingLessons(lessons) {
         mappedLesson.type = LessonTypes.CODE
         mappedLesson.exampleSolution = lesson.examplesolution
         mappedLesson.verificationInformation = lesson.verificationinformation
+        mappedLessons.userCode = ""
         mappedLessons.push(mappedLesson)
     }
     return mappedLessons

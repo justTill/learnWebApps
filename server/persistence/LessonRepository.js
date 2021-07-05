@@ -391,7 +391,20 @@ exports.findSolvedByLessonIdAndMoodleId = async function (lessonId, moodleId) {
             throw  err
         })
     return result
-
+}
+exports.findSolvedByMoodleId = async function (moodleId) {
+    let query = 'SELECT * from "solvedLessons" WHERE moodleid=$1'
+    let result = []
+    result = await pool.query(query, [moodleId])
+        .then(res => {
+            if (res.rows) {
+                return res.rows
+            }
+            return result
+        }).catch(err => {
+            throw  err
+        })
+    return result
 }
 exports.findById = async function (lessonId) {
     let query = 'SELECT * from "lessons" WHERE id=$1'

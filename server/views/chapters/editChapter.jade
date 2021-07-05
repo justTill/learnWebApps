@@ -56,15 +56,12 @@ block content
                             include ../formError
                             form(class="modalForm" action="/saveNewSection" method="post")
                                 span.label(class="input-group-text") Unterthemaname
-                                br
                                 input(class="form-control" type="text" name="sectionName" required value="#{sectionData ? sectionData.name : ''}")
                                 br
                                 span.label(class="input-group-text") Übersichtstext
-                                br
                                 textarea(class="form-control" name="information" required) #{sectionData ? sectionData.information : ''}
                                 br
                                 span.label(class="input-group-text") Unterhema nummer
-                                br
                                 input(class="form-control" type="number" min=1 name="sectionNumber" required value="#{sectionData ? sectionData.sectionNumber : 1}")
                                 input(type="hidden" name="chapterId" value="#{chapter.id}")
                                 br
