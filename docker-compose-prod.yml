@@ -28,6 +28,9 @@ services:
     container_name: learnWebAppsFrontendProd
     volumes:
       - media_volume:/usr/src/app/client/mediafiles
+    environment:
+      - BACKENDHOST=${BACKEND_HOST}
+      - BACKENDPORT=${BACKEND_PORT}
     build:
       context: ./client
       dockerfile: Dockerfile-prod
