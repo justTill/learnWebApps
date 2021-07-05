@@ -47,10 +47,12 @@ exports.saveNewChapter = async function (req, res, next) {
     let overview = req.body.overview
     let chapterNumber = req.body.chapterNumber
     let chapter = await chapterRepository.findByChapterNumber(chapterNumber)
+    let chapters = await chapterRepository.findAll()
     if (Object.keys(chapter).length !== 0) {
-        res.render('chapters/createChapter', {
+        res.render('chapters/chapter', {
             error: "Kapitelnummer ist schon vergeben, bitte eine andere wählen",
-            chapterData: {name: name, overview: overview, chapterNumber: chapterNumber}
+            chapterData: {name: name, overview: overview, chapterNumber: chapterNumber},
+            chapters: chapters,
         })
     } else if (name && overview && chapterNumber) {
         await chapterRepository.insertOrUpdateChapter(null, name, overview, chapterNumber)
@@ -79,7 +81,7 @@ exports.saveEditedChapter = async function (req, res, next) {
                 let sections = await sectionRepository.findByChapterId(chapterId)
                 let files = await fileRepository.findByChapterId(chapterId)
                 res.render('chapters/editChapter', {
-                    error: "Kapitelnummer ist schon vergeben, bitte eine andere wählen",
+                    editChapterErrorMessage: "Kapitelnummer ist schon vergeben, bitte eine andere wählen",
                     chapter: {id: chapterId, name: name, overview: overview, chapternumber: chapterNumber},
                     sections: sections,
                     files: files
@@ -107,11 +109,14 @@ exports.uploadMedia = async function (req, res, next) {
     const targetPath = path.join(__dirname, "../mediafiles/" + imagePath);
     let allowedFiles = [".gif", ".png", ".jpg", ".jpeg"]
     if (allowedFiles.includes(path.extname(req.file.originalname).toLowerCase())) {
-        mv(tempPath, targetPath, {mkdirp: true}, err => {
+        mv(tempPath, targetPath, {mkdirp: true}, async err => {
             if (err) {
                 throw err
             }
-            fileRepository.insert(id, imagePath)
+            let pathExist = await fileRepository.findByChapterIdAndPath(id, imagePath)
+            if (!pathExist) {
+                await fileRepository.insert(id, imagePath)
+            }
             chapterRepository.findAll()
                 .then(rows => res.render('chapters/chapter', {chapters: rows, fileUploaded: true}))
         });

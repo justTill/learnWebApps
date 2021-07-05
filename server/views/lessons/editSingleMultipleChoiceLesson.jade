@@ -1,16 +1,16 @@
 extends ../layout
 
 block content
-    h1 Single- oder Multiple-Choice Aufgabe bearbeiten
+    h1(class="headline")  Single- oder Multiple-Choice Aufgabe bearbeiten
+    div(class="editLessonTileContainer")
+        div(class="editLessonTile")
+            form(class="modalForm" action="/saveEditSingleMultipleChoiceLesson" method="post")
+                include ../formError
+                include baseEditLessonForm
+                span.label(class="input-group-text") Mögliche Antworten <br> Richtige Lösungen mit [X] makieren
+                textarea(class="form-control" name="markedoptions" required) #{lesson.markedoptions}
+                br
+                button(class="btn btn-primary saveBt" type="submit") Speichern
 
-    form(action="/saveEditSingleMultipleChoiceLesson" method="post")
-        include baseEditLessonForm
-        div.input
-            span.label Mögliche Antworten mit [X] makieren wenn eine Lösung Richtig ist
-            br
-            textarea(name="markedoptions" required) #{lesson.markedoptions}
-        div.actions
-            input(type="submit" value="Aufagbe Speichern")
-
-    include ../formError
-    include ../files
+        div(class="editLessonTile")
+            include ../files

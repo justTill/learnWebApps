@@ -1,75 +1,118 @@
 extends ../layout
 
 block content
-    h1 Unterthema bearbeiten
-    h3 Hinweise an den Dozenten
-    br
-    form(action="/saveEditedSection" method="post")
-        div.input
-            span.label Name
-            br
-            input(type="text" name="sectionName" required value="#{section.name}")
-        div.input
-            span.label Informationen
-            br
-            textarea(name="information" required) #{section.information }
-        div.input
-            span.label Unterhema nummer
-            br
-            input(type="number" min=1 name="updatedSectionNumber" required value="#{section.sectionnumber}")
-            input(type="hidden" name="sectionNumber" value="#{section.sectionnumber}")
-        div.input
-            span.label Kapitel
-            br
-            select(name="chapterId")
-                each chapter in chapters
-                    option(value="#{chapter.id}" selected=chapter.id == currentChapterId) #{chapter.name}
-            br
-            input(type="hidden" name="sectionId" value="#{section.id}" required)
-            input(type="hidden" name="currentChapterId" value="#{currentChapterId}" required)
-        div.actions
-            input(type="submit" value="Unterhemea Speichern")
-
-        include ../formError
-
-        include ../files
-
-        h3 Aufgaben
-        h4 Informationseinheiten
-        a(href='/createInformationLesson/#{currentChapterId}/#{section.id}') Erstellen
-        br
+    h1(class="headline") #{section.name}
+    h5(class="headline") Bearbeiten und neue Aufgaben erstellen
+    div(class="tilesContainer")
+        div(class="tile")
+            button(type="button" class="btn createButton" data-toggle="modal" data-target="#editSection")
+                img(class="add-image" src="/images/edit-icon.png")
+        div(class="modal fade" id="editSection" tabindex="-1" role="dialog" aria-hidden="true")
+            div(class="modal-dialog modal-dialog-centered" role="document")
+                div(class="modal-content")
+                    div(class="modal-header")
+                        h5(class="modal-title") Unterthema Bearbeiten
+                        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                            span(aria-hidden="true") &times;
+                    div(class="modal-body")
+                        div(id="editSectionError" class="errorMessage")
+                            if editSectionErrorMessage
+                                p #{editSectionErrorMessage}
+                        form(class="modalForm" action="/saveEditedSection" method="post")
+                            span.label(class="input-group-text") Name
+                            input(class="form-control" type="text" name="sectionName" required value="#{section.name}")
+                            br
+                            span.label(class="input-group-text") Informationen
+                            textarea(class="form-control" name="information" required) #{section.information }
+                            br
+                            span.label(class="input-group-text") Unterhema nummer
+                            input(class="form-control" type="number" min=1 name="updatedSectionNumber" required value="#{section.sectionnumber}")
+                            input(type="hidden" name="sectionNumber" value="#{section.sectionnumber}")
+                            br
+                            span.label(class="input-group-text") Kapitel
+                            select(class="form-select" name="chapterId")
+                                each chapter in chapters
+                                    option(value="#{chapter.id}" selected=chapter.id == currentChapterId) #{chapter.name}
+                            br
+                            input(type="hidden" name="sectionId" value="#{section.id}" required)
+                            input(type="hidden" name="currentChapterId" value="#{currentChapterId}" required)
+                            button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch
+                            button(class="btn btn-primary saveBt" type="submit") Speichern
+                    div(class="modal-footer")
+                        include ../files
+    div(class="tilesContainer")
+        div(class="tile iconTile")
+            img(class="icon" src="/images/information-icon.png")
+            span Informationseinheiten
+        div(class="tile")
+            include ../lessons/createInformationLesson
         each informationLesson in informationLessons
-            p #{informationLesson.name}
-                a(href='/editInformationLesson/#{currentChapterId}/#{section.id}/#{informationLesson.id}') Bearbeiten
-                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{informationLesson.id}')  Löschen
-        h4 Code Aufgaben
-        a(href='/createCodingLesson/#{currentChapterId}/#{section.id}') Erstellen
-        br
+            div(class="tile chapterTile")
+                a(type="button" class="btn btn-danger deleteChapter" href='/deleteLesson/#{currentChapterId}/#{section.id}/#{informationLesson.id}')  Löschen
+                a(type="button" class="btn btn-primary editChapter" href='/editInformationLesson/#{currentChapterId}/#{section.id}/#{informationLesson.id}') Bearbeiten
+                span #{informationLesson.name}
+
+    div(class="tilesContainer")
+        div(class="tile iconTile")
+            img(class="icon iconMargin" src="/images/code-icon.png" style="padding-top=5px")
+            span Code&nbsp;Aufgaben
+        div(class="tile")
+            include ../lessons/createCodingLesson
         each codeLesson in codingLessons
-            p #{codeLesson.name}
-                a(href='/editCodingLesson/#{currentChapterId}/#{section.id}/#{codeLesson.lessonid}') Bearbeiten
-                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{codeLesson.lessonid}')  Löschen
-
-        h4 Code extension Aufgaben
-        a(href='/createCodeExtensionLesson/#{currentChapterId}/#{section.id}') Erstellen
-        br
+            div(class="tile chapterTile")
+                a(type="button" class="btn btn-danger deleteChapter" href='/deleteLesson/#{currentChapterId}/#{section.id}/#{codeLesson.lessonid}')  Löschen
+                a(type="button" class="btn btn-primary editChapter" href='/editCodingLesson/#{currentChapterId}/#{section.id}/#{codeLesson.lessonid}') Bearbeiten
+                span #{codeLesson.name}
+    div(class="tilesContainer")
+        div(class="tile iconTile")
+            img(class="icon iconMargin" src="/images/codeExtension-icon.png" style="padding-top=5px")
+            span Code&nbsp;Ergänzungs&nbsp;Aufgaben
+        div(class="tile")
+            include ../lessons/createCodeExtensionLesson
         each codeExtensionLesson in codeExtensionLessons
-            p #{codeExtensionLesson.name}
-                a(href='/editCodeExtensionLesson/#{currentChapterId}/#{section.id}/#{codeExtensionLesson.lessonid}') Bearbeiten
-                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{codeExtensionLesson.lessonid}')  Löschen
+            div(class="tile chapterTile")
+                a(type="button" class="btn btn-danger deleteChapter" href='/deleteLesson/#{currentChapterId}/#{section.id}/#{codeExtensionLesson.lessonid}')  Löschen
+                a(type="button" class="btn btn-primary editChapter" href='/editCodeExtensionLesson/#{currentChapterId}/#{section.id}/#{codeExtensionLesson.lessonid}') Bearbeiten
+                span #{codeExtensionLesson.name}
 
-        h4 Fill the blank Aufgaben
-        a(href='/createFillTheBlankLesson/#{currentChapterId}/#{section.id}') Erstellen
-        br
+    div(class="tilesContainer")
+        div(class="tile iconTile")
+            img(class="icon iconMargin" src="/images/fill-the-blanks-icon.png" style="padding-top=5px")
+
+            span Lückentext&nbsp;Aufagben
+        div(class="tile")
+            include ../lessons/createFillTheBlankLesson
         each fillTheBlankLesson in fillTheBlankLessons
-            p #{fillTheBlankLesson.name}
-                a(href='/editFillTheBlankLesson/#{currentChapterId}/#{section.id}/#{fillTheBlankLesson.lessonid}') Bearbeiten
-                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{fillTheBlankLesson.lessonid}')  Löschen
+            div(class="tile chapterTile")
+                a(type="button" class="btn btn-danger deleteChapter" href='/deleteLesson/#{currentChapterId}/#{section.id}/#{fillTheBlankLesson.lessonid}')  Löschen
+                a(type="button" class="btn btn-primary editChapter" href='/editFillTheBlankLesson/#{currentChapterId}/#{section.id}/#{fillTheBlankLesson.lessonid}') Bearbeiten
+                span #{fillTheBlankLesson.name}
 
-        h4 Single- und Multiplechoice Aufgaben
-        a(href='/createSingleMultipleChoiceLesson/#{currentChapterId}/#{section.id}') Erstellen
-        br
+    div(class="tilesContainer")
+        div(class="tile iconTile")
+            img(class="icon iconMargin" src="/images/single-multiple-choice-icon.png" style="padding-top=5px")
+            span Single-Multiple-Choice&nbsp;Aufgaben
+        div(class="tile")
+            include ../lessons/createSingleMultipleChoiceLesson
         each singleMultipleChoiceLesson in singleMultipleChoiceLessons
-            p #{singleMultipleChoiceLesson.name}
-                a(href='/editSingleMultipleChoiceLesson/#{currentChapterId}/#{section.id}/#{singleMultipleChoiceLesson.lessonid}') Bearbeiten
-                    a(href='/deleteLesson/#{currentChapterId}/#{section.id}/#{singleMultipleChoiceLesson.lessonid}')  Löschen
+            div(class="tile chapterTile")
+                a(type="button" class="btn btn-danger deleteChapter" href='/deleteLesson/#{currentChapterId}/#{section.id}/#{singleMultipleChoiceLesson.lessonid}')  Löschen
+                a(type="button" class="btn btn-primary editChapter" href='/editSingleMultipleChoiceLesson/#{currentChapterId}/#{section.id}/#{singleMultipleChoiceLesson.lessonid}') Bearbeiten
+                span #{singleMultipleChoiceLesson.name}
+
+    script.
+        $(window).on('load', function () {
+            if ($('#errorFillTheBlankMessages').children().length > 0) {
+                $('#createFillTheBlankLesson').modal('show');
+            } else if ($('#singleMultipleChoiceErrorMessage').children().length > 0) {
+                $('#createSingleMultipleChoiceLesson').modal('show');
+            } else if ($('#codeExtensionErrorMessage').children().length > 0) {
+                $('#createCodeExtensionLesson').modal('show');
+            } else if ($('#codingErrorMessage').children().length > 0) {
+                $('#createCodingLesson').modal('show');
+            } else if ($('#informationErrorMessage').children().length > 0) {
+                $('#createInformation').modal('show');
+            } else if ($('#editSectionError').children().length > 0) {
+                $('#editSection').modal('show');
+            }
+        });

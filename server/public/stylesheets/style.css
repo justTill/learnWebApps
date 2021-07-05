@@ -7,5 +7,178 @@ a {
   color: #00B7FF;
 }
 
-div {
+.hidden {
+  display: none;
+}
+
+.headline {
+  margin-top: 10px;
+}
+
+.navigation {
+  margin: auto;
+}
+
+.content {
+  max-width: 1200px;
+  margin: auto;
+
+}
+
+.formAnswerText {
+  width: 300px;
+  height: 100px;
+}
+
+.modalForm > input {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modalForm > select {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.modalForm {
+  display: inline;
+}
+
+.modalForm > textarea {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 200px;
+}
+
+.modalForm > span {
+  padding-bottom: 5px;
+  padding-left: 5px;
+  display: block;
+  text-align: center;
+}
+
+.saveBt {
+  float: right;
+}
+
+.deleteProblemBt {
+  float: left;
+  margin-right: 100px;
+}
+
+.tilesContainer {
+  max-width: 1500px;
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.tile {
+  border-style: solid !important;
+  border-color: lightblue;
+  margin: 20px;
+  width: 250px;
+  height: 250px;
+}
+
+select {
+  max-width: 466px;
+}
+
+.add-image {
+  width: 200px;
+  height: 200px;
+  cursor: pointer;
+}
+
+.createButton {
+  display: block;
+  margin-top: 15px;
+  margin-left: 9px;
+}
+
+.content > h1, .content > h5 {
+  text-align: center;
+}
+
+.successMessage {
+  position: absolute;
+  margin-left: 80px;
+}
+
+.chapterTile > span {
+  display: inline-block;
+  font-weight: bold;
+}
+
+.chapterTile, .problemTile {
+  text-align: center;
+}
+
+.deleteChapter {
+  position: relative;
+  margin-right: 10px;
+  top: 175px
+}
+
+.editChapter {
+  top: 175px;
+  position: relative;
+  margin-left: 10px;
+}
+
+.filePath {
+  margin: 5px;
+  padding: 1px;
+  display: inline-block;
+  border-color: lightblue;
+  border-style: solid !important;
+}
+
+#errorMessages {
+  color: red;
+}
+
+.errorMessage {
+  color: red;
+}
+
+.editLessonTileContainer {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.editLessonTile {
+  max-width: 300px;
+}
+
+.icon {
+  width: 200px;
+  height: 200px;
+}
+
+.iconTile {
+  text-align: center;
+}
+
+.iconMargin {
+  margin-top: 10px;
+}
+
+.problemTile > span {
+  display: inline-block;
+}
+
+.overview {
+  max-width: 1500px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.overview > div {
+  display: block;
 }

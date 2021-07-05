@@ -1,16 +1,23 @@
-extends ../layout
-
 block content
-    h1 Single- oder Multiple-Choice Aufgabe erstellen
-    form(action="/saveCreateSingleMultipleChoiceLesson" method="post")
-        include baseCreateLessonForm
-        div.input
-            span.label Mögliche Antworten mit [X] makieren wenn eine Lösung Richtig ist
-            br
-            textarea(name="markedOptions" required) #{lesson ? lesson.markedoptions : ''}
-        div.actions
-            input(type="submit" value="Aufagbe Speichern")
-
-    include ../formError
-
-    include ../files
+    button(type="button" class="btn createButton" data-toggle="modal" data-target="#createSingleMultipleChoiceLesson")
+        img(class="add-image" src="/images/plus-icon.png")
+    div(class="modal fade" id="createSingleMultipleChoiceLesson" tabindex="-1" role="dialog" aria-hidden="true")
+        div(class="modal-dialog modal-dialog-centered" role="document")
+            div(class="modal-content")
+                div(class="modal-header")
+                    h5(class="modal-title") Single-Multiple-Choice Aufgabe erstellen
+                    button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                        span(aria-hidden="true") &times;
+                div(class="modal-body")
+                    div(id="singleMultipleChoiceErrorMessage" class="errorMessage")
+                        if singleMultipleChoiceError
+                            p #{singleMultipleChoiceError}
+                    form(class="modalForm" action="/saveCreateSingleMultipleChoiceLesson" method="post")
+                        include baseCreateLessonForm
+                        span.label(class="input-group-text") Mögliche Antworten <br> Richtige Antworten mit [X] makieren
+                        textarea(class="form-control" name="markedOptions" required) #{lesson ? lesson.markedoptions : ''}
+                        br
+                        button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch
+                        button(class="btn btn-primary saveBt" type="submit") Speichern
+                div(class="modal-footer")
+                    include ../files

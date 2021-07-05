@@ -178,3 +178,14 @@ exports.insertSolvedLessonForUser = async function (lessonId, moodleId, userCode
         })
     return result
 }
+exports.insertProblemForUser = async function (moodleId, lessonId, problem) {
+    let result = []
+    let query = 'INSERT INTO "problems" (moodleid, lessonid, message) VALUES ($1, $2, $3)';
+    result = await pool.query(query, [moodleId, lessonId, problem])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}

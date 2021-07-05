@@ -1,31 +1,34 @@
-extends ../layout
-
 block content
-    h1 Coding Aufgabe erstellen
-
-    form(action="/saveCreateCodingLesson" method="post")
-        include baseCreateLessonForm
-        div.input
-            span.label Aufgabenüberprüfungstyp
-            br
-            select(name="verificationtype" required)
-                option(value="JASMINE") Jasmine
-                option(value="SELF") Selbst
-        div.input
-            span.label Musterlösung
-            br
-            textarea(name="examplesolution" required) #{lesson ? lesson.examplesolution : ''}
-        div.input
-            span.label Überprüfungscode
-            br
-            textarea(name="verificationCode" required) #{lesson ? lesson.verificationcode : ''}
-        div.input
-            span.label Überprüfungsinformationen
-            br
-            textarea(name="verificationInformation" required) #{lesson ? lesson.verificationinformation : ''}
-        div.actions
-            input(type="submit" value="Aufagbe Speichern")
-
-    include ../formError
-
-    include ../files
+    button(type="button" class="btn createButton" data-toggle="modal" data-target="#createCodingLesson")
+        img(class="add-image" src="/images/plus-icon.png")
+    div(class="modal fade" id="createCodingLesson" tabindex="-1" role="dialog" aria-hidden="true")
+        div(class="modal-dialog modal-dialog-centered" role="document")
+            div(class="modal-content")
+                div(class="modal-header")
+                    h5(class="modal-title") Code Aufgabe erstellen
+                    button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                        span(aria-hidden="true") &times;
+                div(class="modal-body")
+                    div(id="codingErrorMessage" class="errorMessage")
+                        if codingErrorMessages
+                            p #{codingErrorMessages}
+                    form(class="modalForm" action="/saveCreateCodingLesson" method="post")
+                        include baseCreateLessonForm
+                        span.label(class="input-group-text") Aufgabenüberprüfungstyp
+                        select(class="form-select" name="verificationtype" required)
+                            option(value="JASMINE") Jasmine
+                            option(value="SELF") Selbst
+                        br
+                        span.label(class="input-group-text") Musterlösung
+                        textarea(class="form-control" name="examplesolution" required) #{lesson ? lesson.examplesolution : ''}
+                        br
+                        span.label(class="input-group-text") Überprüfungscode
+                        textarea(class="form-control" name="verificationCode" required) #{lesson ? lesson.verificationcode : ''}
+                        br
+                        span.label(class="input-group-text") Überprüfungsinformationen
+                        textarea(class="form-control" name="verificationInformation" required) #{lesson ? lesson.verificationinformation : ''}
+                        br
+                        button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch
+                        button(class="btn btn-primary saveBt" type="submit") Speichern
+                    div(class="modal-footer")
+                        include ../files

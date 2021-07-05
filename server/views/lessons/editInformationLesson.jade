@@ -1,34 +1,30 @@
 extends ../layout
 
 block content
-    h1 Informations einheit bearbeiten
+    h1(class="headline")  Informationseinheit bearbeiten
+    div(class="editLessonTileContainer")
+        div(class="editLessonTile")
+            form(class="modalForm" action="/saveEditInformationLesson" method="post")
+                include ../formError
+                input(type="hidden" name="chapterId" value="#{chapterId}")
+                input(type="hidden" name="lessonId" value="#{lessonId}")
+                input(type="hidden" name="sectionId" value="#{sectionId}")
+                input(type="hidden" name="lessonNumber" value="#{lesson.lessonnumber}")
+                span.label(class="input-group-text") Aufgabenname
+                input(class="form-control" type="text" name="lessonName" required value="#{lesson.name}")
+                br
+                span.label(class="input-group-text") Aufgabennummer
+                input(class="form-control" type="number" min=1 name="updatedLessonNumber" required value="#{lesson.lessonnumber}")
+                br
+                span.label(class="input-group-text") Informationen
+                textarea(name="lessonInformation" required) #{lesson.information}
+                br
+                span.label(class="input-group-text") Unterthema
+                select(class="form-select" name="updatedSectionId" required)
+                    each section in sections
+                        option(value="#{section.id}" selected=sectionId == section.id) #{section.name}
+                br
+                button(class="btn btn-primary saveBt" type="submit") Speichern
 
-    form(action="/saveEditInformationLesson" method="post")
-        input(type="hidden" name="chapterId" value="#{chapterId}")
-        input(type="hidden" name="lessonId" value="#{lesson.id}")
-        input(type="hidden" name="sectionId" value="#{sectionId}")
-        input(type="hidden" name="lessonNumber" value="#{lesson.lessonnumber}")
-        div.input
-            span.label Aufgabenname
-            br
-            input(type="text" name="lessonName" required value="#{lesson.name}")
-        div.input
-            span.label Aufgabennummer
-            br
-            input(type="number" min=1 name="updatedLessonNumber" required value="#{lesson.lessonnumber}")
-        div.input
-            span.label Informationen
-            br
-            textarea(name="lessonInformation" required) #{lesson.information}
-        div.input
-            span.label Unterthema
-            br
-            select(name="updatedSectionId" required)
-                each section in sections
-                    option(value="#{section.id}" selected=sectionId == section.id) #{section.name}
-        div.actions
-            input(type="submit" value="Aufagbe Speichern")
-
-    include ../formError
-
-    include ../files
+        div(class="editLessonTile")
+            include ../files

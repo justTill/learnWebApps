@@ -22,14 +22,14 @@ exports.createUserIfNotExist = function (req, res, next) {
                             next()
                         })
                         .catch(err => {
-                            res.send({error: "UnbekannterFehler"}, 500)
+                            res.status(500).send({message: "unknown error"})
                         })
                 } else {
                     next()
                 }
             })
             .catch(err => {
-                res.send({error: "UnbekannterFehler"}, 500)
+                res.status(500).send({message: "unknown error"})
             })
     } else {
         req.query.moodleId = -1
@@ -67,8 +67,8 @@ exports.testCodingLesson = async function (req, res, next) {
         let codingLesson = await lessonRepository.findCodingByLessonId(lessonId)
         if (codingLesson) {
             await codeExecutionService.runTestForCodingLesson(codingLesson, code)
-                .then(result => {
-                    if (result.errors.length === 0 && moodleId && moodleName && moodleId !== -1 && moodleName !== "default") {
+                .then(testResult => {
+                    if (testResult.errors.length === 0 && moodleId && moodleName && moodleId !== -1 && moodleName !== "default") {
                         userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
                             .then(userResult => {
                                 if (userResult.length !== 0) {
@@ -76,18 +76,17 @@ exports.testCodingLesson = async function (req, res, next) {
                                 }
                             })
                     }
-                    res.send(result, 200)
+                    res.send(testResult, 200)
                 })
                 .catch(err => {
-                    res.send("unknown error please try again later", 500)
+                    res.status(500).send({message: "unknown error please try again later"})
                 })
         } else {
-            res.send("No lesson found with given id", 400)
+            res.status(400).send({message: "No lesson found with given id"})
         }
     } else {
-        res.send("Missing field lessonId or code", 400)
+        res.status(400).send({message: "Missing field lessonId or code"})
     }
-    //res.status(status).send(body)
 }
 exports.saveNotes = async function (req, res, next) {
     let moodleId = parseInt(req.params.moodleId)
@@ -101,14 +100,14 @@ exports.saveNotes = async function (req, res, next) {
                         res.send({}, 201)
                     })
                 } else {
-                    res.send({}, 400)
+                    res.status(400).send({message: "could not found user try again later"})
                 }
             })
             .catch(err => {
-                res.send({}, 500)
+                res.status(500).send({message: "unknown error try again later"})
             })
     } else {
-        res.send({}, 400)
+        res.status(400).send({message: "moodle id or name missing or default values are used"})
     }
 }
 exports.getNotes = async function (req, res, next) {
@@ -120,6 +119,31 @@ exports.getNotes = async function (req, res, next) {
         res.send({data: mapToOutputNotes(notes)}, 200)
     } else {
         res.send({}, 400)
+    }
+}
+exports.saveProblem = async function (req, res, next) {
+    let moodleId = parseInt(req.body.moodleId)
+    let moodleName = req.body.moodleName
+    let lessonId = req.body.lessonId
+    let problem = req.body.problem
+    if (moodleId !== -1 && moodleName !== "default" && problem && lessonId) {
+        let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+        let lesson = await lessonRepository.findById(lessonId)
+        if (user.length !== 0 && lesson.length !== 0) {
+            userRepository.insertProblemForUser(moodleId, lessonId, problem)
+                .then(result => {
+                    res.status(201).send({message: "Problem created"})
+
+                })
+                .catch(err => {
+                    res.status(500).send({message: "Unknown error try again later"})
+
+                })
+        } else {
+            res.status(404).send({message: "User or Lesson not found"})
+        }
+    } else {
+        res.status(400).send({message: "Could not save Problem for default User"})
     }
 }
 

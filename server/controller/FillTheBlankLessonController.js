@@ -2,6 +2,7 @@ var lessonsRepository = require("../persistence/LessonRepository")
 var fileRepository = require("../persistence/FileRepository")
 var sectionRepository = require("../persistence/SectionRepository")
 var isLessonNumberOccupied = require("../utils/lessons").isLessonNumberOccupied
+var getEditSectionData = require("../utils/sectionData").getEditSectionData
 
 function correctNumberOfBlanksAndAnswers(textWithBlanks, markedAnswers) {
     let possibleAnswers = markedAnswers.replaceAll("\n", "").split('\r')
@@ -13,16 +14,6 @@ function correctNumberOfBlanksAndAnswers(textWithBlanks, markedAnswers) {
         }
     })
     return numberOfAnswers === numberOfInputs && possibleAnswers.length >= numberOfInputs
-}
-
-
-exports.createFillTheBlankLesson = async function (req, res, next) {
-    let files = await fileRepository.findByChapterId(req.params.chapterId)
-    res.render('lessons/createFillTheBlankLesson', {
-        chapterId: req.params.chapterId,
-        sectionId: req.params.sectionId,
-        files: files
-    })
 }
 
 
@@ -56,22 +47,18 @@ exports.saveCreateFillTheBlankLesson = async function (req, res, next) {
         if (lessonNumberOccupied) errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen";
         if (!correctNumberOfBlanksAndAnswers(textWithBlanks, markedAnswers)) errorMessage = "Anzahl an [input]'s und Antworten stimmt nicht überein oder Anzahl an möglich Antworten ist geringer als Anzahl an Inputs"
         if (errorMessage) {
-            let files = await fileRepository.findByChapterId(chapterId)
-            res.render("lessons/createFillTheBlankLesson", {
-                error: errorMessage,
-                lesson: {
-                    name: lessonName,
-                    lessonnumber: lessonNumber,
-                    information: lessonInformation,
-                    textWithBlanks: textWithBlanks,
-                    markedanswers: markedAnswers,
-                    difficultylevel: difficultyLevel,
-                    feedback: feedback
-                },
-                chapterId: chapterId,
-                sectionId: sectionId,
-                files: files
-            })
+            let lesson = {
+                name: lessonName,
+                lessonnumber: lessonNumber,
+                information: lessonInformation,
+                textWithBlanks: textWithBlanks,
+                markedanswers: markedAnswers,
+                difficultylevel: difficultyLevel,
+                feedback: feedback
+            }
+            let data = await getEditSectionData(sectionId, chapterId, errorMessage, lesson)
+            data.fillTheBlankError = errorMessage
+            res.render('sections/editSection', data)
         } else {
             await lessonsRepository.insertOrUpdateFillTheBlankLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, textWithBlanks, markedAnswers)
                 .then(result => {

@@ -2,6 +2,7 @@ var lessonsRepository = require("../persistence/LessonRepository")
 var fileRepository = require("../persistence/FileRepository")
 var sectionRepository = require("../persistence/SectionRepository")
 var isLessonNumberOccupied = require("../utils/lessons").isLessonNumberOccupied
+var getEditSectionData = require("../utils/sectionData").getEditSectionData
 
 exports.deleteLesson = async function (req, res, next) {
     let chapterId = req.params.chapterId
@@ -30,14 +31,6 @@ exports.editCodingLesson = async function (req, res, next) {
         lesson: codingLesson,
         updatedSectionId: req.params.sectionId,
         sections: sections,
-        files: files
-    })
-}
-exports.createCodingLesson = async function (req, res, next) {
-    let files = await fileRepository.findByChapterId(req.params.chapterId)
-    res.render('lessons/createCodingLesson', {
-        chapterId: req.params.chapterId,
-        sectionId: req.params.sectionId,
         files: files
     })
 }
@@ -117,24 +110,21 @@ exports.saveCreateCodingLesson = async function (req, res, next) {
     if (chapterId && sectionId && lessonName && difficultyLevel && lessonNumber && lessonInformation && verificationType && exampleSolution && verificationCode && verificationInformation) {
         let lessonNumberOccupied = await isLessonNumberOccupied(lessonNumber, sectionId);
         if (lessonNumberOccupied) {
-            let files = await fileRepository.findByChapterId(chapterId)
-            res.render("lessons/createCodingLesson", {
-                error: "Aufgaben Nummer ist schon vergeben, bitte eine andere wählen",
-                lesson: {
-                    name: lessonName,
-                    lessonnumber: lessonNumber,
-                    information: lessonInformation,
-                    difficultylevel: difficultyLevel,
-                    feedback: feedback,
-                    verificationtype: verificationType,
-                    examplesolution: exampleSolution,
-                    verificationcode: verificationCode,
-                    verificationinformation: verificationInformation
-                },
-                chapterId: chapterId,
-                sectionId: sectionId,
-                files: files
-            })
+            let errorMessage = "Aufgaben Nummer ist schon vergeben, bitte eine andere wählen"
+            let lesson = {
+                name: lessonName,
+                lessonnumber: lessonNumber,
+                information: lessonInformation,
+                difficultylevel: difficultyLevel,
+                feedback: feedback,
+                verificationtype: verificationType,
+                examplesolution: exampleSolution,
+                verificationcode: verificationCode,
+                verificationinformation: verificationInformation
+            }
+            let data = await getEditSectionData(sectionId, chapterId, lesson)
+            data.codingErrorMessages = errorMessage
+            res.render('sections/editSection', data)
         } else {
             await lessonsRepository.insertOrUpdateCodingLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, verificationType, verificationCode, exampleSolution, verificationInformation)
                 .then(result => {

@@ -2,16 +2,7 @@ var lessonsRepository = require("../persistence/LessonRepository")
 var fileRepository = require("../persistence/FileRepository")
 var sectionRepository = require("../persistence/SectionRepository")
 var isLessonNumberOccupied = require("../utils/lessons").isLessonNumberOccupied
-
-
-exports.createInformationLesson = async function (req, res, next) {
-    let files = await fileRepository.findByChapterId(req.params.chapterId)
-    res.render('lessons/createInformationLesson', {
-        chapterId: req.params.chapterId,
-        sectionId: req.params.sectionId,
-        files: files
-    })
-}
+var getEditSectionData = require("../utils/sectionData").getEditSectionData
 
 exports.saveCreateInformationLesson = async function (req, res, next) {
     let chapterId = req.body.chapterId
@@ -22,18 +13,15 @@ exports.saveCreateInformationLesson = async function (req, res, next) {
     if (chapterId && sectionId && lessonName && lessonNumber && lessonInformation) {
         let lessonNumberOccupied = await isLessonNumberOccupied(lessonNumber, sectionId);
         if (lessonNumberOccupied) {
-            let files = await fileRepository.findByChapterId(chapterId)
-            res.render("lessons/createInformationLesson", {
-                error: "Aufgabennummer ist schon vergeben, bitte eine andere wählen",
-                lesson: {
-                    name: lessonName,
-                    lessonnumber: lessonNumber,
-                    information: lessonInformation,
-                },
-                chapterId: chapterId,
-                sectionId: sectionId,
-                files: files
-            })
+            let lesson = {
+                name: lessonName,
+                lessonnumber: lessonNumber,
+                information: lessonInformation,
+            }
+            let errorMessage = "Aufgabennummer ist schon vergeben, bitte eine andere wählen"
+            let data = await getEditSectionData(sectionId, chapterId, lesson)
+            data.informationErrorMessage = errorMessage
+            res.render("sections/editSection", data)
         } else {
             await lessonsRepository.insertOrUpdateInformationLesson(null, sectionId, lessonNumber, lessonInformation, lessonName)
                 .then(result => {
@@ -56,7 +44,7 @@ exports.editInformationLesson = async function (req, res, next) {
         chapterId: req.params.chapterId,
         sectionId: req.params.sectionId,
         lessonId: req.params.lessonId,
-        informationLesson: informationLesson,
+        lesson: informationLesson,
         files: files,
         sections: sections,
     })
@@ -87,6 +75,7 @@ exports.saveEditInformationLesson = async function (req, res, next) {
                     lessonnumber: lessonNumber,
                     information: lessonInformation,
                 },
+                lessonId: lessonId,
                 sections: sections,
                 chapterId: chapterId,
                 sectionId: sectionId,
