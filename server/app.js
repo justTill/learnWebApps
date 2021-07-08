@@ -18,6 +18,8 @@ var DbConnector = require('./persistence/DbConnector');
 var pgPool = DbConnector.getDBConnectionPool()
 var passport = require('passport');
 var crypto = require('crypto');
+const cors = require('cors');
+
 var LocalStrategy = require('passport-local').Strategy;
 var UserRepository = require('./persistence/UserRepository')
 //view engine setup
@@ -30,7 +32,12 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use(
+    cors({
+        origin: (origin, callback) => callback(null, true), // you can control it based on condition.
+        credentials: true, // if using cookie sessions.
+    })
+);
 /**
  * This function is called when the `passport.authenticate()` method is called.
  *

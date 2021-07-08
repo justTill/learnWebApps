@@ -24,9 +24,14 @@ services:
     ports:
       - "8080:8080"
     container_name: learnWebAppsFrontend
+    environment:
+      - BACKENDHOST=localhost
+      - BACKENDPORT=3080
     volumes:
       - ./client:/usr/src/app/client
       - /usr/src/app/client/node_modules
+    depends_on:
+      - node-server
   db:
     image: postgres:11.0-alpine
     container_name: ${DB_CONTAINER_NAME}
