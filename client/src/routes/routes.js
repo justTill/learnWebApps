@@ -1,15 +1,17 @@
-import about from "@/components/about";
-import test from "@/components/Test";
-import hello from "@/components/HelloWorld";
 import VueRouter from "vue-router";
 import Vue from 'vue'
+import notes from "@/components/notes";
+import problems from "@/components/problems";
+import home from "@/components/home";
+import learn from "@/components/learn";
 
 Vue.use(VueRouter)
 
 const routes = [
-    {path: '/about', component: about},
-    {path: '/test/', component: test},
-    {path: '/hello', component: hello},
+    {path: '/notes', component: notes},
+    {path: '/learn', component: learn},
+    {path: '/messages/', component: problems},
+    {path: '/home', component: home},
 ]
 
 export const router = new VueRouter({

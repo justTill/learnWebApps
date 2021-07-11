@@ -33,5 +33,23 @@ export const store = new Vuex.Store({
         addProblem(state, problem) {
             state.problems.push(problem)
         }
+    },
+    getters: {
+        user: state => {
+            return {
+                userId: store.state.userId,
+                userName: store.state.userName,
+                isDefault: store.state.userId === -1 && store.state.userName === "default"
+            }
+        },
+        chapters: state => {
+            return store.state.chapters
+        },
+        problems: state => {
+            return store.state.problems
+        },
+        notes: state => {
+            return store.state.notes
+        }
     }
 })
