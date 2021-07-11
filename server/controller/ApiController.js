@@ -5,6 +5,7 @@ var lessonRepository = require("../persistence/LessonRepository")
 var codeExecutionService = require("../service/CodeExecutionService")
 
 const LessonTypes = Object.freeze({
+    INFORMATION: "information",
     CODE: "codingLesson",
     CODEEXTENSION: "codeExtensionLesson",
     FILLTHEBLANK: "FillTheBlankLesson",
@@ -189,6 +190,8 @@ async function mapToOutputSection(section, moodleId) {
 }
 
 async function getMappedLessonsForSectionId(sectionId, moodleId) {
+    let informationLessons = await lessonRepository.findInformationsBySectionId(sectionId)
+    let mappedInformationLessons = mapToOutputInformationLessons(informationLessons)
     let fillTheBlankLessons = await lessonRepository.findFillTheBlankBySectionId(sectionId)
     let mappedFillTheBlankLessons = mapToOutputFillTheBlankLessons(fillTheBlankLessons)
     let codingLessons = await lessonRepository.findCodingBySectionId(sectionId)
@@ -201,6 +204,7 @@ async function getMappedLessonsForSectionId(sectionId, moodleId) {
         .concat(mappedCodingLessons)
         .concat(mappedCodeExtensionLessons)
         .concat(mappedSingleMultipleChoiceLessons)
+        .concat(mappedInformationLessons)
     let sortedLessons = sortLessonsByNumber(mappedLessons)
     if (moodleId) {
         let solvedLessons = await lessonRepository.findSolvedByMoodleId(moodleId)
@@ -231,6 +235,22 @@ function mapDefaultLesson(lesson) {
         feedback: lesson.feedback,
         done: false,
     }
+}
+
+function mapToOutputInformationLessons(lessons) {
+    let mappedLessons = []
+    for (let lesson of lessons) {
+        let mappedLesson = {
+            lessonId: lesson.id,
+            sectionId: lesson.sectionid,
+            lessonNumber: lesson.lessonnumber,
+            lessonName: lesson.name,
+            information: lesson.information,
+            type: LessonTypes.INFORMATION
+        }
+        mappedLessons.push(mappedLesson)
+    }
+    return mappedLessons
 }
 
 function mapToOutputFillTheBlankLessons(lessons) {
