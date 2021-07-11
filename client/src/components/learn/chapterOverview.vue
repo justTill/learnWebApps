@@ -98,5 +98,6 @@ export default {
   border-radius: 2px;
   padding-top: 10px;
   padding-left: 10px;
+  padding-right: 10px;
 }
 </style>
