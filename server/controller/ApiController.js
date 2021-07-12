@@ -310,10 +310,12 @@ function mapMarkedAnswers(answers) {
     let mappedAnswers = []
     let possibleAnswers = answers.replaceAll("\n", "").split('\r')
     for (let answer of possibleAnswers) {
-        mappedAnswers.push({
-            possibleAnswer: answer.replaceAll('[X]', "").replaceAll('[x]', ""),
-            isCorrect: answer.includes('[X]') || answer.includes('[x]'),
-        })
+        if (answer !== "") {
+            mappedAnswers.push({
+                possibleAnswer: answer.replaceAll('[X]', "").replaceAll('[x]', ""),
+                isCorrect: answer.includes('[X]') || answer.includes('[x]'),
+            })
+        }
     }
     return mappedAnswers
 }

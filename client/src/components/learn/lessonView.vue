@@ -5,8 +5,8 @@
         <span class="doneIcon" v-if="lesson.done && lesson.type !== 'information'">&#10003;</span></h1>
     </div>
     <div class="lessonTextContainer">
-      <div class="lessonText" v-html="lessonText">
-        {{ lesson.information }}
+      <div class="lessonText">
+        <div v-html="lessonText"></div>
         <div class="lessonButtons">
           <div class="prevButton" v-if="previousLesson" v-on:click="goToLesson(previousLesson)"> &#8592; Vorherige
             Lerneinheit
@@ -15,11 +15,11 @@
           </div>
         </div>
       </div>
-      <coding-lesson v-if="lesson.type==='codingLesson'"></coding-lesson>
-      <code-extension-lesson v-if="lesson.type==='codeExtensionLesson'"></code-extension-lesson>
-      <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'"></fill-the-blank-lesson>
-      <single-multiple-choice-lesson v-if="lesson.type==='singleMultipleChoiceLesson'"></single-multiple-choice-lesson>
-
+      <coding-lesson v-if="lesson.type==='codingLesson'" :lesson="lesson"></coding-lesson>
+      <code-extension-lesson v-if="lesson.type==='codeExtensionLesson'" :lesson="lesson"></code-extension-lesson>
+      <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'" :lesson="lesson"></fill-the-blank-lesson>
+      <single-multiple-choice-lesson v-if="lesson.type==='singleMultipleChoiceLesson'"
+                                     :lesson="lesson"></single-multiple-choice-lesson>
     </div>
   </div>
 </template>
@@ -42,19 +42,21 @@ export default {
   computed: {
     lessonText: function () {
       let information = this.lesson.information
-      let prevButton = '<div class="prevButton" v-if="previousLesson" v-on:click="goToLesson(previousLesson)"> &#8592; Vorherige Lerneinheit </div>'
-      let nextButton = '<div class="nextButton" v-if="nextLesson" v-on:click="goToLesson(nextLesson)"> Nächste Lerneinheit &#8594; </div>'
-      return information + '<div class="lessonButtons"> ' + prevButton + nextButton + '</div>'
+      return information;
     }
   }
 }
 </script>
 
 <style>
+.doneIcon {
+  color: green;
+}
+
 .lessonTextContainer {
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: center;
 }
 
 pre {

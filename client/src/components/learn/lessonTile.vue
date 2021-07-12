@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div class="title lessonTitle">{{ this.lesson.lessonName }}</div>
+    <div class="title lessonTitle">{{ this.lesson.lessonName }} <span class="doneIcon"
+                                                                      v-if="lesson.done && lesson.type !== 'information'">&#10003;</span>
+    </div>
     <div class="lessonInformation">
       {{ lessonPreview }}
     </div>
