@@ -210,7 +210,7 @@ async function getMappedLessonsForSectionId(sectionId, moodleId) {
         let solvedLessons = await lessonRepository.findSolvedByMoodleId(moodleId)
         for (let lesson of sortedLessons) {
             for (let solvedLesson of solvedLessons) {
-                lesson.done = solvedLesson.lessonId === lesson.id
+                lesson.done = solvedLesson.lessonid === lesson.lessonId
                 if (lesson.type === LessonTypes.CODE) {
                     lesson.userCode = solvedLesson.code
                 }

@@ -93,8 +93,6 @@ export default {
   background-color: white;
   border: 1px solid black;
   border-radius: 2px;
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 10px 10px 5px;
 }
 </style>

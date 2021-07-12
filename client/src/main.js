@@ -21,7 +21,7 @@ function getChapters() {
 function getChaptersForUser(userId, userName) {
   this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/" + userId + "/" + userName)
       .then(result => {
-          console.log(result.data.chapters)
+          console.log(result.data.chapters[1].sections[0].lessons)
           this.$store.commit("setChapters", result.data.chapters)
       })
       .catch(err => console.log(err))
