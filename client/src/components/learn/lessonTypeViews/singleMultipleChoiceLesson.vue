@@ -13,7 +13,8 @@
 export default {
   name: 'singleMultipleChoiceLesson',
   props: {
-    lesson: Object
+    lesson: Object,
+    afterSolving: Function
   },
   data: function () {
     return {
@@ -43,8 +44,9 @@ export default {
       if (isCorrect) {
         this.errorMessage = "";
         this.successMessage = this.lesson.feedback
+        this.afterSolving(this.lesson.lessonId)
         //store set Done
-        //make API Call
+
       } else {
         this.successMessage = ""
         this.errorMessage = "Die Antwort ist leider nicht korrekt"

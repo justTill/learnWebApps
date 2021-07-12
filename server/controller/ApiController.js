@@ -72,7 +72,27 @@ exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
     }
     res.send(data)
 }
-
+exports.saveSolvedLesson = async function (req, res, next) {
+    let lessonId = parseInt(req.body.lessonId)
+    let moodleId = parseInt(req.body.moodleId)
+    let moodleName = req.body.moodleName
+    if (lessonId && moodleId && moodleName) {
+        let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+        if (user.length !== 0) {
+            userRepository.insertSolvedLessonForUser(lessonId, moodleId, null)
+                .then(result => {
+                    res.status(201).send({message: "Saved"})
+                })
+                .catch(err => {
+                    res.status(500).send({message: "Unbekannter Fehler"})
+                })
+        } else {
+            res.status(404).send({message: "user not found"})
+        }
+    } else {
+        res.status(400).send({message: "missing field in body"})
+    }
+}
 exports.testCodingLesson = async function (req, res, next) {
     let moodleId = parseInt(req.body.moodleId)
     let moodleName = req.body.moodleName
@@ -210,9 +230,11 @@ async function getMappedLessonsForSectionId(sectionId, moodleId) {
         let solvedLessons = await lessonRepository.findSolvedByMoodleId(moodleId)
         for (let lesson of sortedLessons) {
             for (let solvedLesson of solvedLessons) {
-                lesson.done = solvedLesson.lessonid === lesson.lessonId
-                if (lesson.type === LessonTypes.CODE) {
-                    lesson.userCode = solvedLesson.code
+                if (solvedLesson.lessonid === lesson.lessonId) {
+                    lesson.done = true
+                    if (lesson.type === LessonTypes.CODE) {
+                        lesson.userCode = solvedLesson.code
+                    }
                 }
             }
         }

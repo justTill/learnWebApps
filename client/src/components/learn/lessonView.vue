@@ -19,7 +19,8 @@
       <code-extension-lesson v-if="lesson.type==='codeExtensionLesson'" :lesson="lesson"></code-extension-lesson>
       <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'" :lesson="lesson"></fill-the-blank-lesson>
       <single-multiple-choice-lesson v-if="lesson.type==='singleMultipleChoiceLesson'"
-                                     :lesson="lesson"></single-multiple-choice-lesson>
+                                     :lesson="lesson"
+                                     :afterSolving="solvedLesson"></single-multiple-choice-lesson>
     </div>
   </div>
 </template>
@@ -29,6 +30,8 @@ import CodingLesson from "@/components/learn/lessonTypeViews/codingLesson";
 import SingleMultipleChoiceLesson from "@/components/learn/lessonTypeViews/singleMultipleChoiceLesson";
 import CodeExtensionLesson from "@/components/learn/lessonTypeViews/codeExtensionLesson";
 import FillTheBlankLesson from "@/components/learn/lessonTypeViews/fillTheBlankLesson";
+import {backEndHost, backEndPort} from '../../envVariables'
+import {mapGetters} from "vuex";
 
 export default {
   name: 'lessonView',
@@ -43,6 +46,18 @@ export default {
     lessonText: function () {
       let information = this.lesson.information
       return information;
+    },
+    ...mapGetters([
+      'user'
+    ]),
+  },
+  methods: {
+    solvedLesson(lessonId) {
+      this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1//lessons/lesson/solved", {
+        lessonId: lessonId,
+        moodleId: this.user.userId,
+        moodleName: this.user.userName
+      }).then(response => console.log(response)).catch(err => console.log(err))
     }
   }
 }
