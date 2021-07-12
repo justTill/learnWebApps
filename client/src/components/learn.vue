@@ -173,7 +173,11 @@ export default {
 
 @media only screen and (min-width: 1000px) {
   .min-nav-button {
-    display: none;
+    display: none !important;
+  }
+
+  .chapterNavigation {
+    display: block !important;
   }
 }
 
