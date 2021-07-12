@@ -135,7 +135,7 @@
                 {
                   "column": {
                     "name": "overview",
-                    "type": "varchar(255)",
+                    "type": "text",
                     "constraints": {
                       "nullable": false
                     }
@@ -211,7 +211,7 @@
                 {
                   "column": {
                     "name": "information",
-                    "type": "varchar(255)",
+                    "type": "text",
                     "constraints": {
                       "nullable": false
                     }
@@ -268,7 +268,7 @@
                 {
                   "column": {
                     "name": "information",
-                    "type": "varchar(255)",
+                    "type": "text",
                     "constraints": {
                       "nullable": false
                     }
@@ -286,7 +286,7 @@
                 {
                   "column": {
                     "name": "feedback",
-                    "type": "varchar(255)",
+                    "type": "text",
                     "constraints": {
                       "nullable": true
                     }
@@ -337,7 +337,7 @@
                 {
                   "column": {
                     "name": "message",
-                    "type": "varchar(255)"
+                    "type": "text"
                   }
                 },
                 {
@@ -395,7 +395,7 @@
                 {
                   "column": {
                     "name": "answer",
-                    "type": "varchar(255)",
+                    "type": "text",
                     "constraints": {
                       "nullable": false
                     }
@@ -444,7 +444,7 @@
                 {
                   "column": {
                     "name": "markedoptions",
-                    "type": "varchar(255)",
+                    "type": "text",
                     "constraints": {
                       "nullable": false
                     }
@@ -492,7 +492,7 @@
                 {
                   "column": {
                     "name": "verificationcode",
-                    "type": "varchar(255)",
+                    "type": "text",
                     "constraints": {
                       "nullable": false
                     }
@@ -501,13 +501,13 @@
                 {
                   "column": {
                     "name": "examplesolution",
-                    "type": "varchar(255)"
+                    "type": "text"
                   }
                 },
                 {
                   "column": {
                     "name": "verificationinformation",
-                    "type": "varchar(255)"
+                    "type": "text"
                   }
                 }
               ]
@@ -543,7 +543,7 @@
                 {
                   "column": {
                     "name": "textwithblanks",
-                    "type": "varchar(255)",
+                    "type": "text",
                     "constraints": {
                       "nullable": false
                     }
@@ -552,7 +552,7 @@
                 {
                   "column": {
                     "name": "markedanswers",
-                    "type": "varchar(255)",
+                    "type": "text",
                     "constraints": {
                       "nullable": false
                     }
@@ -591,7 +591,7 @@
                 {
                   "column": {
                     "name": "unfinishedcode",
-                    "type": "varchar(255)",
+                    "type": "text",
                     "constraints": {
                       "nullable": false
                     }
@@ -600,7 +600,7 @@
                 {
                   "column": {
                     "name": "answers",
-                    "type": "varchar(255)",
+                    "type": "text",
                     "constraints": {
                       "nullable": false
                     }
@@ -690,7 +690,7 @@
                 {
                   "column": {
                     "name": "code",
-                    "type": "varchar(255)"
+                    "type": "text"
                   }
                 }
               ]
@@ -726,7 +726,7 @@
                 {
                   "column": {
                     "name": "note",
-                    "type": "varchar(255)",
+                    "type": "text",
                     "constraints": {
                       "nullable": false
                     }
