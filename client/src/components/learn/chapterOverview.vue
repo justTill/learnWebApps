@@ -2,9 +2,7 @@
   <div class="chapterOverviewContainer">
     <h1 class="title"> {{ chapter.chapterName }}</h1>
     <div class="textContainer">
-      <div class="overviewText">
-        {{ chapter.overview }}
-        <img src="../../../mediafiles/test.png">
+      <div class="overviewText" v-html="chapter.overview">
       </div>
     </div>
     <div class="sections">
@@ -64,7 +62,6 @@ export default {
   margin-left: auto;
   margin-right: auto;
   flex-wrap: wrap;
-  flex: 50%;
 }
 
 .section:hover {

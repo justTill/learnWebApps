@@ -104,9 +104,9 @@ exports.saveEditedChapter = async function (req, res, next) {
 exports.uploadMedia = async function (req, res, next) {
     let id = req.body.chapter
     let chapter = await chapterRepository.findById(id)
-    let imagePath = chapter.name.split(' ').join('') + "/" + req.file.originalname
+    let imagePath = "/mediafiles/" + chapter.name.split(' ').join('') + "/" + req.file.originalname
     const tempPath = req.file.path;
-    const targetPath = path.join(__dirname, "../mediafiles/" + imagePath);
+    const targetPath = path.join(__dirname, ".." + imagePath);
     let allowedFiles = [".gif", ".png", ".jpg", ".jpeg"]
     if (allowedFiles.includes(path.extname(req.file.originalname).toLowerCase())) {
         mv(tempPath, targetPath, {mkdirp: true}, async err => {

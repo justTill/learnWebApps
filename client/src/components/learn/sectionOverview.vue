@@ -2,8 +2,7 @@
   <div class="sectionOverviewContainer">
     <h1 class="title"> {{ section.sectionName }}</h1>
     <div class="textContainer">
-      <div class="overviewText">
-        {{ section.information }}
+      <div class="overviewText" v-html="section.information">
       </div>
     </div>
     <div class="lessons">
@@ -69,7 +68,6 @@ export default {
   margin-left: auto;
   margin-right: auto;
   flex-wrap: wrap;
-  flex: 50%;
 }
 
 .lessons:hover {

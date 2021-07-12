@@ -257,6 +257,7 @@ function mapToOutputFillTheBlankLessons(lessons) {
     let mappedLessons = []
     for (let lesson of lessons) {
         let mappedLesson = mapDefaultLesson(lesson)
+        mappedLesson.lessonId = lesson.lessonid
         mappedLesson.type = LessonTypes.FILLTHEBLANK
         mappedLesson.textWithBlanks = lesson.textwithblanks
         mappedLesson.answerOptions = mapMarkedAnswers(lesson.markedanswers)
@@ -269,6 +270,7 @@ function mapToOutputCodingLessons(lessons) {
     let mappedLessons = []
     for (let lesson of lessons) {
         let mappedLesson = mapDefaultLesson(lesson)
+        mappedLesson.lessonId = lesson.lessonid
         mappedLesson.type = LessonTypes.CODE
         mappedLesson.exampleSolution = lesson.examplesolution
         mappedLesson.verificationInformation = lesson.verificationinformation
@@ -282,6 +284,7 @@ function mapToOutputCodeExtensionLessons(lessons) {
     let mappedLessons = []
     for (let lesson of lessons) {
         let mappedLesson = mapDefaultLesson(lesson)
+        mappedLesson.lessonId = lesson.lessonid
         mappedLesson.type = LessonTypes.CODEEXTENSION
         mappedLesson.unfinishedCode = lesson.unfinishedcode
         mappedLesson.answerOptions = lesson.answers.replaceAll("\n", "").split('\r')
@@ -294,6 +297,7 @@ function mapToOutputSingleMultipleChoiceLessons(lessons) {
     let mappedLessons = []
     for (let lesson of lessons) {
         let mappedLesson = mapDefaultLesson(lesson)
+        mappedLesson.lessonId = lesson.lessonid
         mappedLesson.type = LessonTypes.SINGLEMULTIPLECHOICE
         mappedLesson.answerOptions = mapMarkedAnswers(lesson.markedoptions)
         mappedLessons.push(mappedLesson)
