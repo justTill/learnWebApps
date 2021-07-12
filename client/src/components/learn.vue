@@ -23,17 +23,24 @@
     </div>
 
     <chapter-overview class="chapterContent"
-                      v-if="selectedChapter && !selectedSection"
+                      v-if="selectedChapter && !selectedSection && !selectedLesson"
                       :chapter="selectedChapter"
                       :go-to-section="goToSection">
     </chapter-overview>
 
     <section-overview class="chapterContent"
-                      v-else-if="selectedSection"
+                      v-else-if="selectedSection && !selectedLesson"
                       :section="selectedSection"
                       :gotToLesson="goToLesson">
     </section-overview>
+    <lesson-view class="chapterContent"
+                 v-else-if="selectedLesson"
+                 :lesson="selectedLesson"
+                 :previousLesson="previousLesson"
+                 :nextLesson="nextLesson"
+                 :goToLesson="goToLesson">
 
+    </lesson-view>
     <div v-else class="chapterContent">
       <h1> Default Informationen</h1>
     </div>
@@ -45,14 +52,18 @@ import {mapGetters} from 'vuex'
 import ChapterOverview from "@/components/learn/chapterOverview";
 import SectionOverview from "@/components/learn/sectionOverview";
 import NavButton from "@/components/utils/navButton";
+import LessonView from "@/components/learn/lessonView";
 
 export default {
   name: 'learn',
-  components: {ChapterOverview, SectionOverview, NavButton},
+  components: {LessonView, ChapterOverview, SectionOverview, NavButton},
   data: function () {
     return {
       selectedChapter: null,
       selectedSection: null,
+      selectedLesson: null,
+      previousLesson: null,
+      nextLesson: null
     }
   },
   computed: {
@@ -62,9 +73,11 @@ export default {
   },
   methods: {
     changeCurrentChapter(chapter) {
+      this.selectedLesson = null
       this.selectedChapter = chapter
     },
     changeCurrentSection(section) {
+      this.selectedLesson = null
       this.selectedSection = section
     },
     changeChapterAndSectionOnNavigationClick(chapter, section) {
@@ -93,8 +106,17 @@ export default {
       this.changeChapterAndSectionOnNavigationClick(this.selectedChapter, section)
       this.$refs['section-' + section.sectionId][0].isActive = true;
     },
-    goToLesson(lesson) {
-      console.log(lesson)
+    goToLesson(updatedLesson) {
+      this.previousLesson = null;
+      this.nextLesson = null;
+      for (let lesson of this.selectedSection.lessons) {
+        if (lesson.lessonNumber === updatedLesson.lessonNumber + 1) {
+          this.nextLesson = lesson
+        } else if (lesson.lessonNumber === updatedLesson.lessonNumber - 1) {
+          this.previousLesson = lesson
+        }
+      }
+      this.selectedLesson = updatedLesson
     }
   }
 }

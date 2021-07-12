@@ -8,7 +8,7 @@ const LessonTypes = Object.freeze({
     INFORMATION: "information",
     CODE: "codingLesson",
     CODEEXTENSION: "codeExtensionLesson",
-    FILLTHEBLANK: "FillTheBlankLesson",
+    FILLTHEBLANK: "fillTheBlankLesson",
     SINGLEMULTIPLECHOICE: "singleMultipleChoiceLesson"
 })
 exports.createUserIfNotExist = function (req, res, next) {
