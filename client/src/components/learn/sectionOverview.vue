@@ -1,6 +1,7 @@
 <template>
   <div class="sectionOverviewContainer">
-    <h1 class="title"> {{ section.sectionName }}</h1>
+    <title-header :title="section.sectionName" :lesson="null">
+    </title-header>
     <div class="textContainer">
       <div class="overviewText" v-html="section.information">
       </div>
@@ -19,6 +20,7 @@
 <script>
 
 import LessonTile from "@/components/learn/lessonTile";
+import TitleHeader from "@/components/learn/titleHeader";
 
 export default {
   name: 'sectionOverview',
@@ -26,15 +28,12 @@ export default {
     section: Object,
     gotToLesson: Function
   },
-  components: {LessonTile},
+  components: {TitleHeader, LessonTile},
   computed: {},
   methods: {}
 }
 </script>
 <style>
-.title {
-  text-align: center;
-}
 
 .textContainer {
   display: block;

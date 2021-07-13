@@ -187,6 +187,7 @@ export default {
 .chapterContent {
   overflow: auto;
   height: 90%;
+  width: 100%;
 }
 
 .navigationButton:hover, .navigationSectionButton:hover {
@@ -239,9 +240,7 @@ export default {
   .min-nav-button {
     display: inline;
     border: 2px solid black;
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 20px auto;
     min-width: 400px;
     height: 30px;
     background-color: #f7f3eb;

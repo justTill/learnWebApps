@@ -1,9 +1,7 @@
 <template>
   <div class="lessonContainer">
-    <div class="title">
-      <h1>{{ lesson.lessonName }}
-        <span class="doneIcon" v-if="lesson.done && lesson.type !== 'information'">&#10003;</span></h1>
-    </div>
+    <title-header :title="lesson.lessonName" :lesson="lesson">
+    </title-header>
     <div class="lessonTextContainer">
       <div class="lessonText">
         <div v-html="lessonText"></div>
@@ -32,10 +30,11 @@ import CodeExtensionLesson from "@/components/learn/lessonTypeViews/codeExtensio
 import FillTheBlankLesson from "@/components/learn/lessonTypeViews/fillTheBlankLesson";
 import {backEndHost, backEndPort} from '../../envVariables'
 import {mapGetters} from "vuex";
+import TitleHeader from "@/components/learn/titleHeader";
 
 export default {
   name: 'lessonView',
-  components: {FillTheBlankLesson, CodeExtensionLesson, SingleMultipleChoiceLesson, CodingLesson},
+  components: {TitleHeader, FillTheBlankLesson, CodeExtensionLesson, SingleMultipleChoiceLesson, CodingLesson},
   props: {
     lesson: Object,
     previousLesson: Object,
@@ -68,9 +67,6 @@ export default {
 </script>
 
 <style>
-.doneIcon {
-  color: green;
-}
 
 .lessonTextContainer {
   display: flex;
@@ -90,7 +86,6 @@ pre {
 
 .lessonContainer {
   display: block;
-  padding: 10px;
   width: 100%;
 }
 

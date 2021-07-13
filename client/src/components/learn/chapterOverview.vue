@@ -1,6 +1,7 @@
 <template>
   <div class="chapterOverviewContainer">
-    <h1 class="title"> {{ chapter.chapterName }}</h1>
+    <title-header :title="chapter.chapterName" :lesson="null">
+    </title-header>
     <div class="textContainer">
       <div class="overviewText" v-html="chapter.overview">
       </div>
@@ -18,6 +19,7 @@
 <script>
 
 import SectionTile from "@/components/learn/sectionTile";
+import TitleHeader from "@/components/learn/titleHeader";
 
 export default {
   name: 'chapterOverview',
@@ -25,16 +27,12 @@ export default {
     chapter: Object,
     goToSection: Function
   },
-  components: {SectionTile},
+  components: {TitleHeader, SectionTile},
   computed: {},
   methods: {},
 }
 </script>
 <style>
-.title {
-  text-align: center;
-}
-
 
 .chapterOverviewContainer {
   display: flex;
