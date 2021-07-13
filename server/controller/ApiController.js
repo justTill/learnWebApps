@@ -327,7 +327,6 @@ function mapToOutputSingleMultipleChoiceLessons(lessons) {
     return mappedLessons
 }
 
-
 function mapMarkedAnswers(answers) {
     let mappedAnswers = []
     let possibleAnswers = answers.replaceAll("\n", "").split('\r')

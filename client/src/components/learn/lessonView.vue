@@ -7,6 +7,9 @@
     <div class="lessonTextContainer">
       <div class="lessonText">
         <div v-html="lessonText"></div>
+        <single-multiple-choice-lesson v-if="lesson.type==='singleMultipleChoiceLesson'"
+                                       :lesson="lesson"
+                                       :solvedHandler="solvedLesson"></single-multiple-choice-lesson>
         <div class="lessonButtons">
           <div class="prevButton" v-if="previousLesson" v-on:click="goToLesson(previousLesson)"> &#8592; Vorherige
             Lerneinheit
@@ -18,9 +21,6 @@
       <coding-lesson v-if="lesson.type==='codingLesson'" :lesson="lesson"></coding-lesson>
       <code-extension-lesson v-if="lesson.type==='codeExtensionLesson'" :lesson="lesson"></code-extension-lesson>
       <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'" :lesson="lesson"></fill-the-blank-lesson>
-      <single-multiple-choice-lesson v-if="lesson.type==='singleMultipleChoiceLesson'"
-                                     :lesson="lesson"
-                                     :afterSolving="solvedLesson"></single-multiple-choice-lesson>
     </div>
   </div>
 </template>
@@ -41,6 +41,7 @@ export default {
     previousLesson: Object,
     nextLesson: Object,
     goToLesson: Function,
+    lessonSolvedHandler: Function,
   },
   computed: {
     lessonText: function () {
@@ -52,12 +53,15 @@ export default {
     ]),
   },
   methods: {
-    solvedLesson(lessonId) {
-      this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1//lessons/lesson/solved", {
-        lessonId: lessonId,
-        moodleId: this.user.userId,
-        moodleName: this.user.userName
-      }).then(response => console.log(response)).catch(err => console.log(err))
+    solvedLesson(lessonId, isSolved) {
+      this.lessonSolvedHandler(lessonId, isSolved)
+      if (isSolved) {
+        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1//lessons/lesson/solved", {
+          lessonId: lessonId,
+          moodleId: this.user.userId,
+          moodleName: this.user.userName
+        }).then(response => console.log(response)).catch(err => console.log(err))
+      }
     }
   }
 }

@@ -38,7 +38,8 @@
                  :lesson="selectedLesson"
                  :previousLesson="previousLesson"
                  :nextLesson="nextLesson"
-                 :goToLesson="goToLesson">
+                 :goToLesson="goToLesson"
+                 :lessonSolvedHandler="lessonSolvedHandler">
 
     </lesson-view>
     <div v-else class="chapterContent">
@@ -109,14 +110,29 @@ export default {
     goToLesson(updatedLesson) {
       this.previousLesson = null;
       this.nextLesson = null;
-      for (let lesson of this.selectedSection.lessons) {
-        if (lesson.lessonNumber === updatedLesson.lessonNumber + 1) {
-          this.nextLesson = lesson
-        } else if (lesson.lessonNumber === updatedLesson.lessonNumber - 1) {
-          this.previousLesson = lesson
+      let currentLessonIndex = this.selectedSection.lessons.indexOf(updatedLesson)
+      this.nextLesson = this.selectedSection.lessons[currentLessonIndex + 1]
+      this.previousLesson = this.selectedSection.lessons[currentLessonIndex - 1]
+      this.selectedLesson = updatedLesson
+    },
+    lessonSolvedHandler(lessonId, solved) {
+      let chapters = this.chapters
+      let chapterIndex = chapters.indexOf(this.selectedChapter)
+      let sectionIndex = chapters[chapterIndex].sections.indexOf(this.selectedSection)
+      let lessonIndex = -1
+      for (let i = 0; i < chapters[chapterIndex].sections[sectionIndex].lessons.length; i++) {
+        if (chapters[chapterIndex].sections[sectionIndex].lessons[i].lessonId === lessonId) {
+          lessonIndex = i;
         }
       }
-      this.selectedLesson = updatedLesson
+      let payload = {
+        lessonIndex: lessonIndex,
+        chapterIndex: chapterIndex,
+        sectionIndex: sectionIndex,
+        solved: solved
+      }
+      console.log(payload)
+      this.$store.commit('updateLessonDone', payload)
     }
   }
 }

@@ -32,6 +32,13 @@ export const store = new Vuex.Store({
         },
         addProblem(state, problem) {
             state.problems.push(problem)
+        },
+        updateLessonDone(state, payload) {
+            if (payload.lessonIndex !== -1) {
+                state.chapters[payload.chapterIndex]
+                    .sections[payload.sectionIndex]
+                    .lessons[payload.lessonIndex].done = payload.solved
+            }
         }
     },
     getters: {
