@@ -4,18 +4,23 @@ import {router} from '@/./routes/routes'
 import {store} from '@/stores/store.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
 import {backEndHost, backEndPort} from './envVariables'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.use(VueAxios, axios)
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 Vue.config.productionTip = false
 
 function getChapters() {
-  this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")
-      .then(result => {
-        console.log(result.data.chapters)
-          this.$store.commit("setChapters", result.data.chapters)
-      })
-      .catch(err => console.log(err))
+    this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")
+        .then(result => {
+            console.log(result.data.chapters)
+            this.$store.commit("setChapters", result.data.chapters)
+        })
+        .catch(err => console.log(err))
 }
 
 function getChaptersForUser(userId, userName) {

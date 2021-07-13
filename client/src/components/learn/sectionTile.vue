@@ -55,7 +55,6 @@ export default {
   font-size: large;
   font-weight: bold;
   padding: 2px;
-  margin: 10px;
 }
 
 .percentageBar {

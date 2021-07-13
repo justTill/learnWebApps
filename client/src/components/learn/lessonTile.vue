@@ -16,7 +16,8 @@ import {mapGetters} from "vuex";
 export default {
   name: 'lessonTile',
   props: {
-    lesson: Object
+    lesson: Object,
+    helpText: String
   },
   components: {},
   computed: {
