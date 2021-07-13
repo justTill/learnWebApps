@@ -99,8 +99,12 @@ exports.deleteSolvedLessons = async function (req, res, next) {
     let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
     if (user.length !== 0) {
         userRepository.deleteSolvedByMoodleId(moodleId)
+            .then(result => res.status(204).send({message: "deleted"})
+            )
+            .catch(err => console.log(err))
+    } else {
+        res.status(204).send({message: "no User"})
     }
-    res.status(204).send({message: "deleted"})
 }
 
 exports.testCodingLesson = async function (req, res, next) {
