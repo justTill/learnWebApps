@@ -4,7 +4,7 @@
       <input type="checkbox" :id="'option-'+index" :ref="'option-'+index" :value="option.possibleAnswer"
              v-model="checkedAnswers"
              :checked="lesson.done && option.isCorrect">
-      <label :for="'option-'+index">{{ option.possibleAnswer }}</label>
+      <label :for="'option-'+index" v-html="option.possibleAnswer"></label>
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
     <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
@@ -65,6 +65,12 @@ export default {
 
 .checkLesson:hover, .answerOptions:hover {
   cursor: pointer;
+}
+
+label > code {
+  padding: 2px;
+  border-radius: 5px;
+  background-color: #c7a6a6;
 }
 
 .errorMessage {
