@@ -7,6 +7,7 @@ router.get('/chapters/', asyncMiddleware(apiController.getChapterDataWithSection
 router.get('/chapters/:moodleId/:moodleName', asyncMiddleware(apiController.getChapterDataWithSectionsAndLessonsForUser));
 router.post('/codingLessons/check/', asyncMiddleware(apiController.testCodingLesson));
 router.post('/lessons/lesson/solved', asyncMiddleware(apiController.saveSolvedLesson))
+router.delete('lessons/lesson/solved', asyncMiddleware(apiController.deleteSolvedLessons))
 
 router.get('/users/problems/:moodleId/:moodleName', asyncMiddleware(apiController.getProblemsWithAnswers));
 router.post('/users/problems/', asyncMiddleware(apiController.saveProblem));

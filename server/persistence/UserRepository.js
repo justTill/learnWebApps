@@ -189,3 +189,14 @@ exports.insertProblemForUser = async function (moodleId, lessonId, problem) {
         })
     return result
 }
+exports.deleteSolvedByMoodleId = async function (moodleId) {
+    let result = []
+    let query = 'DELETE from "solvedLessons" WHERE moodleId=$1';
+    result = await pool.query(query, [moodleId])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}

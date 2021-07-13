@@ -93,6 +93,16 @@ exports.saveSolvedLesson = async function (req, res, next) {
         res.status(400).send({message: "missing field in body"})
     }
 }
+exports.deleteSolvedLessons = async function (req, res, next) {
+    let moodleId = parseInt(req.body.moodleId)
+    let moodleName = req.body.moodleName
+    let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+    if (user.length !== 0) {
+        userRepository.deleteSolvedByMoodleId(moodleId)
+    }
+    res.status(204).send({message: "deleted"})
+}
+
 exports.testCodingLesson = async function (req, res, next) {
     let moodleId = parseInt(req.body.moodleId)
     let moodleName = req.body.moodleName
