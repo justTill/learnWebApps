@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="title lessonTitle">{{ this.lesson.lessonName }} <span class="doneIcon"
-                                                                      v-if="lesson.done && lesson.type !== 'information'">&#10003;</span>
+    <div class="lessonTitle">{{ this.lesson.lessonName }} <span class="doneIcon"
+                                                                v-if="lesson.done && lesson.type !== 'information'">&#10003;</span>
     </div>
     <div class="lessonInformation">
       {{ lessonPreview }}
@@ -35,12 +35,13 @@ export default {
 }
 </script>
 <style>
-
 .lessonTitle {
   text-align: center;
   font-size: large;
   font-weight: bold;
   padding: 2px;
+  margin: 10px;
+
 }
 
 .lessonInformation {

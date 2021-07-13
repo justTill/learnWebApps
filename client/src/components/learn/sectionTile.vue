@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="title sectionTitle">{{ this.section.sectionName }}</div>
+    <div class="sectionTitle">{{ this.section.sectionName }}</div>
     <div class="sectionInformation">
       {{ sectionPreview }}
     </div>
@@ -55,6 +55,7 @@ export default {
   font-size: large;
   font-weight: bold;
   padding: 2px;
+  margin: 10px;
 }
 
 .percentageBar {
