@@ -94,8 +94,9 @@ exports.saveSolvedLesson = async function (req, res, next) {
     }
 }
 exports.deleteSolvedLessons = async function (req, res, next) {
-    let moodleId = parseInt(req.body.moodleId)
-    let moodleName = req.body.moodleName
+    let moodleId = parseInt(req.params.moodleId)
+    let moodleName = req.params.moodleName
+    console.log(moodleId, moodleName)
     let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
     if (user.length !== 0) {
         userRepository.deleteSolvedByMoodleId(moodleId)

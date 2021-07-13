@@ -56,7 +56,7 @@ export default {
     solvedLesson(lessonId, isSolved) {
       this.lessonSolvedHandler(lessonId, isSolved)
       if (isSolved) {
-        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1//lessons/lesson/solved", {
+        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved", {
           lessonId: lessonId,
           moodleId: this.user.userId,
           moodleName: this.user.userName

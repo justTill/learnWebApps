@@ -44,6 +44,7 @@
     </lesson-view>
     <div v-else class="chapterContent">
       <h1> Default Informationen</h1>
+      <button v-on:click="resetLessonsSolved">Reset Aufgaben</button>
     </div>
   </div>
 </template>
@@ -54,6 +55,7 @@ import ChapterOverview from "@/components/learn/chapterOverview";
 import SectionOverview from "@/components/learn/sectionOverview";
 import NavButton from "@/components/utils/navButton";
 import LessonView from "@/components/learn/lessonView";
+import {backEndHost, backEndPort} from "@/envVariables";
 
 export default {
   name: 'learn',
@@ -69,7 +71,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'chapters'
+      'chapters',
+      'user'
     ])
   },
   methods: {
@@ -133,6 +136,17 @@ export default {
       }
       console.log(payload)
       this.$store.commit('updateLessonDone', payload)
+    },
+    resetLessonsSolved() {
+      this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/" + this.user.userId + "/" + this.user.userName)
+          .then(response =>
+              this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")
+                  .then(result => {
+                    this.$store.commit("setChapters", result.data.chapters)
+                  })
+                  .catch(err => console.log(err)))
+          .catch(err => console.log(err))
+
     }
   }
 }
