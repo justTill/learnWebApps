@@ -1,8 +1,21 @@
 <template>
   <div class="title">
     <h1> {{ title }}
-      <span class="doneIcon" v-if="lesson && lesson.type !== 'information'">&#10003;</span>
+      <span class="doneIcon" v-if="lesson && lesson.type !== 'information' && lesson.done">&#10003;</span>
     </h1>
+    <div title="Kapitel zurücksetzen" v-if="resetChapter" class="resetButton">
+      <div title="Kapitel zurücksetzen" class="reset" v-on:click="openResetModal" v-b-modal.modal-center
+           variant="info">
+        <img title="Kapitel zurücksetzen" alt="Kapitel zurücksetzen" class="resetIcon" src="../../assets/reset.png">
+        <b-modal ref="reset-modal" id="modal-center-reset" centered title="Kapitel zurücksetzen" ok-only
+                 ok-variant="danger"
+                 ok-title="Zurücksetzen"
+                 @ok="resetChapter"
+                 hide-header-close>
+          <div class="resetText">Kapitel Fortschritt zurücksetzen ?</div>
+        </b-modal>
+      </div>
+    </div>
     <div v-if="lesson && !user.isDefault" class="helperButtons">
       <div title="Hilfe" class="helpButton" v-on:click="openHelpModal" v-b-modal.modal-center
            variant="info">
@@ -13,7 +26,7 @@
         </b-modal>
       </div>
       <div title="Meldung" class="reportButton" v-on:click="openReportModal">
-        <img title="Problem Melden" alt="Hilfe" class="helpIcon" src="../../assets/error.png">
+        <img title="Problem Melden" alt="Hilfe" class="reportIcon" src="../../assets/error.png">
         <b-modal ref="report-modal" id="modal-center-report" centered title="Problem Melden" hide-header-close
                  ok-variant="success"
                  ok-title="Problem melden"
@@ -36,7 +49,8 @@ export default {
   props: {
     title: String,
     lesson: Object,
-    helpText: String
+    helpText: String,
+    resetChapter: Function
   },
   data: function () {
     return {
@@ -50,6 +64,9 @@ export default {
   methods: {
     openHelpModal() {
       this.$refs['help-modal'].show()
+    },
+    openResetModal() {
+      this.$refs['reset-modal'].show()
     },
     openReportModal() {
       this.$refs['report-modal'].show()
@@ -81,6 +98,7 @@ export default {
 
 .title > h1 {
   display: inline-block;
+  padding: 18px;
 }
 
 .title {
@@ -93,7 +111,7 @@ export default {
   border-bottom: 1px solid black;
 }
 
-.helperButtons {
+.helperButtons, .resetButton {
   position: absolute;
   right: 30px;
   height: 80px;
@@ -110,14 +128,21 @@ export default {
   margin: 20px;
 }
 
-.helpIcon {
+.helpIcon, .resetIcon, .reportIcon {
   width: 30px;
   height: 30px;
   margin-left: 3px;
 }
 
-.helperButtons:hover {
+.helperButtons:hover, .resetButton:hover {
   cursor: pointer;
+}
+
+.resetText {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+  text-align: center;
 }
 
 .problemArea {

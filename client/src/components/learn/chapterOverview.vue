@@ -1,6 +1,6 @@
 <template>
   <div class="chapterOverviewContainer">
-    <title-header :title="chapter.chapterName" :lesson="null">
+    <title-header :title="chapter.chapterName" :lesson="null" :resetChapter="resetChapter">
     </title-header>
     <div class="textContainer">
       <div class="overviewText" v-html="chapter.overview">
@@ -25,7 +25,8 @@ export default {
   name: 'chapterOverview',
   props: {
     chapter: Object,
-    goToSection: Function
+    goToSection: Function,
+    resetChapter: Function
   },
   components: {TitleHeader, SectionTile},
   computed: {},

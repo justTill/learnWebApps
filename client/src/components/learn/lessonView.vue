@@ -59,7 +59,10 @@ export default {
           lessonId: lessonId,
           moodleId: this.user.userId,
           moodleName: this.user.userName
-        }).then(response => console.log(response)).catch(err => console.log(err))
+        }).then(response => {
+
+        }).catch(err => {
+        })
       }
     }
   }

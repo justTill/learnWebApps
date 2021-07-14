@@ -25,7 +25,8 @@
     <chapter-overview class="chapterContent"
                       v-if="selectedChapter && !selectedSection && !selectedLesson"
                       :chapter="selectedChapter"
-                      :go-to-section="goToSection">
+                      :go-to-section="goToSection"
+                      :resetChapter="resetChapterLessons">
     </chapter-overview>
 
     <section-overview class="chapterContent"
@@ -39,7 +40,7 @@
                  :previousLesson="previousLesson"
                  :nextLesson="nextLesson"
                  :goToLesson="goToLesson"
-                 :lessonSolvedHandler="lessonSolvedHandler">
+                 :lessonSolvedHandler="lessonSolvedHandlerForCurrentChapter">
 
     </lesson-view>
     <div v-else class="chapterContent">
@@ -118,35 +119,71 @@ export default {
       this.previousLesson = this.selectedSection.lessons[currentLessonIndex - 1]
       this.selectedLesson = updatedLesson
     },
-    lessonSolvedHandler(lessonId, solved) {
+    lessonSolvedHandlerForCurrentChapter(lessonId, solved) {
       let chapters = this.chapters
       let chapterIndex = chapters.indexOf(this.selectedChapter)
       let sectionIndex = chapters[chapterIndex].sections.indexOf(this.selectedSection)
-      let lessonIndex = -1
       for (let i = 0; i < chapters[chapterIndex].sections[sectionIndex].lessons.length; i++) {
-        if (chapters[chapterIndex].sections[sectionIndex].lessons[i].lessonId === lessonId) {
-          lessonIndex = i;
+        if (lessonId) {
+          if (chapters[chapterIndex].sections[sectionIndex].lessons[i].lessonId === lessonId) {
+            let payload = {
+              lessonIndex: i,
+              chapterIndex: chapterIndex,
+              sectionIndex: sectionIndex,
+              solved: solved
+            }
+            this.$store.commit('updateLessonDone', payload)
+          }
+        } else {
+          let payload = {
+            lessonIndex: i,
+            chapterIndex: chapterIndex,
+            sectionIndex: sectionIndex,
+            solved: solved
+          }
+          this.$store.commit('updateLessonDone', payload)
         }
       }
-      let payload = {
-        lessonIndex: lessonIndex,
-        chapterIndex: chapterIndex,
-        sectionIndex: sectionIndex,
-        solved: solved
-      }
-      console.log(payload)
-      this.$store.commit('updateLessonDone', payload)
     },
     resetLessonsSolved() {
-      this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/" + this.user.userId + "/" + this.user.userName)
-          .then(response =>
+      if (this.user.isDefault) {
+        for (let c = 0; c < this.chapters.length; c++) {
+          for (let s = 0; s < this.chapters[c].sections.length; s++) {
+            for (let l = 0; l < this.chapters[c].sections[s].lessons.length; l++) {
+              this.$store.commit('updateLessonDone', {
+                lessonIndex: l,
+                chapterIndex: c,
+                sectionIndex: s,
+                solved: false
+              })
+            }
+          }
+        }
+      } else {
+        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/" + this.user.userId + "/" + this.user.userName)
+            .then(response =>
+                this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")
+                    .then(result => {
+                      this.$store.commit("setChapters", result.data.chapters)
+                    })
+                    .catch(err => console.log(err)))
+            .catch(err => console.log(err))
+      }
+    },
+    resetChapterLessons() {
+      if (this.user.isDefault) {
+        this.lessonSolvedHandlerForCurrentChapter(null, false)
+      } else {
+        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/" + this.selectedChapter.chapterId + "/" + this.user.userId + "/" + this.user.userName)
+            .then(response => {
               this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")
                   .then(result => {
+                    this.selectedChapter = result.data.chapters.find(c => c.chapterId === this.selectedChapter.chapterId)
                     this.$store.commit("setChapters", result.data.chapters)
                   })
-                  .catch(err => console.log(err)))
-          .catch(err => console.log(err))
-
+                  .catch(err => console.log(err))
+            }).catch(err => console.log(err))
+      }
     }
   }
 }

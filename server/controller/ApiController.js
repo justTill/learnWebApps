@@ -96,13 +96,24 @@ exports.saveSolvedLesson = async function (req, res, next) {
 exports.deleteSolvedLessons = async function (req, res, next) {
     let moodleId = parseInt(req.params.moodleId)
     let moodleName = req.params.moodleName
-    console.log(moodleId, moodleName)
     let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
     if (user.length !== 0) {
-        userRepository.deleteSolvedByMoodleId(moodleId)
-            .then(result => res.status(204).send({message: "deleted"})
-            )
-            .catch(err => console.log(err))
+        if (!req.params.chapterId) {
+            userRepository.deleteSolvedByMoodleId(moodleId)
+                .then(result => res.status(204).send({message: "deleted"})
+                )
+                .catch(err =>
+                    res.status(500).send({message: "Please try again later"})
+                )
+        } else {
+            console.log(req.params.chapterId, moodleId)
+            userRepository.deleteSolvedByMoodleIdAndChapterId(moodleId, req.params.chapterId)
+                .then(result => res.status(204).send({message: "deleted"})
+                )
+                .catch(err =>
+                    res.status(500).send({message: "Please try again later"})
+                )
+        }
     } else {
         res.status(204).send({message: "no User"})
     }

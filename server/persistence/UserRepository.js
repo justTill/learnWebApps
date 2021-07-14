@@ -200,3 +200,14 @@ exports.deleteSolvedByMoodleId = async function (moodleId) {
         })
     return result
 }
+exports.deleteSolvedByMoodleIdAndChapterId = async function (moodleId, chapterId) {
+    let result = []
+    let query = 'delete from "solvedLessons" sl using chapters c, sections s, lessons l where sl.lessonid = l.id and l.sectionId = s.id and c.id = s.chapterid and sl.moodleid= $1 and c.id = $2';
+    result = await pool.query(query, [moodleId, chapterId])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}

@@ -9,6 +9,7 @@ router.post('/codingLessons/check/', asyncMiddleware(apiController.testCodingLes
 router.post('/lessons/lesson/solved', asyncMiddleware(apiController.saveSolvedLesson))
 
 router.delete('/lessons/lesson/solved/:moodleId/:moodleName', asyncMiddleware(apiController.deleteSolvedLessons))
+router.delete('/lessons/lesson/solved/:chapterId/:moodleId/:moodleName', asyncMiddleware(apiController.deleteSolvedLessons))
 
 router.get('/users/problems/:moodleId/:moodleName', asyncMiddleware(apiController.getProblemsWithAnswers));
 router.post('/users/problems/', asyncMiddleware(apiController.saveProblem));
