@@ -2,9 +2,8 @@
   <div class="singleMultipleChoiceLessonContainer">
     <div class="answerOptions" v-for="(option, index) in lesson.answerOptions">
       <input type="checkbox" :id="'option-'+index" :ref="'option-'+index" :value="option.possibleAnswer"
-             v-model="checkedAnswers"
-             :checked="lesson.done && option.isCorrect">
-      <label :for="'option-'+index" v-html="option.possibleAnswer"></label>
+             v-model="checkedAnswers">
+      <label :for="'option-'+index" v-html="option.possibleAnswer +  lesson.done && option.isCorrect" checked></label>
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
     <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
@@ -20,12 +19,25 @@ export default {
   },
   data: function () {
     return {
-      checkedAnswers: [],
+      checkedAnswers: this.fillCheckAnswersIfIsDone(),
       errorMessage: "",
       successMessage: "",
     }
   },
   methods: {
+    fillCheckAnswersIfIsDone() {
+      let answers = []
+      if (this.lesson.done) {
+        for (let option of this.lesson.answerOptions) {
+          if (option.isCorrect) {
+            answers.push(option.possibleAnswer)
+          }
+        }
+        return answers
+      } else {
+        return []
+      }
+    },
     evaluate() {
       let isCorrect = true;
       let correctAnswers = []
