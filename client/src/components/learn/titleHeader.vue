@@ -3,32 +3,73 @@
     <h1> {{ title }}
       <span class="doneIcon" v-if="lesson && lesson.type !== 'information'">&#10003;</span>
     </h1>
-    <div v-if="lesson" class="helperButtons">
-      <div class="helpButton" v-on:click="help">Help</div>
-      <div class="reportButton" v-on:click="report"> Report</div>
-      <div>
-        <b-button v-b-modal.modal-1>Launch demo modal</b-button>
-
-        <b-modal id="modal-1" title="BootstrapVue">
-          <p class="my-4">Hello from modal!</p>
+    <div v-if="lesson && !user.isDefault" class="helperButtons">
+      <div title="Hilfe" class="helpButton" v-on:click="openHelpModal" v-b-modal.modal-center
+           variant="info">
+        <img title="Hilfe" alt="Hilfe" class="helpIcon" src="../../assets/question.png">
+        <b-modal ref="help-modal" id="modal-center-help" centered title="Hilfe" ok-only ok-variant="success"
+                 hide-header-close>
+          <p class="my-4">{{ helpText }}</p>
+        </b-modal>
+      </div>
+      <div title="Meldung" class="reportButton" v-on:click="openReportModal">
+        <img title="Problem Melden" alt="Hilfe" class="helpIcon" src="../../assets/error.png">
+        <b-modal ref="report-modal" id="modal-center-report" centered title="Problem Melden" hide-header-close
+                 ok-variant="success"
+                 ok-title="Problem melden"
+                 @ok="sendProblem"
+                 cancel-title="Abbruch" cancel-variant="danger">
+            <textarea class="problemArea" v-model="problem"
+                      placeholder="Bitte beschreiben Sie das Problem für der Aktuellen Aufgabe">
+            </textarea>
         </b-modal>
       </div>
     </div>
   </div>
 </template>
 <script>
+import {backEndHost, backEndPort} from '@/envVariables'
+import {mapGetters} from "vuex";
+
 export default {
   name: 'titleHeader',
   props: {
     title: String,
-    lesson: Object
+    lesson: Object,
+    helpText: String
+  },
+  data: function () {
+    return {
+      problem: "",
+    }
+  }, computed: {
+    ...mapGetters([
+      'user'
+    ]),
   },
   methods: {
-    help() {
-      console.log('help')
+    openHelpModal() {
+      this.$refs['help-modal'].show()
     },
-    report() {
-      console.log('report')
+    openReportModal() {
+      this.$refs['report-modal'].show()
+    },
+    sendProblem() {
+      if (this.problem !== "") {
+        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/", {
+          moodleId: this.user.userId,
+          moodleName: this.user.userName,
+          problem: this.problem
+        }).then(response => {
+          this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + userId + "/" + userName)
+              .then(result => {
+                this.$store.commit("setProblems", result.data.problems)
+              })
+              .catch(err => console.log(err))
+        }).catch(err => {
+          console.log(err)
+        })
+      }
     }
   }
 }
@@ -66,11 +107,24 @@ export default {
   height: 80px;
   align-items: center;
   display: inline-flex;
-  margin: 10px;
+  margin: 20px;
+}
+
+.helpIcon {
+  width: 30px;
+  height: 30px;
+  margin-left: 3px;
 }
 
 .helperButtons:hover {
   cursor: pointer;
 }
 
+.problemArea {
+  width: 300px;
+  height: 200px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 </style>

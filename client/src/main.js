@@ -44,10 +44,8 @@ function getNotes(userId, userName) {
 function getProblems(userId, userName) {
   this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + userId + "/" + userName)
       .then(result => {
-        if (result.status === 200) {
           console.log(result.data.problems)
           this.$store.commit("setProblems", result.data.problems)
-        }
       })
       .catch(err => console.log(err))
 }

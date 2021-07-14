@@ -28,7 +28,7 @@ import CodingLesson from "@/components/learn/lessonTypeViews/codingLesson";
 import SingleMultipleChoiceLesson from "@/components/learn/lessonTypeViews/singleMultipleChoiceLesson";
 import CodeExtensionLesson from "@/components/learn/lessonTypeViews/codeExtensionLesson";
 import FillTheBlankLesson from "@/components/learn/lessonTypeViews/fillTheBlankLesson";
-import {backEndHost, backEndPort} from '../../envVariables'
+import {backEndHost, backEndPort} from '@/envVariables'
 import {mapGetters} from "vuex";
 import TitleHeader from "@/components/learn/titleHeader";
 
