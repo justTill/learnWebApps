@@ -10,6 +10,8 @@
                                        :solvedHandler="solvedLesson"></single-multiple-choice-lesson>
         <code-extension-lesson v-if="lesson.type==='codeExtensionLesson'" :lesson="lesson"
                                :solvedHandler="solvedLesson"></code-extension-lesson>
+      <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'" :lesson="lesson"
+                             :solvedHandler="solvedLesson"></fill-the-blank-lesson>
         <div class="lessonButtons">
           <div class="prevButton" v-if="previousLesson" v-on:click="goToLesson(previousLesson)"> &#8592; Vorherige
             Lerneinheit
@@ -19,7 +21,6 @@
         </div>
       </div>
       <coding-lesson v-if="lesson.type==='codingLesson'" :lesson="lesson"></coding-lesson>
-      <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'" :lesson="lesson"></fill-the-blank-lesson>
     </div>
   </div>
 </template>

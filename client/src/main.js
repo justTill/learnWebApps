@@ -8,13 +8,11 @@ import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
 import {backEndHost, backEndPort} from './envVariables'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import RuntimeTemplateCompiler from "vue-runtime-template-compiler"
 
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.config.productionTip = false
-Vue.use(RuntimeTemplateCompiler)
 
 function getChapters() {
     this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")

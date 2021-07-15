@@ -270,8 +270,8 @@ export default {
     font-size: 20px;
     float: right;
     margin: 20px;
-    width: 25px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     border: 2px solid white;
   }
 
