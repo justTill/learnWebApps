@@ -4,7 +4,7 @@
     </title-header>
     <div class="lessonTextContainer">
       <div class="lessonText">
-        <div v-html="lessonText"></div>
+        <div v-html="sanitizedLessonText"></div>
         <single-multiple-choice-lesson v-if="lesson.type==='singleMultipleChoiceLesson'"
                                        :lesson="lesson"
                                        :solvedHandler="solvedLesson"></single-multiple-choice-lesson>
@@ -32,6 +32,7 @@ import FillTheBlankLesson from "@/components/learn/lessonTypeViews/fillTheBlankL
 import {backEndHost, backEndPort} from '@/envVariables'
 import {mapGetters} from "vuex";
 import TitleHeader from "@/components/learn/titleHeader";
+import DOMPurify from "dompurify";
 
 export default {
   name: 'lessonView',
@@ -44,9 +45,8 @@ export default {
     lessonSolvedHandler: Function,
   },
   computed: {
-    lessonText: function () {
-      let information = this.lesson.information
-      return information;
+    sanitizedLessonText: function () {
+      return DOMPurify.sanitize(this.lesson.information);
     },
     ...mapGetters([
       'user'

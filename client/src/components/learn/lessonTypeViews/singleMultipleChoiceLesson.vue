@@ -1,9 +1,10 @@
 <template>
   <div class="singleMultipleChoiceLessonContainer">
     <div class="answerOptions" v-for="(option, index) in lesson.answerOptions">
-      <input type="checkbox" :id="'option-'+index" :ref="'option-'+index" :value="option.possibleAnswer"
+      <input type="checkbox" :id="'option-'+index" :ref="'option-'+index"
+             :value="sanitizedAnswers(option.possibleAnswer)"
              v-model="checkedAnswers">
-      <label :for="'option-'+index" v-html="option.possibleAnswer +  lesson.done && option.isCorrect" checked></label>
+      <label :for="'option-'+index" v-html="sanitizedAnswers(option.possibleAnswer)"></label>
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
     <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
@@ -11,6 +12,8 @@
   </div>
 </template>
 <script>
+import DOMPurify from "dompurify";
+
 export default {
   name: 'singleMultipleChoiceLesson',
   props: {
@@ -25,6 +28,9 @@ export default {
     }
   },
   methods: {
+    sanitizedAnswers(answer) {
+      return DOMPurify.sanitize(answer)
+    },
     fillCheckAnswersIfIsDone() {
       let answers = []
       if (this.lesson.done) {

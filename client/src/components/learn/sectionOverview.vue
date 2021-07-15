@@ -3,7 +3,7 @@
     <title-header :title="section.sectionName" :lesson="null">
     </title-header>
     <div class="textContainer">
-      <div class="overviewText" v-html="section.information">
+      <div class="overviewText" v-html="sanitizedSectionInformation">
       </div>
     </div>
     <div class="lessons">
@@ -21,6 +21,7 @@
 
 import LessonTile from "@/components/learn/lessonTile";
 import TitleHeader from "@/components/learn/titleHeader";
+import DOMPurify from "dompurify";
 
 export default {
   name: 'sectionOverview',
@@ -29,7 +30,11 @@ export default {
     gotToLesson: Function
   },
   components: {TitleHeader, LessonTile},
-  computed: {},
+  computed: {
+    sanitizedSectionInformation() {
+      return DOMPurify.sanitize(this.section.information)
+    }
+  },
   methods: {}
 }
 </script>

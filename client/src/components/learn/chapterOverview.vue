@@ -4,7 +4,7 @@
                   :resetChapter="resetChapter">
     </title-header>
     <div class="textContainer">
-      <div class="overviewText" v-html="chapter.overview">
+      <div class="overviewText" v-html="sanitizedChapterOverview">
       </div>
     </div>
     <div class="sections">
@@ -21,6 +21,7 @@
 
 import SectionTile from "@/components/learn/sectionTile";
 import TitleHeader from "@/components/learn/titleHeader";
+import DOMPurify from "dompurify";
 
 export default {
   name: 'chapterOverview',
@@ -30,7 +31,11 @@ export default {
     resetChapter: Function
   },
   components: {TitleHeader, SectionTile},
-  computed: {},
+  computed: {
+    sanitizedChapterOverview() {
+      return DOMPurify.sanitize(this.chapter.overview)
+    }
+  },
   methods: {},
 }
 </script>

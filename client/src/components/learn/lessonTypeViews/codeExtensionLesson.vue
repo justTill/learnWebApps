@@ -2,7 +2,7 @@
   <div class="codeExtensionLessonContainer">
     <div class="codeExtensionText">
       <pre>
-        <code v-html="preparedUnfinishedCode">
+        <code v-html="preparedSanitizedUnfinishedCode">
         </code>
       </pre>
     </div>
@@ -30,7 +30,7 @@ export default {
     }
   },
   computed: {
-    preparedUnfinishedCode() {
+    preparedSanitizedUnfinishedCode() {
       let code = '\n' + this.lesson.unfinishedCode
       if (this.lesson.done || this.inputs.length !== 0) {
         let counter = 0;
