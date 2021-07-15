@@ -44,8 +44,8 @@
 
     </lesson-view>
     <div v-else class="chapterContent">
-      <h1> Default Informationen</h1>
-      <button v-on:click="resetLessonsSolved">Reset Aufgaben</button>
+      <title-header title="Informationen" :reset-chapter="resetLessonsSolved"
+                    resetText="Alle Fortschritt zurücksetzen ?"></title-header>
     </div>
   </div>
 </template>
@@ -57,10 +57,11 @@ import SectionOverview from "@/components/learn/sectionOverview";
 import NavButton from "@/components/utils/navButton";
 import LessonView from "@/components/learn/lessonView";
 import {backEndHost, backEndPort} from "@/envVariables";
+import TitleHeader from "@/components/learn/titleHeader";
 
 export default {
   name: 'learn',
-  components: {LessonView, ChapterOverview, SectionOverview, NavButton},
+  components: {TitleHeader, LessonView, ChapterOverview, SectionOverview, NavButton},
   data: function () {
     return {
       selectedChapter: null,

@@ -1,6 +1,7 @@
 <template>
   <div class="chapterOverviewContainer">
-    <title-header :title="chapter.chapterName" :lesson="null" :resetChapter="resetChapter">
+    <title-header :title="chapter.chapterName" :lesson="null" resetText="Fortschritt dieses Kapitel zurücksetzen ?"
+                  :resetChapter="resetChapter">
     </title-header>
     <div class="textContainer">
       <div class="overviewText" v-html="chapter.overview">

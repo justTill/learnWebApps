@@ -12,7 +12,7 @@
                  ok-title="Zurücksetzen"
                  @ok="resetChapter"
                  hide-header-close>
-          <div class="resetText">Kapitel Fortschritt zurücksetzen ?</div>
+          <div class="resetText">{{ resetText }}</div>
         </b-modal>
       </div>
     </div>
@@ -50,6 +50,7 @@ export default {
     title: String,
     lesson: Object,
     helpText: String,
+    resetText: String,
     resetChapter: Function
   },
   data: function () {
