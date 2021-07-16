@@ -23,7 +23,6 @@ export default {
   },
   data: function () {
     return {
-      parentComponent: this,
       errorMessage: "",
       successMessage: "",
       inputs: [],
