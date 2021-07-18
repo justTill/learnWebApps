@@ -6,11 +6,15 @@
       <div v-if="index+1 !== preparedFillTheBlankTest.length" class="dropzone" :id="'drop-'+index"
            @drop="onDrop($event, index)" @dragenter.prevent
            @dragover.prevent>
+        <div v-if="userAnswer.length !== 0 && userAnswer[index]" :id="'option-'+userAnswer[index].index"
+             @dragstart="startDrag($event)" draggable="true" class="possibleAnswers drag">
+          {{ userAnswer[index].answer }}
+        </div>
       </div>
     </div>
     <div class="initialDropZone" id="initialDropZone" @drop="onDrop($event, -1)" @dragenter.prevent
          @dragover.prevent>
-      <div class="possibleAnswers drag" v-for="option in prepareAnswerList" :id="'option-'+option.index"
+      <div class="possibleAnswers drag" v-for="option in answerOptions" :id="'option-'+option.index"
            @dragstart="startDrag($event)" draggable="true">
         {{ option.answer }}
       </div>
@@ -33,10 +37,44 @@ export default {
     return {
       errorMessage: "",
       successMessage: "",
-      userHasSolvedLessonBefore: false,
+      userAnswer: this.getUserAnswers(),
+      answerOptions: this.getAnswersOptions()
     }
   },
   methods: {
+    getUserAnswers() {
+      let answers = [];
+      if (this.lesson.done) {
+        this.lesson.answerOptions.forEach((option, index) => {
+          if (option.isCorrect) {
+            answers.push({
+              answer: option.possibleAnswer,
+              index: index,
+            })
+          }
+        })
+      }
+      return answers;
+    },
+    getAnswersOptions() {
+      let answerOptions = []
+      this.lesson.answerOptions.forEach((option, index) => {
+        if (this.lesson.done) {
+          if (!option.isCorrect) {
+            answerOptions.push({
+              answer: option.possibleAnswer,
+              index: index,
+            })
+          }
+        } else {
+          answerOptions.push({
+            answer: option.possibleAnswer,
+            index: index,
+          })
+        }
+      })
+      return answerOptions
+    },
     onDrop(event, dropzoneId) {
       if (dropzoneId !== -1) {
         let updatedAnswer = this.$el.querySelector("#" + event.dataTransfer.getData("Text"))
@@ -65,13 +103,15 @@ export default {
       let rightAnswers = this.lesson.answerOptions.filter(o => o.isCorrect)
       for (let i = 0; i < rightAnswers.length; i++) {
         let dropZone = this.$el.querySelector("#drop-" + i)
-        if (dropZone.hasChildNodes()) {
+        let indexOfNonCommentChildNodes = this.hasChildrenAndNonCommentOnes(dropZone)
+        if (indexOfNonCommentChildNodes !== -1) {
           let answerStr = rightAnswers[i].possibleAnswer.replaceAll(" ", "")
-          let dropzoneStr = dropZone.childNodes[0].innerText.replaceAll(" ", "")
+          let dropzoneStr = dropZone.childNodes[indexOfNonCommentChildNodes].innerText.replaceAll(" ", "")
           if (dropzoneStr !== answerStr) {
             isCorrect = false
             dropZone.style.backgroundColor = "rgba(255, 0, 0, 0.1)";
           } else {
+            console.log("dropzoneId " + i + " set Color Green")
             dropZone.style.backgroundColor = "rgba(0, 255, 0, 0.3)";
           }
         } else {
@@ -88,28 +128,22 @@ export default {
       }
       this.solvedHandler(this.lesson.lessonId, isCorrect)
     },
-    pseudoShuffle(array) {
-      return array.sort(() => Math.random() - 0.5);
+    hasChildrenAndNonCommentOnes(zone) {
+      let index = -1
+      if (zone.hasChildNodes()) {
+        zone.childNodes.forEach((el, i) => {
+          if (el.nodeName !== '#comment') {
+            index = i
+          }
+        })
+      }
+      return index
     }
   },
   computed: {
     preparedFillTheBlankTest() {
       let textWithBlanksText = DOMPurify.sanitize(this.lesson.textWithBlanks)
       return textWithBlanksText.split("[input]")
-    },
-    prepareAnswerList() {
-      let answerList = []
-      this.lesson.answerOptions.forEach((a, i) => {
-        answerList.push({
-          answer: a.possibleAnswer,
-          index: i
-        })
-      })
-      if (this.lesson.done) {
-        this.userHasSolvedLessonBefore = true
-        //return only false answers
-      }
-      return this.pseudoShuffle(answerList)
     },
   },
 }

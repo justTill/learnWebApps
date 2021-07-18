@@ -44,7 +44,7 @@ exports.getProblemsWithAnswers = async function (req, res, next) {
         let problemsWithAnswers = await userRepository.findProblemsAndAnswersByUser(moodleId, moodleName)
         data.problems = mapToOutputProblem(problemsWithAnswers)
     }
-    res.send(data, 200)
+    res.send(data)
 }
 exports.getChapterDataWithSectionsAndLessonsForUser = async function (req, res, next) {
     let data = {chapters: []}
@@ -137,7 +137,7 @@ exports.testCodingLesson = async function (req, res, next) {
                                 }
                             })
                     }
-                    res.send(testResult, 200)
+                    res.send(testResult)
                 })
                 .catch(err => {
                     res.status(500).send({message: "unknown error please try again later"})
@@ -158,7 +158,7 @@ exports.saveNotes = async function (req, res, next) {
             .then(result => {
                 if (result.length !== 0) {
                     userRepository.insertNotesForUser(moodleId).then(result => {
-                        res.send({}, 201)
+                        res.status(201).send({})
                     })
                 } else {
                     res.status(400).send({message: "could not found user try again later"})
@@ -176,9 +176,9 @@ exports.getNotes = async function (req, res, next) {
     let moodleName = req.params.moodleName
     if (moodleId !== -1 && moodleName !== "default") {
         let notes = await userRepository.findNotesByUser(moodleId, moodleName)
-        res.send({notes: mapToOutputNotes(notes)}, 200)
+        res.status(200).send({notes: mapToOutputNotes(notes)})
     } else {
-        res.send({}, 400)
+        res.status(400).send({})
     }
 }
 exports.saveProblem = async function (req, res, next) {
@@ -363,7 +363,11 @@ function mapMarkedAnswers(answers) {
             })
         }
     }
-    return mappedAnswers
+    return pseudoShuffle(mappedAnswers)
+}
+
+function pseudoShuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
 }
 
 function mapToOutputProblem(problemsWithAnswers) {

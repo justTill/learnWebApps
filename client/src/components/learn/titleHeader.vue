@@ -77,10 +77,12 @@ export default {
         this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/", {
           moodleId: this.user.userId,
           moodleName: this.user.userName,
-          problem: this.problem
+          problem: this.problem,
+          lessonId: this.lesson.lessonId
         }).then(response => {
-          this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + userId + "/" + userName)
+          this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + this.user.userId + "/" + this.user.userName)
               .then(result => {
+                this.problem = ""
                 this.$store.commit("setProblems", result.data.problems)
               })
               .catch(err => console.log(err))
