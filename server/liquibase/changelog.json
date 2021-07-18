@@ -734,6 +734,13 @@
                 }
               ]
             }
+          },
+          {
+            "addUniqueConstraint": {
+              "columnNames": "moodleid, lessonid",
+              "constraintName": "solvedlessons_un",
+              "tableName": "solvedLessons"
+            }
           }
         ]
       }

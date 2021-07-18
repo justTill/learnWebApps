@@ -167,9 +167,9 @@ exports.findNotesByUser = async function (moodleId, moodlename) {
     return result
 }
 
-exports.insertSolvedLessonForUser = async function (lessonId, moodleId, userCode) {
+exports.insertOrUpdateSolvedLessonOnConflict = async function (lessonId, moodleId, userCode) {
     let result = []
-    let query = 'INSERT INTO "solvedLessons" (moodleid, lessonid, code) VALUES ($1, $2, $3)';
+    let query = 'INSERT INTO "solvedLessons" (moodleid, lessonid, code) VALUES ($1, $2, $3) ON CONFLICT ON CONSTRAINT "solvedlessons_un" DO update set code = $3 ';
     result = await pool.query(query, [moodleId, lessonId, userCode])
         .then(res => {
             return res.rows

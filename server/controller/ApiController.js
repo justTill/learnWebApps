@@ -80,7 +80,7 @@ exports.saveSolvedLesson = async function (req, res, next) {
     if (lessonId && moodleId && moodleName) {
         let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
         if (user.length !== 0) {
-            userRepository.insertSolvedLessonForUser(lessonId, moodleId, code ? code : null)
+            userRepository.insertOrUpdateSolvedLessonOnConflict(lessonId, moodleId, code ? code : null)
                 .then(result => {
                     res.status(201).send({message: "Saved"})
                 })
