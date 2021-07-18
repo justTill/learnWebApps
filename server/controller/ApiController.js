@@ -76,10 +76,11 @@ exports.saveSolvedLesson = async function (req, res, next) {
     let lessonId = parseInt(req.body.lessonId)
     let moodleId = parseInt(req.body.moodleId)
     let moodleName = req.body.moodleName
+    let code = req.body.userCode
     if (lessonId && moodleId && moodleName) {
         let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
         if (user.length !== 0) {
-            userRepository.insertSolvedLessonForUser(lessonId, moodleId, null)
+            userRepository.insertSolvedLessonForUser(lessonId, moodleId, code ? code : null)
                 .then(result => {
                     res.status(201).send({message: "Saved"})
                 })
@@ -106,7 +107,6 @@ exports.deleteSolvedLessons = async function (req, res, next) {
                     res.status(500).send({message: "Please try again later"})
                 )
         } else {
-            console.log(req.params.chapterId, moodleId)
             userRepository.deleteSolvedByMoodleIdAndChapterId(moodleId, req.params.chapterId)
                 .then(result => res.status(204).send({message: "deleted"})
                 )
@@ -129,14 +129,6 @@ exports.testCodingLesson = async function (req, res, next) {
         if (codingLesson) {
             await codeExecutionService.runTestForCodingLesson(codingLesson, code)
                 .then(testResult => {
-                    if (testResult.errors.length === 0 && moodleId && moodleName && moodleId !== -1 && moodleName !== "default") {
-                        userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
-                            .then(userResult => {
-                                if (userResult.length !== 0) {
-                                    userRepository.insertSolvedLessonForUser(lessonId, moodleId, code)
-                                }
-                            })
-                    }
                     res.send(testResult)
                 })
                 .catch(err => {

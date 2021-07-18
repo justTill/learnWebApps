@@ -68,7 +68,7 @@ export default {
         this.successMessage = ""
         this.errorMessage = "Die Antwort ist leider nicht korrekt"
       }
-      this.solvedHandler(this.lesson.lessonId, isCorrect)
+      this.solvedHandler(this.lesson.lessonId, isCorrect, null)
     }
   }
 }

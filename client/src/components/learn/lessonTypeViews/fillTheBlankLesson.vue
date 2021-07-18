@@ -126,7 +126,7 @@ export default {
         this.successMessage = ""
         this.errorMessage = "leider nicht ganz korrekt"
       }
-      this.solvedHandler(this.lesson.lessonId, isCorrect)
+      this.solvedHandler(this.lesson.lessonId, isCorrect, null)
     },
     hasChildrenAndNonCommentOnes(zone) {
       let index = -1

@@ -120,7 +120,7 @@ export default {
       this.previousLesson = this.selectedSection.lessons[currentLessonIndex - 1]
       this.selectedLesson = updatedLesson
     },
-    lessonSolvedHandlerForCurrentChapter(lessonId, solved) {
+    lessonSolvedHandlerForCurrentChapter(lessonId, solved, userCode) {
       let chapters = this.chapters
       let chapterIndex = chapters.indexOf(this.selectedChapter)
       let sectionIndex = chapters[chapterIndex].sections.indexOf(this.selectedSection)
@@ -131,7 +131,8 @@ export default {
               lessonIndex: i,
               chapterIndex: chapterIndex,
               sectionIndex: sectionIndex,
-              solved: solved
+              solved: solved,
+              userCode: userCode
             }
             this.$store.commit('updateLessonDone', payload)
           }

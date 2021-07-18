@@ -38,6 +38,11 @@ export const store = new Vuex.Store({
                 state.chapters[payload.chapterIndex]
                     .sections[payload.sectionIndex]
                     .lessons[payload.lessonIndex].done = payload.solved
+                if (payload.userCode) {
+                    state.chapters[payload.chapterIndex]
+                        .sections[payload.sectionIndex]
+                        .lessons[payload.lessonIndex].userCode = payload.userCode
+                }
             }
         }
     },

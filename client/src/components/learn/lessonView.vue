@@ -20,7 +20,7 @@
           </div>
         </div>
       </div>
-      <coding-lesson v-if="lesson.type==='codingLesson'" :lesson="lesson"></coding-lesson>
+      <coding-lesson v-if="lesson.type==='codingLesson'" :lesson="lesson" :solvedHandler="solvedLesson"></coding-lesson>
     </div>
   </div>
 </template>
@@ -54,13 +54,14 @@ export default {
     ]),
   },
   methods: {
-    solvedLesson(lessonId, isSolved) {
-      this.lessonSolvedHandler(lessonId, isSolved)
+    solvedLesson(lessonId, isSolved, userCode) {
+      this.lessonSolvedHandler(lessonId, isSolved, userCode)
       if (isSolved) {
         this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved", {
           lessonId: lessonId,
           moodleId: this.user.userId,
-          moodleName: this.user.userName
+          moodleName: this.user.userName,
+          userCode: userCode
         }).then(response => {
 
         }).catch(err => {

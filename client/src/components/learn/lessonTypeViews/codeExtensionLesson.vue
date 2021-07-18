@@ -75,7 +75,7 @@ export default {
         this.successMessage = ""
         this.errorMessage = "leider nicht ganz korrekt"
       }
-      this.solvedHandler(this.lesson.lessonId, allAnswersCorrect)
+      this.solvedHandler(this.lesson.lessonId, allAnswersCorrect, null)
     }
   }
 }
