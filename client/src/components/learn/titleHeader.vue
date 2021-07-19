@@ -18,11 +18,11 @@
     </div>
     <div v-if="lesson && !user.isDefault" class="helperButtons">
       <div title="Hilfe" class="helpButton" v-on:click="openHelpModal" v-b-modal.modal-center
-           variant="info">
+           variant="info" v-if="lesson.type !=='information'">
         <img title="Hilfe" alt="Hilfe" class="helpIcon" src="../../assets/question.png">
         <b-modal ref="help-modal" id="modal-center-help" centered title="Hilfe" ok-only ok-variant="success"
                  hide-header-close>
-          <p class="my-4">{{ helpText }}</p>
+          <help-content class="my-4" :lesson="lesson"></help-content>
         </b-modal>
       </div>
       <div title="Meldung" class="reportButton" v-on:click="openReportModal">
@@ -43,9 +43,11 @@
 <script>
 import {backEndHost, backEndPort} from '@/envVariables'
 import {mapGetters} from "vuex";
+import HelpContent from "@/components/learn/helpContent";
 
 export default {
   name: 'titleHeader',
+  components: {HelpContent},
   props: {
     title: String,
     lesson: Object,

@@ -11,7 +11,6 @@
     <div class="errorMessage" v-for="error in errorMessages" :key="error">
       {{ error }}
     </div>
-    {{ lesson }}
   </div>
 </template>
 <script>
