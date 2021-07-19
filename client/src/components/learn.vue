@@ -202,7 +202,7 @@ export default {
 .chapterNavigation {
   flex-basis: 250px;
   flex-shrink: 0;
-  height: 90%;
+  height: 100%;
   background-color: #1a152d;
   overflow: auto;
 }
