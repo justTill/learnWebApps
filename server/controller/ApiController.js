@@ -149,8 +149,8 @@ exports.saveNotes = async function (req, res, next) {
         userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
             .then(result => {
                 if (result.length !== 0) {
-                    userRepository.insertNotesForUser(moodleId).then(result => {
-                        res.status(201).send({})
+                    userRepository.insertNotesForUser(moodleId, note).then(result => {
+                        res.status(201).send({message: "success", id: result.rows[0].id})
                     })
                 } else {
                     res.status(400).send({message: "could not found user try again later"})

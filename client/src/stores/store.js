@@ -22,7 +22,7 @@ export const store = new Vuex.Store({
             state.notes = notes
         },
         setProblems(state, problems) {
-            state.notes = problems
+            state.problems = problems
         },
         setChapters(state, chapters) {
             state.chapters = chapters

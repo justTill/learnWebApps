@@ -145,7 +145,7 @@ exports.findProblemsAndAnswersByUser = async function (moodleId, moodleName) {
     return result
 }
 exports.insertNotesForUser = async function (moodleId, note) {
-    let query = 'INSERT INTO notes (moodleid, note) VALUES ($1, $2)';
+    let query = 'INSERT INTO notes (moodleid, note) VALUES ($1, $2) RETURNING id';
     let result = []
     result = await pool.query(query, [moodleId, note])
         .then(res => {

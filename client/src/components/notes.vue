@@ -1,5 +1,8 @@
 <template>
-  <h1>Notes</h1>
+  <div>
+    <h1>Notes</h1>
+    {{ notes }}
+  </div>
 </template>
 
 <script>

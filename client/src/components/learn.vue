@@ -1,5 +1,7 @@
 <template>
   <div class="content">
+    <div id="createNotes" class="createNotes" v-on:click="saveMarkedTextAsNotes"> Notiz erstellen</div>
+    <div id="notesSaved" class="noteSaved"> Notiz gespeichert &#10003;</div>
     <button class="min-nav-button" v-on:click="openOrCloseChapterNavigation" ref="navigationMenu"> Menu</button>
     <div class="chapterNavigation" ref="chapterNavigation">
       <div class="closeNavigationButton" v-on:click="openOrCloseChapterNavigation">&#10005;</div>
@@ -68,16 +70,59 @@ export default {
       selectedSection: null,
       selectedLesson: null,
       previousLesson: null,
-      nextLesson: null
+      nextLesson: null,
+      selectedText: ""
     }
   },
   computed: {
     ...mapGetters([
       'chapters',
-      'user'
+      'user',
+      'notes'
     ])
   },
+  mounted() {
+    document.addEventListener('mouseup', event => {
+      this.$el.querySelector('#createNotes').style.display = "none";
+      //check if in chapteroverview
+      //or sectionor lessonview
+      if (window.getSelection().toString() !== '' && this.$route.path.includes('learn')) {
+        let element = this.$el.querySelector('#createNotes')
+        element.style.display = "inline-block";
+        element.style.left = event.pageX + "px"
+        element.style.top = event.pageY - 100 + "px"
+        this.selectedText = window.getSelection().toString();
+      }
+    })
+  },
   methods: {
+    saveMarkedTextAsNotes() {
+      let note = {
+        notesId: -1,
+        note: this.selectedText
+      }
+      if (!this.user.isDefault) {
+        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/" + this.user.userId + "/" + this.user.userName, {note: this.selectedText})
+            .then(res => {
+              note.notesId = res.data.id
+              this.$store.commit('addNotes', note)
+            })
+            .catch(err => {
+              this.$store.commit('addNotes', note)
+            })
+      } else {
+        this.$store.commit('addNotes', note)
+      }
+      this.displayNotesSaved();
+      this.selectedText = "";
+    },
+    displayNotesSaved() {
+      let element = this.$el.querySelector('#notesSaved')
+      element.style.display = "block"
+      setTimeout(() => {
+        element.style.display = "none"
+      }, 5000)
+    },
     changeCurrentChapter(chapter) {
       this.selectedLesson = null
       this.selectedChapter = chapter
@@ -192,6 +237,35 @@ export default {
 </script>
 
 <style>
+.createNotes {
+  position: absolute;
+  z-index: 9999;
+  display: none;
+  margin: 40px;
+  padding: 20px;
+  background-color: #1a152d;
+  color: white;
+  border-radius: 5px;
+}
+
+.noteSaved {
+  position: absolute;
+  z-index: 9999;
+  display: none;
+  color: white;
+  border-radius: 5px;
+  bottom: 5px;
+  padding: 10px;
+  margin: 8px;
+  width: 200px;
+  text-align: center;
+  background-color: rgb(48, 48, 48);
+}
+
+.createNotes:hover {
+  cursor: pointer;
+}
+
 .content {
   display: flex;
   flex-direction: row;
