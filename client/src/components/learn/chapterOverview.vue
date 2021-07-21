@@ -1,10 +1,10 @@
 <template>
   <div class="chapterOverviewContainer">
-    <h1 class="title"> {{ chapter.chapterName }}</h1>
+    <title-header :title="chapter.chapterName" :lesson="null" resetText="Fortschritt dieses Kapitel zurücksetzen ?"
+                  :resetChapter="resetChapter">
+    </title-header>
     <div class="textContainer">
-      <div class="overviewText">
-        {{ chapter.overview }}
-        <img src="../../../mediafiles/test.png">
+      <div class="overviewText" v-html="sanitizedChapterOverview">
       </div>
     </div>
     <div class="sections">
@@ -20,23 +20,26 @@
 <script>
 
 import SectionTile from "@/components/learn/sectionTile";
+import TitleHeader from "@/components/learn/titleHeader";
+import DOMPurify from "dompurify";
 
 export default {
   name: 'chapterOverview',
   props: {
     chapter: Object,
-    goToSection: Function
+    goToSection: Function,
+    resetChapter: Function
   },
-  components: {SectionTile},
-  computed: {},
+  components: {TitleHeader, SectionTile},
+  computed: {
+    sanitizedChapterOverview() {
+      return DOMPurify.sanitize(this.chapter.overview)
+    }
+  },
   methods: {},
 }
 </script>
 <style>
-.title {
-  text-align: center;
-}
-
 
 .chapterOverviewContainer {
   display: flex;
@@ -64,7 +67,6 @@ export default {
   margin-left: auto;
   margin-right: auto;
   flex-wrap: wrap;
-  flex: 50%;
 }
 
 .section:hover {
@@ -96,8 +98,6 @@ export default {
   background-color: white;
   border: 1px solid black;
   border-radius: 2px;
-  padding-top: 10px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 10px 10px 5px;
 }
 </style>

@@ -8,7 +8,7 @@ const LessonTypes = Object.freeze({
     INFORMATION: "information",
     CODE: "codingLesson",
     CODEEXTENSION: "codeExtensionLesson",
-    FILLTHEBLANK: "FillTheBlankLesson",
+    FILLTHEBLANK: "fillTheBlankLesson",
     SINGLEMULTIPLECHOICE: "singleMultipleChoiceLesson"
 })
 exports.createUserIfNotExist = function (req, res, next) {
@@ -44,7 +44,7 @@ exports.getProblemsWithAnswers = async function (req, res, next) {
         let problemsWithAnswers = await userRepository.findProblemsAndAnswersByUser(moodleId, moodleName)
         data.problems = mapToOutputProblem(problemsWithAnswers)
     }
-    res.send(data, 200)
+    res.send(data)
 }
 exports.getChapterDataWithSectionsAndLessonsForUser = async function (req, res, next) {
     let data = {chapters: []}
@@ -72,6 +72,52 @@ exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
     }
     res.send(data)
 }
+exports.saveSolvedLesson = async function (req, res, next) {
+    let lessonId = parseInt(req.body.lessonId)
+    let moodleId = parseInt(req.body.moodleId)
+    let moodleName = req.body.moodleName
+    let code = req.body.userCode
+    if (lessonId && moodleId && moodleName) {
+        let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+        if (user.length !== 0) {
+            userRepository.insertOrUpdateSolvedLessonOnConflict(lessonId, moodleId, code ? code : null)
+                .then(result => {
+                    res.status(201).send({message: "Saved"})
+                })
+                .catch(err => {
+                    res.status(500).send({message: "Unbekannter Fehler"})
+                })
+        } else {
+            res.status(404).send({message: "user not found"})
+        }
+    } else {
+        res.status(400).send({message: "missing field in body"})
+    }
+}
+exports.deleteSolvedLessons = async function (req, res, next) {
+    let moodleId = parseInt(req.params.moodleId)
+    let moodleName = req.params.moodleName
+    let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+    if (user.length !== 0) {
+        if (!req.params.chapterId) {
+            userRepository.deleteSolvedByMoodleId(moodleId)
+                .then(result => res.status(204).send({message: "deleted"})
+                )
+                .catch(err =>
+                    res.status(500).send({message: "Please try again later"})
+                )
+        } else {
+            userRepository.deleteSolvedByMoodleIdAndChapterId(moodleId, req.params.chapterId)
+                .then(result => res.status(204).send({message: "deleted"})
+                )
+                .catch(err =>
+                    res.status(500).send({message: "Please try again later"})
+                )
+        }
+    } else {
+        res.status(204).send({message: "no User"})
+    }
+}
 
 exports.testCodingLesson = async function (req, res, next) {
     let moodleId = parseInt(req.body.moodleId)
@@ -83,15 +129,7 @@ exports.testCodingLesson = async function (req, res, next) {
         if (codingLesson) {
             await codeExecutionService.runTestForCodingLesson(codingLesson, code)
                 .then(testResult => {
-                    if (testResult.errors.length === 0 && moodleId && moodleName && moodleId !== -1 && moodleName !== "default") {
-                        userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
-                            .then(userResult => {
-                                if (userResult.length !== 0) {
-                                    userRepository.insertSolvedLessonForUser(lessonId, moodleId, code)
-                                }
-                            })
-                    }
-                    res.send(testResult, 200)
+                    res.send(testResult)
                 })
                 .catch(err => {
                     res.status(500).send({message: "unknown error please try again later"})
@@ -112,7 +150,7 @@ exports.saveNotes = async function (req, res, next) {
             .then(result => {
                 if (result.length !== 0) {
                     userRepository.insertNotesForUser(moodleId).then(result => {
-                        res.send({}, 201)
+                        res.status(201).send({})
                     })
                 } else {
                     res.status(400).send({message: "could not found user try again later"})
@@ -130,9 +168,9 @@ exports.getNotes = async function (req, res, next) {
     let moodleName = req.params.moodleName
     if (moodleId !== -1 && moodleName !== "default") {
         let notes = await userRepository.findNotesByUser(moodleId, moodleName)
-        res.send({notes: mapToOutputNotes(notes)}, 200)
+        res.status(200).send({notes: mapToOutputNotes(notes)})
     } else {
-        res.send({}, 400)
+        res.status(400).send({})
     }
 }
 exports.saveProblem = async function (req, res, next) {
@@ -151,7 +189,6 @@ exports.saveProblem = async function (req, res, next) {
                 })
                 .catch(err => {
                     res.status(500).send({message: "Unknown error try again later"})
-
                 })
         } else {
             res.status(404).send({message: "User or Lesson not found"})
@@ -210,9 +247,11 @@ async function getMappedLessonsForSectionId(sectionId, moodleId) {
         let solvedLessons = await lessonRepository.findSolvedByMoodleId(moodleId)
         for (let lesson of sortedLessons) {
             for (let solvedLesson of solvedLessons) {
-                lesson.done = solvedLesson.lessonId === lesson.id
-                if (lesson.type === LessonTypes.CODE) {
-                    lesson.userCode = solvedLesson.code
+                if (solvedLesson.lessonid === lesson.lessonId) {
+                    lesson.done = true
+                    if (lesson.type === LessonTypes.CODE) {
+                        lesson.userCode = solvedLesson.code
+                    }
                 }
             }
         }
@@ -257,6 +296,7 @@ function mapToOutputFillTheBlankLessons(lessons) {
     let mappedLessons = []
     for (let lesson of lessons) {
         let mappedLesson = mapDefaultLesson(lesson)
+        mappedLesson.lessonId = lesson.lessonid
         mappedLesson.type = LessonTypes.FILLTHEBLANK
         mappedLesson.textWithBlanks = lesson.textwithblanks
         mappedLesson.answerOptions = mapMarkedAnswers(lesson.markedanswers)
@@ -269,6 +309,7 @@ function mapToOutputCodingLessons(lessons) {
     let mappedLessons = []
     for (let lesson of lessons) {
         let mappedLesson = mapDefaultLesson(lesson)
+        mappedLesson.lessonId = lesson.lessonid
         mappedLesson.type = LessonTypes.CODE
         mappedLesson.exampleSolution = lesson.examplesolution
         mappedLesson.verificationInformation = lesson.verificationinformation
@@ -282,9 +323,10 @@ function mapToOutputCodeExtensionLessons(lessons) {
     let mappedLessons = []
     for (let lesson of lessons) {
         let mappedLesson = mapDefaultLesson(lesson)
+        mappedLesson.lessonId = lesson.lessonid
         mappedLesson.type = LessonTypes.CODEEXTENSION
         mappedLesson.unfinishedCode = lesson.unfinishedcode
-        mappedLesson.answerOptions = lesson.answers.replaceAll("\n", "").split('\r')
+        mappedLesson.answers = lesson.answers.replaceAll("\n", "").split('\r')
         mappedLessons.push(mappedLesson)
     }
     return mappedLessons
@@ -294,6 +336,7 @@ function mapToOutputSingleMultipleChoiceLessons(lessons) {
     let mappedLessons = []
     for (let lesson of lessons) {
         let mappedLesson = mapDefaultLesson(lesson)
+        mappedLesson.lessonId = lesson.lessonid
         mappedLesson.type = LessonTypes.SINGLEMULTIPLECHOICE
         mappedLesson.answerOptions = mapMarkedAnswers(lesson.markedoptions)
         mappedLessons.push(mappedLesson)
@@ -301,17 +344,22 @@ function mapToOutputSingleMultipleChoiceLessons(lessons) {
     return mappedLessons
 }
 
-
 function mapMarkedAnswers(answers) {
     let mappedAnswers = []
     let possibleAnswers = answers.replaceAll("\n", "").split('\r')
     for (let answer of possibleAnswers) {
-        mappedAnswers.push({
-            possibleAnswer: answer.replaceAll('[X]', "").replaceAll('[x]', ""),
-            isCorrect: answer.includes('[X]') || answer.includes('[x]'),
-        })
+        if (answer !== "") {
+            mappedAnswers.push({
+                possibleAnswer: answer.replaceAll('[X]', "").replaceAll('[x]', ""),
+                isCorrect: answer.includes('[X]') || answer.includes('[x]'),
+            })
+        }
     }
-    return mappedAnswers
+    return pseudoShuffle(mappedAnswers)
+}
+
+function pseudoShuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
 }
 
 function mapToOutputProblem(problemsWithAnswers) {

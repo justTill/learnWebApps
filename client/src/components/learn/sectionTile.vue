@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="title sectionTitle">{{ this.section.sectionName }}</div>
+    <div class="sectionTitle">{{ this.section.sectionName }}</div>
     <div class="sectionInformation">
       {{ sectionPreview }}
     </div>
     <div class="percentageBar"
-         v-if="!user.isDefault && percentage.lessonsSolved !== 0 && percentage.numberOfLessons !== 0 ">
+         v-if="!user.isDefault && percentage.numberOfLessons !== 0 ">
       <progress :value="percentage.lessonsSolved" :max="percentage.numberOfLessons">
       </progress>
       <span> {{ percentage.lessonsSolved }}/{{ percentage.numberOfLessons }}</span>

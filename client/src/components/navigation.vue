@@ -1,19 +1,25 @@
 <template>
   <div class="navigation">
-    <span class="nav-link">Logo</span>
-    <router-link class="nav-link" to="/home">Home</router-link>
-    <router-link class="nav-link" to="/learn">Lernen</router-link>
-    <router-link class="nav-link" to="/notes">Notes</router-link>
-    <router-link class="nav-link" to="/messages">Nachrichten</router-link>
+    <span class="navLink">Logo</span>
+    <router-link class="navLink" to="/home">Home</router-link>
+    <router-link class="navLink" to="/learn">Lernen</router-link>
+    <router-link class="navLink" v-if="!user.isDefault" to="/notes">Notes</router-link>
+    <router-link class="navLink" v-if="!user.isDefault" to="/messages">Nachrichten</router-link>
   </div>
 </template>
 
 <script>
 
+import {mapGetters} from "vuex";
+
 export default {
   name: 'navigation',
   components: {},
-  computed: {},
+  computed: {
+    ...mapGetters([
+      'user'
+    ]),
+  },
   methods: {}
 }
 </script>
@@ -31,7 +37,7 @@ export default {
   display: none;
 }
 
-.nav-link {
+.navLink {
   margin: 10px;
   text-decoration: none;
   color: black;

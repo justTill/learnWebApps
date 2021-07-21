@@ -289,7 +289,7 @@ exports.insertOrUpdateSingleMultipleChoiceLesson = async function (lessonId, sin
     let result
     if (lessonId && singleMultipleChoiceLessonId) {
         result = pool.query('BEGIN', err => {
-            let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, ,difficultylevel=$5::difficultyleveltype, feedback=$6 WHERE id=$7";
+            let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4, difficultylevel=$5::difficultyleveltype, feedback=$6 WHERE id=$7";
             pool.query(query, [sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, lessonId])
                 .then(res => {
                     let childUpdate = 'UPDATE "singleMultipleChoiceLessons" SET markedoptions=$1 WHERE id=$2'
@@ -419,6 +419,5 @@ exports.findById = async function (lessonId) {
             throw  err
         })
     return result
-
 }
 

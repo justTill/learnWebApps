@@ -1,6 +1,8 @@
 <template>
   <div>
-    <div class="title lessonTitle">{{ this.lesson.lessonName }}</div>
+    <div class="lessonTitle">{{ this.lesson.lessonName }} <span class="doneIcon"
+                                                                v-if="lesson.done && lesson.type !== 'information'">&#10003;</span>
+    </div>
     <div class="lessonInformation">
       {{ lessonPreview }}
     </div>
@@ -14,7 +16,8 @@ import {mapGetters} from "vuex";
 export default {
   name: 'lessonTile',
   props: {
-    lesson: Object
+    lesson: Object,
+    helpText: String
   },
   components: {},
   computed: {
@@ -33,12 +36,13 @@ export default {
 }
 </script>
 <style>
-
 .lessonTitle {
   text-align: center;
   font-size: large;
   font-weight: bold;
   padding: 2px;
+  margin: 10px;
+
 }
 
 .lessonInformation {

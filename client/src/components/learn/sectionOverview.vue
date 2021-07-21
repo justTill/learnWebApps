@@ -1,9 +1,9 @@
 <template>
   <div class="sectionOverviewContainer">
-    <h1 class="title"> {{ section.sectionName }}</h1>
+    <title-header :title="section.sectionName" :lesson="null">
+    </title-header>
     <div class="textContainer">
-      <div class="overviewText">
-        {{ section.information }}
+      <div class="overviewText" v-html="sanitizedSectionInformation">
       </div>
     </div>
     <div class="lessons">
@@ -20,6 +20,8 @@
 <script>
 
 import LessonTile from "@/components/learn/lessonTile";
+import TitleHeader from "@/components/learn/titleHeader";
+import DOMPurify from "dompurify";
 
 export default {
   name: 'sectionOverview',
@@ -27,15 +29,16 @@ export default {
     section: Object,
     gotToLesson: Function
   },
-  components: {LessonTile},
-  computed: {},
+  components: {TitleHeader, LessonTile},
+  computed: {
+    sanitizedSectionInformation() {
+      return DOMPurify.sanitize(this.section.information)
+    }
+  },
   methods: {}
 }
 </script>
 <style>
-.title {
-  text-align: center;
-}
 
 .textContainer {
   display: block;
@@ -69,7 +72,6 @@ export default {
   margin-left: auto;
   margin-right: auto;
   flex-wrap: wrap;
-  flex: 50%;
 }
 
 .lessons:hover {

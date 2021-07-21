@@ -167,9 +167,9 @@ exports.findNotesByUser = async function (moodleId, moodlename) {
     return result
 }
 
-exports.insertSolvedLessonForUser = async function (lessonId, moodleId, userCode) {
+exports.insertOrUpdateSolvedLessonOnConflict = async function (lessonId, moodleId, userCode) {
     let result = []
-    let query = 'INSERT INTO "solvedLessons" (moodleid, lessonid, code) VALUES ($1, $2, $3)';
+    let query = 'INSERT INTO "solvedLessons" (moodleid, lessonid, code) VALUES ($1, $2, $3) ON CONFLICT ON CONSTRAINT "solvedlessons_un" DO update set code = $3 ';
     result = await pool.query(query, [moodleId, lessonId, userCode])
         .then(res => {
             return res.rows
@@ -182,6 +182,28 @@ exports.insertProblemForUser = async function (moodleId, lessonId, problem) {
     let result = []
     let query = 'INSERT INTO "problems" (moodleid, lessonid, message) VALUES ($1, $2, $3)';
     result = await pool.query(query, [moodleId, lessonId, problem])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
+exports.deleteSolvedByMoodleId = async function (moodleId) {
+    let result = []
+    let query = 'DELETE from "solvedLessons" WHERE moodleId=$1';
+    result = await pool.query(query, [moodleId])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
+exports.deleteSolvedByMoodleIdAndChapterId = async function (moodleId, chapterId) {
+    let result = []
+    let query = 'delete from "solvedLessons" sl using chapters c, sections s, lessons l where sl.lessonid = l.id and l.sectionId = s.id and c.id = s.chapterid and sl.moodleid= $1 and c.id = $2';
+    result = await pool.query(query, [moodleId, chapterId])
         .then(res => {
             return res.rows
         }).catch(err => {

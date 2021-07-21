@@ -4,24 +4,32 @@ import {router} from '@/./routes/routes'
 import {store} from '@/stores/store.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
 import {backEndHost, backEndPort} from './envVariables'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import VueCodemirror from 'vue-codemirror'
+import 'codemirror/lib/codemirror.css'
 
 Vue.use(VueAxios, axios)
+Vue.use(BootstrapVue)
+Vue.use(IconsPlugin)
 Vue.config.productionTip = false
+Vue.use(VueCodemirror)
 
 function getChapters() {
-  this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")
-      .then(result => {
-        console.log(result.data.chapters)
-          this.$store.commit("setChapters", result.data.chapters)
-      })
-      .catch(err => console.log(err))
+    this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")
+        .then(result => {
+            console.log(result.data.chapters)
+            this.$store.commit("setChapters", result.data.chapters)
+        })
+        .catch(err => console.log(err))
 }
 
 function getChaptersForUser(userId, userName) {
   this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/" + userId + "/" + userName)
       .then(result => {
-          console.log(result.data.chapters)
+          console.log(result.data.chapters[1].sections[0].lessons)
           this.$store.commit("setChapters", result.data.chapters)
       })
       .catch(err => console.log(err))
@@ -39,10 +47,8 @@ function getNotes(userId, userName) {
 function getProblems(userId, userName) {
   this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + userId + "/" + userName)
       .then(result => {
-        if (result.status === 200) {
           console.log(result.data.problems)
           this.$store.commit("setProblems", result.data.problems)
-        }
       })
       .catch(err => console.log(err))
 }

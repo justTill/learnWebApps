@@ -20,10 +20,14 @@ export default {
 </script>
 
 <style>
+html {
+  background-color: #f7f3eb;
+}
+
 html, body {
   margin: 0;
   height: 100%;
-  overflow: hidden
+  /*overflow: hidden: Problem with Moodle :(*/
 }
 
 body, html {

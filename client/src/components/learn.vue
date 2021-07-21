@@ -23,19 +23,29 @@
     </div>
 
     <chapter-overview class="chapterContent"
-                      v-if="selectedChapter && !selectedSection"
+                      v-if="selectedChapter && !selectedSection && !selectedLesson"
                       :chapter="selectedChapter"
-                      :go-to-section="goToSection">
+                      :go-to-section="goToSection"
+                      :resetChapter="resetChapterLessons">
     </chapter-overview>
 
     <section-overview class="chapterContent"
-                      v-else-if="selectedSection"
+                      v-else-if="selectedSection && !selectedLesson"
                       :section="selectedSection"
                       :gotToLesson="goToLesson">
     </section-overview>
+    <lesson-view class="chapterContent"
+                 v-else-if="selectedLesson"
+                 :lesson="selectedLesson"
+                 :previousLesson="previousLesson"
+                 :nextLesson="nextLesson"
+                 :goToLesson="goToLesson"
+                 :lessonSolvedHandler="lessonSolvedHandlerForCurrentChapter">
 
+    </lesson-view>
     <div v-else class="chapterContent">
-      <h1> Default Informationen</h1>
+      <title-header title="Informationen" :reset-chapter="resetLessonsSolved"
+                    resetText="Alle Fortschritt zurücksetzen ?"></title-header>
     </div>
   </div>
 </template>
@@ -45,26 +55,35 @@ import {mapGetters} from 'vuex'
 import ChapterOverview from "@/components/learn/chapterOverview";
 import SectionOverview from "@/components/learn/sectionOverview";
 import NavButton from "@/components/utils/navButton";
+import LessonView from "@/components/learn/lessonView";
+import {backEndHost, backEndPort} from "@/envVariables";
+import TitleHeader from "@/components/learn/titleHeader";
 
 export default {
   name: 'learn',
-  components: {ChapterOverview, SectionOverview, NavButton},
+  components: {TitleHeader, LessonView, ChapterOverview, SectionOverview, NavButton},
   data: function () {
     return {
       selectedChapter: null,
       selectedSection: null,
+      selectedLesson: null,
+      previousLesson: null,
+      nextLesson: null
     }
   },
   computed: {
     ...mapGetters([
-      'chapters'
+      'chapters',
+      'user'
     ])
   },
   methods: {
     changeCurrentChapter(chapter) {
+      this.selectedLesson = null
       this.selectedChapter = chapter
     },
     changeCurrentSection(section) {
+      this.selectedLesson = null
       this.selectedSection = section
     },
     changeChapterAndSectionOnNavigationClick(chapter, section) {
@@ -93,8 +112,80 @@ export default {
       this.changeChapterAndSectionOnNavigationClick(this.selectedChapter, section)
       this.$refs['section-' + section.sectionId][0].isActive = true;
     },
-    goToLesson(lesson) {
-      console.log(lesson)
+    goToLesson(updatedLesson) {
+      this.previousLesson = null;
+      this.nextLesson = null;
+      let currentLessonIndex = this.selectedSection.lessons.indexOf(updatedLesson)
+      this.nextLesson = this.selectedSection.lessons[currentLessonIndex + 1]
+      this.previousLesson = this.selectedSection.lessons[currentLessonIndex - 1]
+      this.selectedLesson = updatedLesson
+    },
+    lessonSolvedHandlerForCurrentChapter(lessonId, solved, userCode) {
+      let chapters = this.chapters
+      let chapterIndex = chapters.indexOf(this.selectedChapter)
+      let sectionIndex = chapters[chapterIndex].sections.indexOf(this.selectedSection)
+      for (let i = 0; i < chapters[chapterIndex].sections[sectionIndex].lessons.length; i++) {
+        if (lessonId) {
+          if (chapters[chapterIndex].sections[sectionIndex].lessons[i].lessonId === lessonId) {
+            let payload = {
+              lessonIndex: i,
+              chapterIndex: chapterIndex,
+              sectionIndex: sectionIndex,
+              solved: solved,
+              userCode: userCode
+            }
+            this.$store.commit('updateLessonDone', payload)
+          }
+        } else {
+          let payload = {
+            lessonIndex: i,
+            chapterIndex: chapterIndex,
+            sectionIndex: sectionIndex,
+            solved: solved
+          }
+          this.$store.commit('updateLessonDone', payload)
+        }
+      }
+    },
+    resetLessonsSolved() {
+      if (this.user.isDefault) {
+        for (let c = 0; c < this.chapters.length; c++) {
+          for (let s = 0; s < this.chapters[c].sections.length; s++) {
+            for (let l = 0; l < this.chapters[c].sections[s].lessons.length; l++) {
+              this.$store.commit('updateLessonDone', {
+                lessonIndex: l,
+                chapterIndex: c,
+                sectionIndex: s,
+                solved: false
+              })
+            }
+          }
+        }
+      } else {
+        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/" + this.user.userId + "/" + this.user.userName)
+            .then(response =>
+                this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")
+                    .then(result => {
+                      this.$store.commit("setChapters", result.data.chapters)
+                    })
+                    .catch(err => console.log(err)))
+            .catch(err => console.log(err))
+      }
+    },
+    resetChapterLessons() {
+      if (this.user.isDefault) {
+        this.lessonSolvedHandlerForCurrentChapter(null, false)
+      } else {
+        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/" + this.selectedChapter.chapterId + "/" + this.user.userId + "/" + this.user.userName)
+            .then(response => {
+              this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")
+                  .then(result => {
+                    this.selectedChapter = result.data.chapters.find(c => c.chapterId === this.selectedChapter.chapterId)
+                    this.$store.commit("setChapters", result.data.chapters)
+                  })
+                  .catch(err => console.log(err))
+            }).catch(err => console.log(err))
+      }
     }
   }
 }
@@ -111,7 +202,7 @@ export default {
 .chapterNavigation {
   flex-basis: 250px;
   flex-shrink: 0;
-  height: 90%;
+  height: 100%;
   background-color: #1a152d;
   overflow: auto;
 }
@@ -135,6 +226,7 @@ export default {
 .chapterContent {
   overflow: auto;
   height: 90%;
+  width: 100%;
 }
 
 .navigationButton:hover, .navigationSectionButton:hover {
@@ -151,7 +243,11 @@ export default {
 
 @media only screen and (min-width: 1000px) {
   .min-nav-button {
-    display: none;
+    display: none !important;
+  }
+
+  .chapterNavigation {
+    display: block !important;
   }
 }
 
@@ -175,17 +271,15 @@ export default {
     font-size: 20px;
     float: right;
     margin: 20px;
-    width: 25px;
-    height: 20px;
+    width: 30px;
+    height: 30px;
     border: 2px solid white;
   }
 
   .min-nav-button {
     display: inline;
     border: 2px solid black;
-    margin-top: 20px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 20px auto;
     min-width: 400px;
     height: 30px;
     background-color: #f7f3eb;
