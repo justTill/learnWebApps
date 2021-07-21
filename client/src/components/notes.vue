@@ -25,6 +25,8 @@
         <textarea class="editNoteArea" v-model="currentNote.note"></textarea>
       </b-modal>
     </div>
+    <div v-if="lastDeletedNote !== null && lastDeletedNoteIndex !== -1" class="noteDeleted">Gelöscht <span
+        class="revertDelete" v-on:click="revertDeleteNote">Rückgängig machen</span></div>
   </div>
 </template>
 
@@ -40,10 +42,11 @@ export default {
   data: function () {
     return {
       changeAreaIndex: -1,
-      lastDeletedNote: null,
-      lastDeletedNoteIndex: null,
+      lastDeletedNote: {},
+      lastDeletedNoteIndex: -1,
       currentNote: {note: ""},
       currentNoteIndex: -1,
+      deleteReverted: false
     }
   },
   computed: {
@@ -67,16 +70,31 @@ export default {
       this.changeAreaIndex = -1
     },
     deleteNote(note) {
-      if (!this.user.isDefault) {
-        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/" + this.user.userId + "/" + this.user.userName + "/" + note.notesId)
-            .then(response => {
-            })
-            .catch(err => {
-            })
-      }
+      this.lastDeletedNote = note
       this.lastDeletedNoteIndex = this.notes.indexOf(note)
-      this.lastDeletedNote = note //display zurückholen
       this.$store.commit('deleteNote', note)
+      setTimeout(() => {
+        if (!this.user.isDefault && !this.deleteReverted) {
+          this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/" + this.user.userId + "/" + this.user.userName + "/" + note.notesId)
+              .then(response => {
+              })
+              .catch(err => {
+              })
+        }
+        this.lastDeletedNoteIndex = null
+        this.lastDeletedNote = -1
+        this.deleteReverted = false
+      }, 4000)
+    },
+    revertDeleteNote() {
+      console.log("revertDelete")
+      this.deleteReverted = true;
+      let payload = {
+        index: this.lastDeletedNoteIndex,
+        note: this.lastDeletedNote
+      }
+      this.$store.commit('addNoteAtIndex', payload)
+
     },
     showChangeNoteModal(note) {
       this.$refs['editNote-modal'].show()
@@ -152,6 +170,29 @@ export default {
   border: 1px solid black;
   border-radius: 5px;
 
+}
+
+.revertDelete {
+  font-weight: bold;
+  text-decoration: underline;
+  color: lightskyblue;
+}
+
+.revertDelete:hover {
+  cursor: pointer;
+}
+
+.noteDeleted {
+  position: absolute;
+  z-index: 9999;
+  color: white;
+  border-radius: 5px;
+  bottom: 5px;
+  padding: 15px;
+  margin: 8px;
+  width: 300px;
+  text-align: center;
+  background-color: rgb(48, 48, 48);
 }
 
 .editNoteArea {

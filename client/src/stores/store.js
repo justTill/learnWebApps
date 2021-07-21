@@ -33,6 +33,9 @@ export const store = new Vuex.Store({
         changeNote(state, payload) {
             state.notes[payload.index].note = payload.noteText
         },
+        addNoteAtIndex(state, payload) {
+            state.notes.splice(payload.index, 0, payload.note)
+        },
         deleteNote(state, note) {
             state.notes.splice(state.notes.indexOf(note), 1)
         },
