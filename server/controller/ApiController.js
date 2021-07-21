@@ -174,13 +174,13 @@ exports.getNotes = async function (req, res, next) {
     }
 }
 
-exports.changeNote = async function (req, res, next) {
+exports.insertOrUpdateNote = async function (req, res, next) {
     let moodleId = parseInt(req.body.moodleId)
     let moodleName = req.body.moodleName
     let updatedNoteText = req.body.updatedNoteText
     let noteId = req.body.noteId
     if (moodleId !== -1 && moodleName !== "default" && updatedNoteText && noteId) {
-        userRepository.updateNote(moodleId, moodleName, updatedNoteText, noteId)
+        userRepository.insertOrUpdateNote(moodleId, moodleName, updatedNoteText, noteId)
             .then(result => {
                 res.status(201).send({message: "changed"})
             })

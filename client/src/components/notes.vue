@@ -25,8 +25,11 @@
         <textarea class="editNoteArea" v-model="currentNote.note"></textarea>
       </b-modal>
     </div>
-    <div v-if="lastDeletedNote !== null && lastDeletedNoteIndex !== -1" class="noteDeleted">Gelöscht <span
-        class="revertDelete" v-on:click="revertDeleteNote">Rückgängig machen</span></div>
+    <div id="revertNoteDelete" class="noteDeleted">Gelöscht
+      <span class="revertDelete" v-on:click="revertDeleteNote">
+        Rückgängig machen
+    </span>
+    </div>
   </div>
 </template>
 
@@ -46,7 +49,6 @@ export default {
       lastDeletedNoteIndex: -1,
       currentNote: {note: ""},
       currentNoteIndex: -1,
-      deleteReverted: false
     }
   },
   computed: {
@@ -73,28 +75,25 @@ export default {
       this.lastDeletedNote = note
       this.lastDeletedNoteIndex = this.notes.indexOf(note)
       this.$store.commit('deleteNote', note)
-      setTimeout(() => {
-        if (!this.user.isDefault && !this.deleteReverted) {
-          this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/" + this.user.userId + "/" + this.user.userName + "/" + note.notesId)
-              .then(response => {
-              })
-              .catch(err => {
-              })
-        }
-        this.lastDeletedNoteIndex = null
-        this.lastDeletedNote = -1
-        this.deleteReverted = false
-      }, 4000)
+      if (!this.user.isDefault) {
+        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/" + this.user.userId + "/" + this.user.userName + "/" + note.notesId)
+            .then(response => {
+            })
+            .catch(err => {
+            })
+      }
+      this.$el.querySelector('#revertNoteDelete').style.display = "block"
     },
     revertDeleteNote() {
-      console.log("revertDelete")
-      this.deleteReverted = true;
+      this.$el.querySelector('#revertNoteDelete').style.display = "none"
       let payload = {
         index: this.lastDeletedNoteIndex,
         note: this.lastDeletedNote
       }
+      this.updateNoteBackend(this.lastDeletedNote)
+      this.lastDeletedNote = -1
+      this.lastDeletedNoteIndex = null
       this.$store.commit('addNoteAtIndex', payload)
-
     },
     showChangeNoteModal(note) {
       this.$refs['editNote-modal'].show()
@@ -106,12 +105,16 @@ export default {
         index: this.currentNoteIndex,
         noteText: this.currentNote.note
       }
+      this.updateNoteBackend(this.currentNote)
+      this.$store.commit('changeNote', storePayload)
+    },
+    updateNoteBackend(note) {
       if (!this.user.isDefault) {
         let payload = {
           moodleId: this.user.userId,
           moodleName: this.user.userName,
-          updatedNoteText: this.currentNote.note,
-          noteId: this.currentNote.notesId
+          updatedNoteText: note.note,
+          noteId: note.notesId
         }
         this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/note", payload)
             .then(response => {
@@ -120,8 +123,7 @@ export default {
               //error Could not save Note
             })
       }
-      this.$store.commit('changeNote', storePayload)
-    },
+    }
   },
 }
 </script>
@@ -184,6 +186,7 @@ export default {
 
 .noteDeleted {
   position: absolute;
+  display: none;
   z-index: 9999;
   color: white;
   border-radius: 5px;
