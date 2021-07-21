@@ -17,5 +17,7 @@ router.post('/users/user/', apiController.createUserIfNotExist)
 router.post('/users/notes/:moodleId/:moodleName', asyncMiddleware(apiController.saveNotes));
 router.get('/users/notes/:moodleId/:moodleName', asyncMiddleware(apiController.getNotes));
 
+router.post('/users/notes/note', asyncMiddleware(apiController.changeNote));
+router.delete('/users/notes/:moodleId/:moodleName/:noteId', asyncMiddleware(apiController.deleteNote))
 
 module.exports = router;

@@ -173,6 +173,37 @@ exports.getNotes = async function (req, res, next) {
         res.status(400).send({})
     }
 }
+
+exports.changeNote = async function (req, res, next) {
+    let moodleId = parseInt(req.body.moodleId)
+    let moodleName = req.body.moodleName
+    let updatedNoteText = req.body.updatedNoteText
+    let noteId = req.body.noteId
+    if (moodleId !== -1 && moodleName !== "default" && updatedNoteText && noteId) {
+        userRepository.updateNote(moodleId, moodleName, updatedNoteText, noteId)
+            .then(result => {
+                res.status(201).send({message: "changed"})
+            })
+            .catch(err => {
+                res.status(500).send({message: "unknown error try again later"})
+            })
+    } else {
+        res.status(400).send({})
+    }
+}
+
+exports.deleteNote = async function (req, res, next) {
+    let moodleId = parseInt(req.params.moodleId)
+    let moodleName = req.params.moodleName
+    let noteId = req.params.noteId
+    if (moodleId !== -1 && moodleName !== "default" && noteId) {
+        userRepository.deleteNoteForUser(moodleId, moodleName, noteId).then(result => {
+            res.status(204).send({message: "deleted"})
+        }).catch(err => res.status(500).send({message: "unknown error try again later"}))
+    } else {
+        res.status(400).send({})
+    }
+}
 exports.saveProblem = async function (req, res, next) {
     let moodleId = parseInt(req.body.moodleId)
     let moodleName = req.body.moodleName

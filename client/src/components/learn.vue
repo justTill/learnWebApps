@@ -1,7 +1,7 @@
 <template>
   <div class="content">
     <div id="createNotes" class="createNotes" v-on:click="saveMarkedTextAsNotes"> Notiz erstellen</div>
-    <div id="notesSaved" class="noteSaved"> Notiz gespeichert &#10003;</div>
+    <div id="notesSaved" class="noteSaved" v-if="showSaveNote"> Notiz gespeichert &#10003;</div>
     <button class="min-nav-button" v-on:click="openOrCloseChapterNavigation" ref="navigationMenu"> Menu</button>
     <div class="chapterNavigation" ref="chapterNavigation">
       <div class="closeNavigationButton" v-on:click="openOrCloseChapterNavigation">&#10005;</div>
@@ -71,7 +71,8 @@ export default {
       selectedLesson: null,
       previousLesson: null,
       nextLesson: null,
-      selectedText: ""
+      selectedText: "",
+      showNote: false
     }
   },
   computed: {
@@ -79,13 +80,14 @@ export default {
       'chapters',
       'user',
       'notes'
-    ])
+    ]),
+    showSaveNote() {
+      return this.showNote
+    }
   },
   mounted() {
     document.addEventListener('mouseup', event => {
       this.$el.querySelector('#createNotes').style.display = "none";
-      //check if in chapteroverview
-      //or sectionor lessonview
       if (window.getSelection().toString() !== '' && this.$route.path.includes('learn')) {
         let element = this.$el.querySelector('#createNotes')
         element.style.display = "inline-block";
@@ -113,15 +115,11 @@ export default {
       } else {
         this.$store.commit('addNotes', note)
       }
-      this.displayNotesSaved();
-      this.selectedText = "";
-    },
-    displayNotesSaved() {
-      let element = this.$el.querySelector('#notesSaved')
-      element.style.display = "block"
+      this.showNote = true
       setTimeout(() => {
-        element.style.display = "none"
-      }, 5000)
+        this.showNote = false
+      }, 4000)
+      this.selectedText = "";
     },
     changeCurrentChapter(chapter) {
       this.selectedLesson = null
@@ -251,7 +249,6 @@ export default {
 .noteSaved {
   position: absolute;
   z-index: 9999;
-  display: none;
   color: white;
   border-radius: 5px;
   bottom: 5px;
