@@ -145,7 +145,7 @@ exports.findProblemsAndAnswersByUser = async function (moodleId, moodleName) {
     return result
 }
 exports.insertNotesForUser = async function (moodleId, note) {
-    let query = 'INSERT INTO notes (moodleid, note) VALUES ($1, $2)';
+    let query = 'INSERT INTO notes (moodleid, note) VALUES ($1, $2) RETURNING id';
     let result = []
     result = await pool.query(query, [moodleId, note])
         .then(res => {
@@ -156,7 +156,7 @@ exports.insertNotesForUser = async function (moodleId, note) {
     return result
 }
 exports.findNotesByUser = async function (moodleId, moodlename) {
-    let query = 'SELECT * from notes n join persons p on p.moodleid = n.moodleid where n.moodleid=$1 and p.moodlename=$2 order by n.id';
+    let query = 'SELECT  n.moodleid, n.id, p.moodlename, n.note from notes n join persons p on p.moodleid = n.moodleid where n.moodleid=$1 and p.moodlename=$2 order by n.id';
     let result = []
     result = await pool.query(query, [moodleId, moodlename])
         .then(res => {
@@ -204,6 +204,28 @@ exports.deleteSolvedByMoodleIdAndChapterId = async function (moodleId, chapterId
     let result = []
     let query = 'delete from "solvedLessons" sl using chapters c, sections s, lessons l where sl.lessonid = l.id and l.sectionId = s.id and c.id = s.chapterid and sl.moodleid= $1 and c.id = $2';
     result = await pool.query(query, [moodleId, chapterId])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
+exports.deleteNoteForUser = async function (moodleId, moodleName, noteId) {
+    let result = []
+    let query = 'delete from "notes" n using persons p where p.moodleid = $1 and p.moodlename = $2 and n.id = $3';
+    result = await pool.query(query, [moodleId, moodleName, noteId])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
+exports.insertOrUpdateNote = async function (moodleId, moodleName, noteText, noteId) {
+    let result = []
+    let query = 'Insert Into notes (id, moodleid, note) VALUES( $1,$2,$3) ON CONFLICT ON CONSTRAINT "notes_pkey" DO UPDATE SET note=$3'
+    result = await pool.query(query, [noteId, moodleId, noteText])
         .then(res => {
             return res.rows
         }).catch(err => {

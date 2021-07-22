@@ -3,7 +3,7 @@
     <title-header :title="chapter.chapterName" :lesson="null" resetText="Fortschritt dieses Kapitel zurücksetzen ?"
                   :resetChapter="resetChapter">
     </title-header>
-    <div class="textContainer">
+    <div class="textContainer" ref="overViewText">
       <div class="overviewText" v-html="sanitizedChapterOverview">
       </div>
     </div>

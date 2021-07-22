@@ -6,7 +6,8 @@
     <div title="Kapitel zurücksetzen" v-if="resetChapter" class="resetButton">
       <div title="Kapitel zurücksetzen" class="reset" v-on:click="openResetModal" v-b-modal.modal-center
            variant="info">
-        <img title="Kapitel zurücksetzen" alt="Kapitel zurücksetzen" class="resetIcon" src="../../assets/reset.png">
+        <img title="Kapitel zurücksetzen" alt="Kapitel zurücksetzen" class="resetIcon" src="../../assets/reset.png"
+             v-b-tooltip.hover.lefttop>
         <b-modal ref="reset-modal" id="modal-center-reset" centered title="Kapitel zurücksetzen" ok-only
                  ok-variant="danger"
                  ok-title="Zurücksetzen"
@@ -19,14 +20,15 @@
     <div v-if="lesson && !user.isDefault" class="helperButtons">
       <div title="Hilfe" class="helpButton" v-on:click="openHelpModal" v-b-modal.modal-center
            variant="info" v-if="lesson.type !=='information'">
-        <img title="Hilfe" alt="Hilfe" class="helpIcon" src="../../assets/question.png">
+        <img title="Hilfe" alt="Hilfe" class="helpIcon" src="../../assets/question.png" v-b-tooltip.hover.lefttop>
         <b-modal ref="help-modal" id="modal-center-help" centered title="Hilfe" ok-only ok-variant="success"
                  hide-header-close>
           <help-content class="my-4" :lesson="lesson"></help-content>
         </b-modal>
       </div>
       <div title="Meldung" class="reportButton" v-on:click="openReportModal">
-        <img title="Problem Melden" alt="Hilfe" class="reportIcon" src="../../assets/error.png">
+        <img title="Problem Melden" alt="Hilfe" class="reportIcon" src="../../assets/error.png"
+             v-b-tooltip.hover.lefttop>
         <b-modal ref="report-modal" id="modal-center-report" centered title="Problem Melden" hide-header-close
                  ok-variant="success"
                  ok-title="Problem melden"

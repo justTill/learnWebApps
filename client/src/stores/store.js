@@ -22,13 +22,22 @@ export const store = new Vuex.Store({
             state.notes = notes
         },
         setProblems(state, problems) {
-            state.notes = problems
+            state.problems = problems
         },
         setChapters(state, chapters) {
             state.chapters = chapters
         },
         addNotes(state, note) {
             state.notes.push(note)
+        },
+        changeNote(state, payload) {
+            state.notes[payload.index].note = payload.noteText
+        },
+        addNoteAtIndex(state, payload) {
+            state.notes.splice(payload.index, 0, payload.note)
+        },
+        deleteNote(state, note) {
+            state.notes.splice(state.notes.indexOf(note), 1)
         },
         addProblem(state, problem) {
             state.problems.push(problem)
