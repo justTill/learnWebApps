@@ -167,7 +167,7 @@ export default {
   max-width: 600px;
   min-width: 400px;
   background-color: white;
-  margin: 5px auto 5px;
+  margin: 10px auto 10px;
   padding: 5px 10px 5px;
   border: 1px solid black;
   border-radius: 5px;
