@@ -1,7 +1,190 @@
 <template>
-  <h1>Problems</h1>
+  <div>
+    <title-header title="Deine Nachrichten"></title-header>
+    <div class="messageContainer">
+      <div v-for="(problem, index) in problems">
+        <div class="problem hoverEffect"
+             @mouseover="onHover(index)"
+             @mouseleave="onHoverLeave(index)">
+          <span class="problemLessonName"><b>Aufgabe:</b> {{ problem.LessonName }}</span>
+          <span class="problemMessage"><b>Problem:</b> <pre class="problemPre">{{ problem.problemMessage }}</pre></span>
+          <div class="deleteProblem" v-if="problemAreaIndex === index" v-on:click="openDeleteProblemModal(problem)">
+            <img src="../assets/reset.png" alt="Problem Löschen" title="Löschen" v-b-tooltip.hover.lefttop>
+          </div>
+          <div class="displayAnswers" :ref="'showAnswer-'+index" v-on:click="toggleAnswerShow(index)">
+            {{ index === displayAnswerIndex ? "Antwort ausblenden" : "Antworten anzeigen" }}
+          </div>
+          <div v-if="displayAnswerIndex === index ">
+            <div v-if="problem.answers.length !== 0">
+                <pre class="problemPre answer" v-for="answer in problem.answers">
+                 {{ answer }}
+                </pre>
+            </div>
+            <div v-else class="answer">
+              Es gibt noch keine Antworten
+            </div>
+            <div class="addAnswer" v-on:click="openAnswerOnProblemModal(problem)" v-if="problem.answers.length !== 0">
+              Antworten
+            </div>
+          </div>
+        </div>
+      </div>
+      <b-modal ref="answerProblem-modal" id="modal-center-answerProblem" centered title="Antworten"
+               ok-variant="success"
+               @ok="answerOnProblem"
+               cancel-variant="danger"
+               cancel-title="Abbruch"
+               ok-title="Antworten"
+               hide-header-close>
+        <textarea class="answerArea" v-model="answer">
+
+        </textarea>
+      </b-modal>
+      <b-modal ref="deleteProblem-modal" id="modal-center-deleteProblem" centered title="Problem Löschen" ok-only
+               ok-variant="danger"
+               @ok="deleteProblem"
+               ok-title="Problem unwiederruflich Löschen"
+               hide-header-close>
+        <div class="resetText">Das Löschen kann nicht rückgängig gemacht werden</div>
+      </b-modal>
+    </div>
+  </div>
 </template>
 
 <script>
-export default {}
+import TitleHeader from "@/components/learn/titleHeader";
+import {mapGetters} from "vuex";
+
+export default {
+  name: 'notes',
+  components: {TitleHeader},
+  data: function () {
+    return {
+      answer: "",
+      problemAreaIndex: -1,
+      displayAnswerIndex: -1,
+      currentProblem: {},
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'problems',
+      'user'
+    ]),
+  }, methods: {
+    answerOnProblem() {
+      let payload = {
+        problem: this.currentProblem,
+        toBeAddedAnswer: this.answer
+      }
+      this.$store.commit('addAnswerToProblem', payload)
+      this.answer = ""
+    },
+    openAnswerOnProblemModal(problem) {
+      this.answer = ""
+      this.currentProblem = problem
+      this.$refs['answerProblem-modal'].show()
+    },
+    onHover(index) {
+      this.problemAreaIndex = index
+    },
+    onHoverLeave(index) {
+      this.problemAreaIndex = -1
+    },
+    deleteProblem() {
+      console.log(this.currentProblem)
+    },
+    openDeleteProblemModal(problem) {
+      this.currentProblem = problem
+      this.$refs['deleteProblem-modal'].show()
+    },
+    toggleAnswerShow(index) {
+      this.displayAnswerIndex = index === this.displayAnswerIndex ? -1 : index
+    }
+  },
+}
 </script>
+<style>
+.problem {
+  position: relative;
+  display: block;
+  max-width: 600px;
+  min-width: 400px;
+  background-color: white;
+  margin: 10px auto 10px;
+  padding: 5px 10px 5px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.answer {
+  border-left: 1px solid grey;
+  border-bottom: 1px solid grey;
+  margin-left: 30px;
+  margin-bottom: 10px !important;
+  margin-right: 30px;
+  padding-left: 10px;
+}
+
+.problemPre {
+  white-space: pre-line;
+  background-color: white;
+  margin-bottom: 5px;
+  border-radius: 0px;
+}
+
+.deleteProblem {
+  cursor: pointer;
+  display: inline-block;
+  position: absolute;
+  right: 10px;
+  top: 3px;
+}
+
+.problemLessonName, .problemMessage {
+  display: block;
+  margin: 5px 5px 5px;
+}
+
+.deleteProblem > img {
+  width: 25px;
+  height: 25px;
+}
+
+.displayAnswers {
+  text-decoration: underline;
+  color: blue;
+  margin-left: 30px;
+  padding-left: 10px;
+  font-size: small;
+  margin-bottom: 5px;
+}
+
+.displayAnswers:hover {
+  cursor: pointer;
+}
+
+.addAnswer:hover {
+  cursor: pointer;
+  background-color: darkgreen;
+}
+
+.addAnswer {
+  margin-left: 30px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  padding: 10px;
+  color: white;
+  display: inline-block;
+  background-color: green;
+  border-radius: 5px;
+}
+
+.answerArea {
+  width: 300px;
+  height: 200px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>

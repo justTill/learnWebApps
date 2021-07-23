@@ -158,7 +158,7 @@ export default {
 .changeNoteArea {
   display: inline-block;
   position: absolute;
-  right: 10px
+  right: 10px;
 }
 
 .note {
@@ -171,7 +171,6 @@ export default {
   padding: 5px 10px 5px;
   border: 1px solid black;
   border-radius: 5px;
-
 }
 
 .revertDelete {

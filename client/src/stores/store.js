@@ -24,6 +24,13 @@ export const store = new Vuex.Store({
         setProblems(state, problems) {
             state.problems = problems
         },
+        addProblem(state, problem) {
+            state.problems.push(problem)
+        },
+        addAnswerToProblem(state, payload) {
+            let index = state.problems.indexOf(payload.problem)
+            state.problems[index].answers.push(payload.toBeAddedAnswer)
+        },
         setChapters(state, chapters) {
             state.chapters = chapters
         },
@@ -38,9 +45,6 @@ export const store = new Vuex.Store({
         },
         deleteNote(state, note) {
             state.notes.splice(state.notes.indexOf(note), 1)
-        },
-        addProblem(state, problem) {
-            state.problems.push(problem)
         },
         updateLessonDone(state, payload) {
             if (payload.lessonIndex !== -1) {

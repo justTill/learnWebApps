@@ -398,7 +398,7 @@ function mapToOutputProblem(problemsWithAnswers) {
     for (let problem of problemsWithAnswers) {
         mapped.push({
             problemMessage: problem.message,
-            answer: problem.answer,
+            answers: [problem.answer],
             LessonId: problem.lessonid,
             LessonName: problem.name,
             createdAt: problem.createdat,
