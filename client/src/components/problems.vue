@@ -92,7 +92,7 @@ export default {
       this.problemAreaIndex = -1
     },
     deleteProblem() {
-      console.log(this.currentProblem)
+      this.$store.commit('deleteProblem', this.currentProblem)
     },
     openDeleteProblemModal(problem) {
       this.currentProblem = problem

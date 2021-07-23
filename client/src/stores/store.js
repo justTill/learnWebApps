@@ -27,6 +27,9 @@ export const store = new Vuex.Store({
         addProblem(state, problem) {
             state.problems.push(problem)
         },
+        deleteProblem(state, problem) {
+            state.problems.splice(state.problems.indexOf(problem), 1)
+        },
         addAnswerToProblem(state, payload) {
             let index = state.problems.indexOf(payload.problem)
             state.problems[index].answers.push(payload.toBeAddedAnswer)
