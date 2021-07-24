@@ -228,7 +228,28 @@ exports.saveProblem = async function (req, res, next) {
         res.status(400).send({message: "Could not save Problem for default User"})
     }
 }
+exports.deleteProblem = async function (req, res, next) {
+    let problemId = parseInt(req.params.problemId)
+    let moodleId = parseInt(req.params.moodleId)
+    let moodleName = req.params.moodleName
+    if (problemId && moodleId && moodleName) {
+        let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+        if (user.length !== 0) {
+            userRepository.deleteProblemById(problemId)
+                .then(result => {
+                    res.status(204).send({message: "deleted"})
 
+                })
+                .catch(err => {
+                    res.status(500).send({message: "Unknown error try again later"})
+                })
+        } else {
+            res.status(404).send({message: "User not found"})
+        }
+    } else {
+        res.status(400).send({message: "Missing fields"})
+    }
+}
 async function mapToOutputChapter(chapter, moodleId) {
     let mappedSections = []
     let sections = await sectionRepository.findByChapterId(chapter.id)
@@ -397,6 +418,7 @@ function mapToOutputProblem(problemsWithAnswers) {
     let mapped = []
     for (let problem of problemsWithAnswers) {
         mapped.push({
+            problemId: problem.id,
             problemMessage: problem.message,
             answers: [problem.answer],
             LessonId: problem.lessonid,

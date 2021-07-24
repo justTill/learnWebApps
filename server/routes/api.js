@@ -19,5 +19,6 @@ router.get('/users/notes/:moodleId/:moodleName', asyncMiddleware(apiController.g
 
 router.post('/users/notes/note', asyncMiddleware(apiController.insertOrUpdateNote));
 router.delete('/users/notes/:moodleId/:moodleName/:noteId', asyncMiddleware(apiController.deleteNote))
+router.delete('/users/problems/:moodleId/:moodleName/:problemId', asyncMiddleware(apiController.deleteProblem))
 
 module.exports = router;

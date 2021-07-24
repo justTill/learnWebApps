@@ -54,6 +54,7 @@
 <script>
 import TitleHeader from "@/components/learn/titleHeader";
 import {mapGetters} from "vuex";
+import {backEndHost, backEndPort} from "@/envVariables";
 
 export default {
   name: 'notes',
@@ -93,6 +94,13 @@ export default {
     },
     deleteProblem() {
       this.$store.commit('deleteProblem', this.currentProblem)
+      if (!this.user.isDefault) {
+        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + this.user.userId + "/" + this.user.userName + "/" + this.currentProblem.problemId)
+            .then(response => {
+            })
+            .catch(err => {
+            })
+      }
     },
     openDeleteProblemModal(problem) {
       this.currentProblem = problem
