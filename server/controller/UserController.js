@@ -72,10 +72,11 @@ exports.showUserOverview = async function (req, res, next) {
 exports.showUserNotifications = async function (req, res, next) {
     let unansweredProblems = await userRepository.findUnansweredProblem()
     let answeredProblems = await userRepository.findAnsweredProblems()
+    let mappedAnsweredProblems = mapAnsweredProblems(answeredProblems)
     let answeredProblemsKey = []
     let mappedProblems = new Map()
-    for (let problem of answeredProblems) {
-        let dateString = new Date(problem.createdat).toISOString().split('T')[0]
+    for (let problem of mappedAnsweredProblems) {
+        let dateString = new Date(problem.createdAt).toISOString().split('T')[0]
         if (mappedProblems.has(dateString)) {
             mappedProblems.get(dateString).push(problem)
         } else {
@@ -89,13 +90,36 @@ exports.showUserNotifications = async function (req, res, next) {
         unansweredProblems: unansweredProblems
     })
 }
+
+function mapAnsweredProblems(problems) {
+    let mappedProblems = new Map()
+    for (let problem of problems) {
+        if (mappedProblems.has(problem.problemid)) {
+            mappedProblems.get(problem.problemid).answers.push("\n \n" + problem.answer)
+        } else {
+            let mappedProblem = {
+                problemId: problem.problemid,
+                moodleId: problem.moodleid,
+                moodleName: problem.moodlename,
+                message: problem.message,
+                createdAt: problem.createdat,
+                answers: [problem.answer],
+                lessonId: problem.lessonid,
+                lessonName: problem.lessonname,
+                notificationId: problem.notificationid,
+            }
+            mappedProblems.set(problem.problemid, mappedProblem)
+        }
+    }
+    return Array.from(mappedProblems.values())
+}
+
 exports.saveAnswerOnProblem = async function (req, res, next) {
     let problemId = req.body.problemId
     let moodleId = req.body.moodleId
     let answer = req.body.answer
-    let notificationId = req.body.notificationId
     if (problemId && moodleId && answer) {
-        await userRepository.insertOrUpdateUserNotifications(notificationId, moodleId, answer, problemId)
+        await userRepository.insertOrUpdateUserNotifications(null, moodleId, answer, problemId)
     }
     res.redirect('/notifications')
 }
