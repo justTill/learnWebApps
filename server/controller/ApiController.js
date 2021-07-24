@@ -228,6 +228,29 @@ exports.saveProblem = async function (req, res, next) {
         res.status(400).send({message: "Could not save Problem for default User"})
     }
 }
+exports.saveAnswerForProblem = async function (req, res, next) {
+    let problemId = parseInt(req.body.problemId)
+    let moodleId = parseInt(req.body.moodleId)
+    let moodleName = req.body.moodleName
+    let answer = req.body.answer
+    if (problemId && moodleId && moodleName && answer) {
+        let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+        if (user.length !== 0) {
+            userRepository.insertAnswerForProblemAndUser(problemId, moodleId, answer)
+                .then(result => {
+                    res.status(201).send({message: "created"})
+                })
+                .catch(err => {
+                    res.status(500).send({message: "Unknown error try again later"})
+                })
+        } else {
+            res.status(404).send({message: "User not found"})
+        }
+    } else {
+        res.status(400).send({message: "Missing fields"})
+    }
+}
+
 exports.deleteProblem = async function (req, res, next) {
     let problemId = parseInt(req.params.problemId)
     let moodleId = parseInt(req.params.moodleId)

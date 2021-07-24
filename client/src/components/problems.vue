@@ -79,6 +79,19 @@ export default {
         toBeAddedAnswer: this.answer
       }
       this.$store.commit('addAnswerToProblem', payload)
+      if (!this.user.isDefault) {
+        let requestPayload = {
+          moodleId: this.user.userId,
+          moodleName: this.user.userName,
+          answer: this.answer,
+          problemId: this.currentProblem.problemId
+        }
+        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/answer/", requestPayload)
+            .then(response => {
+            })
+            .catch(err => {
+            })
+      }
       this.answer = ""
     },
     openAnswerOnProblemModal(problem) {

@@ -233,3 +233,15 @@ exports.insertOrUpdateNote = async function (moodleId, moodleName, noteText, not
         })
     return result
 }
+
+exports.insertAnswerForProblemAndUser = async function (problemId, moodleId, answer) {
+    let result = []
+    let query = 'Insert Into notifications (moodleid, problemid, answer) VALUES($1,$2,$3)'
+    result = await pool.query(query, [moodleId, problemId, answer])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
