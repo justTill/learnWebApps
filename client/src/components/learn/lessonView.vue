@@ -66,7 +66,6 @@ export default {
   methods: {
     solvedLesson(lessonId, isSolved, userCode) {
       this.lessonSolvedHandler(lessonId, isSolved, userCode)
-      console.log("should be here")
       this.lessonSolved = isSolved
       if (isSolved) {
         this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved", {

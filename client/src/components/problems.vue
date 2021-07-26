@@ -9,7 +9,7 @@
           <span class="problemLessonName"><b>Aufgabe:</b> {{ problem.LessonName }}</span>
           <span class="problemMessage"><b>Problem:</b> <pre class="problemPre">{{ problem.problemMessage }}</pre></span>
           <div class="deleteProblem" v-if="problemAreaIndex === index" v-on:click="openDeleteProblemModal(problem)">
-            <img src="../assets/reset.png" alt="Problem Löschen" title="Löschen" v-b-tooltip.hover.lefttop>
+            <img src="../assets/delete.png" alt="Problem Löschen" title="Löschen" v-b-tooltip.hover.lefttop>
           </div>
           <div class="displayAnswers" :ref="'showAnswer-'+index" v-on:click="toggleAnswerShow(index)">
             {{ index === displayAnswerIndex ? "Antwort ausblenden" : "Antworten anzeigen" }}
