@@ -1,5 +1,5 @@
 var passport = require('passport');
-var crypto = require('crypto');
+
 var userRepository = require("../persistence/UserRepository")
 var chapterRepository = require("../persistence/ChapterRepository")
 var sectionRepository = require("../persistence/SectionRepository")
@@ -126,24 +126,7 @@ exports.saveAnswerOnProblem = async function (req, res, next) {
     res.redirect('/notifications')
 }
 
-exports.registerUser = function (req, res, next) {
-    const saltHash = genPassword(req.body.password);
-    const salt = saltHash.salt;
-    const hash = saltHash.hash;
-    userRepository.saveAdmin(req.body.email, hash, salt).then(res => res)
-    res.redirect('/');
-}
 exports.logout = function (req, res, next) {
     req.logout();
     res.redirect('/');
-}
-
-function genPassword(password) {
-    var salt = crypto.randomBytes(32).toString('hex');
-    var genHash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512').toString('hex');
-
-    return {
-        salt: salt,
-        hash: genHash
-    };
 }

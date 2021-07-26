@@ -20,6 +20,8 @@ services:
       - SESSION_KEY=${SESSION_KEY}
       - SQL_HOST=db
       - SQL_PORT=5432
+      - ADMIN_NAME=${ADMIN_NAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
     depends_on:
       - db
   vue-nginx-client:
