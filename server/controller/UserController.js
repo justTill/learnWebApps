@@ -18,11 +18,13 @@ async function getUserThatSolvedEveryLesson() {
     let allSolved = allUsers
     for (let user of allUsers) {
         for (let lessonId of lessonIds) {
-            let solvedLesson = await lessonRepository.findSolvedByLessonIdAndMoodleId(lessonId.id, user.moodleid)
-            if (solvedLesson.length === 0) {
-                allSolved = allSolved.filter(u => {
-                    return u.moodleid !== user.moodleid
-                })
+            if (lessonId.difficultylevel !== null) {
+                let solvedLesson = await lessonRepository.findSolvedByLessonIdAndMoodleId(lessonId.id, user.moodleid)
+                if (solvedLesson.length === 0) {
+                    allSolved = allSolved.filter(u => {
+                        return u.moodleid !== user.moodleid
+                    })
+                }
             }
         }
     }

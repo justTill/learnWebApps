@@ -1,7 +1,6 @@
 <template>
   <div class="navigation">
     <span class="navLink">Logo</span>
-    <router-link class="navLink" to="/home">Home</router-link>
     <router-link class="navLink" to="/learn">Lernen</router-link>
     <router-link class="navLink" v-if="!user.isDefault" to="/notes">Notes</router-link>
     <router-link class="navLink" v-if="!user.isDefault" to="/messages">Nachrichten</router-link>
