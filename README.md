@@ -48,6 +48,8 @@ Our frontend can be accessed via: http://localhost:8080
 
 Backend is accessible via http://localhost:3080
 
+###create and Admin
+docker-compose exec node-server node createAdmin.js 
 ## Licences
 To be determined
 

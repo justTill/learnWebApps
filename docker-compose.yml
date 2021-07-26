@@ -14,8 +14,6 @@ services:
       - SESSION_KEY=${SESSION_KEY}
       - SQL_HOST=db
       - SQL_PORT=5432
-      - ADMIN_NAME=${ADMIN_NAME}
-      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
     volumes:
       - ./server:/usr/src/app/server
       - /usr/src/app/server/node_modules

@@ -29,6 +29,7 @@
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "pg": "^8.6.0",
+    "prompt-sync": "^4.2.0",
     "worker-threads": "^1.0.0"
   }
 }
