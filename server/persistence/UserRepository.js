@@ -58,7 +58,7 @@ exports.findAllUsers = async function () {
 }
 
 exports.findAnsweredProblems = async function () {
-    let query = 'select p.moodleid, p.message, p.createdat, ps.moodlename, n.answer, p.id as "problemid",n.id as notificationid,  l.id as "lessonid", l.name as "lessonname" from problems p join notifications n on n.problemid = p.id join lessons l on l.id = p.lessonid join persons ps on ps.moodleid = p.moodleid order by p.createdat';
+    let query = 'select p.moodleid, p.message, p.createdat, ps.moodlename, n.answer, p.id as "problemid",n.id as notificationid,  l.id as "lessonid", l.name as "lessonname", n.sender as "sender", n.seen as "seen" from problems p join notifications n on n.problemid = p.id join lessons l on l.id = p.lessonid join persons ps on ps.moodleid = p.moodleid order by n.createdat ';
     let result = []
     result = await pool.query(query, [])
         .then(res => {
@@ -90,19 +90,19 @@ exports.deleteProblemById = async function (id) {
         })
     return result
 }
-exports.insertOrUpdateUserNotifications = async function (id, moodleId, answer, problemId) {
+exports.insertOrUpdateUserNotifications = async function (id, moodleId, answer, problemId, sender, seen) {
     let result = []
     if (id) {
-        let query = 'UPDATE notifications set moodleid=$1, answer=$2, problemid=$3 where id=$4';
-        result = await pool.query(query, [moodleId, answer, problemId, id])
+        let query = 'UPDATE notifications set moodleid=$1, answer=$2, problemid=$3, sender=$4::senderTyp, seen=$5 where id=$6';
+        result = await pool.query(query, [moodleId, answer, problemId, sender, seen, id])
             .then(res => {
                 return res
             }).catch(err => {
                 throw  err
             })
     } else {
-        let query = 'INSERT INTO notifications (moodleid, answer, problemid) VALUES ($1, $2, $3)';
-        result = await pool.query(query, [moodleId, answer, problemId])
+        let query = 'INSERT INTO notifications (moodleid, answer, problemid, sender, seen) VALUES ($1, $2, $3, $4::senderTyp,$5)';
+        result = await pool.query(query, [moodleId, answer, problemId, sender, seen])
             .then(res => {
                 return res
             }).catch(err => {
@@ -233,11 +233,21 @@ exports.insertOrUpdateNote = async function (moodleId, moodleName, noteText, not
         })
     return result
 }
-
 exports.insertAnswerForProblemAndUser = async function (problemId, moodleId, answer) {
     let result = []
-    let query = 'Insert Into notifications (moodleid, problemid, answer) VALUES($1,$2,$3)'
-    result = await pool.query(query, [moodleId, problemId, answer])
+    let query = 'Insert Into notifications (moodleid, problemid, answer, sender , seen) VALUES($1,$2,$3, $4::sendertyp, $5)'
+    result = await pool.query(query, [moodleId, problemId, answer, "STUDENT", false])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
+exports.updateNotificationsSeenForProblem = async function (problemId, hasSeen) {
+    let result = []
+    let query = 'UPDATE notifications set seen=$1 where problemid=$2'
+    result = await pool.query(query, [hasSeen, problemId])
         .then(res => {
             return res.rows
         }).catch(err => {

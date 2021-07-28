@@ -63,6 +63,14 @@ exports.deleteProblem = async function (req, res, next) {
     await userRepository.deleteProblemById(req.body.problemId)
     res.redirect('/notifications')
 }
+exports.markProblemAsSeen = async function (req, res, next) {
+    console.log("here", req.body)
+    userRepository.updateNotificationsSeenForProblem(req.body.problemId, true)
+        .then(res => res)
+        .catch(err => console.log(err))
+    res.redirect('/notifications')
+}
+
 exports.showUserOverview = async function (req, res, next) {
     let solvedLessonsByChapter = await getUsersThatSolvedLessonsByChapter();
     let userThatSolvedEveryLesson = await getUserThatSolvedEveryLesson();
@@ -77,7 +85,9 @@ exports.showUserNotifications = async function (req, res, next) {
     let mappedAnsweredProblems = mapAnsweredProblems(answeredProblems)
     let answeredProblemsKey = []
     let mappedProblems = new Map()
-    for (let problem of mappedAnsweredProblems) {
+    let unseenProblems = mappedAnsweredProblems.filter(p => !p.seen)
+    let seenProblems = mappedAnsweredProblems.filter(p => p.seen)
+    for (let problem of seenProblems) {
         let dateString = new Date(problem.createdAt).toISOString().split('T')[0]
         if (mappedProblems.has(dateString)) {
             mappedProblems.get(dateString).push(problem)
@@ -89,23 +99,27 @@ exports.showUserNotifications = async function (req, res, next) {
     res.render('users/notifications', {
         answeredProblemKeys: answeredProblemsKey,
         answeredProblems: mappedProblems,
-        unansweredProblems: unansweredProblems
+        unansweredProblems: unansweredProblems,
+        unseenProblems: unseenProblems
     })
 }
 
 function mapAnsweredProblems(problems) {
     let mappedProblems = new Map()
     for (let problem of problems) {
+        let sender = problem.sender === "STUDENT" ? "vom: studenten" : "vom: Dozenten"
         if (mappedProblems.has(problem.problemid)) {
-            mappedProblems.get(problem.problemid).answers.push("\n \n" + problem.answer)
+            mappedProblems.get(problem.problemid).answers.push("\n \n" + problem.answer + "\n " + sender)
+            mappedProblems.get(problem.problemid).seen = problem.sender !== "STUDENT" || problem.seen
         } else {
             let mappedProblem = {
                 problemId: problem.problemid,
                 moodleId: problem.moodleid,
                 moodleName: problem.moodlename,
+                seen: problem.sender !== "STUDENT" || problem.seen,
                 message: problem.message,
                 createdAt: problem.createdat,
-                answers: [problem.answer],
+                answers: [problem.answer + "\n " + sender],
                 lessonId: problem.lessonid,
                 lessonName: problem.lessonname,
                 notificationId: problem.notificationid,
@@ -121,7 +135,7 @@ exports.saveAnswerOnProblem = async function (req, res, next) {
     let moodleId = req.body.moodleId
     let answer = req.body.answer
     if (problemId && moodleId && answer) {
-        await userRepository.insertOrUpdateUserNotifications(null, moodleId, answer, problemId)
+        await userRepository.insertOrUpdateUserNotifications(null, moodleId, answer, problemId, "LECTURER", true)
             .then(res => res)
             .catch(err => console.log(err))
     }

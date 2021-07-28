@@ -449,7 +449,7 @@ function mapToOutputProblem(problemsWithAnswers) {
                 answers: [problem.answer],
                 lessonId: problem.lessonid,
                 createdAt: problem.createdat,
-
+                sender: problem.sender,
             })
         }
     }

@@ -11,6 +11,7 @@ router.get('/logout', isLoggedIn, userController.logout);
 router.post('/login', userController.authenticate);
 
 router.post('/deleteProblem', userController.deleteProblem);
+router.post('/markAsRead', userController.markProblemAsSeen);
 router.post('/saveAnswerOnProblem', userController.saveAnswerOnProblem);
 
 module.exports = router;

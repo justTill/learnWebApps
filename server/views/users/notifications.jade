@@ -45,8 +45,22 @@ block content
     else
         h1(class="headline") Es gibt keine neuen Probleme
 
+    if unseenProblems.length !== 0
+        h1(class="headline") Probleme mit ungelesenen Nachrichten
+        each unseenProblem in unseenProblems
+            div(class="tile problemTile")
+                button(class="btn btn-primary editChapter" type="button" data-toggle="modal" data-target="#problemEditModal"
+                    data-problemlessonname="#{unseenProblem.lessonName}"
+                    data-problemmessage="#{unseenProblem.message}"
+                    data-problemid="#{unseenProblem.problemId}"
+                    data-problemmoodlename="#{unseenProblem.moodleName}"
+                    data-problemmoodleid="#{unseenProblem.moodleId}"
+                    data-problemanswers="#{unseenProblem.answers}"
+                    data-problemnotificationid="#{unseenProblem.notificationId}") Problem bearbeiten
+                span Problem von <b> #{unseenProblem.moodleName} </b> bei der Aufgabe <b> #{unseenProblem.lessonName}</b>
 
-    h1(class="headline") Probleme mit ungelesenen Nachrichten
+    else
+        h1(class="headline") Es gibt keine beantworteten Probleme mit ungelesenen Nachrichten
 
     if answeredProblemKeys.length !== 0
         h1(class="headline") Probleme bearbeiten
@@ -63,7 +77,7 @@ block content
                             data-problemmoodlename="#{problem.moodleName}"
                             data-problemmoodleid="#{problem.moodleId}"
                             data-problemanswers="#{problem.answers}"
-                            data-problemnotificationid="#{problem.notificationId}") Antwort bearbeiten
+                            data-problemnotificationid="#{problem.notificationId}") Problem bearbeiten
                         span Problem von <b> #{problem.moodleName} </b> bei der Aufgabe <b> #{problem.lessonName}</b>
 
         div
@@ -91,6 +105,9 @@ block content
                                 textarea(class="form-control formNewAnswer" name="answer" value="" required placeholder="neue Antwort schreiben")
                                 br
                                 button(class="btn btn-primary saveBt" type="submit") Speichern
+                            form(class="problemForm" action="/markAsRead" method="post")
+                                input(class="markAsReadProblemId" type="hidden" name="problemId")
+                                button(class="btn btn-success readBt" type="submit") Als gelesen makieren
                             form(class="problemForm" action="/deleteProblem" method="post")
                                 input(class="deleteAnswerProblemId" type="hidden" name="problemId")
                                 button(class="btn btn-danger deleteProblemBt" type="submit") Löschen
@@ -114,6 +131,7 @@ block content
                 modal.find('.formProblemText').text('Frage: ' + problemMessage)
                 modal.find('.formAnswersText').text(problemAnswers)
                 modal.find('.deleteAnswerProblemId').val(problemId)
+                modal.find('.markAsReadProblemId').val(problemId)
             })
     else
         h1 Es gibt noch keine Antworten auf Probleme die bearbeitet werden können
