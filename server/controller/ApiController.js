@@ -438,19 +438,22 @@ function pseudoShuffle(array) {
 }
 
 function mapToOutputProblem(problemsWithAnswers) {
-    let mapped = []
+    let mapped = new Map()
     for (let problem of problemsWithAnswers) {
-        mapped.push({
-            problemId: problem.id,
-            problemMessage: problem.message,
-            answers: [problem.answer],
-            LessonId: problem.lessonid,
-            LessonName: problem.name,
-            createdAt: problem.createdat,
+        if (mapped.has(problem.id)) {
+            mapped.get(problem.id).answers.push(problem.answer)
+        } else {
+            mapped.set(problem.id, {
+                problemId: problem.id,
+                problemMessage: problem.message,
+                answers: [problem.answer],
+                lessonId: problem.lessonid,
+                createdAt: problem.createdat,
 
-        })
+            })
+        }
     }
-    return mapped
+    return Array.from(mapped.values())
 }
 
 function mapToOutputNotes(notes) {

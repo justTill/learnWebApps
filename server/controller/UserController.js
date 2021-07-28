@@ -122,6 +122,8 @@ exports.saveAnswerOnProblem = async function (req, res, next) {
     let answer = req.body.answer
     if (problemId && moodleId && answer) {
         await userRepository.insertOrUpdateUserNotifications(null, moodleId, answer, problemId)
+            .then(res => res)
+            .catch(err => console.log(err))
     }
     res.redirect('/notifications')
 }
