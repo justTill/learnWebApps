@@ -11,10 +11,14 @@ export const store = new Vuex.Store({
         problems: [],
         chapters: [],
         difficultyLevel: "ALL",
+        codeMirrorTheme: "DARK",
     },
     mutations: {
         setDifficultyLevel(state, level) {
             state.difficultyLevel = level
+        },
+        setCodeMirrorTheme(state, theme) {
+            state.codeMirrorTheme = theme
         },
         setUserId(state, id) {
             state.userId = id
@@ -85,6 +89,9 @@ export const store = new Vuex.Store({
         },
         difficultyLevel: state => {
             return store.state.difficultyLevel
+        },
+        codeMirrorTheme: state => {
+            return store.state.codeMirrorTheme
         }
     }
 })

@@ -57,6 +57,13 @@
           <option value="HARD">Schwer</option>
         </select>
       </div>
+      <div class="selectDifficulty">
+        Für Programmieraufgaben hellen oder Dunklen modus?
+        <select v-model="codeMirrorMode" v-on:change="changeCodeMirrorTheme">
+          <option value="DARK" selected>Dunkel</option>
+          <option value="LIGHT">Hell</option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
@@ -82,14 +89,16 @@ export default {
       nextLesson: null,
       selectedText: "",
       showNote: false,
-      difficultyLevel: "ALL"
+      difficultyLevel: "ALL",
+      codeMirrorMode: "DARK"
     }
   },
   computed: {
     ...mapGetters([
       'chapters',
       'user',
-      'notes'
+      'notes',
+      'codeMirrorTheme'
     ]),
     showSaveNote() {
       return this.showNote
@@ -110,6 +119,9 @@ export default {
   methods: {
     changeDifficultyLevel() {
       this.$store.commit('setDifficultyLevel', this.difficultyLevel)
+    },
+    changeCodeMirrorTheme() {
+      this.$store.commit('setCodeMirrorTheme', this.codeMirrorMode)
     },
     saveMarkedTextAsNotes() {
       let note = {

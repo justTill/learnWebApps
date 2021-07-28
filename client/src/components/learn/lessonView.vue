@@ -20,7 +20,8 @@
           </div>
         </div>
       </div>
-      <coding-lesson v-if="lesson.type==='codingLesson'" :lesson="lesson" :solvedHandler="solvedLesson"></coding-lesson>
+      <coding-lesson v-if="lesson.type==='codingLesson'" :lesson="lesson" :solvedHandler="solvedLesson"
+                     :theme="codeMirrorTheme"></coding-lesson>
     </div>
     <lesson-solved :feedback="lesson.feedback" v-if="lessonSolved"></lesson-solved>
   </div>
@@ -60,7 +61,8 @@ export default {
       return DOMPurify.sanitize(this.lesson.information);
     },
     ...mapGetters([
-      'user'
+      'user',
+      'codeMirrorTheme'
     ]),
   },
   methods: {
