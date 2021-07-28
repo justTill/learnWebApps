@@ -48,6 +48,15 @@
     <div v-else class="chapterContent">
       <title-header title="Informationen" :reset-chapter="resetLessonsSolved"
                     resetText="Alle Fortschritt zurücksetzen ?"></title-header>
+      <div class="selectDifficulty">
+        Es gibt verschiedene Schwierigkeistgerade
+        <select v-model="difficultyLevel" v-on:change="changeDifficultyLevel">
+          <option value="ALL" selected>Alle</option>
+          <option value="EASY">Leicht</option>
+          <option value="MIDDLE">Mittel</option>
+          <option value="HARD">Schwer</option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
@@ -72,7 +81,8 @@ export default {
       previousLesson: null,
       nextLesson: null,
       selectedText: "",
-      showNote: false
+      showNote: false,
+      difficultyLevel: "ALL"
     }
   },
   computed: {
@@ -98,6 +108,9 @@ export default {
     })
   },
   methods: {
+    changeDifficultyLevel() {
+      this.$store.commit('setDifficultyLevel', this.difficultyLevel)
+    },
     saveMarkedTextAsNotes() {
       let note = {
         notesId: -1,

@@ -25,13 +25,14 @@ export default {
   components: {},
   computed: {
     ...mapGetters([
-      'user'
+      'user',
+      'difficultyLevel'
     ]),
     percentage: function () {
       let numberOfInteractiveLessons = 0
       let numberOfLessonsDone = 0;
       for (let lesson of this.section.lessons) {
-        if (lesson.type !== 'information') {
+        if (lesson.type !== 'information' && (this.difficultyLevel === "ALL" || this.difficultyLevel === lesson.difficultyLevel)) {
           numberOfInteractiveLessons++
           if (lesson.done) numberOfLessonsDone++
         }
