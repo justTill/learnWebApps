@@ -26,6 +26,10 @@ to start docker setup run following command
 
 ``` docker-compose up --build ```
 
+To create an admin fun following command and follow instructions on screen
+
+ ```docker-compose exec node-server node createAdmin.js  ```
+ 
 Our frontend can be accessed via: http://localhost:8080
 
 Backend is accessible via http://localhost:3080
@@ -48,6 +52,9 @@ Our frontend can be accessed via: http://localhost:8080
 
 Backend is accessible via http://localhost:3080
 
+To create an admin fun following command and follow instructions on screen
+
+ ```docker-compose -f docker-compose-prod.yml exec node-server node createAdmin.js  ```
 ## Licences
 To be determined
 

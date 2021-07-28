@@ -17,10 +17,20 @@
           },
           {
             "sql": {
-              "comment": "create lessons type enum",
+              "comment": "difficulty type enum",
               "endDelimiter": "GO",
               "splitStatements": true,
               "sql": "CREATE TYPE difficultyLevelType AS ENUM ('EASY','MIDDLE', 'HARD')",
+              "stripComments": true
+            }
+          },
+          ,
+          {
+            "sql": {
+              "comment": "notificationsSender type enum",
+              "endDelimiter": "GO",
+              "splitStatements": true,
+              "sql": "CREATE TYPE senderTyp AS ENUM ('LECTURER','STUDENT')",
               "stripComments": true
             }
           },
@@ -338,6 +348,24 @@
                   "column": {
                     "name": "message",
                     "type": "text"
+                  }
+                },
+                {
+                  "column": {
+                    "name": "sender",
+                    "type": "senderTyp",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "seen",
+                    "type": "boolean",
+                    "constraints": {
+                      "nullable": false
+                    }
                   }
                 },
                 {

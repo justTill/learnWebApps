@@ -233,7 +233,6 @@ export default {
   }
 }
 </script>
-
 <style>
 .createNotes {
   position: absolute;

@@ -364,7 +364,7 @@ exports.findAllBySectionId = async function (sectionId) {
 }
 
 exports.findAllLessonIds = async function () {
-    let query = 'SELECT id from lessons '
+    let query = 'SELECT id, difficultylevel from lessons '
     let result = {}
     result = await pool.query(query, [])
         .then(res => {

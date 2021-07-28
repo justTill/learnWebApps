@@ -20,14 +20,14 @@
     <div v-if="lesson && !user.isDefault" class="helperButtons">
       <div title="Hilfe" class="helpButton" v-on:click="openHelpModal" v-b-modal.modal-center
            variant="info" v-if="lesson.type !=='information'">
-        <img title="Hilfe" alt="Hilfe" class="helpIcon" src="../../assets/question.png" v-b-tooltip.hover.lefttop>
+        <img title="Hilfe" alt="Hilfe" class="helpIcon" src="../../assets/help.png" v-b-tooltip.hover.lefttop>
         <b-modal ref="help-modal" id="modal-center-help" centered title="Hilfe" ok-only ok-variant="success"
                  hide-header-close>
           <help-content class="my-4" :lesson="lesson"></help-content>
         </b-modal>
       </div>
       <div title="Meldung" class="reportButton" v-on:click="openReportModal">
-        <img title="Problem Melden" alt="Hilfe" class="reportIcon" src="../../assets/error.png"
+        <img title="Problem Melden" alt="Hilfe" class="reportIcon" src="../../assets/report.png"
              v-b-tooltip.hover.lefttop>
         <b-modal ref="report-modal" id="modal-center-report" centered title="Problem Melden" hide-header-close
                  ok-variant="success"

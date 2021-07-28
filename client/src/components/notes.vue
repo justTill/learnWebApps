@@ -9,10 +9,10 @@
         {{ note.note }}
         <div class="changeNoteArea" v-if="changeAreaIndex === index">
           <div class="changeNoteButton" v-on:click="showChangeNoteModal(note)">
-            <img src="../assets/reset.png" alt="Notiz Bearbeiten" title="Bearbeiten" v-b-tooltip.hover.lefttop>
+            <img src="../assets/edit.png" alt="Notiz Bearbeiten" title="Bearbeiten" v-b-tooltip.hover.lefttop>
           </div>
           <div class="changeNoteButton deleteNote" v-on:click="deleteNote(note)">
-            <img src="../assets/reset.png" alt="Notiz Löschen" title="Löschen" v-b-tooltip.hover.lefttop>
+            <img src="../assets/delete.png" alt="Notiz Löschen" title="Löschen" v-b-tooltip.hover.lefttop>
           </div>
         </div>
       </div>
@@ -137,10 +137,6 @@ export default {
   }
 }
 
-.deleteNote {
-  background-color: red;
-}
-
 .changeNoteButton {
   display: inline-block;
   margin-right: 10px;
@@ -158,7 +154,7 @@ export default {
 .changeNoteArea {
   display: inline-block;
   position: absolute;
-  right: 10px
+  right: 10px;
 }
 
 .note {
@@ -171,7 +167,6 @@ export default {
   padding: 5px 10px 5px;
   border: 1px solid black;
   border-radius: 5px;
-
 }
 
 .revertDelete {

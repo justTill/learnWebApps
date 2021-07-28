@@ -228,7 +228,51 @@ exports.saveProblem = async function (req, res, next) {
         res.status(400).send({message: "Could not save Problem for default User"})
     }
 }
+exports.saveAnswerForProblem = async function (req, res, next) {
+    let problemId = parseInt(req.body.problemId)
+    let moodleId = parseInt(req.body.moodleId)
+    let moodleName = req.body.moodleName
+    let answer = req.body.answer
+    if (problemId && moodleId && moodleName && answer) {
+        let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+        if (user.length !== 0) {
+            userRepository.insertAnswerForProblemAndUser(problemId, moodleId, answer)
+                .then(result => {
+                    res.status(201).send({message: "created"})
+                })
+                .catch(err => {
+                    res.status(500).send({message: "Unknown error try again later"})
+                })
+        } else {
+            res.status(404).send({message: "User not found"})
+        }
+    } else {
+        res.status(400).send({message: "Missing fields"})
+    }
+}
 
+exports.deleteProblem = async function (req, res, next) {
+    let problemId = parseInt(req.params.problemId)
+    let moodleId = parseInt(req.params.moodleId)
+    let moodleName = req.params.moodleName
+    if (problemId && moodleId && moodleName) {
+        let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+        if (user.length !== 0) {
+            userRepository.deleteProblemById(problemId)
+                .then(result => {
+                    res.status(204).send({message: "deleted"})
+
+                })
+                .catch(err => {
+                    res.status(500).send({message: "Unknown error try again later"})
+                })
+        } else {
+            res.status(404).send({message: "User not found"})
+        }
+    } else {
+        res.status(400).send({message: "Missing fields"})
+    }
+}
 async function mapToOutputChapter(chapter, moodleId) {
     let mappedSections = []
     let sections = await sectionRepository.findByChapterId(chapter.id)
@@ -394,18 +438,22 @@ function pseudoShuffle(array) {
 }
 
 function mapToOutputProblem(problemsWithAnswers) {
-    let mapped = []
+    let mapped = new Map()
     for (let problem of problemsWithAnswers) {
-        mapped.push({
-            problemMessage: problem.message,
-            answer: problem.answer,
-            LessonId: problem.lessonid,
-            LessonName: problem.name,
-            createdAt: problem.createdat,
-
-        })
+        if (mapped.has(problem.id)) {
+            mapped.get(problem.id).answers.push(problem.answer)
+        } else {
+            mapped.set(problem.id, {
+                problemId: problem.id,
+                problemMessage: problem.message,
+                answers: [problem.answer],
+                lessonId: problem.lessonid,
+                createdAt: problem.createdat,
+                sender: problem.sender,
+            })
+        }
     }
-    return mapped
+    return Array.from(mapped.values())
 }
 
 function mapToOutputNotes(notes) {
