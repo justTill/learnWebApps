@@ -29,7 +29,7 @@ export default {
   },
   mounted() {
     if (this.errorMessage) {
-      this.$refs['showErrorMessage-modal'].show()
+      setTimeout(() => this.$refs['showErrorMessage-modal'].show(), 150)
     }
   }
 }
