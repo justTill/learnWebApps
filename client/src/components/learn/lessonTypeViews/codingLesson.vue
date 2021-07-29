@@ -16,7 +16,8 @@
 <script>
 import {codemirror} from 'vue-codemirror'
 import 'codemirror/mode/javascript/javascript.js'
-import 'codemirror/theme/base16-dark.css'
+import 'codemirror/theme/darcula.css'
+import 'codemirror/theme/duotone-light.css'
 import {mapGetters} from "vuex";
 import {backEndHost, backEndPort} from "@/envVariables";
 
@@ -24,6 +25,7 @@ export default {
   name: 'codingLesson',
   components: {codemirror},
   props: {
+    theme: String,
     lesson: Object,
     solvedHandler: Function,
   },
@@ -33,14 +35,16 @@ export default {
       userCode: this.lesson.userCode,
       isLoadingResults: false,
       errorMessages: [],
-      cmOptions: {
-        tabSize: 4,
-        mode: 'text/javascript',
-        theme: 'base16-dark',
-        lineNumbers: true,
-        line: true,
-      }
+      cmOptions: this.codeMirrorOptions(),
     }
+  },
+  computed: {
+    ...mapGetters([
+      'user',
+    ]),
+    codemirror() {
+      return this.$refs.codeMirror.codemirror
+    },
   },
   methods: {
     evaluate() {
@@ -70,20 +74,17 @@ export default {
     },
     onCodeChange(cm) {
       this.userCode = cm
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'user'
-    ]),
-    codemirror() {
-      return this.$refs.codeMirror.codemirror
     },
-    getUserCode() {
-      console.log("heere")
-      return this.lesson.userCode
-    }
-  }
+    codeMirrorOptions() {
+      return {
+        tabSize: 4,
+        mode: 'text/javascript',
+        theme: this.theme === "DARK" ? "darcula" : "duotone-light",
+        lineNumbers: true,
+        line: true,
+      }
+    },
+  },
 }
 </script>
 <style>

@@ -48,6 +48,22 @@
     <div v-else class="chapterContent">
       <title-header title="Informationen" :reset-chapter="resetLessonsSolved"
                     resetText="Alle Fortschritt zurücksetzen ?"></title-header>
+      <div class="selectDifficulty">
+        Es gibt verschiedene Schwierigkeistgerade
+        <select v-model="difficultyLevel" v-on:change="changeDifficultyLevel">
+          <option value="ALL" selected>Alle</option>
+          <option value="EASY">Leicht</option>
+          <option value="MIDDLE">Mittel</option>
+          <option value="HARD">Schwer</option>
+        </select>
+      </div>
+      <div class="selectDifficulty">
+        Für Programmieraufgaben hellen oder Dunklen modus?
+        <select v-model="codeMirrorMode" v-on:change="changeCodeMirrorTheme">
+          <option value="DARK" selected>Dunkel</option>
+          <option value="LIGHT">Hell</option>
+        </select>
+      </div>
     </div>
   </div>
 </template>
@@ -72,14 +88,17 @@ export default {
       previousLesson: null,
       nextLesson: null,
       selectedText: "",
-      showNote: false
+      showNote: false,
+      difficultyLevel: "ALL",
+      codeMirrorMode: "DARK"
     }
   },
   computed: {
     ...mapGetters([
       'chapters',
       'user',
-      'notes'
+      'notes',
+      'codeMirrorTheme'
     ]),
     showSaveNote() {
       return this.showNote
@@ -98,6 +117,12 @@ export default {
     })
   },
   methods: {
+    changeDifficultyLevel() {
+      this.$store.commit('setDifficultyLevel', this.difficultyLevel)
+    },
+    changeCodeMirrorTheme() {
+      this.$store.commit('setCodeMirrorTheme', this.codeMirrorMode)
+    },
     saveMarkedTextAsNotes() {
       let note = {
         notesId: -1,
