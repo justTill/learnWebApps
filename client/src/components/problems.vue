@@ -78,7 +78,6 @@ export default {
         problem: this.currentProblem,
         toBeAddedAnswer: this.answer
       }
-      this.$store.commit('addAnswerToProblem', payload)
       if (!this.user.isDefault) {
         let requestPayload = {
           moodleId: this.user.userId,
@@ -88,8 +87,11 @@ export default {
         }
         this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/answer/", requestPayload)
             .then(response => {
+              this.$store.commit('addAnswerToProblem', payload)
             })
             .catch(err => {
+              let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Die Antwort konnte nicht daher gespeichert werden, bitte versuchen Sie es später erneut."
+              this.$store.commit('setErrorMessage', errorMessage)
             })
       }
       this.answer = ""
@@ -106,13 +108,17 @@ export default {
       this.problemAreaIndex = -1
     },
     deleteProblem() {
-      this.$store.commit('deleteProblem', this.currentProblem)
       if (!this.user.isDefault) {
         this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + this.user.userId + "/" + this.user.userName + "/" + this.currentProblem.problemId)
             .then(response => {
+              this.$store.commit('deleteProblem', this.currentProblem)
             })
             .catch(err => {
+              let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Das Problem konnte nicht daher gelöscht werden, bitte versuchen Sie es später erneut."
+              this.$store.commit('setErrorMessage', errorMessage)
             })
+      } else {
+        this.$store.commit('deleteProblem', this.currentProblem)
       }
     },
     openDeleteProblemModal(problem) {

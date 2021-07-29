@@ -446,7 +446,7 @@ function mapToOutputProblem(problemsWithAnswers) {
             mapped.set(problem.id, {
                 problemId: problem.id,
                 problemMessage: problem.message,
-                answers: [problem.answer],
+                answers: problem.answer ? [problem.answer] : [],
                 lessonId: problem.lessonid,
                 createdAt: problem.createdat,
                 sender: problem.sender,

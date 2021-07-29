@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <error-pop-up v-if="isErrorMessage !== ''" :errorMessage="isErrorMessage"></error-pop-up>
     <navigation></navigation>
     <div class="viewArea">
       <router-view class="view"></router-view>
@@ -10,11 +11,20 @@
 <script>
 
 import Navigation from "@/components/navigation";
+import {mapGetters} from "vuex";
+import ErrorPopUp from "@/components/utils/errorPopUp";
 
 export default {
   name: 'app',
-  components: {Navigation},
-  computed: {},
+  components: {ErrorPopUp, Navigation},
+  computed: {
+    ...mapGetters([
+      'errorMessage',
+    ]),
+    isErrorMessage() {
+      return this.errorMessage
+    }
+  },
   methods: {}
 }
 </script>

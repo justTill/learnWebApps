@@ -17,7 +17,7 @@
         </b-modal>
       </div>
     </div>
-    <div v-if="lesson && !user.isDefault" class="helperButtons">
+    <div v-if="lesson" class="helperButtons">
       <div title="Hilfe" class="helpButton" v-on:click="openHelpModal" v-b-modal.modal-center
            variant="info" v-if="lesson.type !=='information'">
         <img title="Hilfe" alt="Hilfe" class="helpIcon" src="../../assets/help.png" v-b-tooltip.hover.lefttop>
@@ -26,7 +26,7 @@
           <help-content class="my-4" :lesson="lesson"></help-content>
         </b-modal>
       </div>
-      <div title="Meldung" class="reportButton" v-on:click="openReportModal">
+      <div v-if="!user.isDefault" title="Meldung" class="reportButton" v-on:click="openReportModal">
         <img title="Problem Melden" alt="Hilfe" class="reportIcon" src="../../assets/report.png"
              v-b-tooltip.hover.lefttop>
         <b-modal ref="report-modal" id="modal-center-report" centered title="Problem Melden" hide-header-close
