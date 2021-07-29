@@ -12,6 +12,10 @@ exports.authenticate = passport.authenticate('local', {
     if (err) next(err);
 };
 
+exports.redirectFrontend = async function (req, res, next) {
+    res.redirect('http://localhost:8080')
+}
+
 async function getUserThatSolvedEveryLesson() {
     let allUsers = await userRepository.findAllUsers()
     let lessonIds = await lessonRepository.findAllLessonIds()

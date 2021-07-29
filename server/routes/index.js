@@ -8,6 +8,8 @@ router.get('/overview', isLoggedIn, asyncMiddleware(userController.showUserOverv
 router.get('/notifications', isLoggedIn, asyncMiddleware(userController.showUserNotifications))
 router.get('/logout', isLoggedIn, userController.logout);
 
+router.get('/test', isLoggedIn, userController.redirectFrontend);
+
 router.post('/login', userController.authenticate);
 
 router.post('/deleteProblem', userController.deleteProblem);
