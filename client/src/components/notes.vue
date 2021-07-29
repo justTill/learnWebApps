@@ -54,7 +54,8 @@ export default {
   computed: {
     ...mapGetters([
       'notes',
-      'user'
+      'user',
+      'errorMessage'
     ]),
     titleText() {
       if (this.user.isDefault) {
@@ -72,17 +73,24 @@ export default {
       this.changeAreaIndex = -1
     },
     deleteNote(note) {
-      this.lastDeletedNote = note
-      this.lastDeletedNoteIndex = this.notes.indexOf(note)
-      this.$store.commit('deleteNote', note)
       if (!this.user.isDefault) {
         this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/" + this.user.userId + "/" + this.user.userName + "/" + note.notesId)
             .then(response => {
+              this.lastDeletedNote = note
+              this.lastDeletedNoteIndex = this.notes.indexOf(note)
+              this.$store.commit('deleteNote', note)
+              this.$el.querySelector('#revertNoteDelete').style.display = "block"
             })
             .catch(err => {
+              let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Die Notiz konnte nicht gelöscht werden, bitte versuchen Sie es später erneut."
+              this.$store.commit('setErrorMessage', errorMessage)
             })
+      } else {
+        this.lastDeletedNote = note
+        this.lastDeletedNoteIndex = this.notes.indexOf(note)
+        this.$store.commit('deleteNote', note)
+        this.$el.querySelector('#revertNoteDelete').style.display = "block"
       }
-      this.$el.querySelector('#revertNoteDelete').style.display = "block"
     },
     revertDeleteNote() {
       this.$el.querySelector('#revertNoteDelete').style.display = "none"
@@ -109,7 +117,7 @@ export default {
       this.$store.commit('changeNote', storePayload)
     },
     updateNoteBackend(note) {
-      if (!this.user.isDefault) {
+      if (!this.user.isDefault && note.notesId !== -1) {
         let payload = {
           moodleId: this.user.userId,
           moodleName: this.user.userName,
@@ -120,7 +128,8 @@ export default {
             .then(response => {
             })
             .catch(err => {
-              //error Could not save Note
+              let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Die Notiz konnte leider nicht permanent gespeichert werden."
+              this.$store.commit('setErrorMessage', errorMessage)
             })
       }
     }

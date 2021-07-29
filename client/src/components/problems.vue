@@ -3,6 +3,7 @@
     <title-header title="Deine Nachrichten"></title-header>
     <div class="messageContainer">
       <div v-for="(problem, index) in problems">
+        {{ problem }}
         <div class="problem hoverEffect"
              @mouseover="onHover(index)"
              @mouseleave="onHoverLeave(index)">

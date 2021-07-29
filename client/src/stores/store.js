@@ -37,7 +37,7 @@ export const store = new Vuex.Store({
             state.problems = problems
         },
         addProblem(state, problem) {
-            state.problems.push(problem)
+            state.problems.unshift(problem)
         },
         deleteProblem(state, problem) {
             state.problems.splice(state.problems.indexOf(problem), 1)

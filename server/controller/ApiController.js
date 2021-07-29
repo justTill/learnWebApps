@@ -215,7 +215,7 @@ exports.saveProblem = async function (req, res, next) {
         if (user.length !== 0 && lesson.length !== 0) {
             userRepository.insertProblemForUser(moodleId, lessonId, problem)
                 .then(result => {
-                    res.status(201).send({message: "Problem created"})
+                    res.status(201).send({message: "Problem created", problemId: result[0].id})
 
                 })
                 .catch(err => {

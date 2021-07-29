@@ -77,21 +77,23 @@ export default {
       this.$refs['report-modal'].show()
     },
     sendProblem() {
-      if (this.problem !== "") {
+      if (this.problem !== "" && !this.user.isDefault) {
         this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/", {
           moodleId: this.user.userId,
           moodleName: this.user.userName,
           problem: this.problem,
           lessonId: this.lesson.lessonId
         }).then(response => {
-          this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + this.user.userId + "/" + this.user.userName)
-              .then(result => {
-                this.problem = ""
-                this.$store.commit("setProblems", result.data.problems)
-              })
-              .catch(err => console.log(err))
+          let problem = {
+            problemId: response.data.problemId,
+            problemMessage: this.problem,
+            lessonId: this.lesson.lessonId,
+            answers: []
+          }
+          this.$store.commit('addProblem', problem)
         }).catch(err => {
-          console.log(err)
+          let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Das Problem konnte leider nicht übermittelt werden."
+          this.$store.commit('setErrorMessage', errorMessage)
         })
       }
     }
