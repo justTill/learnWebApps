@@ -30,8 +30,9 @@ export default {
 </script>
 
 <style>
+@import "assets/cssVariables.css";
 html {
-  background-color: #f7f3eb;
+  background-color: var(--beige);
 }
 
 html, body {
@@ -48,9 +49,9 @@ body, html {
 }
 
 #app {
-  background-color: #f7f3eb;
+  background-color: var(--beige);
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  color: #2c3e50;
+  color: var(--dark-blue);
   height: 100%;
   word-wrap: break-word;
 }

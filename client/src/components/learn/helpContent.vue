@@ -70,7 +70,7 @@ export default {
       let counter = 0;
       while (text.includes('[input]')) {
         let answerValue = answers[counter].possibleAnswer
-        let divValue = '<div class="dropzone" style="background-color: rgba(0, 255, 0, 0.3)">' + '<div class="possibleAnswers drag">' + answerValue + '</div></div>'
+        let divValue = '<div class="dropzone" style="background-color: rgba(0, 255, 0, 0.1)">' + '<div class="possibleAnswers drag">' + answerValue + '</div></div>'
         text = text.replace('[input]', divValue)
         counter++
       }

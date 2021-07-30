@@ -101,8 +101,10 @@ export default {
 }
 </script>
 <style>
+@import "../../assets/cssVariables.css";
+
 .doneIcon {
-  color: green;
+  color: var(--dark-green);
 }
 
 .title > h1 {
@@ -114,7 +116,7 @@ export default {
   height: 80px;
   position: relative;
   text-align: center;
-  background-color: white;
+  background-color: var(--white);
   margin-bottom: 10px;
   border-top: 1px solid black;
   border-bottom: 1px solid black;

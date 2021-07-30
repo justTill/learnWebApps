@@ -74,6 +74,8 @@ export default {
 }
 </script>
 <style>
+@import "../../../assets/cssVariables.css";
+
 .singleMultipleChoiceLessonContainer {
   display: flex;
   justify-content: center;
@@ -88,17 +90,17 @@ export default {
 label > code {
   padding: 2px;
   border-radius: 5px;
-  background-color: #c7a6a6;
+  background-color: var(--davys-grey-light);
 }
 
 .errorMessage {
   height: 60px;
-  background-color: #f2ebdc;
+  background-color: var(--light-red);
   padding-top: 25px;
   margin-top: 10px;
   margin-bottom: 10px;
-  border-top: 2px solid red;
-  border-bottom: 2px solid red;
+  border-top: 2px solid var(--red);
+  border-bottom: 2px solid var(--red);
 }
 
 .answerOptions {
@@ -111,7 +113,7 @@ label {
   padding: 10px;
   border-radius: 10px;
   width: 90%;
-  background-color: lightgray;
+  background-color: var(--davys-grey-light);
 }
 
 label:hover {
@@ -125,8 +127,8 @@ input[type=checkbox]:checked + label {
 
 .checkLesson {
   display: inline-block;
-  background-color: #1a152d;
+  background-color: var(--darker-blue);
   padding: 10px;
-  color: white;
+  color: var(--white);
 }
 </style>

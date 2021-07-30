@@ -91,19 +91,21 @@ export default {
 }
 </script>
 <style>
+@import "../../../assets/cssVariables.css";
+
 .codingLessonContainer {
   display: flex;
   justify-content: center;
   flex-direction: column;
   border-radius: 2px;
   border: 1px solid black;
-  background-color: white;
+  background-color: var(--white);
   min-width: 300px;
 
 }
 
 .verificationInformation {
-  background-color: white;
+  background-color: var(--white);
   border-radius: 2px;
   border: 1px solid black;
   padding: 10px;

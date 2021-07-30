@@ -257,28 +257,31 @@ export default {
 }
 </script>
 <style>
+@import "../assets/cssVariables.css";
+
 .createNotes {
   position: absolute;
   z-index: 9999;
   display: none;
   margin: 40px;
   padding: 20px;
-  background-color: #1a152d;
-  color: white;
+  background-color: var(--davys-grey);
+  text-decoration: underline;
+  color: var(--white);
   border-radius: 5px;
 }
 
 .noteSaved {
   position: absolute;
   z-index: 9999;
-  color: white;
+  color: var(--white);
   border-radius: 5px;
   bottom: 5px;
   padding: 10px;
   margin: 8px;
   width: 200px;
   text-align: center;
-  background-color: rgb(48, 48, 48);
+  background-color: var(--davys-grey);
 }
 
 .createNotes:hover {
@@ -296,7 +299,7 @@ export default {
   flex-basis: 250px;
   flex-shrink: 0;
   height: 100%;
-  background-color: #1a152d;
+  background-color: var(--darker-blue);
   overflow: auto;
 }
 
@@ -306,7 +309,6 @@ export default {
   padding: 0px 24px 0;
   margin-top: 5px;
   min-height: 35px;
-  color: #e0e0e0;
   font-size: large;
   overflow-wrap: break-word;
 }
@@ -323,7 +325,7 @@ export default {
 }
 
 .navigationButton:hover, .navigationSectionButton:hover {
-  color: white;
+  color: var(--white);
 }
 
 .min-nav-button {
@@ -352,13 +354,13 @@ export default {
   }
 
   .navigationButton:hover, .navigationSectionButton:hover {
-    color: white !important;
+    color: var(--white) !important;
   }
 
   .closeNavigationButton {
     display: inline-block;
     cursor: pointer;
-    color: white;
+    color: var(--white);
     text-align: center;
     padding-bottom: 5px;
     font-size: 20px;
@@ -366,7 +368,7 @@ export default {
     margin: 20px;
     width: 30px;
     height: 30px;
-    border: 2px solid white;
+    border: 2px solid var(--white);
   }
 
   .min-nav-button {
@@ -375,14 +377,14 @@ export default {
     margin: 20px auto;
     min-width: 400px;
     height: 30px;
-    background-color: #f7f3eb;
+    background-color: var(--beige);
     transition-duration: 0.4s;
     border-radius: 8px;
   }
 
   .min-nav-button:hover {
     cursor: pointer;
-    background-color: #dee3e2;
+    background-color: var(--platinum);
   }
 
   .content {

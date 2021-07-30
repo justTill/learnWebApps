@@ -24,9 +24,10 @@ export default {
 </script>
 
 <style>
+@import "../assets/cssVariables.css";
 
 .navigation {
-  background-color: white;
+  background-color: var(--white);
   padding-left: 50px;
   padding-top: 25px;
   padding-bottom: 25px;
@@ -39,6 +40,6 @@ export default {
 .navLink {
   margin: 10px;
   text-decoration: none;
-  color: black;
+  color: var(--dark-blue)
 }
 </style>
