@@ -67,7 +67,10 @@ export default {
               this.successMessage = isCorrect ? this.lesson.feedback : ""
               this.solvedHandler(this.lesson.lessonId, isCorrect, this.userCode)
             })
-            .catch(err => console.log(err))
+            .catch(err => {
+              let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Aufgabe konnte nicht überprüft werden, bitte versuchen sie es Später erneut."
+              this.$store.commit('setErrorMessage', errorMessage)
+            })
       } else {
         this.errorMessages.push("Leere Code kann nicht abgeschickt werden")
       }

@@ -17,7 +17,7 @@
         </b-modal>
       </div>
     </div>
-    <div v-if="lesson && !user.isDefault" class="helperButtons">
+    <div v-if="lesson" class="helperButtons">
       <div title="Hilfe" class="helpButton" v-on:click="openHelpModal" v-b-modal.modal-center
            variant="info" v-if="lesson.type !=='information'">
         <img title="Hilfe" alt="Hilfe" class="helpIcon" src="../../assets/help.png" v-b-tooltip.hover.lefttop>
@@ -26,7 +26,7 @@
           <help-content class="my-4" :lesson="lesson"></help-content>
         </b-modal>
       </div>
-      <div title="Meldung" class="reportButton" v-on:click="openReportModal">
+      <div v-if="!user.isDefault" title="Meldung" class="reportButton" v-on:click="openReportModal">
         <img title="Problem Melden" alt="Hilfe" class="reportIcon" src="../../assets/report.png"
              v-b-tooltip.hover.lefttop>
         <b-modal ref="report-modal" id="modal-center-report" centered title="Problem Melden" hide-header-close
@@ -77,21 +77,23 @@ export default {
       this.$refs['report-modal'].show()
     },
     sendProblem() {
-      if (this.problem !== "") {
+      if (this.problem !== "" && !this.user.isDefault) {
         this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/", {
           moodleId: this.user.userId,
           moodleName: this.user.userName,
           problem: this.problem,
           lessonId: this.lesson.lessonId
         }).then(response => {
-          this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + this.user.userId + "/" + this.user.userName)
-              .then(result => {
-                this.problem = ""
-                this.$store.commit("setProblems", result.data.problems)
-              })
-              .catch(err => console.log(err))
+          let problem = {
+            problemId: response.data.problemId,
+            problemMessage: this.problem,
+            lessonId: this.lesson.lessonId,
+            answers: []
+          }
+          this.$store.commit('addProblem', problem)
         }).catch(err => {
-          console.log(err)
+          let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Das Problem konnte leider nicht übermittelt werden."
+          this.$store.commit('setErrorMessage', errorMessage)
         })
       }
     }

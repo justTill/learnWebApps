@@ -180,7 +180,7 @@ exports.insertOrUpdateSolvedLessonOnConflict = async function (lessonId, moodleI
 }
 exports.insertProblemForUser = async function (moodleId, lessonId, problem) {
     let result = []
-    let query = 'INSERT INTO "problems" (moodleid, lessonid, message) VALUES ($1, $2, $3)';
+    let query = 'INSERT INTO "problems" (moodleid, lessonid, message) VALUES ($1, $2, $3) RETURNING id';
     result = await pool.query(query, [moodleId, lessonId, problem])
         .then(res => {
             return res.rows

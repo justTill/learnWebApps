@@ -12,8 +12,12 @@ export const store = new Vuex.Store({
         chapters: [],
         difficultyLevel: "ALL",
         codeMirrorTheme: "DARK",
+        errorMessage: "",
     },
     mutations: {
+        setErrorMessage(state, message) {
+            state.errorMessage = message
+        },
         setDifficultyLevel(state, level) {
             state.difficultyLevel = level
         },
@@ -33,7 +37,7 @@ export const store = new Vuex.Store({
             state.problems = problems
         },
         addProblem(state, problem) {
-            state.problems.push(problem)
+            state.problems.unshift(problem)
         },
         deleteProblem(state, problem) {
             state.problems.splice(state.problems.indexOf(problem), 1)
@@ -92,6 +96,9 @@ export const store = new Vuex.Store({
         },
         codeMirrorTheme: state => {
             return store.state.codeMirrorTheme
+        },
+        errorMessage: state => {
+            return store.state.errorMessage
         }
     }
 })
