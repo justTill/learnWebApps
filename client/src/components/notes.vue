@@ -137,6 +137,8 @@ export default {
 }
 </script>
 <style>
+@import "../assets/cssVariables.css";
+
 .notesContainer {
 }
 
@@ -171,7 +173,7 @@ export default {
   display: block;
   max-width: 600px;
   min-width: 400px;
-  background-color: white;
+  background-color: var(--white);
   margin: 10px auto 10px;
   padding: 5px 10px 5px;
   border: 1px solid black;
@@ -181,7 +183,7 @@ export default {
 .revertDelete {
   font-weight: bold;
   text-decoration: underline;
-  color: lightskyblue;
+  color: var(--dark-sky-blue);
 }
 
 .revertDelete:hover {
@@ -192,14 +194,14 @@ export default {
   position: absolute;
   display: none;
   z-index: 9999;
-  color: white;
+  color: var(--white);
   border-radius: 5px;
   bottom: 5px;
   padding: 15px;
   margin: 8px;
   width: 300px;
   text-align: center;
-  background-color: rgb(48, 48, 48);
+  background-color: var(--davys-grey);
 }
 
 .editNoteArea {

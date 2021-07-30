@@ -86,6 +86,7 @@ export default {
 </script>
 
 <style>
+@import "../../assets/cssVariables.css";
 
 .lessonTextContainer {
   display: flex;
@@ -96,7 +97,7 @@ export default {
 pre {
   white-space: pre-wrap;
   word-wrap: break-word;
-  background-color: lightgray;
+  background-color: var(--davys-grey-light);
   border-radius: 10px;
   padding-right: 10px;
   padding-left: 10px;
@@ -139,7 +140,7 @@ pre {
   padding: 10px;
   display: inline-block;
   right: 0px;
-  color: green;
+  color: var(--dark-green);
   position: absolute;
 }
 
@@ -147,13 +148,15 @@ pre {
   padding: 10px;
   display: inline-block;
   position: absolute;
-  color: green;
+  color: var(--dark-green);
 }
 
+code {
+  color: var(--dark-blue) !important;
+}
 @media only screen and (max-width: 1000px) {
   .lessonTextContainer {
     flex-direction: column;
-
   }
 }
 

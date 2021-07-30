@@ -109,14 +109,14 @@ export default {
           let dropzoneStr = dropZone.childNodes[indexOfNonCommentChildNodes].innerText.replaceAll(" ", "")
           if (dropzoneStr !== answerStr) {
             isCorrect = false
-            dropZone.style.backgroundColor = "rgba(255, 0, 0, 0.1)";
+            dropZone.style.backgroundColor = "rgba(255, 0, 0, 0.2)";
           } else {
             console.log("dropzoneId " + i + " set Color Green")
-            dropZone.style.backgroundColor = "rgba(0, 255, 0, 0.3)";
+            dropZone.style.backgroundColor = "rgba(0, 255, 0, 0.1)";
           }
         } else {
           isCorrect = false
-          dropZone.style.backgroundColor = "rgba(255, 0, 0, 0.1)";
+          dropZone.style.backgroundColor = "rgba(255, 0, 0, 0.2)";
         }
       }
       if (isCorrect) {
@@ -149,6 +149,8 @@ export default {
 }
 </script>
 <style>
+@import "../../../assets/cssVariables.css";
+
 .fillTheBlankLessonContainer {
   display: flex;
   justify-content: center;
@@ -181,7 +183,7 @@ export default {
   padding: 3px;
   min-height: 20px;
   min-width: 70px;
-  background-color: #C2C9D6;
+  background-color: var(--davys-grey-light);
   border-radius: 10px;
 }
 
@@ -199,7 +201,7 @@ export default {
 }
 
 code {
-  background-color: lightgray;
+  background-color: var(--davys-grey-light);
   padding: 3px;
 }
 

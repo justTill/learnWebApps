@@ -132,12 +132,14 @@ export default {
 }
 </script>
 <style>
+@import "../assets/cssVariables.css";
+
 .problem {
   position: relative;
   display: block;
   max-width: 600px;
   min-width: 400px;
-  background-color: white;
+  background-color: var(--white);
   margin: 10px auto 10px;
   padding: 5px 10px 5px;
   border: 1px solid black;
@@ -145,8 +147,8 @@ export default {
 }
 
 .answer {
-  border-left: 1px solid grey;
-  border-bottom: 1px solid grey;
+  border-left: 1px solid var(--davys-grey);
+  border-bottom: 1px solid var(--davys-grey);
   margin-left: 30px;
   margin-bottom: 10px !important;
   margin-right: 30px;
@@ -155,7 +157,7 @@ export default {
 
 .problemPre {
   white-space: pre-line;
-  background-color: white;
+  background-color: var(--white);
   margin-bottom: 5px;
   border-radius: 0px;
 }
@@ -180,11 +182,11 @@ export default {
 
 .displayAnswers {
   text-decoration: underline;
-  color: blue;
   margin-left: 30px;
   padding-left: 10px;
   font-size: small;
   margin-bottom: 5px;
+  color: var(--blue);
 }
 
 .displayAnswers:hover {
@@ -201,9 +203,9 @@ export default {
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 10px;
-  color: white;
+  color: var(--white);
   display: inline-block;
-  background-color: green;
+  background-color: var(--dark-green);
   border-radius: 5px;
 }
 
