@@ -12,8 +12,8 @@ exports.authenticate = passport.authenticate('local', {
     if (err) next(err);
 };
 
-exports.openTutorial = async function (req, res, next) {
-    let filePath = "./public/tutorial.pdf";
+exports.openManual = async function (req, res, next) {
+    let filePath = "./public/manual.pdf";
     fs.readFile(filePath, function (err, data) {
         res.contentType("application/pdf");
         res.send(data);

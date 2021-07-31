@@ -14,10 +14,14 @@ block content
             div.actions
                 input(type="submit" value="Log In")
     else
-        a(href="tutorial" target="_blank") Anleitung Öffnen
 
         h1(class="headline") Informationen
         div(class="overview")
+            div(class="tile")
+                a(type="button" class="btn createButton" href="manual" target="_blank")
+                    include ../public/images/manual.svg
+                    br
+                    span Anleitung
             div(class="tile")
                 span kurze Instruktsioneinheiten
             div(class="tile")
