@@ -1,5 +1,5 @@
 var passport = require('passport');
-
+const fs = require('fs')
 var userRepository = require("../persistence/UserRepository")
 var chapterRepository = require("../persistence/ChapterRepository")
 var sectionRepository = require("../persistence/SectionRepository")
@@ -10,6 +10,14 @@ exports.authenticate = passport.authenticate('local', {
     successRedirect: '/'
 }), (err, req, res, next) => {
     if (err) next(err);
+};
+
+exports.openTutorial = async function (req, res, next) {
+    let filePath = "./public/tutorial.pdf";
+    fs.readFile(filePath, function (err, data) {
+        res.contentType("application/pdf");
+        res.send(data);
+    });
 };
 
 async function getUserThatSolvedEveryLesson() {
