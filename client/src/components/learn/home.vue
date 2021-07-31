@@ -4,6 +4,12 @@
                   resetText="Alle Fortschritt zurücksetzen ?"></title-header>
     <div class="Was kann man machen">
       <h1> What</h1>
+      Eine Lernumgebung zum üben was man im Praktium und in der Vorlesung gelernt hat
+      <br>
+      kann auch zu klausirvorbereitung benutzt werden
+      GIF wie man Notizen macht
+      GIF Auf Probelme Antworten ??
+      Muss sonst noch was erklärt werden ?
     </div>
     <div class="settings">
       <h1> Settings</h1>
