@@ -32,7 +32,6 @@ async function runTextExecutionWorker(worker) {
             if (result instanceof Error) {
                 result = [result.message]
             }
-            console.log("finished sending results " + result)
             resolve(result)
         });
         worker.on("error", error => {

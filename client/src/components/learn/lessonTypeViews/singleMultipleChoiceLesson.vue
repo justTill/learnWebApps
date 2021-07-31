@@ -94,9 +94,11 @@ label > code {
 }
 
 .errorMessage {
-  height: 60px;
+  min-height: 60px;
   background-color: var(--light-red);
   padding-top: 25px;
+  padding-bottom: 25px;
+  padding-left: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
   border-top: 2px solid var(--red);
