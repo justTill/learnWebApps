@@ -81,6 +81,19 @@ a {
   flex-wrap: wrap;
 }
 
+svg {
+  width: 200px;
+  height: 190px;
+}
+
+.imgButton {
+  background-color: white !important;
+  display: block !important;
+  margin-right: auto;
+  margin-left: auto;
+
+}
+
 .tile {
   border-style: solid !important;
   border-color: lightblue;
@@ -97,12 +110,6 @@ select {
   width: 200px;
   height: 200px;
   cursor: pointer;
-}
-
-.createButton {
-  display: block;
-  margin-top: 15px;
-  margin-left: 9px;
 }
 
 .content > h1, .content > h5 {
