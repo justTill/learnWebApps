@@ -16,46 +16,39 @@ block content
     else
 
         h1(class="headline") Informationen
-        div
-            p Hier stehen nochmal die Hinweise, auf die man beim Einpflegen von Lerninhalten beachten soll.
         div(class="overview")
-            div(class="tile")
+            div(class="tile informationTile")
                 a(type="button" class="btn createButton" href="manual" target="_blank")
                     include ../public/images/manual.svg
                     br
                     span Anleitung Ansehen
-            div(class="tile")
-                span kurze Instruktsioneinheiten
-            div(class="tile")
-                span vertraute Begriffe
-            div(class="tile")
-                span bekanntes Bewertungssysteme / studenten sagen was geprüft wird bei Code aufgaben = tranzparenz
-            div(class="tile")
-                span auf einanderaufbauende Lerneinheiten /wissen aus vorherigenn Lerneinheiten anwenden /variation
-            div(class="tile")
-                span positiv motivierende Rückmeldungen (nicht zu viele) nicht glück gehabt oder so
-            div(class="tile")
-                span Simulationen echter Welt Projekte durch spannende Formulierungen der Aufgaben bzw
-                span lerninhalte erforschen lassen also auch mal austest aufgaben ohne informationen
-            div(class="tile")
-                span personalisierte Sprache
-            div(class="tile")
-                span Voraussetzungen beschreiben am anfang
-            div(class="tile")
-                span nutzen beschreiben also das Warum
-            div(class="tile")
-                span über benötigtes Wissen informiere
-            div(class="tile")
-                span unerwartete Inhalte/ wiedersprüchliche Aussagen
-            div(class="tile")
-                span Humor
-            div(class="tile")
-                span metaphern Analogien/erwartungen beachten
-            div(class="tile")
-                span verschiedene Grafiken/Bilder/Grafiken/Audio
-            div(class="tile")
-                span Mit fragen oder Probleme Konfrontieren
-            div(class="tile")
-                span Nützlichkeit beschreiben, WARUM
+            div(class="tile informationTile")
+                h5 Hinweise für das Einpflegen von Lerninhalten
+            div(class="tile informationTile")
+                span Die einzelnen Lerneinheiten sollten nicht zu lang sein. Es sollte auch beschrieben werden warum es sicht lohnt die Inhalte zu lernen (Zweck).
 
-            // nochmal wv checken (modelle)
+            div(class="tile informationTile")
+                span Bei Allen Aufgaben soll den Studierenden klargemacht werden, was von ihnen genau von ihnen erwartet wird,
+                br
+                span Bei Code Aufgaben kann beschrieben werden, was genau getestet wird.
+
+            div(class="tile informationTile")
+                span Die verschiednenen Lerneinheiten sollten aufeinander aufbauen.
+
+            div(class="tile informationTile")
+                span Variationen in den lerneinheiten kann durch eine andere Formulierung erreicht werden. Es kann z.B. beschrieben werden das man XY für eine Firma prorammieren soll.
+
+            div(class="tile informationTile")
+                span Variation kann ebenfalls durch das Weglassen von erklärungen/Hinweisen erreicht werden, da die Studieren so mit Problemnen konfrontiert werden und die Lerningalte selbst erforschen können
+
+            div(class="tile informationTile")
+                span Nach dem lösen einer Aufgabe kann eine Rückmeldung angezeigt werden, diese soll positive Motivierend formuliert werden. Nicht bei jeder Aufgabe sind Rückmeldungen nötig & sinnvoll.
+
+            div(class="tile informationTile")
+                span Lerneinheiten sollen in der ersten oder zweiten Person geschrieben sein und Metaphern, Analogien und Begriffe, die die Studierenden kennen verwenden. Humor kann auch abundzu benutzt werden.
+
+            div(class="tile informationTile")
+                span Falls es bestimmte voraussetzungen zum lösen einer Aufgabe gibt oder spezielles Wissen benötigt wird, sollen diese dem Studierenden vorher genannt werden.
+
+            div(class="tile informationTile")
+                span Lerninhalte können durch unerwartete Inhalte, wiedersprüchliche Aussagen, Grafiken, Bilder und Gifs spannender gestaltet werden.

@@ -102,6 +102,14 @@ svg {
   height: 250px;
 }
 
+.informationTile {
+  text-align: center;
+  display: flex !important;
+  align-content: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
 select {
   max-width: 466px;
 }
