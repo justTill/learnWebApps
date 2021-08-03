@@ -5,11 +5,11 @@
                 :options="cmOptions"
                 @input="onCodeChange">
     </codemirror>
-    <div class="verificationInformation"> {{ lesson.verificationInformation }}</div>
     <button class="checkLesson" v-on:click="evaluate" :disabled="isLoadingResults">Aufgabe Überprüfen</button>
     <div class="errorMessage" v-for="error in errorMessages" :key="error">
       {{ error }}
     </div>
+    <div class="verificationInformation"> {{ lesson.verificationInformation }}</div>
   </div>
 </template>
 <script>
@@ -102,6 +102,7 @@ export default {
   border: 1px solid black;
   background-color: var(--white);
   min-width: 300px;
+  margin-bottom: 10px;
 
 }
 

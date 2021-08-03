@@ -125,6 +125,13 @@ pre {
   min-width: 400px;
 }
 
+@media only screen and (max-width: 1000px) {
+  .lessonText {
+    margin-right: auto;
+    margin-left: auto;
+  }
+}
+
 .nextButton:hover, .prevButton:hover {
   cursor: pointer;
 }
