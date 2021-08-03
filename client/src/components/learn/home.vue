@@ -18,8 +18,9 @@
     </div>
     <div class="settings homeSection hoverEffect">
       <h1> Settings</h1>
+      Für jeden Interessierten gibt es Lerneinheiten. Egal ob du schon fortgeschritten bist oder gerade anfängst du
+      Konzepte zu lernen und zu verstehen. Daher kannst du hier die Schwierigkeit einstellen.
       <div class="selectDifficulty">
-        Es gibt verschiedene Schwierigkeistgerade
         <select v-model="difficultyLevel" v-on:change="changeDifficultyLevel">
           <option value="ALL" selected>Alle</option>
           <option value="EASY">Leicht</option>
@@ -27,11 +28,11 @@
           <option value="HARD">Schwer</option>
         </select>
       </div>
-      <div class="selectDifficulty">
-        Für Programmieraufgaben hellen oder Dunklen modus?
+      Du möchstes bei Programmieraufgaben lieber den Code im Darkmode schreiben? Dann kannst du das hier ändern!
+      <div class="selectCodeTheme">
         <select v-model="codeMirrorMode" v-on:change="changeCodeMirrorTheme">
-          <option value="DARK" selected>Dunkel</option>
           <option value="LIGHT">Hell</option>
+          <option value="DARK">Dunkel</option>
         </select>
       </div>
     </div>
@@ -50,7 +51,7 @@ export default {
   data: function () {
     return {
       difficultyLevel: "ALL",
-      codeMirrorMode: "DARK"
+      codeMirrorMode: "LIGHT"
     }
   },
   methods: {
@@ -108,8 +109,18 @@ export default {
   background-color: var(--white);
   border: 1px solid black;
   border-radius: 2px;
-  padding: 10px 10px 5px;
+  padding: 10px 30px 10px;
   margin: 5px auto;
 }
 
+.selectDifficulty, .selectCodeTheme {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+
+.selectDifficulty > select, .selectCodeTheme > select {
+  width: 150px;
+}
 </style>
