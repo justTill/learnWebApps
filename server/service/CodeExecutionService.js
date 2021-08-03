@@ -56,7 +56,7 @@ async function runTextExecutionWorker(worker) {
             if (exitCode !== 0) {
                 reject("error")
             } else {
-                resolve([]);
+                resolve();
             }
         })
     })

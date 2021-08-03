@@ -113,6 +113,7 @@ export default {
 }
 
 .checkLesson {
+  border: none;
   text-align: center;
 }
 
