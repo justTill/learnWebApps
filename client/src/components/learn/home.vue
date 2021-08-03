@@ -1,17 +1,22 @@
 <template>
-  <div>
+  <div class="homeContainer">
     <title-header title="Informationen" :reset-chapter="resetAllLessons"
                   resetText="Alle Fortschritt zurücksetzen ?"></title-header>
-    <div class="Was kann man machen">
-      <h1> What</h1>
-      Eine Lernumgebung zum üben was man im Praktium und in der Vorlesung gelernt hat
+    <div class="explanation homeSection hoverEffect">
+      <h1> Learn Web Apps</h1>
+      Ist einer Interaktive Lernandwendung, mithilfe der du, die Konzepte die dir in der Vorlesung "WebApp" vorgestellt
+      bekommen wurden vertiefen und üben kannst.
       <br>
-      kann auch zu klausirvorbereitung benutzt werden
-      GIF wie man Notizen macht
-      GIF Auf Probelme Antworten ??
-      Muss sonst noch was erklärt werden ?
+      <br>
+      Die Anwendung kannst du außerdem gut für die Klausur & Praktikums vorbereitung nutzen. Denn hier werden neben
+      angeboteten Übungen, wichtige Inhalte nochmal erläuter.
+      <br>
+      <br>
+      <div class="instructionBlock">
+        GIF mit Notizen machen und Code ausführen
+      </div>
     </div>
-    <div class="settings">
+    <div class="settings homeSection hoverEffect">
       <h1> Settings</h1>
       <div class="selectDifficulty">
         Es gibt verschiedene Schwierigkeistgerade
@@ -29,9 +34,6 @@
           <option value="LIGHT">Hell</option>
         </select>
       </div>
-    </div>
-    <div class="hints">
-      <h1> Hinweise</h1>
     </div>
   </div>
 </template>
@@ -62,5 +64,52 @@ export default {
 }
 </script>
 <style>
+.homeContainer {
+  display: flex;
+  align-content: center;
+  flex-direction: column;
+  margin-right: auto;
+  margin-left: auto;
+  overflow: scroll;
+}
+
+.homeContainer h1 {
+  text-align: center;
+}
+
+@media only screen and (min-width: 1250px) {
+  .homeSection {
+    min-width: 1000px;
+    max-width: 1000px;
+  }
+}
+
+@media only screen and (min-width: 1000px) and (max-width: 1249px) {
+  .homeSection {
+    min-width: 750px;
+    max-width: 750px;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .homeSection {
+    max-width: 700px;
+  }
+
+}
+
+.instructionBlock {
+  display: flex;
+  justify-content: center;
+}
+
+.homeSection {
+  display: block;
+  background-color: var(--white);
+  border: 1px solid black;
+  border-radius: 2px;
+  padding: 10px 10px 5px;
+  margin: 5px auto;
+}
 
 </style>

@@ -129,4 +129,8 @@ input[type=checkbox]:checked + label {
   padding: 10px;
   color: var(--white);
 }
+
+.checkLesson:hover {
+  background-color: var(--davys-grey);
+}
 </style>

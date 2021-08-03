@@ -39,7 +39,7 @@ export default {
       return DOMPurify.sanitize(this.section.information)
     },
     lessonsForSelectedDifficultyLevel() {
-      return this.difficultyLevel === "ALL" || this.difficultyLevel === null ? this.section.lessons : this.section.lessons.filter(l => l.difficultyLevel === this.difficultyLevel)
+      return this.difficultyLevel === "ALL" || this.difficultyLevel === null ? this.section.lessons : this.section.lessons.filter(l => l.type === 'information' || l.difficultyLevel === this.difficultyLevel || l.difficultyLevel === 'ALL')
     },
   },
   methods: {}

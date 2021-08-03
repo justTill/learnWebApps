@@ -20,7 +20,7 @@
               "comment": "difficulty type enum",
               "endDelimiter": "GO",
               "splitStatements": true,
-              "sql": "CREATE TYPE difficultyLevelType AS ENUM ('EASY','MIDDLE', 'HARD')",
+              "sql": "CREATE TYPE difficultyLevelType AS ENUM ('ALL', 'EASY','MIDDLE', 'HARD')",
               "stripComments": true
             }
           },
