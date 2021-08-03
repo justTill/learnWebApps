@@ -6,7 +6,7 @@
                 @input="onCodeChange">
     </codemirror>
     <div class="verificationInformation"> {{ lesson.verificationInformation }}</div>
-    <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
+    <button class="checkLesson" v-on:click="evaluate" :disabled="isLoadingResults">Aufgabe Überprüfen</button>
     <div class="errorMessage" v-for="error in errorMessages" :key="error">
       {{ error }}
     </div>
@@ -57,14 +57,18 @@ export default {
           payload.moodleName = this.user.userName
         }
         this.isLoadingResults = true
+
         this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/coding/check", payload)
             .then(response => {
               let testErrors = response.data.errors
               let isCorrect = testErrors.length === 0;
               this.errorMessages = testErrors
+              this.isLoadingResults = false
               this.solvedHandler(this.lesson.lessonId, isCorrect, this.userCode)
             })
             .catch(err => {
+              this.isLoadingResults = false
+
               let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Aufgabe konnte nicht überprüft werden, bitte versuchen sie es Später erneut."
               this.$store.commit('setErrorMessage', errorMessage)
             })

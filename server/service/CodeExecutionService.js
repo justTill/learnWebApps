@@ -12,11 +12,25 @@ exports.runTestForCodingLesson = async function (codeLesson, userCode) {
             let worker = new Worker(workerPath, {
                 workerData: {
                     userCode: userCode,
-                    verificationCode: codeLesson.verificationcode
+                    verificationCode: codeLesson.verificationcode,
                 }
             })
-            let results = await runTextExecutionWorker(worker)
-            return {errors: results}
+            let terminateMessage = ""
+            setTimeout(function () {
+                terminateMessage = "Die Ausfrührung des Codes dauert länger als 1 Minute und wird daher abgebrochen"
+                worker.terminate()
+            }, 30000)
+            testResults = await runTextExecutionWorker(worker)
+                .then(res => {
+                    return {errors: res}
+                })
+                .catch(err => {
+                    if (terminateMessage) {
+                        return {errors: [terminateMessage]}
+                    } else {
+                        throw err
+                    }
+                })
         }
     }
     return testResults
@@ -35,16 +49,14 @@ async function runTextExecutionWorker(worker) {
             resolve(result)
         });
         worker.on("error", error => {
-            console.log(error);
             reject(error);
         });
 
         worker.on("exit", exitCode => {
             if (exitCode !== 0) {
-                //does go in exit when test results are not correct
                 reject("error")
             } else {
-                resolve();
+                resolve([]);
             }
         })
     })

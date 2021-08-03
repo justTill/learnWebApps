@@ -91,14 +91,15 @@ export default {
   mounted() {
     document.addEventListener('mouseup', event => {
       this.$el.querySelector('#createNotes').style.display = "none";
-      let classNames = window.getSelection().anchorNode.parentElement.className
-      if (window.getSelection().toString() !== '' && this.$route.path.includes('learn') && !classNames.includes('CodeMirror')) {
-        console.log(window.getSelection().anchorNode.parentElement.className)
-        let element = this.$el.querySelector('#createNotes')
-        element.style.display = "inline-block";
-        element.style.left = event.pageX + "px"
-        element.style.top = event.pageY - 100 + "px"
-        this.selectedText = window.getSelection().toString();
+      if (window.getSelection().toString() !== '' && this.$route.path.includes('learn')) {
+        let classNames = window.getSelection().anchorNode.parentElement.className
+        if (!classNames.includes('CodeMirror')) {
+          let element = this.$el.querySelector('#createNotes')
+          element.style.display = "inline-block";
+          element.style.left = event.pageX + "px"
+          element.style.top = event.pageY - 100 + "px"
+          this.selectedText = window.getSelection().toString();
+        }
       }
     })
   },

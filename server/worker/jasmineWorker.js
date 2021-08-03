@@ -13,7 +13,7 @@ async function execTests(userCode, verificationCode) {
     }).constructor
     describe("Test Code From User", function () {
         it("Run", async function () {
-            AsyncFunction(`'use strict'; let userCode=' ${userCode}'; ${userCode} ${verificationCode}`)()
+            await AsyncFunction(`'use strict'; ${userCode} ${verificationCode}`)()
         })
     })
     let message = [];
