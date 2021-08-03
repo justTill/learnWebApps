@@ -125,7 +125,7 @@ input[type=checkbox]:checked + label {
 
 .checkLesson {
   display: inline-block;
-  background-color: var(--darker-blue);
+  background-color: var(--davys-grey-light);
   padding: 10px;
   color: var(--white);
 }

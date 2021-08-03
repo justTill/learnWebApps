@@ -5,7 +5,9 @@
                 :options="cmOptions"
                 @input="onCodeChange">
     </codemirror>
-    <button class="checkLesson" v-on:click="evaluate" :disabled="isLoadingResults">Aufgabe Überprüfen</button>
+    <button class="checkLesson" v-on:click="evaluate" :disabled="isLoadingResults">Aufgabe Überprüfen
+      <div class="loader" v-if="isLoadingResults"></div>
+    </button>
     <div class="errorMessage" v-for="error in errorMessages" :key="error">
       {{ error }}
     </div>
@@ -118,4 +120,23 @@ export default {
   text-align: center;
 }
 
+.loader {
+  display: inline-block;
+  float: right;
+  border: 3px solid var(--white); /* Light grey */
+  border-top: 3px solid black; /* Blue */
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 </style>
