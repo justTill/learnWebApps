@@ -7,7 +7,6 @@
     </codemirror>
     <div class="verificationInformation"> {{ lesson.verificationInformation }}</div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
-    <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
     <div class="errorMessage" v-for="error in errorMessages" :key="error">
       {{ error }}
     </div>
@@ -31,7 +30,6 @@ export default {
   },
   data: function () {
     return {
-      successMessage: "",
       userCode: this.lesson.userCode,
       isLoadingResults: false,
       errorMessages: [],
@@ -64,7 +62,6 @@ export default {
               let testErrors = response.data.errors
               let isCorrect = testErrors.length === 0;
               this.errorMessages = testErrors
-              this.successMessage = isCorrect ? this.lesson.feedback : ""
               this.solvedHandler(this.lesson.lessonId, isCorrect, this.userCode)
             })
             .catch(err => {
@@ -112,10 +109,6 @@ export default {
 }
 
 .checkLesson {
-  text-align: center;
-}
-
-.successMessage {
   text-align: center;
 }
 

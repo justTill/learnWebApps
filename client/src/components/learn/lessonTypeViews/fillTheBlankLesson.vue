@@ -20,7 +20,6 @@
       </div>
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
-    <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
     <div class="errorMessage" v-if="errorMessage"> {{ errorMessage }}</div>
   </div>
 </template>
@@ -36,7 +35,6 @@ export default {
   data: function () {
     return {
       errorMessage: "",
-      successMessage: "",
       userAnswer: this.getUserAnswers(),
       answerOptions: this.getAnswersOptions()
     }
@@ -120,10 +118,8 @@ export default {
         }
       }
       if (isCorrect) {
-        this.successMessage = "Richtig"
         this.errorMessage = ""
       } else {
-        this.successMessage = ""
         this.errorMessage = "leider nicht ganz korrekt"
       }
       this.solvedHandler(this.lesson.lessonId, isCorrect, null)

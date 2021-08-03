@@ -91,7 +91,9 @@ export default {
   mounted() {
     document.addEventListener('mouseup', event => {
       this.$el.querySelector('#createNotes').style.display = "none";
-      if (window.getSelection().toString() !== '' && this.$route.path.includes('learn')) {
+      let classNames = window.getSelection().anchorNode.parentElement.className
+      if (window.getSelection().toString() !== '' && this.$route.path.includes('learn') && !classNames.includes('CodeMirror')) {
+        console.log(window.getSelection().anchorNode.parentElement.className)
         let element = this.$el.querySelector('#createNotes')
         element.style.display = "inline-block";
         element.style.left = event.pageX + "px"
