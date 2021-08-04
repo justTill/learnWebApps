@@ -28,7 +28,7 @@
           <option value="HARD">Schwer</option>
         </select>
       </div>
-      Du möchstes bei Programmieraufgaben lieber den Code im Darkmode schreiben? Dann kannst du das hier ändern!
+      Du möchstes bei Programmieraufgaben den code lieber im Darkmode schreiben? Dann kannst du das hier ändern!
       <div class="selectCodeTheme">
         <select v-model="codeMirrorMode" v-on:change="changeCodeMirrorTheme">
           <option value="LIGHT">Hell</option>
