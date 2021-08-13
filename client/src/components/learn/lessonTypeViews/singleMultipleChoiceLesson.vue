@@ -7,7 +7,6 @@
       <label :for="'option-'+index" v-html="sanitizedAnswers(option.possibleAnswer)"></label>
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
-    <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
     <div class="errorMessage" v-if="errorMessage"> {{ errorMessage }}</div>
   </div>
 </template>
@@ -24,7 +23,6 @@ export default {
     return {
       checkedAnswers: this.fillCheckAnswersIfIsDone(),
       errorMessage: "",
-      successMessage: "",
     }
   },
   methods: {
@@ -63,9 +61,7 @@ export default {
       }
       if (isCorrect) {
         this.errorMessage = "";
-        this.successMessage = this.lesson.feedback
       } else {
-        this.successMessage = ""
         this.errorMessage = "Die Antwort ist leider nicht korrekt"
       }
       this.solvedHandler(this.lesson.lessonId, isCorrect, null)
@@ -94,9 +90,11 @@ label > code {
 }
 
 .errorMessage {
-  height: 60px;
+  min-height: 60px;
   background-color: var(--light-red);
   padding-top: 25px;
+  padding-bottom: 25px;
+  padding-left: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
   border-top: 2px solid var(--red);
@@ -127,8 +125,12 @@ input[type=checkbox]:checked + label {
 
 .checkLesson {
   display: inline-block;
-  background-color: var(--darker-blue);
+  background-color: var(--davys-grey-light);
   padding: 10px;
   color: var(--white);
+}
+
+.checkLesson:hover {
+  background-color: var(--davys-grey);
 }
 </style>

@@ -5,8 +5,10 @@ block content
     h5(class="headline") Bearbeiten und neue Unterthemen erstellen
     div(class="tilesContainer")
         div(class="tile")
-            button(type="button" class="btn createButton" data-toggle="modal" data-target="#editChapter")
-                img(class="add-image" src="/images/edit-icon.png")
+            button(type="button" class="btn imgButton" data-toggle="modal" data-target="#editChapter")
+                include ../../public/images/edit-icon.svg
+                br
+                span Kapitel bearbeiten
             div(class="modal fade" id="editChapter" tabindex="-1" role="dialog" aria-hidden="true")
                 div(class="modal-dialog modal-dialog-centered" role="document")
                     div(class="modal-content")
@@ -43,8 +45,10 @@ block content
                 span #{section.name}
 
         div(class="tile")
-            button(type="button" class="btn createButton" data-toggle="modal" data-target="#createSection")
-                img(class="add-image" src="/images/plus-icon.png")
+            button(type="button" class="btn imgButton" data-toggle="modal" data-target="#createSection")
+                include ../../public/images/add-icon.svg
+                br
+                span Unterthema hinzufügen
             div(class="modal fade" id="createSection" tabindex="-1" role="dialog" aria-hidden="true")
                 div(class="modal-dialog modal-dialog-centered" role="document")
                     div(class="modal-content")

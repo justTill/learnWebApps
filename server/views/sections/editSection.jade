@@ -5,8 +5,10 @@ block content
     h5(class="headline") Bearbeiten und neue Aufgaben erstellen
     div(class="tilesContainer")
         div(class="tile")
-            button(type="button" class="btn createButton" data-toggle="modal" data-target="#editSection")
-                img(class="add-image" src="/images/edit-icon.png")
+            button(type="button" class="btn imgButton" data-toggle="modal" data-target="#editSection")
+                include ../../public/images/edit-icon.svg
+                br
+                span Unterthema bearbeiten
         div(class="modal fade" id="editSection" tabindex="-1" role="dialog" aria-hidden="true")
             div(class="modal-dialog modal-dialog-centered" role="document")
                 div(class="modal-content")
@@ -42,7 +44,8 @@ block content
                         include ../files
     div(class="tilesContainer")
         div(class="tile iconTile")
-            img(class="icon" src="/images/information-icon.png")
+            include ../../public/images/info-icon.svg
+            br
             span Informationseinheiten
         div(class="tile")
             include ../lessons/createInformationLesson
@@ -54,7 +57,8 @@ block content
 
     div(class="tilesContainer")
         div(class="tile iconTile")
-            img(class="icon iconMargin" src="/images/code-icon.png" style="padding-top=5px")
+            include ../../public/images/code-icon.svg
+            br
             span Code&nbsp;Aufgaben
         div(class="tile")
             include ../lessons/createCodingLesson
@@ -65,7 +69,8 @@ block content
                 span #{codeLesson.name}
     div(class="tilesContainer")
         div(class="tile iconTile")
-            img(class="icon iconMargin" src="/images/codeExtension-icon.png" style="padding-top=5px")
+            include ../../public/images/code-extension-icon.svg
+            br
             span Code&nbsp;Ergänzungs&nbsp;Aufgaben
         div(class="tile")
             include ../lessons/createCodeExtensionLesson
@@ -77,8 +82,8 @@ block content
 
     div(class="tilesContainer")
         div(class="tile iconTile")
-            img(class="icon iconMargin" src="/images/fill-the-blanks-icon.png" style="padding-top=5px")
-
+            include ../../public/images/fill-the-blank-icon.svg
+            br
             span Lückentext&nbsp;Aufagben
         div(class="tile")
             include ../lessons/createFillTheBlankLesson
@@ -90,7 +95,8 @@ block content
 
     div(class="tilesContainer")
         div(class="tile iconTile")
-            img(class="icon iconMargin" src="/images/single-multiple-choice-icon.png" style="padding-top=5px")
+            include ../../public/images/s-c-m-icon.svg
+            br
             span Single-Multiple-Choice&nbsp;Aufgaben
         div(class="tile")
             include ../lessons/createSingleMultipleChoiceLesson

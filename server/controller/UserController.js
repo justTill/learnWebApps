@@ -1,5 +1,5 @@
 var passport = require('passport');
-
+const fs = require('fs')
 var userRepository = require("../persistence/UserRepository")
 var chapterRepository = require("../persistence/ChapterRepository")
 var sectionRepository = require("../persistence/SectionRepository")
@@ -10,6 +10,14 @@ exports.authenticate = passport.authenticate('local', {
     successRedirect: '/'
 }), (err, req, res, next) => {
     if (err) next(err);
+};
+
+exports.openManual = async function (req, res, next) {
+    let filePath = "./public/manual.pdf";
+    fs.readFile(filePath, function (err, data) {
+        res.contentType("application/pdf");
+        res.send(data);
+    });
 };
 
 async function getUserThatSolvedEveryLesson() {
@@ -64,7 +72,6 @@ exports.deleteProblem = async function (req, res, next) {
     res.redirect('/notifications')
 }
 exports.markProblemAsSeen = async function (req, res, next) {
-    console.log("here", req.body)
     userRepository.updateNotificationsSeenForProblem(req.body.problemId, true)
         .then(res => res)
         .catch(err => console.log(err))

@@ -24,7 +24,7 @@ export default {
   methods: {},
   computed: {
     preparedFeedback() {
-      return this.feedback === null || this.feedback === '' ? "Sie haben die Aufgabe erfolgreich gelöst" : this.feedback
+      return this.feedback === null || this.feedback === '' ? "Du hast die Aufgabe erfolgreich gelöst" : this.feedback
     }
   },
 }

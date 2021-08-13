@@ -111,7 +111,7 @@ pre {
 
 .lessonText {
   display: block;
-  max-width: 700px;
+  max-width: 600px;
   background-color: white;
   border: 1px solid black;
   border-radius: 2px;
@@ -119,10 +119,18 @@ pre {
   padding-left: 10px;
   padding-right: 10px;
   margin-right: 20px;
+  margin-left: 20px;
   min-height: 30vh;
   max-height: 70vh;
   overflow: auto;
   min-width: 400px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .lessonText {
+    margin-right: auto;
+    margin-left: auto;
+  }
 }
 
 .nextButton:hover, .prevButton:hover {

@@ -45,25 +45,8 @@
                  :lessonSolvedHandler="lessonSolvedHandlerForCurrentChapter">
 
     </lesson-view>
+    <home v-else class="chapterContent" :resetAllLessons="resetLessonsSolved"></home>
     <div v-else class="chapterContent">
-      <title-header title="Informationen" :reset-chapter="resetLessonsSolved"
-                    resetText="Alle Fortschritt zurücksetzen ?"></title-header>
-      <div class="selectDifficulty">
-        Es gibt verschiedene Schwierigkeistgerade
-        <select v-model="difficultyLevel" v-on:change="changeDifficultyLevel">
-          <option value="ALL" selected>Alle</option>
-          <option value="EASY">Leicht</option>
-          <option value="MIDDLE">Mittel</option>
-          <option value="HARD">Schwer</option>
-        </select>
-      </div>
-      <div class="selectDifficulty">
-        Für Programmieraufgaben hellen oder Dunklen modus?
-        <select v-model="codeMirrorMode" v-on:change="changeCodeMirrorTheme">
-          <option value="DARK" selected>Dunkel</option>
-          <option value="LIGHT">Hell</option>
-        </select>
-      </div>
     </div>
   </div>
 </template>
@@ -72,6 +55,7 @@
 import {mapGetters} from 'vuex'
 import ChapterOverview from "@/components/learn/chapterOverview";
 import SectionOverview from "@/components/learn/sectionOverview";
+import Home from "@/components/learn/home";
 import NavButton from "@/components/utils/navButton";
 import LessonView from "@/components/learn/lessonView";
 import {backEndHost, backEndPort} from "@/envVariables";
@@ -79,7 +63,7 @@ import TitleHeader from "@/components/learn/titleHeader";
 
 export default {
   name: 'learn',
-  components: {TitleHeader, LessonView, ChapterOverview, SectionOverview, NavButton},
+  components: {TitleHeader, LessonView, ChapterOverview, SectionOverview, NavButton, Home},
   data: function () {
     return {
       selectedChapter: null,
@@ -108,11 +92,14 @@ export default {
     document.addEventListener('mouseup', event => {
       this.$el.querySelector('#createNotes').style.display = "none";
       if (window.getSelection().toString() !== '' && this.$route.path.includes('learn')) {
-        let element = this.$el.querySelector('#createNotes')
-        element.style.display = "inline-block";
-        element.style.left = event.pageX + "px"
-        element.style.top = event.pageY - 100 + "px"
-        this.selectedText = window.getSelection().toString();
+        let classNames = window.getSelection().anchorNode.parentElement.className
+        if (!classNames.includes('CodeMirror')) {
+          let element = this.$el.querySelector('#createNotes')
+          element.style.display = "inline-block";
+          element.style.left = event.pageX + "px"
+          element.style.top = event.pageY - 100 + "px"
+          this.selectedText = window.getSelection().toString();
+        }
       }
     })
   },
