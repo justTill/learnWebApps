@@ -24,7 +24,6 @@
               "stripComments": true
             }
           },
-          ,
           {
             "sql": {
               "comment": "notificationsSender type enum",
@@ -424,6 +423,24 @@
                   "column": {
                     "name": "answer",
                     "type": "text",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "sender",
+                    "type": "senderTyp",
+                    "constraints": {
+                      "nullable": false
+                    }
+                  }
+                },
+                {
+                  "column": {
+                    "name": "seen",
+                    "type": "boolean",
                     "constraints": {
                       "nullable": false
                     }

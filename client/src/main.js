@@ -20,7 +20,6 @@ Vue.use(VueCodemirror)
 function getChapters() {
     this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")
         .then(result => {
-            console.log(result.data.chapters)
             this.$store.commit("setChapters", result.data.chapters)
         })
         .catch(err => console.log(err))
@@ -29,7 +28,6 @@ function getChapters() {
 function getChaptersForUser(userId, userName) {
   this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/" + userId + "/" + userName)
       .then(result => {
-          console.log(result.data.chapters[1].sections[0].lessons)
           this.$store.commit("setChapters", result.data.chapters)
       })
       .catch(err => console.log(err))
@@ -38,7 +36,6 @@ function getChaptersForUser(userId, userName) {
 function getNotes(userId, userName) {
   this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/" + userId + "/" + userName)
       .then(result => {
-        console.log(result.data.notes)
         this.$store.commit("setNotes", result.data.notes)
       })
       .catch(err => console.log(err))
@@ -47,7 +44,6 @@ function getNotes(userId, userName) {
 function getProblems(userId, userName) {
   this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + userId + "/" + userName)
       .then(result => {
-          console.log(result.data.problems)
           this.$store.commit("setProblems", result.data.problems)
       })
       .catch(err => console.log(err))

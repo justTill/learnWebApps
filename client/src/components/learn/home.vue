@@ -13,12 +13,12 @@
       <br>
       <br>
       <div class="instructionBlock">
-        GIF mit Notizen machen und Code ausführen
+        <img class="gif" src="../../assets/instructions.gif" alt="Instruktions Gif">
       </div>
     </div>
     <div class="settings homeSection hoverEffect">
       <h1> Settings</h1>
-      Für jeden Interessierten gibt es Lerneinheiten. Egal ob du schon fortgeschritten bist oder gerade anfängst du
+      Für jeden Interessierten gibt es Lerneinheiten. Egal ob du schon fortgeschritten bist oder gerade anfängst die
       Konzepte zu lernen und zu verstehen. Daher kannst du hier die Schwierigkeit einstellen.
       <div class="selectDifficulty">
         <select v-model="difficultyLevel" v-on:change="changeDifficultyLevel">
@@ -122,5 +122,14 @@ export default {
 
 .selectDifficulty > select, .selectCodeTheme > select {
   width: 150px;
+}
+
+.gif {
+  width: 700px;
+  height: auto;
+}
+
+.instructionBlock {
+  margin-bottom: 30px;
 }
 </style>

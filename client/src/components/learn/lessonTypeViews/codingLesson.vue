@@ -11,7 +11,7 @@
     <div class="errorMessage" v-for="error in errorMessages" :key="error">
       {{ error }}
     </div>
-    <div class="verificationInformation"> {{ lesson.verificationInformation }}</div>
+    <div class="verificationInformation" v-html="sanitizedVerificationInformation"></div>
   </div>
 </template>
 <script>
@@ -21,6 +21,7 @@ import 'codemirror/theme/darcula.css'
 import 'codemirror/theme/duotone-light.css'
 import {mapGetters} from "vuex";
 import {backEndHost, backEndPort} from "@/envVariables";
+import DOMPurify from "dompurify";
 
 export default {
   name: 'codingLesson',
@@ -42,6 +43,9 @@ export default {
     ...mapGetters([
       'user',
     ]),
+    sanitizedVerificationInformation() {
+      return DOMPurify.sanitize(this.lesson.verificationInformation);
+    },
     codemirror() {
       return this.$refs.codeMirror.codemirror
     },
@@ -105,6 +109,7 @@ export default {
   background-color: var(--white);
   min-width: 300px;
   margin-bottom: 10px;
+  margin-right: 20px;
 
 }
 
