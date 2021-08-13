@@ -78,7 +78,6 @@ export default {
         problem: this.currentProblem,
         toBeAddedAnswer: this.answer
       }
-      this.$store.commit('addAnswerToProblem', payload)
       if (!this.user.isDefault) {
         let requestPayload = {
           moodleId: this.user.userId,
@@ -88,8 +87,11 @@ export default {
         }
         this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/answer/", requestPayload)
             .then(response => {
+              this.$store.commit('addAnswerToProblem', payload)
             })
             .catch(err => {
+              let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Die Antwort konnte nicht daher gespeichert werden, bitte versuchen Sie es später erneut."
+              this.$store.commit('setErrorMessage', errorMessage)
             })
       }
       this.answer = ""
@@ -106,13 +108,17 @@ export default {
       this.problemAreaIndex = -1
     },
     deleteProblem() {
-      this.$store.commit('deleteProblem', this.currentProblem)
       if (!this.user.isDefault) {
         this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + this.user.userId + "/" + this.user.userName + "/" + this.currentProblem.problemId)
             .then(response => {
+              this.$store.commit('deleteProblem', this.currentProblem)
             })
             .catch(err => {
+              let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Das Problem konnte nicht daher gelöscht werden, bitte versuchen Sie es später erneut."
+              this.$store.commit('setErrorMessage', errorMessage)
             })
+      } else {
+        this.$store.commit('deleteProblem', this.currentProblem)
       }
     },
     openDeleteProblemModal(problem) {
@@ -126,12 +132,14 @@ export default {
 }
 </script>
 <style>
+@import "../assets/cssVariables.css";
+
 .problem {
   position: relative;
   display: block;
   max-width: 600px;
   min-width: 400px;
-  background-color: white;
+  background-color: var(--white);
   margin: 10px auto 10px;
   padding: 5px 10px 5px;
   border: 1px solid black;
@@ -139,8 +147,8 @@ export default {
 }
 
 .answer {
-  border-left: 1px solid grey;
-  border-bottom: 1px solid grey;
+  border-left: 1px solid var(--davys-grey);
+  border-bottom: 1px solid var(--davys-grey);
   margin-left: 30px;
   margin-bottom: 10px !important;
   margin-right: 30px;
@@ -149,7 +157,7 @@ export default {
 
 .problemPre {
   white-space: pre-line;
-  background-color: white;
+  background-color: var(--white);
   margin-bottom: 5px;
   border-radius: 0px;
 }
@@ -174,11 +182,11 @@ export default {
 
 .displayAnswers {
   text-decoration: underline;
-  color: blue;
   margin-left: 30px;
   padding-left: 10px;
   font-size: small;
   margin-bottom: 5px;
+  color: var(--blue);
 }
 
 .displayAnswers:hover {
@@ -195,9 +203,9 @@ export default {
   margin-top: 5px;
   margin-bottom: 5px;
   padding: 10px;
-  color: white;
+  color: var(--white);
   display: inline-block;
-  background-color: green;
+  background-color: var(--dark-green);
   border-radius: 5px;
 }
 

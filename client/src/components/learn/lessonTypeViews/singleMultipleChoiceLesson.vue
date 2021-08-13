@@ -7,7 +7,6 @@
       <label :for="'option-'+index" v-html="sanitizedAnswers(option.possibleAnswer)"></label>
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
-    <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
     <div class="errorMessage" v-if="errorMessage"> {{ errorMessage }}</div>
   </div>
 </template>
@@ -24,7 +23,6 @@ export default {
     return {
       checkedAnswers: this.fillCheckAnswersIfIsDone(),
       errorMessage: "",
-      successMessage: "",
     }
   },
   methods: {
@@ -63,9 +61,7 @@ export default {
       }
       if (isCorrect) {
         this.errorMessage = "";
-        this.successMessage = this.lesson.feedback
       } else {
-        this.successMessage = ""
         this.errorMessage = "Die Antwort ist leider nicht korrekt"
       }
       this.solvedHandler(this.lesson.lessonId, isCorrect, null)
@@ -74,6 +70,8 @@ export default {
 }
 </script>
 <style>
+@import "../../../assets/cssVariables.css";
+
 .singleMultipleChoiceLessonContainer {
   display: flex;
   justify-content: center;
@@ -88,17 +86,19 @@ export default {
 label > code {
   padding: 2px;
   border-radius: 5px;
-  background-color: #c7a6a6;
+  background-color: var(--davys-grey-light);
 }
 
 .errorMessage {
-  height: 60px;
-  background-color: #f2ebdc;
+  min-height: 60px;
+  background-color: var(--light-red);
   padding-top: 25px;
+  padding-bottom: 25px;
+  padding-left: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
-  border-top: 2px solid red;
-  border-bottom: 2px solid red;
+  border-top: 2px solid var(--red);
+  border-bottom: 2px solid var(--red);
 }
 
 .answerOptions {
@@ -111,7 +111,7 @@ label {
   padding: 10px;
   border-radius: 10px;
   width: 90%;
-  background-color: lightgray;
+  background-color: var(--davys-grey-light);
 }
 
 label:hover {
@@ -125,8 +125,12 @@ input[type=checkbox]:checked + label {
 
 .checkLesson {
   display: inline-block;
-  background-color: #1a152d;
+  background-color: var(--davys-grey-light);
   padding: 10px;
-  color: white;
+  color: var(--white);
+}
+
+.checkLesson:hover {
+  background-color: var(--davys-grey);
 }
 </style>

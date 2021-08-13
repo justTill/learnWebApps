@@ -20,7 +20,6 @@
       </div>
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
-    <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
     <div class="errorMessage" v-if="errorMessage"> {{ errorMessage }}</div>
   </div>
 </template>
@@ -36,7 +35,6 @@ export default {
   data: function () {
     return {
       errorMessage: "",
-      successMessage: "",
       userAnswer: this.getUserAnswers(),
       answerOptions: this.getAnswersOptions()
     }
@@ -109,21 +107,19 @@ export default {
           let dropzoneStr = dropZone.childNodes[indexOfNonCommentChildNodes].innerText.replaceAll(" ", "")
           if (dropzoneStr !== answerStr) {
             isCorrect = false
-            dropZone.style.backgroundColor = "rgba(255, 0, 0, 0.1)";
+            dropZone.style.backgroundColor = "rgba(255, 0, 0, 0.2)";
           } else {
             console.log("dropzoneId " + i + " set Color Green")
-            dropZone.style.backgroundColor = "rgba(0, 255, 0, 0.3)";
+            dropZone.style.backgroundColor = "rgba(0, 255, 0, 0.1)";
           }
         } else {
           isCorrect = false
-          dropZone.style.backgroundColor = "rgba(255, 0, 0, 0.1)";
+          dropZone.style.backgroundColor = "rgba(255, 0, 0, 0.2)";
         }
       }
       if (isCorrect) {
-        this.successMessage = "Richtig"
         this.errorMessage = ""
       } else {
-        this.successMessage = ""
         this.errorMessage = "leider nicht ganz korrekt"
       }
       this.solvedHandler(this.lesson.lessonId, isCorrect, null)
@@ -149,6 +145,8 @@ export default {
 }
 </script>
 <style>
+@import "../../../assets/cssVariables.css";
+
 .fillTheBlankLessonContainer {
   display: flex;
   justify-content: center;
@@ -181,7 +179,7 @@ export default {
   padding: 3px;
   min-height: 20px;
   min-width: 70px;
-  background-color: #C2C9D6;
+  background-color: var(--davys-grey-light);
   border-radius: 10px;
 }
 
@@ -199,7 +197,7 @@ export default {
 }
 
 code {
-  background-color: lightgray;
+  background-color: var(--davys-grey-light);
   padding: 3px;
 }
 

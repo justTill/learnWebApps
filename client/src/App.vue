@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <error-pop-up v-if="isErrorMessage !== ''" :errorMessage="isErrorMessage"></error-pop-up>
     <navigation></navigation>
     <div class="viewArea">
       <router-view class="view"></router-view>
@@ -10,18 +11,28 @@
 <script>
 
 import Navigation from "@/components/navigation";
+import {mapGetters} from "vuex";
+import ErrorPopUp from "@/components/utils/errorPopUp";
 
 export default {
   name: 'app',
-  components: {Navigation},
-  computed: {},
+  components: {ErrorPopUp, Navigation},
+  computed: {
+    ...mapGetters([
+      'errorMessage',
+    ]),
+    isErrorMessage() {
+      return this.errorMessage
+    }
+  },
   methods: {}
 }
 </script>
 
 <style>
+@import "assets/cssVariables.css";
 html {
-  background-color: #f7f3eb;
+  background-color: var(--beige);
 }
 
 html, body {
@@ -38,9 +49,9 @@ body, html {
 }
 
 #app {
-  background-color: #f7f3eb;
+  background-color: var(--beige);
   font-family: Avenir, Helvetica, Arial, sans-serif;
-  color: #2c3e50;
+  color: var(--dark-blue);
   height: 100%;
   word-wrap: break-word;
 }

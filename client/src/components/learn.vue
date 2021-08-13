@@ -45,25 +45,8 @@
                  :lessonSolvedHandler="lessonSolvedHandlerForCurrentChapter">
 
     </lesson-view>
+    <home v-else class="chapterContent" :resetAllLessons="resetLessonsSolved"></home>
     <div v-else class="chapterContent">
-      <title-header title="Informationen" :reset-chapter="resetLessonsSolved"
-                    resetText="Alle Fortschritt zurücksetzen ?"></title-header>
-      <div class="selectDifficulty">
-        Es gibt verschiedene Schwierigkeistgerade
-        <select v-model="difficultyLevel" v-on:change="changeDifficultyLevel">
-          <option value="ALL" selected>Alle</option>
-          <option value="EASY">Leicht</option>
-          <option value="MIDDLE">Mittel</option>
-          <option value="HARD">Schwer</option>
-        </select>
-      </div>
-      <div class="selectDifficulty">
-        Für Programmieraufgaben hellen oder Dunklen modus?
-        <select v-model="codeMirrorMode" v-on:change="changeCodeMirrorTheme">
-          <option value="DARK" selected>Dunkel</option>
-          <option value="LIGHT">Hell</option>
-        </select>
-      </div>
     </div>
   </div>
 </template>
@@ -72,6 +55,7 @@
 import {mapGetters} from 'vuex'
 import ChapterOverview from "@/components/learn/chapterOverview";
 import SectionOverview from "@/components/learn/sectionOverview";
+import Home from "@/components/learn/home";
 import NavButton from "@/components/utils/navButton";
 import LessonView from "@/components/learn/lessonView";
 import {backEndHost, backEndPort} from "@/envVariables";
@@ -79,7 +63,7 @@ import TitleHeader from "@/components/learn/titleHeader";
 
 export default {
   name: 'learn',
-  components: {TitleHeader, LessonView, ChapterOverview, SectionOverview, NavButton},
+  components: {TitleHeader, LessonView, ChapterOverview, SectionOverview, NavButton, Home},
   data: function () {
     return {
       selectedChapter: null,
@@ -108,11 +92,14 @@ export default {
     document.addEventListener('mouseup', event => {
       this.$el.querySelector('#createNotes').style.display = "none";
       if (window.getSelection().toString() !== '' && this.$route.path.includes('learn')) {
-        let element = this.$el.querySelector('#createNotes')
-        element.style.display = "inline-block";
-        element.style.left = event.pageX + "px"
-        element.style.top = event.pageY - 100 + "px"
-        this.selectedText = window.getSelection().toString();
+        let classNames = window.getSelection().anchorNode.parentElement.className
+        if (!classNames.includes('CodeMirror')) {
+          let element = this.$el.querySelector('#createNotes')
+          element.style.display = "inline-block";
+          element.style.left = event.pageX + "px"
+          element.style.top = event.pageY - 100 + "px"
+          this.selectedText = window.getSelection().toString();
+        }
       }
     })
   },
@@ -135,6 +122,8 @@ export default {
               this.$store.commit('addNotes', note)
             })
             .catch(err => {
+              let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Die Notiz konnte leider nicht dauerhaft sondern nur temporär gespeichert werden, bitte versuchen Sie es später erneut"
+              this.$store.commit('setErrorMessage', errorMessage)
               this.$store.commit('addNotes', note)
             })
       } else {
@@ -216,71 +205,70 @@ export default {
       }
     },
     resetLessonsSolved() {
-      if (this.user.isDefault) {
-        for (let c = 0; c < this.chapters.length; c++) {
-          for (let s = 0; s < this.chapters[c].sections.length; s++) {
-            for (let l = 0; l < this.chapters[c].sections[s].lessons.length; l++) {
-              this.$store.commit('updateLessonDone', {
-                lessonIndex: l,
-                chapterIndex: c,
-                sectionIndex: s,
-                solved: false
-              })
-            }
+      if (!this.user.isDefault) {
+        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/" + this.user.userId + "/" + this.user.userName)
+            .then(response => {
+              return
+            })
+            .catch(err => {
+              let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Alle Kapitel konnte nur bis zu einem neuen laden der Seite zurückgesetzt werden. Versuchen Sie bitte später erneut die Kapitel zurückzusetzten"
+              this.$store.commit('setErrorMessage', errorMessage)
+            })
+      }
+      for (let c = 0; c < this.chapters.length; c++) {
+        for (let s = 0; s < this.chapters[c].sections.length; s++) {
+          for (let l = 0; l < this.chapters[c].sections[s].lessons.length; l++) {
+            this.$store.commit('updateLessonDone', {
+              lessonIndex: l,
+              chapterIndex: c,
+              sectionIndex: s,
+              solved: false
+            })
           }
         }
-      } else {
-        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/" + this.user.userId + "/" + this.user.userName)
-            .then(response =>
-                this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")
-                    .then(result => {
-                      this.$store.commit("setChapters", result.data.chapters)
-                    })
-                    .catch(err => console.log(err)))
-            .catch(err => console.log(err))
       }
     },
     resetChapterLessons() {
-      if (this.user.isDefault) {
-        this.lessonSolvedHandlerForCurrentChapter(null, false)
-      } else {
+      if (!this.user.isDefault) {
         this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/" + this.selectedChapter.chapterId + "/" + this.user.userId + "/" + this.user.userName)
             .then(response => {
-              this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")
-                  .then(result => {
-                    this.selectedChapter = result.data.chapters.find(c => c.chapterId === this.selectedChapter.chapterId)
-                    this.$store.commit("setChapters", result.data.chapters)
-                  })
-                  .catch(err => console.log(err))
-            }).catch(err => console.log(err))
+              return
+            }).catch(err => {
+          let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Das Kapitel konnte nur bis zu einem neuen laden der Seite zurückgesetzt werden. Versuchen Sie bitte später erneut das Kapitel zurückzusetzten"
+          this.$store.commit('setErrorMessage', errorMessage)
+        })
       }
+      this.lessonSolvedHandlerForCurrentChapter(null, false)
     }
   }
 }
 </script>
 <style>
+@import "../assets/cssVariables.css";
+
 .createNotes {
   position: absolute;
   z-index: 9999;
   display: none;
   margin: 40px;
   padding: 20px;
-  background-color: #1a152d;
-  color: white;
+  background-color: var(--davys-grey);
+  text-decoration: underline;
+  color: var(--white);
   border-radius: 5px;
 }
 
 .noteSaved {
   position: absolute;
   z-index: 9999;
-  color: white;
+  color: var(--white);
   border-radius: 5px;
   bottom: 5px;
   padding: 10px;
   margin: 8px;
   width: 200px;
   text-align: center;
-  background-color: rgb(48, 48, 48);
+  background-color: var(--davys-grey);
 }
 
 .createNotes:hover {
@@ -298,7 +286,7 @@ export default {
   flex-basis: 250px;
   flex-shrink: 0;
   height: 100%;
-  background-color: #1a152d;
+  background-color: var(--darker-blue);
   overflow: auto;
 }
 
@@ -308,7 +296,6 @@ export default {
   padding: 0px 24px 0;
   margin-top: 5px;
   min-height: 35px;
-  color: #e0e0e0;
   font-size: large;
   overflow-wrap: break-word;
 }
@@ -325,7 +312,7 @@ export default {
 }
 
 .navigationButton:hover, .navigationSectionButton:hover {
-  color: white;
+  color: var(--white);
 }
 
 .min-nav-button {
@@ -354,13 +341,13 @@ export default {
   }
 
   .navigationButton:hover, .navigationSectionButton:hover {
-    color: white !important;
+    color: var(--white) !important;
   }
 
   .closeNavigationButton {
     display: inline-block;
     cursor: pointer;
-    color: white;
+    color: var(--white);
     text-align: center;
     padding-bottom: 5px;
     font-size: 20px;
@@ -368,7 +355,7 @@ export default {
     margin: 20px;
     width: 30px;
     height: 30px;
-    border: 2px solid white;
+    border: 2px solid var(--white);
   }
 
   .min-nav-button {
@@ -377,14 +364,14 @@ export default {
     margin: 20px auto;
     min-width: 400px;
     height: 30px;
-    background-color: #f7f3eb;
+    background-color: var(--beige);
     transition-duration: 0.4s;
     border-radius: 8px;
   }
 
   .min-nav-button:hover {
     cursor: pointer;
-    background-color: #dee3e2;
+    background-color: var(--platinum);
   }
 
   .content {

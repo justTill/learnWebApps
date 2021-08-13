@@ -86,6 +86,7 @@ export default {
 </script>
 
 <style>
+@import "../../assets/cssVariables.css";
 
 .lessonTextContainer {
   display: flex;
@@ -96,7 +97,7 @@ export default {
 pre {
   white-space: pre-wrap;
   word-wrap: break-word;
-  background-color: lightgray;
+  background-color: var(--davys-grey-light);
   border-radius: 10px;
   padding-right: 10px;
   padding-left: 10px;
@@ -110,7 +111,7 @@ pre {
 
 .lessonText {
   display: block;
-  max-width: 700px;
+  max-width: 600px;
   background-color: white;
   border: 1px solid black;
   border-radius: 2px;
@@ -118,10 +119,18 @@ pre {
   padding-left: 10px;
   padding-right: 10px;
   margin-right: 20px;
+  margin-left: 20px;
   min-height: 30vh;
   max-height: 70vh;
   overflow: auto;
   min-width: 400px;
+}
+
+@media only screen and (max-width: 1000px) {
+  .lessonText {
+    margin-right: auto;
+    margin-left: auto;
+  }
 }
 
 .nextButton:hover, .prevButton:hover {
@@ -139,7 +148,7 @@ pre {
   padding: 10px;
   display: inline-block;
   right: 0px;
-  color: green;
+  color: var(--dark-green);
   position: absolute;
 }
 
@@ -147,13 +156,15 @@ pre {
   padding: 10px;
   display: inline-block;
   position: absolute;
-  color: green;
+  color: var(--dark-green);
 }
 
+code {
+  color: var(--dark-blue) !important;
+}
 @media only screen and (max-width: 1000px) {
   .lessonTextContainer {
     flex-direction: column;
-
   }
 }
 

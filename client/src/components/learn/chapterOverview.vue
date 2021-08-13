@@ -40,6 +40,7 @@ export default {
 }
 </script>
 <style>
+@import "../../assets/cssVariables.css";
 
 .chapterOverviewContainer {
   display: flex;
@@ -81,7 +82,7 @@ export default {
   max-height: 150px;
   min-width: 400px;
   width: 100px;
-  background-color: white;
+  background-color: var(--white);
   border: 1px solid black;
 }
 
@@ -95,7 +96,7 @@ export default {
   display: block;
   min-width: 700px;
   max-width: 1300px;
-  background-color: white;
+  background-color: var(--white);
   border: 1px solid black;
   border-radius: 2px;
   padding: 10px 10px 5px;

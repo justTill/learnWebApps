@@ -39,13 +39,14 @@ export default {
       return DOMPurify.sanitize(this.section.information)
     },
     lessonsForSelectedDifficultyLevel() {
-      return this.difficultyLevel === "ALL" || this.difficultyLevel === null ? this.section.lessons : this.section.lessons.filter(l => l.difficultyLevel === this.difficultyLevel)
+      return this.difficultyLevel === "ALL" || this.difficultyLevel === null ? this.section.lessons : this.section.lessons.filter(l => l.type === 'information' || l.difficultyLevel === this.difficultyLevel || l.difficultyLevel === 'ALL')
     },
   },
   methods: {}
 }
 </script>
 <style>
+@import "../../assets/cssVariables.css";
 
 .textContainer {
   display: block;
@@ -93,7 +94,7 @@ export default {
   max-height: 150px;
   min-width: 400px;
   width: 100px;
-  background-color: white;
+  background-color: var(--white);
   border: 1px solid black;
 }
 
@@ -101,7 +102,7 @@ export default {
   display: block;
   min-width: 700px;
   max-width: 1300px;
-  background-color: white;
+  background-color: var(--white);
   border: 1px solid black;
   border-radius: 2px;
   padding-top: 10px;

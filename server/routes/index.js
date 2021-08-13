@@ -7,6 +7,7 @@ const asyncMiddleware = require('../utils/asyncMiddleware');
 router.get('/overview', isLoggedIn, asyncMiddleware(userController.showUserOverview))
 router.get('/notifications', isLoggedIn, asyncMiddleware(userController.showUserNotifications))
 router.get('/logout', isLoggedIn, userController.logout);
+router.get('/manual', isLoggedIn, userController.openManual);
 
 router.get('/test', isLoggedIn, userController.redirectFrontend);
 
