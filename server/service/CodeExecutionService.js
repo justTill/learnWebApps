@@ -8,6 +8,7 @@ exports.runTestForCodingLesson = async function (codeLesson, userCode) {
         } else if (codeLesson.verificationtype === "SELF") {
             workerPath = "./worker/selfCheckingWorker.js"
         }
+        workerPath = "./worker/secureSelfCheckingWorker.js"
         if (workerPath !== "") {
             let worker = new Worker(workerPath, {
                 workerData: {
@@ -49,6 +50,7 @@ async function runTextExecutionWorker(worker) {
             resolve(result)
         });
         worker.on("error", error => {
+            console.log(error)
             reject(error);
         });
 
