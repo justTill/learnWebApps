@@ -4,14 +4,19 @@
                   resetText="Alle Fortschritt zurücksetzen ?"></title-header>
     <div class="explanation homeSection hoverEffect">
       <h1> Learn Web Apps</h1>
-      Ist einer Interaktive Lernandwendung, mithilfe der du, die Konzepte die dir in der Vorlesung "WebApp" vorgestellt
+      Ist einer Interaktive Lernandwendung, mithilfe der du, die Konzepte die dir in der Vorlesung "WebApps" vorgestellt
       bekommen wurden vertiefen und üben kannst.
+      <br>
+      <br>
+      Die Konzepte bilden die Grundlage zur Umsetzung komplexer clientseitiger Logik für WebApps. Daher ist es wichtig
+      diese zu verstehen und anwenden zu können.
       <br>
       <br>
       Die Anwendung kannst du außerdem gut für die Klausur & Praktikums vorbereitung nutzen. Denn hier werden neben
       angeboteten Übungen, wichtige Inhalte nochmal erläuter.
       <br>
       <br>
+
       <div class="instructionBlock">
         <img class="gif" src="../../assets/instructions.gif" alt="Instruktions Gif">
       </div>
