@@ -11,7 +11,7 @@ textarea(class="form-control" name="lessonInformation" required) #{lesson ? less
 br
 span.label(class="input-group-text") Schwierigkeitsgrad
 select(class="form-select" name="difficultyLevel" required)
-    option(value="All" selected=lesson && lesson.difficultylevel == 'All') Alle
+    option(value="All" selected=lesson && lesson.difficultylevel == 'ALL') Alle
     option(value="EASY" selected=lesson && lesson.difficultylevel == 'EASY') Einfach
     option(value="MIDDLE" selected=lesson && lesson.difficultylevel == 'MIDDLE') Mittel
     option(value="HARD" selected=lesson && lesson.difficultylevel == 'HARD') Schwer

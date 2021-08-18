@@ -42,6 +42,7 @@
                  :previousLesson="previousLesson"
                  :nextLesson="nextLesson"
                  :goToLesson="goToLesson"
+                 :goToLessonOverview="goToSection"
                  :lessonSolvedHandler="lessonSolvedHandlerForCurrentChapter">
 
     </lesson-view>
@@ -166,6 +167,9 @@ export default {
       }
     },
     goToSection(section) {
+      if (section === null) {
+        section = this.selectedSection
+      }
       this.changeChapterAndSectionOnNavigationClick(this.selectedChapter, section)
       this.$refs['section-' + section.sectionId][0].isActive = true;
     },
