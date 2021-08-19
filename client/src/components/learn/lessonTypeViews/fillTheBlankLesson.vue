@@ -1,14 +1,16 @@
 <template>
   <div class="fillTheBlankLessonContainer">
     <br>
-    <div class="fillTheBlankText" v-for="(element, index) in preparedFillTheBlankTest">
-      <span v-html="element">}</span>
-      <div v-if="index+1 !== preparedFillTheBlankTest.length" class="dropzone" :id="'drop-'+index"
-           @drop="onDrop($event, index)" @dragenter.prevent
-           @dragover.prevent>
-        <div v-if="userAnswer.length !== 0 && userAnswer[index]" :id="'option-'+userAnswer[index].index"
-             @dragstart="startDrag($event)" draggable="true" class="possibleAnswers drag">
-          {{ userAnswer[index].answer }}
+    <div class="fillTheBlankTextContainer">
+      <div class="fillTheBlankText" v-for="(element, index) in preparedFillTheBlankTest">
+        <span v-html="element"></span>
+        <div v-if="index+1 !== preparedFillTheBlankTest.length" class="dropzone" :id="'drop-'+index"
+             @drop="onDrop($event, index)" @dragenter.prevent
+             @dragover.prevent>
+          <div v-if="userAnswer.length !== 0 && userAnswer[index]" :id="'option-'+userAnswer[index].index"
+               @dragstart="startDrag($event)" draggable="true" class="possibleAnswers drag">
+            {{ userAnswer[index].answer }}
+          </div>
         </div>
       </div>
     </div>
@@ -139,6 +141,9 @@ export default {
   computed: {
     preparedFillTheBlankTest() {
       let textWithBlanksText = DOMPurify.sanitize(this.lesson.textWithBlanks)
+      console.log(textWithBlanksText.split("[input]"))
+      textWithBlanksText = textWithBlanksText.replaceAll("\n", "<br>")
+      textWithBlanksText = textWithBlanksText.replaceAll(" ", "&nbsp;")
       return textWithBlanksText.split("[input]")
     },
   },
@@ -148,15 +153,18 @@ export default {
 @import "../../../assets/cssVariables.css";
 
 .fillTheBlankLessonContainer {
-  display: flex;
-  justify-content: center;
+  display: inline-flex;
   flex-direction: column;
-  text-align: center;
+}
+
+.fillTheBlankTextContainer {
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
 }
 
 .fillTheBlankText {
-  display: inline-flex;
-  align-items: center;
+  display: inline;
 }
 
 .initialDropZone {
@@ -169,18 +177,23 @@ export default {
   flex-wrap: wrap;
 }
 
-.initialDropZone div {
-  flex: 1 0 15%;
-}
-
 .dropzone {
-  display: inline-block;
+  display: inline;
   margin: 3px;
-  padding: 3px;
-  min-height: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+  /*padding: 3px;*/
   min-width: 70px;
   background-color: var(--davys-grey-light);
   border-radius: 10px;
+}
+
+.possibleAnswers {
+  margin: 5px 15px;
+  border-color: var(--davys-grey-light);
+  border: 1px solid;
+  padding: 2px;
+  border-radius: 5px;
 }
 
 .drag {

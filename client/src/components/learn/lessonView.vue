@@ -16,7 +16,11 @@
           <div class="prevButton" v-if="previousLesson" v-on:click="goToLesson(previousLesson)"> &#8592; Vorherige
             Lerneinheit
           </div>
+          <div class="prevButton" v-if="!previousLesson" v-on:click="goToLessonOverview(null)"> &#8592; Zur Übersicht
+          </div>
           <div class="nextButton" v-if="nextLesson" v-on:click="goToLesson(nextLesson)"> Nächste Lerneinheit &#8594;
+          </div>
+          <div class="nextButton" v-if="!nextLesson" v-on:click="goToLessonOverview(null)"> Zur Übersicht &#8594;
           </div>
         </div>
       </div>
@@ -49,6 +53,7 @@ export default {
     previousLesson: Object,
     nextLesson: Object,
     goToLesson: Function,
+    goToLessonOverview: Function,
     lessonSolvedHandler: Function,
   },
   data: function () {
