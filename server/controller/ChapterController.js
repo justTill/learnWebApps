@@ -67,7 +67,6 @@ exports.saveNewChapter = async function (req, res, next) {
     }
 
 }
-
 exports.saveEditedChapter = async function (req, res, next) {
     let name = req.body.chapterName
     let overview = req.body.overview

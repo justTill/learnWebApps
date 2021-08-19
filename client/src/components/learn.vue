@@ -242,7 +242,18 @@ export default {
           this.$store.commit('setErrorMessage', errorMessage)
         })
       }
-      this.lessonSolvedHandlerForCurrentChapter(null, false)
+      let chapterIndex = this.chapters.indexOf(this.selectedChapter)
+      for (let sectionIndex = 0; sectionIndex < this.chapters[chapterIndex].sections.length; sectionIndex++) {
+        for (let lessonIndex = 0; lessonIndex < this.selectedChapter.sections[sectionIndex].lessons.length; lessonIndex++) {
+          let payload = {
+            lessonIndex: lessonIndex,
+            chapterIndex: chapterIndex,
+            sectionIndex: sectionIndex,
+            solved: false
+          }
+          this.$store.commit('updateLessonDone', payload)
+        }
+      }
     }
   }
 }

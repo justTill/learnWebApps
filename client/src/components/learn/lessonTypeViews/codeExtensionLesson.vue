@@ -48,7 +48,6 @@ export default {
       } else {
         code = code.replaceAll('[input]', '<input class="codeInput" type="text">')
       }
-
       let cleanCode = DOMPurify.sanitize(code)
       return cleanCode
     }
