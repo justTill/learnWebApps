@@ -24,3 +24,15 @@ exports.consumerKeyExist = async function (consumerKey) {
         })
     return result
 }
+
+exports.findByConsumerKey = async function (consumerKey) {
+    let query = "Select * from ltiregistration where consumerkey = $1"
+    let result = {}
+    result = await pool.query(query, [consumerKey])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}

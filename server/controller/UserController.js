@@ -4,8 +4,6 @@ var userRepository = require("../persistence/UserRepository")
 var chapterRepository = require("../persistence/ChapterRepository")
 var sectionRepository = require("../persistence/SectionRepository")
 var lessonRepository = require("../persistence/LessonRepository")
-var lti = require("ims-lti")
-var crypto = require('crypto');
 
 exports.authenticate = passport.authenticate('local', {
     failureRedirect: '/',
@@ -13,67 +11,6 @@ exports.authenticate = passport.authenticate('local', {
 }), (err, req, res, next) => {
     if (err) next(err);
 };
-
-const secrets = {
-    demo: '123456789',
-    demo2: '123456789'
-};
-const nonceStore = new lti.Stores.MemoryStore();
-
-const getSecret = (consumerKey, callback) => {
-    const secret = consumerKey = secrets.demo;
-    if (secret) {
-        return callback(null, secret);
-    }
-
-    let err = new Error(`Unknown consumer ${consumerKey}`);
-    err.status = 403;
-
-    return callback(err);
-};
-exports.handleLTILaunch = async function (req, res, next) {
-    if (!req.body) {
-        let err = new Error('Expected a body');
-        err.status = 400;
-        return next(err);
-    }
-    const consumerKey = req.body.oauth_consumer_key;
-    if (!consumerKey) {
-        let err = new Error('Expected a consumer');
-        err.status = 422;
-        return next(err);
-    }
-    getSecret(consumerKey, (err, consumerSecret) => {
-        if (err) {
-            return next(err);
-        }
-        const provider = new lti.Provider(consumerKey, consumerSecret, nonceStore, lti.HMAC_SHA1);
-        provider.valid_request(req, (err, isValid) => {
-            if (err) {
-                return next(err);
-            }
-            if (isValid) {
-                req.session.regenerate(err => {
-                    if (err) next(err);
-                    //does not work since moodle is localhost and localhost in docker is different
-                    //provider.outcome_service.send_replace_result(1, (err, isValid) => console.log(err))
-                    req.session.email = provider.body.lis_person_contact_email_primary;
-                    req.session.contextId = provider.context_id;
-                    req.session.userId = provider.userId;
-                    req.session.username = provider.username;
-                    req.session.ltiConsumer = provider.body.tool_consumer_instance_guid;
-                    req.session.isTutor = provider.instructor === true;
-                    req.session.context_id = provider.context_id;
-
-                    return res.redirect(301, 'http://localhost:8080');
-                });
-            } else {
-                return next(err);
-            }
-        });
-    });
-}
-
 exports.openManual = async function (req, res, next) {
     let filePath = "./public/manual.pdf";
     fs.readFile(filePath, function (err, data) {
