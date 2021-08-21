@@ -26,11 +26,13 @@ function getChapters() {
 }
 
 function getChaptersForUser(userId, userName) {
-  this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/" + userId + "/" + userName)
-      .then(result => {
-          this.$store.commit("setChapters", result.data.chapters)
-      })
-      .catch(err => console.log(err))
+    this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/" + userId + "/" + userName, {
+        withCredentials: true
+    })
+        .then(result => {
+            this.$store.commit("setChapters", result.data.chapters)
+        })
+        .catch(err => console.log(err))
 }
 
 function getNotes(userId, userName) {
