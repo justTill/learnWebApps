@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var userController = require('../controller/UserController')
+var ltiController = require('../controller/LTIController')
 const isLoggedIn = require('../utils/logIn').loggedIn;
 const asyncMiddleware = require('../utils/asyncMiddleware');
 //User
@@ -9,7 +10,11 @@ router.get('/notifications', isLoggedIn, asyncMiddleware(userController.showUser
 router.get('/logout', isLoggedIn, userController.logout);
 router.get('/manual', isLoggedIn, userController.openManual);
 
-router.get('/test', isLoggedIn, userController.redirectFrontend);
+router.post('/test', userController.handleLTILaunch);
+router.get('/lti/registration/', (req, res, next) => {
+    res.render("LTI/registration")
+});
+router.post('/lti/registration', ltiController.handleLTIRegistration)
 
 router.post('/login', userController.authenticate);
 

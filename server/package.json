@@ -19,6 +19,7 @@
     "express-pg-session": "^1.1.0",
     "express-session": "^1.17.2",
     "http-errors": "~1.6.3",
+    "ims-lti": "^3.0.2",
     "jade": "^1.9.2",
     "jasmine": "^3.7.0",
     "liquibase-wrapper": "^1.0.2",
