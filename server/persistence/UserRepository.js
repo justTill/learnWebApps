@@ -255,3 +255,15 @@ exports.updateNotificationsSeenForProblem = async function (problemId, hasSeen) 
         })
     return result
 }
+
+exports.getSessionForUserID = async function (userId) {
+    let result = []
+    let query = 'Select * from sessions where sid =$1'
+    result = await pool.query(query, [userId])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}

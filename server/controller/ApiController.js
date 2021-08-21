@@ -3,6 +3,7 @@ var sectionRepository = require("../persistence/SectionRepository")
 var userRepository = require("../persistence/UserRepository")
 var lessonRepository = require("../persistence/LessonRepository")
 var codeExecutionService = require("../service/CodeExecutionService")
+var lti = require("ims-lti")
 
 const LessonTypes = Object.freeze({
     INFORMATION: "information",
@@ -47,6 +48,22 @@ exports.getProblemsWithAnswers = async function (req, res, next) {
     res.send(data)
 }
 exports.getChapterDataWithSectionsAndLessonsForUser = async function (req, res, next) {
+    /*try {
+        let options = {
+            consumer_key: req.session.consumer_key,
+            consumer_secret: req.session.consumer_secret,
+            service_url: req.session.service_url,
+            source_did: req.session.source_did,
+        };
+
+        let outcomeService = new lti.OutcomeService(options)
+        outcomeService.send_replace_result(1, function (err, result) {
+            console.log(`Replace result ${result}`); //True or false
+            console.log(err)
+        })
+    } catch (e) {
+        console.log(e)
+    }*/
     let data = {chapters: []}
     let moodleId = parseInt(req.params.moodleId)
     let moodleName = req.params.moodleName

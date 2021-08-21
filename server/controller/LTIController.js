@@ -33,24 +33,6 @@ exports.handleLTIRegistration = async function (req, res, next) {
     }
 }
 
-const secrets = {
-    demo: '123456789',
-    demo2: '123456789'
-};
-const nonceStore = new lti.Stores.MemoryStore();
-
-const getSecret = (consumerKey, callback) => {
-    const secret = consumerKey = secrets.demo;
-    if (secret) {
-        return callback(null, secret);
-    }
-
-    let err = new Error(`Unknown consumer ${consumerKey}`);
-    err.status = 403;
-
-    return callback(err);
-};
-
 let getSecretsForConsumer = async function (consumerKey, cb) {
     let consumer = await ltiRepository.findByConsumerKey(consumerKey)
     if (consumer.length !== 0) {
@@ -77,7 +59,7 @@ exports.handleLTILaunch = async function (req, res, next) {
     let consumerSecret = await getSecretsForConsumer(consumerKey, (err) => {
         if (err) return next(err)
     })
-    const provider = new lti.Provider(consumerKey, consumerSecret, nonceStore, lti.HMAC_SHA1);
+    const provider = new lti.Provider(consumerKey, consumerSecret, lti.HMAC_SHA1);
     provider.valid_request(req, (err, isValid) => {
         if (err) {
             return next(err);
@@ -94,7 +76,13 @@ exports.handleLTILaunch = async function (req, res, next) {
                 req.session.ltiConsumer = provider.body.tool_consumer_instance_guid;
                 req.session.isTutor = provider.instructor === true;
                 req.session.context_id = provider.context_id;
-
+                req.session.service = provider
+                req.session.consumer_key = provider.consumer_key;
+                req.session.consumer_secret = provider.consumer_secret;
+                req.session.service_url = provider.outcome_service.service_url;
+                req.session.source_did = provider.outcome_service.source_did;
+                console.log(provider)
+                res.cookie('connect.sid', req.sessionID, {maxAge: req.session.cookie.maxAge})
                 return res.redirect(301, 'http://localhost:8080');
             });
         } else {
