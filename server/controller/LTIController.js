@@ -1,5 +1,6 @@
 var crypto = require('crypto');
 var ltiRepository = require("../persistence/LTIRepository")
+var userRepository = require("../persistence/UserRepository")
 var lti = require("ims-lti")
 
 exports.handleLTIRegistration = async function (req, res, next) {
@@ -69,14 +70,26 @@ exports.handleLTILaunch = async function (req, res, next) {
                 if (err) next(err);
                 req.session.email = provider.body.lis_person_contact_email_primary;
                 req.session.userId = provider.userId;
-                req.session.username = provider.username;
-                req.session.givenName = provider.lis_person_name_given;
+                req.session.userName = provider.username;
+                req.session.givenName = provider.body.lis_person_name_given;
                 req.session.ltiConsumer = provider.body.tool_consumer_instance_guid;
                 req.session.consumer_key = provider.consumer_key;
                 req.session.consumer_secret = provider.consumer_secret;
                 req.session.service_url = provider.outcome_service.service_url;
                 req.session.source_did = provider.outcome_service.source_did;
-                res.cookie('connect.sid', req.sessionID, {maxAge: req.session.cookie.maxAge})
+                userRepository.findUserByMoodleIdAndMoodleName(req.session.userId, req.session.userName)
+                    .then(result => {
+                        if (result.length === 0) {
+                            userRepository.createPerson(req.session.userId, req.session.userName)
+                                .then()
+                                .catch(err => console.log(err))
+                        }
+                    }).catch(err => console.log(err))
+                res.cookie('connect.sid', req.sessionID, {
+                    maxAge: req.session.cookie.maxAge,
+                })
+                res.cookie('learnAppUsersGivenName', provider.body.lis_person_name_given, {maxAge: req.session.cookie.maxAge})
+
                 return res.redirect(301, 'http://localhost:8080');
             });
         } else {

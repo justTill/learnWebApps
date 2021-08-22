@@ -12,36 +12,11 @@ const LessonTypes = Object.freeze({
     FILLTHEBLANK: "fillTheBlankLesson",
     SINGLEMULTIPLECHOICE: "singleMultipleChoiceLesson"
 })
-exports.createUserIfNotExist = function (req, res, next) {
-    let moodleId = req.body.moodleId
-    let moodleName = req.body.moodleName
-    if (moodleId && moodleName && moodleId !== -1 && moodleName !== "default") {
-        userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
-            .then(result => {
-                if (result.length === 0) {
-                    userRepository.createPerson(moodleId, moodleName)
-                        .then(result => {
-                            res.status(201).send({message: "created"})
-                        })
-                        .catch(err => {
-                            res.status(500).send({message: "unknown error"})
-                        })
-                } else {
-                    res.status(201).send({message: "created"})
-                }
-            })
-            .catch(err => {
-                res.status(500).send({message: "unknown error"})
-            })
-    } else {
-        res.status(400).send({message: "default user given or missing field"})
-    }
-}
 exports.getProblemsWithAnswers = async function (req, res, next) {
-    let moodleId = parseInt(req.params.moodleId)
-    let moodleName = req.params.moodleName
+    let moodleId = parseInt(req.session.userId)
+    let moodleName = req.session.userName
     let data = {problems: []}
-    if (moodleId !== -1 && moodleName !== "default") {
+    if (moodleId && moodleName) {
         let problemsWithAnswers = await userRepository.findProblemsAndAnswersByUser(moodleId, moodleName)
         data.problems = mapToOutputProblem(problemsWithAnswers)
     }
@@ -159,10 +134,10 @@ exports.testCodingLesson = async function (req, res, next) {
     }
 }
 exports.saveNotes = async function (req, res, next) {
-    let moodleId = parseInt(req.params.moodleId)
-    let moodleName = req.params.moodleName
     let note = req.body.note
-    if (moodleId !== -1 && moodleName !== "default" && note) {
+    if (note && req.session.userId && req.session.userName) {
+        let moodleId = req.session.userId
+        let moodleName = req.session.userName
         userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
             .then(result => {
                 if (result.length !== 0) {
@@ -177,18 +152,17 @@ exports.saveNotes = async function (req, res, next) {
                 res.status(500).send({message: "unknown error try again later"})
             })
     } else {
-        res.status(400).send({message: "moodle id or name missing or default values are used"})
+        res.status(400).send({message: "no userId or userName in session or note missing in request body"})
     }
 }
 exports.getNotes = async function (req, res, next) {
-    let moodleId = parseInt(req.params.moodleId)
-    let moodleName = req.params.moodleName
-    if (moodleId !== -1 && moodleName !== "default") {
-        let notes = await userRepository.findNotesByUser(moodleId, moodleName)
-        res.status(200).send({notes: mapToOutputNotes(notes)})
-    } else {
-        res.status(400).send({})
+    let notes = []
+    let moodleId = req.session.userId
+    let moodleName = req.session.userName
+    if (moodleId && moodleName) {
+        notes = await userRepository.findNotesByUser(moodleId, moodleName)
     }
+    res.status(200).send({notes: mapToOutputNotes(notes)})
 }
 
 exports.insertOrUpdateNote = async function (req, res, next) {
@@ -222,18 +196,17 @@ exports.deleteNote = async function (req, res, next) {
     }
 }
 exports.saveProblem = async function (req, res, next) {
-    let moodleId = parseInt(req.body.moodleId)
-    let moodleName = req.body.moodleName
+    let moodleId = req.session.userId
+    let moodleName = req.session.userName
     let lessonId = req.body.lessonId
     let problem = req.body.problem
-    if (moodleId !== -1 && moodleName !== "default" && problem && lessonId) {
+    if (moodleId && moodleName && problem && lessonId) {
         let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
         let lesson = await lessonRepository.findById(lessonId)
         if (user.length !== 0 && lesson.length !== 0) {
             userRepository.insertProblemForUser(moodleId, lessonId, problem)
                 .then(result => {
                     res.status(201).send({message: "Problem created", problemId: result[0].id})
-
                 })
                 .catch(err => {
                     res.status(500).send({message: "Unknown error try again later"})
@@ -242,7 +215,7 @@ exports.saveProblem = async function (req, res, next) {
             res.status(404).send({message: "User or Lesson not found"})
         }
     } else {
-        res.status(400).send({message: "Could not save Problem for default User"})
+        res.status(400).send({message: "Could not save Problem for User"})
     }
 }
 exports.saveAnswerForProblem = async function (req, res, next) {

@@ -77,9 +77,9 @@ export default {
       if (isSolved) {
         this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved", {
           lessonId: lessonId,
-          moodleId: this.user.userId,
-          moodleName: this.user.userName,
           userCode: userCode
+        }, {
+          withCredentials: true
         }).then(response => {
 
         }).catch(err => {

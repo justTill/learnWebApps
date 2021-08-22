@@ -58,10 +58,6 @@ export default {
           lessonId: this.lesson.lessonId,
           userCode: this.userCode,
         }
-        if (!this.user.isDefault) {
-          payload.moodleId = this.user.userId
-          payload.moodleName = this.user.userName
-        }
         this.isLoadingResults = true
 
         this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/coding/check", payload)
@@ -71,6 +67,8 @@ export default {
               this.errorMessages = testErrors
               this.isLoadingResults = false
               this.solvedHandler(this.lesson.lessonId, isCorrect, this.userCode)
+            }, {
+              withCredentials: true
             })
             .catch(err => {
               this.isLoadingResults = false

@@ -80,19 +80,17 @@ export default {
       }
       if (!this.user.isDefault) {
         let requestPayload = {
-          moodleId: this.user.userId,
-          moodleName: this.user.userName,
           answer: this.answer,
           problemId: this.currentProblem.problemId
         }
-        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/answer/", requestPayload)
-            .then(response => {
-              this.$store.commit('addAnswerToProblem', payload)
-            })
-            .catch(err => {
-              let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Die Antwort konnte nicht daher gespeichert werden, bitte versuchen Sie es später erneut."
-              this.$store.commit('setErrorMessage', errorMessage)
-            })
+        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/answer/", requestPayload, {
+          withCredentials: true
+        }).then(response => {
+          this.$store.commit('addAnswerToProblem', payload)
+        }).catch(err => {
+          let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Die Antwort konnte nicht daher gespeichert werden, bitte versuchen Sie es später erneut."
+          this.$store.commit('setErrorMessage', errorMessage)
+        })
       }
       this.answer = ""
     },
@@ -109,14 +107,14 @@ export default {
     },
     deleteProblem() {
       if (!this.user.isDefault) {
-        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + this.user.userId + "/" + this.user.userName + "/" + this.currentProblem.problemId)
-            .then(response => {
-              this.$store.commit('deleteProblem', this.currentProblem)
-            })
-            .catch(err => {
-              let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Das Problem konnte nicht daher gelöscht werden, bitte versuchen Sie es später erneut."
-              this.$store.commit('setErrorMessage', errorMessage)
-            })
+        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + this.currentProblem.problemId, {
+          withCredentials: true
+        }).then(response => {
+          this.$store.commit('deleteProblem', this.currentProblem)
+        }).catch(err => {
+          let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Das Problem konnte nicht daher gelöscht werden, bitte versuchen Sie es später erneut."
+          this.$store.commit('setErrorMessage', errorMessage)
+        })
       } else {
         this.$store.commit('deleteProblem', this.currentProblem)
       }
