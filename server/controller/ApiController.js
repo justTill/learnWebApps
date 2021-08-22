@@ -13,7 +13,7 @@ const LessonTypes = Object.freeze({
     SINGLEMULTIPLECHOICE: "singleMultipleChoiceLesson"
 })
 exports.getProblemsWithAnswers = async function (req, res, next) {
-    let moodleId = parseInt(req.session.userId)
+    let moodleId = req.session.userId
     let moodleName = req.session.userName
     let data = {problems: []}
     if (moodleId && moodleName) {
@@ -22,7 +22,7 @@ exports.getProblemsWithAnswers = async function (req, res, next) {
     }
     res.send(data)
 }
-exports.getChapterDataWithSectionsAndLessonsForUser = async function (req, res, next) {
+exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
     /*try {
         let options = {
             consumer_key: req.session.consumer_key,
@@ -40,30 +40,21 @@ exports.getChapterDataWithSectionsAndLessonsForUser = async function (req, res, 
         console.log(e)
     }*/
     let data = {chapters: []}
-    let moodleId = parseInt(req.params.moodleId)
-    let moodleName = req.params.moodleName
-    if (moodleId && moodleName) {
-        let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+    let moodleId = null
+    if (req.session.userId && req.session.userName) {
+        let user = await userRepository.findUserByMoodleIdAndMoodleName(req.session.userId, req.session.userName)
         if (user.length !== 0) {
-            let chapters = await chapterRepository.findAll()
-            for (let chapter of chapters) {
-                let mappedChapter = await mapToOutputChapter(chapter, moodleId)
-                data.chapters.push(mappedChapter)
-            }
+            moodleId = req.session.userId
         }
     }
-    res.send(data)
-}
-
-exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
-    let data = {chapters: []}
     let chapters = await chapterRepository.findAll()
     for (let chapter of chapters) {
-        let mappedChapter = await mapToOutputChapter(chapter, null)
+        let mappedChapter = await mapToOutputChapter(chapter, moodleId)
         data.chapters.push(mappedChapter)
     }
     res.send(data)
 }
+
 exports.saveSolvedLesson = async function (req, res, next) {
     let lessonId = parseInt(req.body.lessonId)
     let moodleId = parseInt(req.body.moodleId)

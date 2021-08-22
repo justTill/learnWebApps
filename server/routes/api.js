@@ -3,7 +3,7 @@ var router = express.Router();
 var apiController = require('../controller/ApiController')
 const asyncMiddleware = require('../utils/asyncMiddleware');
 
-router.get('/chapters/', asyncMiddleware(apiController.getChapterDataWithSectionsAndLessons));
+router.get('/chapters/', asyncMiddleware(apiController.getChapterDataWithSectionsAndLessons)); //done
 router.post('/lessons/lesson/coding/check', asyncMiddleware(apiController.testCodingLesson));
 router.post('/lessons/lesson/solved', asyncMiddleware(apiController.saveSolvedLesson))
 
