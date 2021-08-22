@@ -67,21 +67,15 @@ exports.handleLTILaunch = async function (req, res, next) {
         if (isValid) {
             req.session.regenerate(err => {
                 if (err) next(err);
-                //does not work since moodle is localhost and localhost in docker is different
-                //provider.outcome_service.send_replace_result(1, (err, isValid) => console.log(err))
                 req.session.email = provider.body.lis_person_contact_email_primary;
-                req.session.contextId = provider.context_id;
                 req.session.userId = provider.userId;
                 req.session.username = provider.username;
+                req.session.givenName = provider.lis_person_name_given;
                 req.session.ltiConsumer = provider.body.tool_consumer_instance_guid;
-                req.session.isTutor = provider.instructor === true;
-                req.session.context_id = provider.context_id;
-                req.session.service = provider
                 req.session.consumer_key = provider.consumer_key;
                 req.session.consumer_secret = provider.consumer_secret;
                 req.session.service_url = provider.outcome_service.service_url;
                 req.session.source_did = provider.outcome_service.source_did;
-                console.log(provider)
                 res.cookie('connect.sid', req.sessionID, {maxAge: req.session.cookie.maxAge})
                 return res.redirect(301, 'http://localhost:8080');
             });
