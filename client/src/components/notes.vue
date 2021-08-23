@@ -119,10 +119,9 @@ export default {
     updateNoteBackend(note) {
       if (!this.user.isDefault && note.notesId !== -1) {
         let payload = {
-          updatedNoteText: note.note,
-          noteId: note.notesId
+          note: note.note,
         }
-        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/note/", payload, {
+        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/note/" + note.notesId, payload, {
           withCredentials: true
         }).then(response => {
         }).catch(err => {
