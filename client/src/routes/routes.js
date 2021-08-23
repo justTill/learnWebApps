@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 
 const routes = [
     {path: '/notes', component: notes},
-    {path: '/learn', component: learn},
+    {path: '/', component: learn},
     {path: '/messages/', component: problems},
 ]
 
