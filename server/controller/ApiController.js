@@ -57,8 +57,8 @@ exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
 
 exports.saveSolvedLesson = async function (req, res, next) {
     let lessonId = parseInt(req.body.lessonId)
-    let moodleId = parseInt(req.body.moodleId)
-    let moodleName = req.body.moodleName
+    let moodleId = req.session.userId
+    let moodleName = req.session.userName
     let code = req.body.userCode
     if (lessonId && moodleId && moodleName) {
         let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
@@ -78,8 +78,8 @@ exports.saveSolvedLesson = async function (req, res, next) {
     }
 }
 exports.deleteSolvedLessons = async function (req, res, next) {
-    let moodleId = parseInt(req.params.moodleId)
-    let moodleName = req.params.moodleName
+    let moodleId = req.session.userId
+    let moodleName = req.session.userName
     let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
     if (user.length !== 0) {
         if (!req.params.chapterId) {
@@ -103,8 +103,6 @@ exports.deleteSolvedLessons = async function (req, res, next) {
 }
 
 exports.testCodingLesson = async function (req, res, next) {
-    let moodleId = parseInt(req.body.moodleId)
-    let moodleName = req.body.moodleName
     let code = req.body.userCode;
     let lessonId = req.body.lessonId;
     if (code && lessonId) {
@@ -132,9 +130,20 @@ exports.saveNotes = async function (req, res, next) {
         userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
             .then(result => {
                 if (result.length !== 0) {
-                    userRepository.insertNotesForUser(moodleId, note).then(result => {
-                        res.status(201).send({message: "success", id: result.rows[0].id})
-                    })
+                    if (req.params.noteId) {
+                        userRepository.insertOrUpdateNote(moodleId, note, req.params.noteId)
+                            .then(result => {
+                                res.status(201).send({message: "changed"})
+                            }).catch(err => {
+                            res.status(500).send({message: "unknown error try again later"})
+                        })
+                    } else {
+                        userRepository.insertNotesForUser(moodleId, note).then(result => {
+                            res.status(201).send({message: "success", id: result.rows[0].id})
+                        }).catch(err => {
+                            res.status(500).send({message: "unknown error try again later"})
+                        })
+                    }
                 } else {
                     res.status(400).send({message: "could not found user try again later"})
                 }
@@ -156,29 +165,11 @@ exports.getNotes = async function (req, res, next) {
     res.status(200).send({notes: mapToOutputNotes(notes)})
 }
 
-exports.insertOrUpdateNote = async function (req, res, next) {
-    let moodleId = parseInt(req.body.moodleId)
-    let moodleName = req.body.moodleName
-    let updatedNoteText = req.body.updatedNoteText
-    let noteId = req.body.noteId
-    if (moodleId !== -1 && moodleName !== "default" && updatedNoteText && noteId) {
-        userRepository.insertOrUpdateNote(moodleId, moodleName, updatedNoteText, noteId)
-            .then(result => {
-                res.status(201).send({message: "changed"})
-            })
-            .catch(err => {
-                res.status(500).send({message: "unknown error try again later"})
-            })
-    } else {
-        res.status(400).send({})
-    }
-}
-
 exports.deleteNote = async function (req, res, next) {
-    let moodleId = parseInt(req.params.moodleId)
-    let moodleName = req.params.moodleName
+    let moodleId = req.session.userId
+    let moodleName = req.session.userName
     let noteId = req.params.noteId
-    if (moodleId !== -1 && moodleName !== "default" && noteId) {
+    if (moodleId && moodleName && noteId) {
         userRepository.deleteNoteForUser(moodleId, moodleName, noteId).then(result => {
             res.status(204).send({message: "deleted"})
         }).catch(err => res.status(500).send({message: "unknown error try again later"}))
@@ -210,9 +201,9 @@ exports.saveProblem = async function (req, res, next) {
     }
 }
 exports.saveAnswerForProblem = async function (req, res, next) {
-    let problemId = parseInt(req.body.problemId)
-    let moodleId = parseInt(req.body.moodleId)
-    let moodleName = req.body.moodleName
+    let problemId = req.body.problemId
+    let moodleId = req.session.userId
+    let moodleName = req.session.userName
     let answer = req.body.answer
     if (problemId && moodleId && moodleName && answer) {
         let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
@@ -233,9 +224,9 @@ exports.saveAnswerForProblem = async function (req, res, next) {
 }
 
 exports.deleteProblem = async function (req, res, next) {
-    let problemId = parseInt(req.params.problemId)
-    let moodleId = parseInt(req.params.moodleId)
-    let moodleName = req.params.moodleName
+    let problemId = req.params.problemId
+    let moodleId = req.session.userId
+    let moodleName = req.session.userName
     if (problemId && moodleId && moodleName) {
         let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
         if (user.length !== 0) {

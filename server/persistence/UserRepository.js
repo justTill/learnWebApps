@@ -222,9 +222,9 @@ exports.deleteNoteForUser = async function (moodleId, moodleName, noteId) {
         })
     return result
 }
-exports.insertOrUpdateNote = async function (moodleId, moodleName, noteText, noteId) {
+exports.insertOrUpdateNote = async function (moodleId, noteText, noteId) {
     let result = []
-    let query = 'Insert Into notes (id, moodleid, note) VALUES( $1,$2,$3) ON CONFLICT ON CONSTRAINT "notes_pkey" DO UPDATE SET note=$3'
+    let query = 'Insert Into notes (id, moodleid, note) VALUES($1,$2,$3) ON CONFLICT ON CONSTRAINT "notes_pkey" DO UPDATE SET note=$3'
     result = await pool.query(query, [noteId, moodleId, noteText])
         .then(res => {
             return res.rows
