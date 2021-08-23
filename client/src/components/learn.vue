@@ -42,6 +42,7 @@
                  :previousLesson="previousLesson"
                  :nextLesson="nextLesson"
                  :goToLesson="goToLesson"
+                 :goToLessonOverview="goToSection"
                  :lessonSolvedHandler="lessonSolvedHandlerForCurrentChapter">
 
     </lesson-view>
@@ -116,16 +117,16 @@ export default {
         note: this.selectedText
       }
       if (!this.user.isDefault) {
-        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/" + this.user.userId + "/" + this.user.userName, {note: this.selectedText})
-            .then(res => {
-              note.notesId = res.data.id
-              this.$store.commit('addNotes', note)
-            })
-            .catch(err => {
-              let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Die Notiz konnte leider nicht dauerhaft sondern nur temporär gespeichert werden, bitte versuchen Sie es später erneut"
-              this.$store.commit('setErrorMessage', errorMessage)
-              this.$store.commit('addNotes', note)
-            })
+        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/note/", {note: this.selectedText}, {
+          withCredentials: true
+        }).then(res => {
+          note.notesId = res.data.id
+          this.$store.commit('addNotes', note)
+        }).catch(err => {
+          let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Die Notiz konnte leider nicht dauerhaft sondern nur temporär gespeichert werden, bitte versuchen Sie es später erneut"
+          this.$store.commit('setErrorMessage', errorMessage)
+          this.$store.commit('addNotes', note)
+        })
       } else {
         this.$store.commit('addNotes', note)
       }
@@ -166,6 +167,9 @@ export default {
       }
     },
     goToSection(section) {
+      if (section === null) {
+        section = this.selectedSection
+      }
       this.changeChapterAndSectionOnNavigationClick(this.selectedChapter, section)
       this.$refs['section-' + section.sectionId][0].isActive = true;
     },
@@ -206,14 +210,14 @@ export default {
     },
     resetLessonsSolved() {
       if (!this.user.isDefault) {
-        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/" + this.user.userId + "/" + this.user.userName)
-            .then(response => {
-              return
-            })
-            .catch(err => {
-              let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Alle Kapitel konnte nur bis zu einem neuen laden der Seite zurückgesetzt werden. Versuchen Sie bitte später erneut die Kapitel zurückzusetzten"
-              this.$store.commit('setErrorMessage', errorMessage)
-            })
+        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/", {
+          withCredentials: true
+        }).then(response => {
+          return
+        }).catch(err => {
+          let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Alle Kapitel konnte nur bis zu einem neuen laden der Seite zurückgesetzt werden. Versuchen Sie bitte später erneut die Kapitel zurückzusetzten"
+          this.$store.commit('setErrorMessage', errorMessage)
+        })
       }
       for (let c = 0; c < this.chapters.length; c++) {
         for (let s = 0; s < this.chapters[c].sections.length; s++) {
@@ -230,15 +234,27 @@ export default {
     },
     resetChapterLessons() {
       if (!this.user.isDefault) {
-        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/" + this.selectedChapter.chapterId + "/" + this.user.userId + "/" + this.user.userName)
-            .then(response => {
-              return
-            }).catch(err => {
+        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/" + this.selectedChapter.chapterId + "/", {
+          withCredentials: true
+        }).then(response => {
+          return
+        }).catch(err => {
           let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Das Kapitel konnte nur bis zu einem neuen laden der Seite zurückgesetzt werden. Versuchen Sie bitte später erneut das Kapitel zurückzusetzten"
           this.$store.commit('setErrorMessage', errorMessage)
         })
       }
-      this.lessonSolvedHandlerForCurrentChapter(null, false)
+      let chapterIndex = this.chapters.indexOf(this.selectedChapter)
+      for (let sectionIndex = 0; sectionIndex < this.chapters[chapterIndex].sections.length; sectionIndex++) {
+        for (let lessonIndex = 0; lessonIndex < this.selectedChapter.sections[sectionIndex].lessons.length; lessonIndex++) {
+          let payload = {
+            lessonIndex: lessonIndex,
+            chapterIndex: chapterIndex,
+            sectionIndex: sectionIndex,
+            solved: false
+          }
+          this.$store.commit('updateLessonDone', payload)
+        }
+      }
     }
   }
 }

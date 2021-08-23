@@ -4,8 +4,12 @@
                   resetText="Alle Fortschritt zurücksetzen ?"></title-header>
     <div class="explanation homeSection hoverEffect">
       <h1> Learn Web Apps</h1>
-      Ist einer Interaktive Lernandwendung, mithilfe der du, die Konzepte die dir in der Vorlesung "WebApp" vorgestellt
+      Ist einer Interaktive Lernandwendung, mithilfe der du, die Konzepte die dir in der Vorlesung "WebApps" vorgestellt
       bekommen wurden vertiefen und üben kannst.
+      <br>
+      <br>
+      Die Konzepte bilden die Grundlage zur Umsetzung komplexer clientseitiger Logik für WebApps. Daher ist es wichtig
+      diese zu verstehen und anwenden zu können.
       <br>
       <br>
       Die Anwendung kannst du außerdem gut für die Klausur & Praktikums vorbereitung nutzen. Denn hier werden neben
@@ -18,7 +22,7 @@
     </div>
     <div class="settings homeSection hoverEffect">
       <h1> Settings</h1>
-      Für jeden Interessierten gibt es Lerneinheiten. Egal ob du schon fortgeschritten bist oder gerade anfängst die
+      Für jeden gibt es Lerneinheiten. Egal ob du schon fortgeschritten bist oder gerade anfängst die
       Konzepte zu lernen und zu verstehen. Daher kannst du hier die Schwierigkeit einstellen.
       <div class="selectDifficulty">
         <select v-model="difficultyLevel" v-on:change="changeDifficultyLevel">

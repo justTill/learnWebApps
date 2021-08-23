@@ -80,7 +80,6 @@ passport.deserializeUser(function (id, cb) {
     }).catch(err => console.log(err))
 });
 
-
 app.use(session({
     store: new pgSession({
         pool: pgPool,
@@ -89,12 +88,11 @@ app.use(session({
     secret: process.env.SESSION_KEY,
     resave: true,
     saveUninitialized: false,
-    cookie: {maxAge: 30 * 24 * 60 * 60 * 1000} // 30 days
+    cookie: {maxAge: 24 * 60 * 60 * 1000, secure: false}, // 1 day
 }));
 
 app.use(passport.initialize());
 app.use(passport.session());
-
 app.use('/', indexRouter);
 app.use('/', chapterRouter);
 app.use('/', sectionRouter);

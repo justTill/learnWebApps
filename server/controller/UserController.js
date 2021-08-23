@@ -11,7 +11,6 @@ exports.authenticate = passport.authenticate('local', {
 }), (err, req, res, next) => {
     if (err) next(err);
 };
-
 exports.openManual = async function (req, res, next) {
     let filePath = "./public/manual.pdf";
     fs.readFile(filePath, function (err, data) {

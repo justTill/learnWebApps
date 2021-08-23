@@ -155,10 +155,10 @@ exports.insertNotesForUser = async function (moodleId, note) {
         })
     return result
 }
-exports.findNotesByUser = async function (moodleId, moodlename) {
+exports.findNotesByUser = async function (moodleId, moodleName) {
     let query = 'SELECT  n.moodleid, n.id, p.moodlename, n.note from notes n join persons p on p.moodleid = n.moodleid where n.moodleid=$1 and p.moodlename=$2 order by n.id';
     let result = []
-    result = await pool.query(query, [moodleId, moodlename])
+    result = await pool.query(query, [moodleId, moodleName])
         .then(res => {
             return res.rows
         }).catch(err => {
@@ -180,8 +180,8 @@ exports.insertOrUpdateSolvedLessonOnConflict = async function (lessonId, moodleI
 }
 exports.insertProblemForUser = async function (moodleId, lessonId, problem) {
     let result = []
-    let query = 'INSERT INTO "problems" (moodleid, lessonid, message) VALUES ($1, $2, $3) RETURNING id';
-    result = await pool.query(query, [moodleId, lessonId, problem])
+    let query = 'INSERT INTO "problems" (moodleid, lessonid, message, seen, sender) VALUES ($1, $2, $3, false, $4::sendertyp) RETURNING id';
+    result = await pool.query(query, [moodleId, lessonId, problem, "STUDENT"])
         .then(res => {
             return res.rows
         }).catch(err => {
@@ -222,9 +222,9 @@ exports.deleteNoteForUser = async function (moodleId, moodleName, noteId) {
         })
     return result
 }
-exports.insertOrUpdateNote = async function (moodleId, moodleName, noteText, noteId) {
+exports.insertOrUpdateNote = async function (moodleId, noteText, noteId) {
     let result = []
-    let query = 'Insert Into notes (id, moodleid, note) VALUES( $1,$2,$3) ON CONFLICT ON CONSTRAINT "notes_pkey" DO UPDATE SET note=$3'
+    let query = 'Insert Into notes (id, moodleid, note) VALUES($1,$2,$3) ON CONFLICT ON CONSTRAINT "notes_pkey" DO UPDATE SET note=$3'
     result = await pool.query(query, [noteId, moodleId, noteText])
         .then(res => {
             return res.rows
@@ -248,6 +248,18 @@ exports.updateNotificationsSeenForProblem = async function (problemId, hasSeen) 
     let result = []
     let query = 'UPDATE notifications set seen=$1 where problemid=$2'
     result = await pool.query(query, [hasSeen, problemId])
+        .then(res => {
+            return res.rows
+        }).catch(err => {
+            throw  err
+        })
+    return result
+}
+
+exports.getSessionForUserID = async function (userId) {
+    let result = []
+    let query = 'Select * from sessions where sid =$1'
+    result = await pool.query(query, [userId])
         .then(res => {
             return res.rows
         }).catch(err => {

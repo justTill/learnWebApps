@@ -1,7 +1,9 @@
 <template>
   <div class="navigation">
-    <span class="navLink">Logo</span>
-    <router-link class="navLink" to="/learn">Lernen</router-link>
+    <router-link class="navLink" to="/learn">
+      <img class="navLogo" src="../../public/logo.svg"/>
+    </router-link>
+    <router-link class="navLink" to="/">Lernen</router-link>
     <router-link class="navLink" v-if="!user.isDefault" to="/notes">Notes</router-link>
     <router-link class="navLink" v-if="!user.isDefault" to="/messages">Nachrichten</router-link>
   </div>
@@ -29,8 +31,7 @@ export default {
 .navigation {
   background-color: var(--white);
   padding-left: 50px;
-  padding-top: 25px;
-  padding-bottom: 25px;
+  height: 80px;
 }
 
 .min-nav {
@@ -41,5 +42,12 @@ export default {
   margin: 10px;
   text-decoration: none;
   color: var(--dark-blue)
+}
+
+.navLogo {
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 80px;
+  height: 80px;
 }
 </style>

@@ -5,7 +5,6 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state: {
-        userId: -1,
         userName: "default",
         notes: [],
         problems: [],
@@ -23,9 +22,6 @@ export const store = new Vuex.Store({
         },
         setCodeMirrorTheme(state, theme) {
             state.codeMirrorTheme = theme
-        },
-        setUserId(state, id) {
-            state.userId = id
         },
         setUserName(state, name) {
             state.userName = name
@@ -77,9 +73,8 @@ export const store = new Vuex.Store({
     getters: {
         user: state => {
             return {
-                userId: store.state.userId,
                 userName: store.state.userName,
-                isDefault: store.state.userId === -1 && store.state.userName === "default"
+                isDefault: store.state.userName === "default"
             }
         },
         chapters: state => {

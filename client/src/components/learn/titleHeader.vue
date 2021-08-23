@@ -78,11 +78,11 @@ export default {
     },
     sendProblem() {
       if (this.problem !== "" && !this.user.isDefault) {
-        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/", {
-          moodleId: this.user.userId,
-          moodleName: this.user.userName,
+        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/problem", {
           problem: this.problem,
           lessonId: this.lesson.lessonId
+        }, {
+          withCredentials: true
         }).then(response => {
           let problem = {
             problemId: response.data.problemId,

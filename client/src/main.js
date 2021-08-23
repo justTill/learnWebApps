@@ -18,59 +18,45 @@ Vue.config.productionTip = false
 Vue.use(VueCodemirror)
 
 function getChapters() {
-    this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/")
-        .then(result => {
-            this.$store.commit("setChapters", result.data.chapters)
-        })
-        .catch(err => console.log(err))
+    this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/", {
+        withCredentials: true
+    }).then(result => {
+        this.$store.commit("setChapters", result.data.chapters)
+    }).catch(err => console.log(err))
 }
 
-function getChaptersForUser(userId, userName) {
-  this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/" + userId + "/" + userName)
-      .then(result => {
-          this.$store.commit("setChapters", result.data.chapters)
-      })
-      .catch(err => console.log(err))
-}
-
-function getNotes(userId, userName) {
-  this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/" + userId + "/" + userName)
-      .then(result => {
+function getNotes() {
+    this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/", {
+        withCredentials: true
+    }).then(result => {
         this.$store.commit("setNotes", result.data.notes)
-      })
-      .catch(err => console.log(err))
+    }).catch(err => console.log(err))
 }
 
-function getProblems(userId, userName) {
-  this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + userId + "/" + userName)
-      .then(result => {
-          this.$store.commit("setProblems", result.data.problems)
-      })
-      .catch(err => console.log(err))
+function getProblems() {
+    this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/", {
+        withCredentials: true
+    }).then(result => {
+        this.$store.commit("setProblems", result.data.problems)
+    }).catch(err => console.log(err))
 }
 
+function getCookieValue(name) {
+    let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    if (match && match[2]) {
+        return match[2]
+    }
+    return null
+}
 new Vue({
     render: h => h(App),
     router,
     store,
     beforeCreate() {
-        let userId = this.$route.query.userId;
-        let userName = this.$route.query.userName;
-        userName = "Till"
-        userId = 2
-        this.$store.commit("setUserId", userId ? userId : -1)
+        let userName = getCookieValue("learnAppUsersGivenName")
         this.$store.commit("setUserName", userName ? userName : "default")
-        if (userId && userName) {
-            this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/user",
-                {moodleId: userId, moodleName: userName})
-                .then(result => {
-                    getChaptersForUser.bind(this)(2, "Till")
-                    getNotes.bind(this)(2, "Till")
-                    getProblems.bind(this)(2, "Till")
-                })
-                .catch(err => console.log(err))
-        } else {
-            getChapters.bind(this)()
-        }
+        getChapters.bind(this)()
+        getNotes.bind(this)()
+        getProblems.bind(this)()
     },
 }).$mount('#app')

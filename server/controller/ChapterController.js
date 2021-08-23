@@ -67,7 +67,6 @@ exports.saveNewChapter = async function (req, res, next) {
     }
 
 }
-
 exports.saveEditedChapter = async function (req, res, next) {
     let name = req.body.chapterName
     let overview = req.body.overview
@@ -107,7 +106,7 @@ exports.uploadMedia = async function (req, res, next) {
     let imagePath = "/mediafiles/" + chapter.name.split(' ').join('') + "/" + req.file.originalname
     const tempPath = req.file.path;
     const targetPath = path.join(__dirname, ".." + imagePath);
-    let allowedFiles = [".gif", ".png", ".jpg", ".jpeg"]
+    let allowedFiles = [".gif", ".png", ".jpg", ".jpeg", ".mp3"]
     if (allowedFiles.includes(path.extname(req.file.originalname).toLowerCase())) {
         mv(tempPath, targetPath, {mkdirp: true}, async err => {
             if (err) {
