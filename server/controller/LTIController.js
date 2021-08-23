@@ -97,3 +97,21 @@ exports.handleLTILaunch = async function (req, res, next) {
         }
     });
 }
+
+exports.updateGrade = function (req, normedGrade) {
+    try {
+        let options = {
+            consumer_key: req.session.consumer_key,
+            consumer_secret: req.session.consumer_secret,
+            service_url: req.session.service_url,
+            source_did: req.session.source_did,
+        };
+        let outcomeService = new lti.OutcomeService(options)
+        outcomeService.send_replace_result(normedGrade, function (err, result) {
+            console.log(`Replace result ${result}`);
+            console.log(err)
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}

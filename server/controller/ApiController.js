@@ -3,6 +3,7 @@ var sectionRepository = require("../persistence/SectionRepository")
 var userRepository = require("../persistence/UserRepository")
 var lessonRepository = require("../persistence/LessonRepository")
 var codeExecutionService = require("../service/CodeExecutionService")
+var ltiController = require("../controller/LTIController")
 var lti = require("ims-lti")
 
 const LessonTypes = Object.freeze({
@@ -23,22 +24,6 @@ exports.getProblemsWithAnswers = async function (req, res, next) {
     res.send(data)
 }
 exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
-    /*try {
-        let options = {
-            consumer_key: req.session.consumer_key,
-            consumer_secret: req.session.consumer_secret,
-            service_url: req.session.service_url,
-            source_did: req.session.source_did,
-        };
-
-        let outcomeService = new lti.OutcomeService(options)
-        outcomeService.send_replace_result(1, function (err, result) {
-            console.log(`Replace result ${result}`); //True or false
-            console.log(err)
-        })
-    } catch (e) {
-        console.log(e)
-    }*/
     let data = {chapters: []}
     let moodleId = null
     if (req.session.userId && req.session.userName) {
@@ -65,6 +50,9 @@ exports.saveSolvedLesson = async function (req, res, next) {
         if (user.length !== 0) {
             userRepository.insertOrUpdateSolvedLessonOnConflict(lessonId, moodleId, code ? code : null)
                 .then(result => {
+                    calculatePercentageOfLessonsSolvedForUser(moodleId)
+                        .then(result => ltiController.updateGrade(req, result))
+                        .catch(err => console.log(err))
                     res.status(201).send({message: "Saved"})
                 })
                 .catch(err => {
@@ -437,4 +425,17 @@ function mapToOutputNotes(notes) {
         })
     }
     return mapped
+}
+
+async function calculatePercentageOfLessonsSolvedForUser(moodleId) {
+    let solvedLessons = await lessonRepository.findSolvedByMoodleId(moodleId)
+    let numberOfSolvedLessons = solvedLessons.length
+    let lessons = await lessonRepository.findAllLessonIds()
+    let numberOfSolvableLessons = 0
+    for (let lesson of lessons) {
+        if (lesson.difficultylevel !== null) {
+            numberOfSolvableLessons++
+        }
+    }
+    return numberOfSolvedLessons / numberOfSolvableLessons
 }
