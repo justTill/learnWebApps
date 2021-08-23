@@ -362,6 +362,7 @@ function mapToOutputCodeExtensionLessons(lessons) {
         mappedLesson.type = LessonTypes.CODEEXTENSION
         mappedLesson.unfinishedCode = lesson.unfinishedcode
         mappedLesson.answers = lesson.answers.replaceAll("\n", "").split('\r')
+        console.log(mappedLesson.answers)
         mappedLessons.push(mappedLesson)
     }
     return mappedLessons
@@ -373,7 +374,7 @@ function mapToOutputSingleMultipleChoiceLessons(lessons) {
         let mappedLesson = mapDefaultLesson(lesson)
         mappedLesson.lessonId = lesson.lessonid
         mappedLesson.type = LessonTypes.SINGLEMULTIPLECHOICE
-        mappedLesson.answerOptions = mapMarkedAnswers(lesson.markedoptions)
+        mappedLesson.answerOptions = pseudoShuffle(mapMarkedAnswers(lesson.markedoptions))
         mappedLessons.push(mappedLesson)
     }
     return mappedLessons
@@ -390,7 +391,7 @@ function mapMarkedAnswers(answers) {
             })
         }
     }
-    return pseudoShuffle(mappedAnswers)
+    return mappedAnswers
 }
 
 function pseudoShuffle(array) {
