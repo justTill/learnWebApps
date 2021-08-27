@@ -10,9 +10,11 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueCodemirror from 'vue-codemirror'
 import 'codemirror/lib/codemirror.css'
+import VueWorker from 'vue-worker'
 
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
+Vue.use(VueWorker)
 Vue.use(IconsPlugin)
 Vue.config.productionTip = false
 Vue.use(VueCodemirror)

@@ -11,12 +11,17 @@
     "axios": "^0.21.1",
     "bootstrap": "^5.0.2",
     "bootstrap-vue": "^2.21.2",
+    "chai": "^4.3.4",
     "core-js": "^3.6.5",
     "dompurify": "^2.3.0",
+    "mocha": "^9.1.0",
+    "mocha-json-report": "^0.0.2",
+    "sinon": "^11.1.2",
     "vue": "^2.6.11",
     "vue-axios": "^3.2.4",
     "vue-codemirror": "^4.0.6",
     "vue-router": "^3.5.1",
+    "vue-worker": "^1.2.1",
     "vuex": "^3.6.2"
   },
   "devDependencies": {

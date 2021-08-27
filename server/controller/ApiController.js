@@ -41,7 +41,7 @@ exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
 }
 
 exports.saveSolvedLesson = async function (req, res, next) {
-    let lessonId = parseInt(req.body.lessonId)
+    let lessonId = req.body.lessonId
     let moodleId = req.session.userId
     let moodleName = req.session.userName
     let code = req.body.userCode
@@ -362,7 +362,6 @@ function mapToOutputCodeExtensionLessons(lessons) {
         mappedLesson.type = LessonTypes.CODEEXTENSION
         mappedLesson.unfinishedCode = lesson.unfinishedcode
         mappedLesson.answers = lesson.answers.replaceAll("\n", "").split('\r')
-        console.log(mappedLesson.answers)
         mappedLessons.push(mappedLesson)
     }
     return mappedLessons

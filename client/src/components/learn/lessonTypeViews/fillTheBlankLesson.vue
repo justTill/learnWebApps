@@ -111,7 +111,6 @@ export default {
             isCorrect = false
             dropZone.style.backgroundColor = "rgba(255, 0, 0, 0.2)";
           } else {
-            console.log("dropzoneId " + i + " set Color Green")
             dropZone.style.backgroundColor = "rgba(0, 255, 0, 0.1)";
           }
         } else {
@@ -141,7 +140,6 @@ export default {
   computed: {
     preparedFillTheBlankTest() {
       let textWithBlanksText = DOMPurify.sanitize(this.lesson.textWithBlanks)
-      console.log(textWithBlanksText.split("[input]"))
       textWithBlanksText = textWithBlanksText.replaceAll("\n", "<br>")
       textWithBlanksText = textWithBlanksText.replaceAll(" ", "&nbsp;")
       return textWithBlanksText.split("[input]")
