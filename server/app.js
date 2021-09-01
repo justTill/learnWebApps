@@ -99,7 +99,6 @@ app.use('/', sectionRouter);
 app.use('/', lessonRouter);
 app.use('/api/v1/', apiRouter);
 
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     next(createError(404));

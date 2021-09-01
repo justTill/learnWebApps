@@ -22,7 +22,8 @@ function getChapters() {
         withCredentials: true
     }).then(result => {
         this.$store.commit("setChapters", result.data.chapters)
-    }).catch(err => console.log(err))
+    }).catch(err => {
+    })
 }
 
 function getNotes() {
@@ -30,7 +31,9 @@ function getNotes() {
         withCredentials: true
     }).then(result => {
         this.$store.commit("setNotes", result.data.notes)
-    }).catch(err => console.log(err))
+    }).catch(err => {
+
+    })
 }
 
 function getProblems() {
@@ -38,7 +41,9 @@ function getProblems() {
         withCredentials: true
     }).then(result => {
         this.$store.commit("setProblems", result.data.problems)
-    }).catch(err => console.log(err))
+    }).catch(err => {
+
+    })
 }
 
 function getCookieValue(name) {

@@ -56,7 +56,7 @@ exports.saveSolvedLesson = async function (req, res, next) {
                     res.status(201).send({message: "Saved"})
                 })
                 .catch(err => {
-                    res.status(500).send({message: "Unbekannter Fehler"})
+                    res.status(500).send({message: "Unknown error please try again later"})
                 })
         } else {
             res.status(404).send({message: "user not found"})

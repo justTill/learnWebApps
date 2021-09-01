@@ -68,7 +68,7 @@ export default {
       if (allAnswersCorrect) {
         this.errorMessage = ""
       } else {
-        this.errorMessage = "leider nicht ganz korrekt"
+        this.errorMessage = "Die Antwort ist leider nicht ganz korrekt"
       }
       this.solvedHandler(this.lesson.lessonId, allAnswersCorrect, null)
     }

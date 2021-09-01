@@ -10,7 +10,7 @@ router.get('/notifications', isLoggedIn, asyncMiddleware(userController.showUser
 router.get('/logout', isLoggedIn, userController.logout);
 router.get('/manual', isLoggedIn, userController.openManual);
 
-router.post('/lti/launch', ltiController.handleLTILaunch);
+router.post('/lti/launch', asyncMiddleware(ltiController.handleLTILaunch));
 router.get('/lti/registration/', (req, res, next) => {
     res.render("LTI/registration")
 });

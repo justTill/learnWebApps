@@ -77,7 +77,7 @@ exports.handleLTILaunch = async function (req, res, next) {
                 req.session.consumer_secret = provider.consumer_secret;
                 req.session.service_url = provider.outcome_service.service_url;
                 req.session.source_did = provider.outcome_service.source_did;
-                userRepository.findUserByMoodleIdAndMoodleName(req.session.userId, req.session.userName)
+                userRepository.findUserByMoodleIdAndMoodleName(provider.userId, provider.username)
                     .then(result => {
                         if (result.length === 0) {
                             userRepository.createPerson(req.session.userId, req.session.userName)
@@ -88,9 +88,10 @@ exports.handleLTILaunch = async function (req, res, next) {
                 res.cookie('connect.sid', req.sessionID, {
                     maxAge: req.session.cookie.maxAge,
                 })
-                res.cookie('learnAppUsersGivenName', provider.body.lis_person_name_given, {maxAge: req.session.cookie.maxAge})
-
-                return res.redirect(301, 'http://localhost:8080');
+                res.cookie('learnAppUsersGivenName', provider.body.lis_person_name_given, {
+                    maxAge: req.session.cookie.maxAge,
+                })
+                return res.redirect(301, 'http://learnwebappsapp.westeurope.azurecontainer.io/');
             });
         } else {
             return next(err);

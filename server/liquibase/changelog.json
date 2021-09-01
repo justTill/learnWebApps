@@ -822,7 +822,7 @@
                 },
                 {
                   "column": {
-                    "name": "secretKey",
+                    "name": "secretkey",
                     "type": "varchar(255)",
                     "constraints": {
                       "nullable": false

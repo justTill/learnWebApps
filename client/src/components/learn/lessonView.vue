@@ -74,7 +74,7 @@ export default {
     solvedLesson(lessonId, isSolved, userCode) {
       this.lessonSolvedHandler(lessonId, isSolved, userCode)
       this.lessonSolved = isSolved
-      if (isSolved) {
+      if (isSolved && !this.user.isDefault) {
         this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved", {
           lessonId: lessonId,
           userCode: userCode
@@ -83,6 +83,8 @@ export default {
         }).then(response => {
 
         }).catch(err => {
+          let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Es konnte leider nicht permanent gespeichert werden, das die Aufgabe gelöst wurde"
+          this.$store.commit('setErrorMessage', errorMessage)
         })
       }
     }

@@ -124,7 +124,6 @@ exports.uploadMedia = async function (req, res, next) {
             if (err) {
                 res.redirect("/chapter")
             }
-            ;
             chapterRepository.findAll()
                 .then(rows => res.render('chapters/chapter', {
                     chapters: rows,
