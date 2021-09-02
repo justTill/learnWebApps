@@ -13,6 +13,8 @@ exports.getEditSectionData = async function (sectionId, chapterId, lesson) {
     let codeExtensionLessons = await lessonsRepository.findCodeExtensionBySectionId(sectionId);
     let singleMultipleChoiceLessons = await lessonsRepository.findSingleMultipleChoiceBySectionId(sectionId);
     return {
+        chapterId: chapterId,
+        sectionId: sectionId,
         section: section,
         chapters: chapters,
         files: files,
