@@ -172,7 +172,8 @@ select {
 }
 
 .editLessonTile {
-  max-width: 300px;
+  width: 700px;
+  margin-right: 10px;
 }
 
 .icon {
