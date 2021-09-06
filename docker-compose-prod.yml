@@ -19,6 +19,7 @@ services:
       - DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
       - SESSION_KEY=${SESSION_KEY}
       - SQL_HOST=db
+      - FRONTEND_URL=${FRONTEND_URL}
       - SQL_PORT=5432
     depends_on:
       - db
@@ -29,8 +30,7 @@ services:
     volumes:
       - media_volume:/usr/src/app/client/mediafiles
     environment:
-      - BACKENDHOST=${BACKEND_HOST}
-      - BACKENDPORT=${BACKEND_PORT}
+      - BACKENDURL=${BACKEND_URL}
     build:
       context: ./client
       dockerfile: Dockerfile-prod

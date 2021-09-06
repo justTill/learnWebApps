@@ -9,6 +9,7 @@ COPY liquibase/changelog.json ./
 COPY liquibase/sessionTable.sql  ./
 COPY liquibase.js ./
 COPY entrypoint.sh ./
+COPY . ./
 
 RUN npm install nodemon
 RUN npm install

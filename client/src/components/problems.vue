@@ -54,7 +54,7 @@
 <script>
 import TitleHeader from "@/components/learn/titleHeader";
 import {mapGetters} from "vuex";
-import {backEndHost, backEndPort} from "@/envVariables";
+import {backEndUrl} from "@/envVariables";
 
 export default {
   name: 'notes',
@@ -83,7 +83,7 @@ export default {
           answer: this.answer,
           problemId: this.currentProblem.problemId
         }
-        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/answer/", requestPayload, {
+        this.$http.post(backEndUrl + "/api/v1/users/problems/answer/", requestPayload, {
           withCredentials: true
         }).then(response => {
           this.$store.commit('addAnswerToProblem', payload)
@@ -107,7 +107,7 @@ export default {
     },
     deleteProblem() {
       if (!this.user.isDefault) {
-        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/" + this.currentProblem.problemId, {
+        this.$http.delete(backEndUrl + "/api/v1/users/problems/" + this.currentProblem.problemId, {
           withCredentials: true
         }).then(response => {
           this.$store.commit('deleteProblem', this.currentProblem)

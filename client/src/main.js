@@ -5,7 +5,7 @@ import {store} from '@/stores/store.js'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import {BootstrapVue, IconsPlugin} from 'bootstrap-vue'
-import {backEndHost, backEndPort} from './envVariables'
+import {backEndUrl} from './envVariables'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import VueCodemirror from 'vue-codemirror'
@@ -18,27 +18,34 @@ Vue.config.productionTip = false
 Vue.use(VueCodemirror)
 
 function getChapters() {
-    this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/chapters/", {
+    this.$http.get(backEndUrl + "/api/v1/chapters/", {
         withCredentials: true
     }).then(result => {
         this.$store.commit("setChapters", result.data.chapters)
-    }).catch(err => console.log(err))
+    }).catch(err => {
+        console.log(err)
+        console.log(backEndUrl)
+    })
 }
 
 function getNotes() {
-    this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/", {
+    this.$http.get(backEndUrl + "/api/v1/users/notes/", {
         withCredentials: true
     }).then(result => {
         this.$store.commit("setNotes", result.data.notes)
-    }).catch(err => console.log(err))
+    }).catch(err => {
+
+    })
 }
 
 function getProblems() {
-    this.$http.get("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/", {
+    this.$http.get(backEndUrl + "/api/v1/users/problems/", {
         withCredentials: true
     }).then(result => {
         this.$store.commit("setProblems", result.data.problems)
-    }).catch(err => console.log(err))
+    }).catch(err => {
+
+    })
 }
 
 function getCookieValue(name) {

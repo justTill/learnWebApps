@@ -20,7 +20,7 @@ import 'codemirror/mode/javascript/javascript.js'
 import 'codemirror/theme/darcula.css'
 import 'codemirror/theme/duotone-light.css'
 import {mapGetters} from "vuex";
-import {backEndHost, backEndPort} from "@/envVariables";
+import {backEndUrl} from "@/envVariables";
 import DOMPurify from "dompurify";
 
 export default {
@@ -60,7 +60,7 @@ export default {
         }
         this.isLoadingResults = true
 
-        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/coding/check", payload)
+        this.$http.post(backEndUrl + "/api/v1/lessons/lesson/coding/check", payload)
             .then(response => {
               let testErrors = response.data.errors
               let isCorrect = testErrors.length === 0;

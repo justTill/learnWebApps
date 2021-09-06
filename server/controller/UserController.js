@@ -73,7 +73,8 @@ exports.deleteProblem = async function (req, res, next) {
 exports.markProblemAsSeen = async function (req, res, next) {
     userRepository.updateNotificationsSeenForProblem(req.body.problemId, true)
         .then(res => res)
-        .catch(err => console.log(err))
+        .catch(err => {
+        })
     res.redirect('/notifications')
 }
 

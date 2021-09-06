@@ -17,7 +17,7 @@ block content
                 input(class="form-control" type="number" min=1 name="updatedLessonNumber" required value="#{lesson.lessonnumber}")
                 br
                 span.label(class="input-group-text") Informationen
-                textarea(name="lessonInformation" required) #{lesson.information}
+                textarea(name="lessonInformation" class="form-control" required) #{lesson.information}
                 br
                 span.label(class="input-group-text") Unterthema
                 select(class="form-select" name="updatedSectionId" required)
