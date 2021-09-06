@@ -14,6 +14,7 @@ services:
       - DB_NAME=LearnWebappsProd
       - DB_CONTAINER_NAME=learnwebappsdbprod
       - SESSION_KEY=key
+      - FRONTEND_URL=http://learnwebappsapp.westeurope.azurecontainer.io
       - SQL_HOST=db
       - SQL_PORT=5432
     depends_on:
@@ -24,8 +25,7 @@ services:
     image: learnwebappscomposeregistry.azurecr.io/vue-nginx-client:latest
     container_name: learnwebappsfrontendprod
     environment:
-      - BACKENDHOST=learnwebappsapp.westeurope.azurecontainer.io
-      - BACKENDPORT=3080
+      - BACKENDURL=http://learnwebappsapp.westeurope.azurecontainer.io:3080
     build:
       context: ./client
       dockerfile: Dockerfile-prod

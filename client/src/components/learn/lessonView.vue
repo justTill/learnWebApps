@@ -36,7 +36,7 @@ import CodingLesson from "@/components/learn/lessonTypeViews/codingLesson";
 import SingleMultipleChoiceLesson from "@/components/learn/lessonTypeViews/singleMultipleChoiceLesson";
 import CodeExtensionLesson from "@/components/learn/lessonTypeViews/codeExtensionLesson";
 import FillTheBlankLesson from "@/components/learn/lessonTypeViews/fillTheBlankLesson";
-import {backEndHost, backEndPort} from '@/envVariables'
+import {backEndUrl} from '@/envVariables'
 import {mapGetters} from "vuex";
 import TitleHeader from "@/components/learn/titleHeader";
 import DOMPurify from "dompurify";
@@ -75,7 +75,7 @@ export default {
       this.lessonSolvedHandler(lessonId, isSolved, userCode)
       this.lessonSolved = isSolved
       if (isSolved && !this.user.isDefault) {
-        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved", {
+        this.$http.post(backEndUrl + "/api/v1/lessons/lesson/solved", {
           lessonId: lessonId,
           userCode: userCode
         }, {

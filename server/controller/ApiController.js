@@ -362,7 +362,6 @@ function mapToOutputCodeExtensionLessons(lessons) {
         mappedLesson.type = LessonTypes.CODEEXTENSION
         mappedLesson.unfinishedCode = lesson.unfinishedcode
         mappedLesson.answers = lesson.answers.replaceAll("\n", "").split('\r')
-        console.log(mappedLesson.answers)
         mappedLessons.push(mappedLesson)
     }
     return mappedLessons

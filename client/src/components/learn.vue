@@ -59,7 +59,7 @@ import SectionOverview from "@/components/learn/sectionOverview";
 import Home from "@/components/learn/home";
 import NavButton from "@/components/utils/navButton";
 import LessonView from "@/components/learn/lessonView";
-import {backEndHost, backEndPort} from "@/envVariables";
+import {backEndUrl} from "@/envVariables";
 import TitleHeader from "@/components/learn/titleHeader";
 
 export default {
@@ -117,7 +117,7 @@ export default {
         note: this.selectedText
       }
       if (!this.user.isDefault) {
-        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/note/", {note: this.selectedText}, {
+        this.$http.post(backEndUrl + "/api/v1/users/notes/note/", {note: this.selectedText}, {
           withCredentials: true
         }).then(res => {
           note.notesId = res.data.id
@@ -210,7 +210,7 @@ export default {
     },
     resetLessonsSolved() {
       if (!this.user.isDefault) {
-        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/", {
+        this.$http.delete(backEndUrl + "/api/v1/lessons/lesson/solved/", {
           withCredentials: true
         }).then(response => {
           return
@@ -234,7 +234,7 @@ export default {
     },
     resetChapterLessons() {
       if (!this.user.isDefault) {
-        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/lessons/lesson/solved/" + this.selectedChapter.chapterId + "/", {
+        this.$http.delete(backEndUrl + "/api/v1/lessons/lesson/solved/" + this.selectedChapter.chapterId + "/", {
           withCredentials: true
         }).then(response => {
           return

@@ -43,7 +43,7 @@
   </div>
 </template>
 <script>
-import {backEndHost, backEndPort} from '@/envVariables'
+import {backEndUrl} from '@/envVariables'
 import {mapGetters} from "vuex";
 import HelpContent from "@/components/learn/helpContent";
 
@@ -78,7 +78,7 @@ export default {
     },
     sendProblem() {
       if (this.problem !== "" && !this.user.isDefault) {
-        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/problems/problem", {
+        this.$http.post(backEndUrl + "/api/v1/users/problems/problem", {
           problem: this.problem,
           lessonId: this.lesson.lessonId
         }, {

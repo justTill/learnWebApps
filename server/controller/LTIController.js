@@ -91,7 +91,7 @@ exports.handleLTILaunch = async function (req, res, next) {
                 res.cookie('learnAppUsersGivenName', provider.body.lis_person_name_given, {
                     maxAge: req.session.cookie.maxAge,
                 })
-                return res.redirect(301, 'http://learnwebappsapp.westeurope.azurecontainer.io/');
+                return res.redirect(301, process.env.FRONTEND_URL);
             });
         } else {
             return next(err);

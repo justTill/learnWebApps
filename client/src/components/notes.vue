@@ -34,10 +34,9 @@
 </template>
 
 <script>
-
 import {mapGetters} from 'vuex'
 import TitleHeader from "@/components/learn/titleHeader";
-import {backEndHost, backEndPort} from "@/envVariables";
+import {backEndUrl} from "@/envVariables";
 
 export default {
   name: 'notes',
@@ -74,7 +73,7 @@ export default {
     },
     deleteNote(note) {
       if (!this.user.isDefault) {
-        this.$http.delete("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/" + note.notesId, {
+        this.$http.delete(backEndUrl + "/api/v1/users/notes/" + note.notesId, {
           withCredentials: true
         }).then(response => {
           this.lastDeletedNote = note
@@ -121,7 +120,7 @@ export default {
         let payload = {
           note: note.note,
         }
-        this.$http.post("http://" + backEndHost + ":" + backEndPort + "/api/v1/users/notes/note/" + note.notesId, payload, {
+        this.$http.post(backEndUrl + "/api/v1/users/notes/note/" + note.notesId, payload, {
           withCredentials: true
         }).then(response => {
         }).catch(err => {
