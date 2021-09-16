@@ -16,7 +16,7 @@ block content
                             p #{singleMultipleChoiceError}
                     form(class="modalForm" action="/saveCreateSingleMultipleChoiceLesson" method="post")
                         include baseCreateLessonForm
-                        span.label(class="input-group-text") Mögliche Antworten <br> Richtige Antworten mit [X] makieren
+                        span.label(class="input-group-text") Mögliche Antworten: <br> Richtige Antworten mit [X] markieren
                         textarea(class="form-control" name="markedOptions" required) #{lesson ? lesson.markedoptions : ''}
                         br
                         button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch

@@ -111,7 +111,8 @@ label {
   padding: 10px;
   border-radius: 10px;
   width: 90%;
-  background-color: var(--davys-grey-light);
+  color: var(--white);
+  background-color: var(--darker-blue);
 }
 
 label:hover {

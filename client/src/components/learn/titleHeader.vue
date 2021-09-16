@@ -35,7 +35,7 @@
                  @ok="sendProblem"
                  cancel-title="Abbruch" cancel-variant="danger">
             <textarea class="problemArea" v-model="problem"
-                      placeholder="Bitte beschreiben Sie das Problem für der Aktuellen Aufgabe">
+                      placeholder="Bitte beschreiben Sie das Problem für die aktuelle Aufgabe">
             </textarea>
         </b-modal>
       </div>

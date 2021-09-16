@@ -114,7 +114,7 @@ exports.showUserNotifications = async function (req, res, next) {
 function mapAnsweredProblems(problems) {
     let mappedProblems = new Map()
     for (let problem of problems) {
-        let sender = problem.sender === "STUDENT" ? "vom: studenten" : "vom: Dozenten"
+        let sender = problem.sender === "STUDENT" ? "vom: Studenten" : "vom: Dozenten"
         if (mappedProblems.has(problem.problemid)) {
             mappedProblems.get(problem.problemid).answers.push("\n \n" + problem.answer + "\n " + sender)
             mappedProblems.get(problem.problemid).seen = problem.sender !== "STUDENT" || problem.seen

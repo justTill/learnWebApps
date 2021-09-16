@@ -92,7 +92,7 @@ export default {
   mounted() {
     document.addEventListener('mouseup', event => {
       this.$el.querySelector('#createNotes').style.display = "none";
-      if (window.getSelection().toString() !== '' && this.$route.path.includes('learn')) {
+      if (window.getSelection().toString() !== '' && this.$route.path.includes('')) {
         let classNames = window.getSelection().anchorNode.parentElement.className
         if (!classNames.includes('CodeMirror')) {
           let element = this.$el.querySelector('#createNotes')

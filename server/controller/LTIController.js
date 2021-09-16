@@ -13,7 +13,8 @@ exports.handleLTIRegistration = async function (req, res, next) {
                 .then(result => {
                     res.status(200).attachment("credentials.json").send({
                         secretKey: secretKey,
-                        consumerKey: consumerKey
+                        consumerKey: consumerKey,
+                        launchURl: req.protocol + '://' + req.get('host') + "/lti/launch",
                     })
                 })
                 .catch(err => {

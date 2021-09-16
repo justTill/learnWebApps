@@ -51,7 +51,7 @@ describe("SectionController: ", function () {
         };
         //create section with error
         await sectionRoutes.saveNewSection(request, response)
-        expect(response.data.error).toContain('Unterthema Nummer ist schon vergeben');
+        expect(response.data.error).toContain('Unterthemanummer ist schon vergeben');
         //create section without error
         request.body.sectionNumber = 10 //definitely free
         await sectionRoutes.saveNewSection(request, response)
@@ -155,7 +155,7 @@ describe("SectionController: ", function () {
         request.body.updatedSectionNumber = secondSectionToChapterOne.sectionnumber
         await sectionRoutes.saveEditedSection(request, response)
         expect(response.viewName).toContain('sections/editSection');
-        expect(response.data.error).toContain('Unterthema Nummer ist schon vergeben');
+        expect(response.data.error).toContain('Unterthemanummer ist schon vergeben');
         //change request do default
         request.body.updatedSectionNumber = firstSectionToChapterOne.sectionnumber
         response.path = null
@@ -165,7 +165,7 @@ describe("SectionController: ", function () {
         request.body.chapterId = secondChapter.id;
         await sectionRoutes.saveEditedSection(request, response)
         expect(response.viewName).toContain('sections/editSection');
-        expect(response.data.error).toContain('Unterthema Nummer ist schon vergeben');
+        expect(response.data.error).toContain('Unterthemanummer ist schon vergeben');
 
     });
 });

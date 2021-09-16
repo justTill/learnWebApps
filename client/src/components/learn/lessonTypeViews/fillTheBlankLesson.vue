@@ -159,6 +159,7 @@ export default {
   margin-left: auto;
   margin-right: auto;
   display: block;
+  flex-wrap: wrap;
 }
 
 .fillTheBlankText {

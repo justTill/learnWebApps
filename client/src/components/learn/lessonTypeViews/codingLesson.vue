@@ -105,7 +105,7 @@ export default {
   border-radius: 2px;
   border: 1px solid black;
   background-color: var(--white);
-  min-width: 300px;
+  min-width: 400px;
   margin-bottom: 10px;
   margin-right: 20px;
 

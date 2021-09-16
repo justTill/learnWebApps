@@ -42,6 +42,7 @@ html, body {
 
 body, html {
   height: 100% !important;
+  overflow: hidden
 }
 
 .viewArea {

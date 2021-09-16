@@ -10,7 +10,7 @@ export const store = new Vuex.Store({
         problems: [],
         chapters: [],
         difficultyLevel: "ALL",
-        codeMirrorTheme: "DARK",
+        codeMirrorTheme: "LIGHT",
         errorMessage: "",
     },
     mutations: {

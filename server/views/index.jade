@@ -14,14 +14,18 @@ block content
             div.actions
                 input(type="submit" value="Log In")
     else
-
         h1(class="headline") Informationen
         div(class="overview")
             div(class="tile informationTile")
                 a(type="button" class="btn createButton" href="manual" target="_blank")
                     include ../public/images/manual.svg
                     br
-                    span Anleitung Ansehen
+                    span Anleitung ansehen
+            div(class="tile informationTile")
+                a(type="button" class="btn createButton" href="/lti/registration" target="_blank")
+                    include ../public/images/consumer-icon.svg
+                    br
+                    span Shared secret erstellen
             div(class="tile informationTile")
                 h5 Hinweise für das Einpflegen von Lerninhalten
         div(class="overview")
