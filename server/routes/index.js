@@ -16,7 +16,7 @@ router.get('/lti/registration/', (req, res, next) => {
 });
 router.post('/lti/registration', ltiController.handleLTIRegistration)
 
-router.post('/login', userController.authenticate);
+router.post('/loginAdmin', userController.authenticate);
 
 router.post('/deleteProblem', userController.deleteProblem);
 router.post('/markAsRead', userController.markProblemAsSeen);

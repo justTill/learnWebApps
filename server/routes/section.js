@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var chapterController = require('../controller/ChapterController')
 var sectionController = require('../controller/SectionController')
 const asyncMiddleware = require('../utils/asyncMiddleware');
 const isLoggedIn = require('../utils/logIn').loggedIn;

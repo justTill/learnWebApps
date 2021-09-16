@@ -26,7 +26,7 @@ exports.getProblemsWithAnswers = async function (req, res, next) {
 exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
     let data = {chapters: []}
     let moodleId = null
-    if (req.session.userId && req.session.userName) {
+    if (req.session && req.session.userId && req.session.userName) {
         let user = await userRepository.findUserByMoodleIdAndMoodleName(req.session.userId, req.session.userName)
         if (user.length !== 0) {
             moodleId = req.session.userId
