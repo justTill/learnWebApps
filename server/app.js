@@ -40,15 +40,15 @@ ltis.setup(process.env.SESSION_KEY, // Key used to sign cookies and tokens
         appRoute: '/learn', loginRoute: '/login', // Optionally, specify some of the reserved routes
         staticPath: path.join(__dirname, './public'), // Path to static files
         cookies: {
-            secure: true, // Set secure to true if the testing platform is in a different domain and https is being used
-            sameSite: 'None' // Set sameSite to 'None' if the testing platform is in a different domain and https is being used
+            secure: false, // Set secure to true if the testing platform is in a different domain and https is being used
+            sameSite: '' // Set sameSite to 'None' if the testing platform is in a different domain and https is being used
         },
         devMode: false, // Set DevMode to true if the testing platform is in a different domain and https is not being used
         dynReg: {
-            url: 'http://localhost:3080/learn', // Tool Provider URL. Required field.
+            url: process.env.FRONTEND_URL + ':3080', // Tool Provider URL. Required field.
             name: 'Tool Provider', // Tool Provider name. Required field.
             description: 'Tool Description', // Tool Provider description.
-            redirectUris: [''], // Additional redirection URLs. The main URL is added by default.
+            redirectUris: [], // Additional redirection URLs. The main URL is added by default.
             customParameters: {}, // Custom parameters.
             autoActivate: true // Whether or not dynamically registered Platforms should be automatically activated. Defaults to false.
         }
@@ -189,7 +189,7 @@ ltis.onConnect((token, req, res) => {
                 }).catch(err => console.log(err))
         }
     }
-    ltis.redirect(res, 'http://localhost:8080')
+    ltis.redirect(res, process.env.FRONTEND_URL)
 })
 ltis.onDynamicRegistration(async (req, res, next) => {
     try {
