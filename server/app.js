@@ -38,6 +38,7 @@ ltis.setup(process.env.SESSION_KEY, // Key used to sign cookies and tokens
     },
     { // Options
         appRoute: '/learn', loginRoute: '/login', // Optionally, specify some of the reserved routes
+        staticPath: path.join(__dirname, './public'), // Path to static files
         cookies: {
             secure: true, // Set secure to true if the testing platform is in a different domain and https is being used
             sameSite: 'None' // Set sameSite to 'None' if the testing platform is in a different domain and https is being used
@@ -47,7 +48,7 @@ ltis.setup(process.env.SESSION_KEY, // Key used to sign cookies and tokens
             url: 'http://localhost:3080/learn', // Tool Provider URL. Required field.
             name: 'Tool Provider', // Tool Provider name. Required field.
             description: 'Tool Description', // Tool Provider description.
-            redirectUris: ['http://localhost:3080/launch'], // Additional redirection URLs. The main URL is added by default.
+            redirectUris: [''], // Additional redirection URLs. The main URL is added by default.
             customParameters: {}, // Custom parameters.
             autoActivate: true // Whether or not dynamically registered Platforms should be automatically activated. Defaults to false.
         }

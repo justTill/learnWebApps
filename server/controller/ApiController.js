@@ -3,8 +3,7 @@ var sectionRepository = require("../persistence/SectionRepository")
 var userRepository = require("../persistence/UserRepository")
 var lessonRepository = require("../persistence/LessonRepository")
 var codeExecutionService = require("../service/CodeExecutionService")
-var ltiController = require("../controller/LTIController")
-var lti = require("ims-lti")
+const lti = require('ltijs').Provider
 
 const LessonTypes = Object.freeze({
     INFORMATION: "information",
@@ -61,8 +60,8 @@ exports.saveSolvedLesson = async function (req, res, next) {
         if (user.length !== 0) {
             userRepository.insertOrUpdateSolvedLessonOnConflict(lessonId, userId, code ? code : null)
                 .then(result => {
-                    calculatePercentageOfLessonsSolvedForUser(userId)
-                        .then(result => ltiController.updateGrade(req, result))
+                    updateGradeForUser(req, res, userId)
+                        .then(result => console.log(result))
                         .catch(err => console.log(err))
                     res.status(201).send({message: "Saved"})
                 })
@@ -453,4 +452,37 @@ async function calculatePercentageOfLessonsSolvedForUser(moodleId) {
         }
     }
     return numberOfSolvedLessons / numberOfSolvableLessons
+}
+
+async function updateGradeForUser(req, res, userId) {
+    let normedGrade = await calculatePercentageOfLessonsSolvedForUser(userId)
+    const idToken = res.locals.token
+    const gradeObj = {
+        userId: idToken.user,
+        scoreGiven: normedGrade * 100,
+        scoreMaximum: 100,
+        activityProgress: 'Completed',
+        gradingProgress: 'FullyGraded'
+    }
+    let lineItemId = idToken.platformContext.endpoint.lineitem // Attempting to retrieve it from idtoken
+    if (!lineItemId) {
+        const response = await lti.Grade.getLineItems(idToken, {resourceLinkId: true})
+        const lineItems = response.lineItems
+        if (lineItems.length === 0) {
+            // Creating line item if there is none
+            console.log('Creating new line item')
+            const newLineItem = {
+                scoreMaximum: 100,
+                label: 'Grade',
+                tag: 'grade',
+                resourceLinkId: idToken.platformContext.resource.id
+            }
+            const lineItem = await lti.Grade.createLineItem(idToken, newLineItem)
+            lineItemId = lineItem.id
+        } else {
+            lineItemId = lineItems[0].id
+        }
+    }
+    const responseGrade = await lti.Grade.submitScore(idToken, lineItemId, gradeObj)
+    return responseGrade
 }
