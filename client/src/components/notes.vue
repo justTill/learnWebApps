@@ -54,6 +54,7 @@ export default {
     ...mapGetters([
       'notes',
       'user',
+      'ltiKey',
       'errorMessage'
     ]),
     titleText() {
@@ -73,7 +74,7 @@ export default {
     },
     deleteNote(note) {
       if (!this.user.isDefault) {
-        this.$http.delete(backEndUrl + "/api/v1/users/notes/" + note.notesId, {
+        this.$http.delete(backEndUrl + "/api/v1/users/notes/" + note.notesId + "?ltik=" + this.ltiKey, {
           withCredentials: true
         }).then(response => {
           this.lastDeletedNote = note
@@ -120,7 +121,7 @@ export default {
         let payload = {
           note: note.note,
         }
-        this.$http.post(backEndUrl + "/api/v1/users/notes/note/" + note.notesId, payload, {
+        this.$http.post(backEndUrl + "/api/v1/users/notes/note/" + note.notesId + "?ltik=" + this.ltiKey, payload, {
           withCredentials: true
         }).then(response => {
         }).catch(err => {

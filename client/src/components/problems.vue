@@ -70,7 +70,8 @@ export default {
   computed: {
     ...mapGetters([
       'problems',
-      'user'
+      'user',
+      'ltiKey'
     ]),
   }, methods: {
     answerOnProblem() {
@@ -83,7 +84,7 @@ export default {
           answer: this.answer,
           problemId: this.currentProblem.problemId
         }
-        this.$http.post(backEndUrl + "/api/v1/users/problems/answer/", requestPayload, {
+        this.$http.post(backEndUrl + "/api/v1/users/problems/answer/" + "?ltik=" + this.ltiKey, requestPayload, {
           withCredentials: true
         }).then(response => {
           this.$store.commit('addAnswerToProblem', payload)
@@ -107,7 +108,7 @@ export default {
     },
     deleteProblem() {
       if (!this.user.isDefault) {
-        this.$http.delete(backEndUrl + "/api/v1/users/problems/" + this.currentProblem.problemId, {
+        this.$http.delete(backEndUrl + "/api/v1/users/problems/" + this.currentProblem.problemId + "?ltik=" + this.ltiKey, {
           withCredentials: true
         }).then(response => {
           this.$store.commit('deleteProblem', this.currentProblem)

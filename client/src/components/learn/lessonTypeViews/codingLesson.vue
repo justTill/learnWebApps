@@ -60,15 +60,13 @@ export default {
         }
         this.isLoadingResults = true
 
-        this.$http.post(backEndUrl + "/api/v1/lessons/lesson/coding/check", payload)
+        this.$http.post(backEndUrl + "/api/v1/lessons/lesson/coding/check", payload, {withCredentials: true})
             .then(response => {
               let testErrors = response.data.errors
               let isCorrect = testErrors.length === 0;
               this.errorMessages = testErrors
               this.isLoadingResults = false
               this.solvedHandler(this.lesson.lessonId, isCorrect, this.userCode)
-            }, {
-              withCredentials: true
             })
             .catch(err => {
               this.isLoadingResults = false

@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
         userName: "default",
+        ltiKey: "",
         notes: [],
         problems: [],
         chapters: [],
@@ -25,6 +26,9 @@ export const store = new Vuex.Store({
         },
         setUserName(state, name) {
             state.userName = name
+        },
+        setLtiKey(state, key) {
+            state.ltiKey = key
         },
         setNotes(state, notes) {
             state.notes = notes
@@ -76,6 +80,9 @@ export const store = new Vuex.Store({
                 userName: store.state.userName,
                 isDefault: store.state.userName === "default"
             }
+        },
+        ltiKey: state => {
+            return store.state.ltiKey
         },
         chapters: state => {
             return store.state.chapters

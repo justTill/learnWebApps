@@ -44,10 +44,10 @@ ltis.setup(process.env.SESSION_KEY, // Key used to sign cookies and tokens
         },
         devMode: false, // Set DevMode to true if the testing platform is in a different domain and https is not being used
         dynReg: {
-            url: 'http://localhost:3000', // Tool Provider URL. Required field.
+            url: 'http://localhost:3080/learn', // Tool Provider URL. Required field.
             name: 'Tool Provider', // Tool Provider name. Required field.
             description: 'Tool Description', // Tool Provider description.
-            redirectUris: ['http://localhost:3000/launch'], // Additional redirection URLs. The main URL is added by default.
+            redirectUris: ['http://localhost:3080/launch'], // Additional redirection URLs. The main URL is added by default.
             customParameters: {}, // Custom parameters.
             autoActivate: true // Whether or not dynamically registered Platforms should be automatically activated. Defaults to false.
         }
@@ -174,7 +174,20 @@ ltis.whitelist({route: new RegExp(/\bsaveEdit\S+Lesson\b/), method: 'post'})
 
 
 ltis.onConnect((token, req, res) => {
-    //console.log(token)
+    if (token) {
+        let userId = token.user
+        let userName = token.userInfo.name
+        if (userId && userName) {
+            UserRepository.findUserByMoodleIdAndMoodleName(userId, userName)
+                .then(result => {
+                    if (result.length === 0) {
+                        UserRepository.createPerson(userId, userName)
+                            .then()
+                            .catch(err => console.log(err))
+                    }
+                }).catch(err => console.log(err))
+        }
+    }
     ltis.redirect(res, 'http://localhost:8080')
 })
 ltis.onDynamicRegistration(async (req, res, next) => {

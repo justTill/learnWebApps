@@ -63,7 +63,8 @@ export default {
     }
   }, computed: {
     ...mapGetters([
-      'user'
+      'user',
+      'ltiKey'
     ]),
   },
   methods: {
@@ -78,7 +79,7 @@ export default {
     },
     sendProblem() {
       if (this.problem !== "" && !this.user.isDefault) {
-        this.$http.post(backEndUrl + "/api/v1/users/problems/problem", {
+        this.$http.post(backEndUrl + "/api/v1/users/problems/problem" + "/?ltik=" + this.ltiKey, {
           problem: this.problem,
           lessonId: this.lesson.lessonId
         }, {

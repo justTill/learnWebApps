@@ -67,6 +67,7 @@ export default {
     },
     ...mapGetters([
       'user',
+      'ltiKey',
       'codeMirrorTheme'
     ]),
   },
@@ -75,7 +76,7 @@ export default {
       this.lessonSolvedHandler(lessonId, isSolved, userCode)
       this.lessonSolved = isSolved
       if (isSolved && !this.user.isDefault) {
-        this.$http.post(backEndUrl + "/api/v1/lessons/lesson/solved", {
+        this.$http.post(backEndUrl + "/api/v1/lessons/lesson/solved" + "/?ltik=" + this.ltiKey, {
           lessonId: lessonId,
           userCode: userCode
         }, {

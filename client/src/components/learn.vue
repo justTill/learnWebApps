@@ -83,6 +83,7 @@ export default {
       'chapters',
       'user',
       'notes',
+      'ltiKey',
       'codeMirrorTheme'
     ]),
     showSaveNote() {
@@ -117,7 +118,7 @@ export default {
         note: this.selectedText
       }
       if (!this.user.isDefault) {
-        this.$http.post(backEndUrl + "/api/v1/users/notes/note/", {note: this.selectedText}, {
+        this.$http.post(backEndUrl + "/api/v1/users/notes/note/" + "?ltik=" + this.ltiKey, {note: this.selectedText}, {
           withCredentials: true
         }).then(res => {
           note.notesId = res.data.id
@@ -210,7 +211,7 @@ export default {
     },
     resetLessonsSolved() {
       if (!this.user.isDefault) {
-        this.$http.delete(backEndUrl + "/api/v1/lessons/lesson/solved/", {
+        this.$http.delete(backEndUrl + "/api/v1/lessons/lesson/solved/" + "?ltik=" + this.ltiKey, {
           withCredentials: true
         }).then(response => {
           return
@@ -234,7 +235,7 @@ export default {
     },
     resetChapterLessons() {
       if (!this.user.isDefault) {
-        this.$http.delete(backEndUrl + "/api/v1/lessons/lesson/solved/" + this.selectedChapter.chapterId + "/", {
+        this.$http.delete(backEndUrl + "/api/v1/lessons/lesson/solved/" + this.selectedChapter.chapterId + "/" + "?ltik=" + this.ltiKey, {
           withCredentials: true
         }).then(response => {
           return
