@@ -453,10 +453,11 @@ async function calculatePercentageOfLessonsSolvedForUser(moodleId) {
     }
     return numberOfSolvedLessons / numberOfSolvableLessons
 }
-
 async function updateGradeForUser(req, res, userId) {
     let normedGrade = await calculatePercentageOfLessonsSolvedForUser(userId)
     const idToken = res.locals.token
+    const gradeResponse = await lti.Grade.getScores(idToken, idToken.platformContext.endpoint.lineitem, {userId: idToken.user})
+    console.log(gradeResponse)
     const gradeObj = {
         userId: idToken.user,
         scoreGiven: normedGrade * 100,
@@ -464,7 +465,8 @@ async function updateGradeForUser(req, res, userId) {
         activityProgress: 'Completed',
         gradingProgress: 'FullyGraded'
     }
-    let lineItemId = idToken.platformContext.endpoint.lineitem // Attempting to retrieve it from idtoken
+
+    let lineItemId = idToken.platformContext.endpoint.lineitem // Attempting to retrieve it from idToken
     if (!lineItemId) {
         const response = await lti.Grade.getLineItems(idToken, {resourceLinkId: true})
         const lineItems = response.lineItems

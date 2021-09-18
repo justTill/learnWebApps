@@ -4,8 +4,8 @@
                   resetText="Alle Fortschritt zurücksetzen ?"></title-header>
     <div class="explanation homeSection hoverEffect">
       <h1> Learn Web Apps</h1>
-      Ist einer Interaktive Lernandwendung, mithilfe der du, die Konzepte die dir in der Vorlesung "WebApps" vorgestellt
-      bekommen wurden vertiefen und üben kannst.
+      Mit dieser Anwendung kannst du die Konzepte, die dir in der Vorlesung "WebApps" vorgestellt wurden vertiefen und
+      üben.
       <br>
       <br>
       Die Konzepte bilden die Grundlage zur Umsetzung komplexer clientseitiger Logik für WebApps. Daher ist es wichtig

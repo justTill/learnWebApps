@@ -1,45 +1,48 @@
 <template>
   <div class="title">
-    <h1> {{ title }}
-      <span class="doneIcon" v-if="lesson && lesson.type !== 'information' && lesson.done">&#10003;</span>
-    </h1>
-    <div title="Kapitel zurücksetzen" v-if="resetChapter" class="resetButton">
-      <div title="Kapitel zurücksetzen" class="reset" v-on:click="openResetModal" v-b-modal.modal-center
-           variant="info">
-        <img title="Kapitel zurücksetzen" alt="Kapitel zurücksetzen" class="resetIcon" src="../../assets/reset.png"
-             v-b-tooltip.hover.lefttop>
-        <b-modal ref="reset-modal" id="modal-center-reset" centered title="Kapitel zurücksetzen" ok-only
-                 ok-variant="danger"
-                 ok-title="Zurücksetzen"
-                 @ok="resetChapter"
-                 hide-header-close>
-          <div class="resetText">{{ resetText }}</div>
-        </b-modal>
+    <span class="doneIcon" v-if="lesson && lesson.type !== 'information' && lesson.done">&#10003;</span>
+
+    <div class="headerButtons">
+      <div title="Kapitel zurücksetzen" v-if="resetChapter" class="resetButton">
+        <div title="Kapitel zurücksetzen" class="reset" v-on:click="openResetModal" v-b-modal.modal-center
+             variant="info">
+          <img title="Kapitel zurücksetzen" alt="Kapitel zurücksetzen" class="resetIcon" src="../../assets/reset.png"
+               v-b-tooltip.hover.lefttop>
+          <b-modal ref="reset-modal" id="modal-center-reset" centered title="Kapitel zurücksetzen" ok-only
+                   ok-variant="danger"
+                   ok-title="Zurücksetzen"
+                   @ok="resetChapter"
+                   hide-header-close>
+            <div class="resetText">{{ resetText }}</div>
+          </b-modal>
+        </div>
       </div>
-    </div>
-    <div v-if="lesson" class="helperButtons">
-      <div title="Hilfe" class="helpButton" v-on:click="openHelpModal" v-b-modal.modal-center
-           variant="info" v-if="lesson.type !=='information'">
-        <img title="Hilfe" alt="Hilfe" class="helpIcon" src="../../assets/help.png" v-b-tooltip.hover.lefttop>
-        <b-modal ref="help-modal" id="modal-center-help" centered title="Hilfe" ok-only ok-variant="success"
-                 hide-header-close>
-          <help-content class="my-4" :lesson="lesson"></help-content>
-        </b-modal>
-      </div>
-      <div v-if="!user.isDefault" title="Meldung" class="reportButton" v-on:click="openReportModal">
-        <img title="Problem Melden" alt="Hilfe" class="reportIcon" src="../../assets/report.png"
-             v-b-tooltip.hover.lefttop>
-        <b-modal ref="report-modal" id="modal-center-report" centered title="Problem Melden" hide-header-close
-                 ok-variant="success"
-                 ok-title="Problem melden"
-                 @ok="sendProblem"
-                 cancel-title="Abbruch" cancel-variant="danger">
+      <div v-if="lesson" class="helperButtons">
+        <div title="Hilfe" class="helpButton" v-on:click="openHelpModal" v-b-modal.modal-center
+             variant="info" v-if="lesson.type !=='information'">
+          <img title="Hilfe" alt="Hilfe" class="helpIcon" src="../../assets/help.png" v-b-tooltip.hover.lefttop>
+          <b-modal ref="help-modal" id="modal-center-help" centered title="Hilfe" ok-only ok-variant="success"
+                   hide-header-close>
+            <help-content class="my-4" :lesson="lesson"></help-content>
+          </b-modal>
+        </div>
+        <div v-if="!user.isDefault" title="Meldung" class="reportButton" v-on:click="openReportModal">
+          <img title="Problem Melden" alt="Hilfe" class="reportIcon" src="../../assets/report.png"
+               v-b-tooltip.hover.lefttop>
+          <b-modal ref="report-modal" id="modal-center-report" centered title="Problem Melden" hide-header-close
+                   ok-variant="success"
+                   ok-title="Problem melden"
+                   @ok="sendProblem"
+                   cancel-title="Abbruch" cancel-variant="danger">
             <textarea class="problemArea" v-model="problem"
                       placeholder="Bitte beschreiben Sie das Problem für die aktuelle Aufgabe">
             </textarea>
-        </b-modal>
+          </b-modal>
+        </div>
       </div>
     </div>
+    <h1> {{ title }}
+    </h1>
   </div>
 </template>
 <script>
@@ -109,13 +112,17 @@ export default {
 }
 
 .title > h1 {
-  display: inline-block;
   padding: 18px;
 }
 
+.headerButtons {
+  display: inline-block;
+  margin-right: 10px;
+  float: right;
+}
+
 .title {
-  height: 80px;
-  position: relative;
+  min-height: 80px;
   text-align: center;
   background-color: var(--white);
   margin-bottom: 10px;
@@ -124,7 +131,6 @@ export default {
 }
 
 .helperButtons, .resetButton {
-  position: absolute;
   right: 30px;
   height: 80px;
   display: inline-flex;

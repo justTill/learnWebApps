@@ -57,6 +57,14 @@ body, html {
   word-wrap: break-word;
 }
 
+pre {
+  overflow: hidden;
+}
+
+code {
+  overflow: hidden;
+}
+
 .hoverEffect {
   transition: box-shadow 200ms ease, transform 200ms ease;
   box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.8);

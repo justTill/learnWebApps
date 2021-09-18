@@ -4,7 +4,7 @@
       <img class="navLogo" src="../../public/logo.svg"/>
     </router-link>
     <router-link class="navLink" to="/">Lernen</router-link>
-    <router-link class="navLink" v-if="!user.isDefault" to="notes">Notizen</router-link>
+    <router-link class="navLink" to="notes">Notizen</router-link>
     <router-link class="navLink" v-if="!user.isDefault" to="messages">Nachrichten</router-link>
   </div>
 </template>

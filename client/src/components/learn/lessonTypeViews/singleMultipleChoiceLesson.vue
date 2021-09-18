@@ -3,7 +3,8 @@
     <div class="answerOptions" v-for="(option, index) in lesson.answerOptions">
       <input type="checkbox" :id="'option-'+index" :ref="'option-'+index"
              :value="sanitizedAnswers(option.possibleAnswer)"
-             v-model="checkedAnswers">
+             v-model="checkedAnswers"
+             @change="removeErrormessage($event)">
       <label :for="'option-'+index" v-html="sanitizedAnswers(option.possibleAnswer)"></label>
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
@@ -26,6 +27,9 @@ export default {
     }
   },
   methods: {
+    removeErrormessage(event) {
+      this.errorMessage = "";
+    },
     sanitizedAnswers(answer) {
       return DOMPurify.sanitize(answer)
     },
@@ -90,6 +94,7 @@ label > code {
 }
 
 .errorMessage {
+  text-align: center;
   min-height: 60px;
   background-color: var(--light-red);
   padding-top: 25px;

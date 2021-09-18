@@ -136,9 +136,6 @@ export default {
 <style>
 @import "../assets/cssVariables.css";
 
-.notesContainer {
-}
-
 @media only screen and (max-width: 400px) {
   .note {
     min-width: 100px !important;
@@ -161,20 +158,20 @@ export default {
 
 .changeNoteArea {
   display: inline-block;
-  position: absolute;
-  right: 10px;
+  float: right;
 }
 
 .note {
+  white-space: pre-line;
   position: relative;
   display: block;
   max-width: 600px;
   min-width: 400px;
   background-color: var(--white);
   margin: 10px auto 10px;
-  padding: 5px 10px 5px;
   border: 1px solid black;
   border-radius: 5px;
+  padding: 5px 10px 30px;
 }
 
 .revertDelete {

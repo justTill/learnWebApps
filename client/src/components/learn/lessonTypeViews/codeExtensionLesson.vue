@@ -67,8 +67,14 @@ export default {
       })
       if (allAnswersCorrect) {
         this.errorMessage = ""
+        this.inputs = []
       } else {
-        this.errorMessage = "Die Antwort ist leider nicht ganz korrekt"
+        let message = "Die Antwort ist leider nicht ganz korrekt"
+        if (this.errorMessage === message) {
+          this.errorMessage = "Diese Antwort ist leider auch nicht ganz korrekt"
+        } else {
+          this.errorMessage = message
+        }
       }
       this.solvedHandler(this.lesson.lessonId, allAnswersCorrect, null)
     }

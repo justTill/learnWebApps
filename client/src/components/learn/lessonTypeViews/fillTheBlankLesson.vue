@@ -76,6 +76,7 @@ export default {
       return answerOptions
     },
     onDrop(event, dropzoneId) {
+      this.errorMessage = "";
       if (dropzoneId !== -1) {
         let updatedAnswer = this.$el.querySelector("#" + event.dataTransfer.getData("Text"))
         let dropZoneEl = this.$el.querySelector("#drop-" + dropzoneId)
@@ -121,7 +122,12 @@ export default {
       if (isCorrect) {
         this.errorMessage = ""
       } else {
-        this.errorMessage = "Die Antwort ist leider nicht ganz korrekt"
+        let message = "Die Antwort ist leider nicht ganz korrekt"
+        if (this.errorMessage === message) {
+          this.errorMessage = "Diese Antwort ist leider auch nicht ganz korrekt"
+        } else {
+          this.errorMessage = message
+        }
       }
       this.solvedHandler(this.lesson.lessonId, isCorrect, null)
     },
