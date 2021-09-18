@@ -10,8 +10,8 @@
                                        :solvedHandler="solvedLesson"></single-multiple-choice-lesson>
         <code-extension-lesson v-if="lesson.type==='codeExtensionLesson'" :lesson="lesson"
                                :solvedHandler="solvedLesson"></code-extension-lesson>
-      <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'" :lesson="lesson"
-                             :solvedHandler="solvedLesson"></fill-the-blank-lesson>
+        <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'" :lesson="lesson"
+                               :solvedHandler="solvedLesson"></fill-the-blank-lesson>
         <div class="lessonButtons">
           <div class="prevButton" v-if="previousLesson" v-on:click="goToLesson(previousLesson)"> &#8592; Vorherige
             Lerneinheit
@@ -118,7 +118,9 @@ pre {
 }
 
 .lessonText {
-  display: block;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
   max-width: 600px;
   background-color: white;
   border: 1px solid black;
@@ -146,8 +148,9 @@ pre {
 }
 
 .lessonButtons {
-  display: block;
-  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   height: 50px;
   bottom: 1px;
 }
@@ -155,15 +158,12 @@ pre {
 .nextButton {
   padding: 10px;
   display: inline-block;
-  right: 0px;
   color: var(--dark-green);
-  position: absolute;
 }
 
 .prevButton {
   padding: 10px;
   display: inline-block;
-  position: absolute;
   color: var(--dark-green);
 }
 
