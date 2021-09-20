@@ -13,14 +13,13 @@ async function execTests(userCode, verificationCode) {
     }).constructor
     describe("Test Code From User", function () {
         it("Run", async function () {
-            await AsyncFunction(`'use strict'; let codeFromUser =arguments[0]; ${userCode} ${verificationCode}`)(userCode)
+            await AsyncFunction(`'use strict'; let codeFromUser=arguments[0]; ${userCode} ${verificationCode}`)(userCode)
         })
     })
     let message = [];
     jasmine.env.addReporter({
         specDone: function (result) {
             console.log('Spec: ' + result.description + ' was ' + result.status);
-
             for (var i = 0; i < result.failedExpectations.length; i++) {
                 message.push('Failure: ' + result.failedExpectations[i].message);
                 console.log(result.failedExpectations[i].stack);

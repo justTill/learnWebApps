@@ -1,2 +1,2 @@
-export const backEndUrl = 'http://localhost:3080'
+export const backEndUrl = 'BACKENDURL'
 

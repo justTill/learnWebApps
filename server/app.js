@@ -31,6 +31,7 @@ const db = new Database(process.env.DB_NAME, process.env.DB_USER, process.env.DB
         dialect: 'postgres',
         logging: false
     })
+
 // Setup provider
 ltis.setup(process.env.SESSION_KEY, // Key used to sign cookies and tokens
     {
