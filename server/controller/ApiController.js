@@ -455,9 +455,8 @@ async function calculatePercentageOfLessonsSolvedForUser(moodleId) {
 }
 async function updateGradeForUser(req, res, userId) {
     let normedGrade = await calculatePercentageOfLessonsSolvedForUser(userId)
+    let shouldUpdateScore = true;
     const idToken = res.locals.token
-    const gradeResponse = await lti.Grade.getScores(idToken, idToken.platformContext.endpoint.lineitem, {userId: idToken.user})
-    console.log(gradeResponse)
     const gradeObj = {
         userId: idToken.user,
         scoreGiven: normedGrade * 100,
@@ -465,7 +464,6 @@ async function updateGradeForUser(req, res, userId) {
         activityProgress: 'Completed',
         gradingProgress: 'FullyGraded'
     }
-
     let lineItemId = idToken.platformContext.endpoint.lineitem // Attempting to retrieve it from idToken
     if (!lineItemId) {
         const response = await lti.Grade.getLineItems(idToken, {resourceLinkId: true})
@@ -484,6 +482,17 @@ async function updateGradeForUser(req, res, userId) {
         } else {
             lineItemId = lineItems[0].id
         }
+    }
+    const gradeResponse = await lti.Grade.getScores(idToken, lineItemId, {userId: idToken.user})
+    if (gradeResponse && gradeResponse.scores.length !== 0) {
+        for (let score of gradeResponse.scores) {
+            if (score.scoreOf === lineItemId) {
+                shouldUpdateScore = score.resultScore < normedGrade * 100;
+            }
+        }
+    }
+    if (!shouldUpdateScore) {
+        return {message: "current score is higher than to be updated score. No grading will take place"}
     }
     const responseGrade = await lti.Grade.submitScore(idToken, lineItemId, gradeObj)
     return responseGrade
