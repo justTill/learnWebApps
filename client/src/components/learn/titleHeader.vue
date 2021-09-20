@@ -1,7 +1,5 @@
 <template>
   <div class="title">
-    <span class="doneIcon" v-if="lesson && lesson.type !== 'information' && lesson.done">&#10003;</span>
-
     <div class="headerButtons">
       <div title="Kapitel zurücksetzen" v-if="resetChapter" class="resetButton">
         <div title="Kapitel zurücksetzen" class="reset" v-on:click="openResetModal" v-b-modal.modal-center
@@ -41,7 +39,9 @@
         </div>
       </div>
     </div>
-    <h1> {{ title }}
+    <h1>
+      <span class="doneIcon" v-if="lesson && lesson.type !== 'information' && lesson.done">&#10003;</span>
+      {{ title }}
     </h1>
   </div>
 </template>
