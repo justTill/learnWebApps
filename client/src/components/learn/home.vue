@@ -3,7 +3,7 @@
     <title-header title="Informationen" :reset-chapter="resetAllLessons"
                   resetText="Alle Fortschritt zurücksetzen ?"></title-header>
     <div class="explanation homeSection hoverEffect">
-      <h1> Learn Web Apps</h1>
+      <h1> Web Apps Lernen</h1>
       Mit dieser Anwendung kannst du die Konzepte, die dir in der Vorlesung "WebApps" vorgestellt wurden vertiefen und
       üben.
       <br>
@@ -21,7 +21,7 @@
       </div>
     </div>
     <div class="settings homeSection hoverEffect">
-      <h1> Settings</h1>
+      <h1> Einstellungen</h1>
       Für jeden gibt es Lerneinheiten. Egal ob du schon fortgeschritten bist oder gerade anfängst die
       Konzepte zu lernen und zu verstehen. Daher kannst du hier die Schwierigkeit einstellen.
       <div class="selectDifficulty">

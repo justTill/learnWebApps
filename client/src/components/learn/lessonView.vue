@@ -105,7 +105,7 @@ export default {
 pre {
   white-space: pre-wrap;
   word-wrap: break-word;
-  background-color: var(--davys-grey-light);
+  background-color: var(--light-gray);
   border-radius: 10px;
   padding-right: 10px;
   padding-left: 10px;

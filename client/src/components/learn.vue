@@ -93,7 +93,8 @@ export default {
   mounted() {
     document.addEventListener('mouseup', event => {
       this.$el.querySelector('#createNotes').style.display = "none";
-      if (window.getSelection().toString() !== '' && this.$route.path.includes('') && !this.user.isDefault) {
+      let isHomePage = this.selectedSection === null && this.selectedChapter === null && this.selectedLesson === null
+      if (window.getSelection().toString() !== '' && this.$route.path.includes('') && !this.user.isDefault && !isHomePage) {
         let classNames = window.getSelection().anchorNode.parentElement.className
         if (!classNames.includes('CodeMirror')) {
           let element = this.$el.querySelector('#createNotes')

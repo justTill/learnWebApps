@@ -187,16 +187,18 @@ export default {
   margin: 3px;
   padding-left: 15px;
   padding-right: 15px;
-  /*padding: 3px;*/
   min-width: 70px;
-  background-color: var(--davys-grey-light);
+  background-color: var(--beau-blue);
   border-radius: 10px;
+}
+
+.dropzone > .possibleAnswers {
+  background-color: transparent;
 }
 
 .possibleAnswers {
   margin: 5px 15px;
-  border-color: var(--davys-grey-light);
-  border: 1px solid;
+  background-color: var(--beau-blue);
   padding: 2px;
   border-radius: 5px;
 }
@@ -215,7 +217,7 @@ export default {
 }
 
 code {
-  background-color: var(--davys-grey-light);
+  background-color: var(--light-gray);
   padding: 3px;
 }
 
