@@ -7,19 +7,22 @@
       <div class="closeNavigationButton" v-on:click="openOrCloseChapterNavigation">&#10005;</div>
       <nav-button :onClickFunction="() => changeChapterAndSectionOnNavigationClick(null,null)"
                   class="navigationButton"
-                  :name="'Home'">
+                  :name="'Home'"
+                  ref="homeBtn">
       </nav-button>
       <div v-for="chapter in chapters" :key="chapter.chapterId">
         <nav-button class="navigationButton"
                     :onClickFunction="() => changeChapterAndSectionOnNavigationClick(chapter,null)"
-                    :name="chapter.chapterName">
+                    :name="chapter.chapterName"
+                    :chapter="chapter">
         </nav-button>
         <nav-button class="navigationSectionButton"
                     :onClickFunction="() => changeChapterAndSectionOnNavigationClick(chapter,section)"
                     :name="section.sectionName"
                     v-if="selectedChapter && selectedChapter.chapterId === chapter.chapterId"
                     v-for="section in chapter.sections"
-                    :ref="'section-'+section.sectionId ">
+                    :ref="'section-'+section.sectionId "
+                    :section="section">
         </nav-button>
       </div>
     </div>
@@ -91,6 +94,7 @@ export default {
     }
   },
   mounted() {
+    this.$refs.homeBtn.isActive = true
     document.addEventListener('mouseup', event => {
       this.$el.querySelector('#createNotes').style.display = "none";
       let isHomePage = this.selectedSection === null && this.selectedChapter === null && this.selectedLesson === null

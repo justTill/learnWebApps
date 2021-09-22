@@ -70,7 +70,6 @@ function getProblems() {
     }).then(result => {
         this.$store.commit("setProblems", result.data.problems)
     }).catch(err => {
-
     })
 }
 
