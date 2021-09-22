@@ -7,9 +7,9 @@ services:
     container_name: learnWebAppsBackend
     environment:
       - DATABASE=postgres
-      - DB_USER=prodUser
-      - DB_PASSWORD=prodPW
-      - DB_NAME=LearnWebappsProd
+      - DB_USER=webAdmin
+      - DB_PASSWORD=defaultPasswort
+      - DB_NAME=learnWebApps
       - DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
       - SESSION_KEY=${SESSION_KEY}
       - SQL_HOST=db
@@ -38,9 +38,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=prodUser
-      - POSTGRES_PASSWORD=prodPW
-      - POSTGRES_DB=LearnWebappsProd
+      - POSTGRES_USER=webAdmin
+      - POSTGRES_PASSWORD=defaultPasswort
+      - POSTGRES_DB=learnWebApps
     ports:
       - 5432:5432
 volumes:

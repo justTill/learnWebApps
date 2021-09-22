@@ -6,10 +6,12 @@
              variant="info">
           <img title="Kapitel zurücksetzen" alt="Kapitel zurücksetzen" class="resetIcon" src="../../assets/reset.png"
                v-b-tooltip.hover.lefttop>
-          <b-modal ref="reset-modal" id="modal-center-reset" centered title="Kapitel zurücksetzen" ok-only
-                   ok-variant="danger"
+          <b-modal ref="reset-modal" id="modal-center-reset" centered title="Kapitel zurücksetzen"
+                   ok-variant="success"
                    ok-title="Zurücksetzen"
                    @ok="resetChapter"
+                   cancel-title="Abbruch"
+                   cancel-variant="danger"
                    hide-header-close>
             <div class="resetText">{{ resetText }}</div>
           </b-modal>
@@ -117,7 +119,7 @@ export default {
 
 .headerButtons {
   display: inline-block;
-  margin-right: 10px;
+  margin-right: 30px;
   float: right;
 }
 

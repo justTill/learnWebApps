@@ -422,6 +422,7 @@ function mapToOutputProblem(problemsWithAnswers) {
                 problemMessage: problem.message,
                 answers: problem.answer ? [problem.answer] : [],
                 lessonId: problem.lessonid,
+                lessonName: problem.name,
                 createdAt: problem.createdat,
                 sender: problem.sender,
             })
