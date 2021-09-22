@@ -1,6 +1,6 @@
 <template>
   <div class="lessonContainer">
-    <title-header :title="lesson.lessonName" :lesson="lesson">
+    <title-header :title="prepareLessonTitle" :lesson="lesson">
     </title-header>
     <div class="lessonTextContainer">
       <div class="lessonText">
@@ -51,6 +51,8 @@ export default {
   props: {
     lesson: Object,
     previousLesson: Object,
+    currentLessonIndex: Number,
+    numberOfLessons: Number,
     nextLesson: Object,
     goToLesson: Function,
     goToLessonOverview: Function,
@@ -62,6 +64,10 @@ export default {
     }
   },
   computed: {
+    prepareLessonTitle() {
+
+      return this.lesson.lessonName + " " + (this.currentLessonIndex + 1) + "/" + this.numberOfLessons
+    },
     sanitizedLessonText: function () {
       return DOMPurify.sanitize(this.lesson.information);
     },
@@ -121,7 +127,7 @@ pre {
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-  max-width: 600px;
+  max-width: 900px;
   background-color: white;
   border: 1px solid black;
   border-radius: 2px;

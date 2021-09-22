@@ -42,7 +42,12 @@ html, body {
 
 body, html {
   height: 100% !important;
-  overflow: hidden
+}
+
+@media only screen and (min-width: 1000px) {
+  body, html {
+    overflow: hidden;
+  }
 }
 
 .viewArea {

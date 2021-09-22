@@ -9,7 +9,7 @@
     <div class="lessons">
       <lesson-tile class="lesson hoverEffect"
                    v-for="lesson in lessonsForSelectedDifficultyLevel"
-                   v-on:click.native="gotToLesson(lesson)"
+                   v-on:click.native="goToLesson(lesson)"
                    :key="lesson.lessonNumber"
                    :lesson="lesson">
       </lesson-tile>
@@ -23,12 +23,13 @@ import LessonTile from "@/components/learn/lessonTile";
 import TitleHeader from "@/components/learn/titleHeader";
 import DOMPurify from "dompurify";
 import {mapGetters} from "vuex";
+import utils from '../../shared/utils'
 
 export default {
   name: 'sectionOverview',
   props: {
     section: Object,
-    gotToLesson: Function
+    goToLesson: Function
   },
   components: {TitleHeader, LessonTile},
   computed: {
@@ -39,7 +40,7 @@ export default {
       return DOMPurify.sanitize(this.section.information)
     },
     lessonsForSelectedDifficultyLevel() {
-      return this.difficultyLevel === "ALL" || this.difficultyLevel === null ? this.section.lessons : this.section.lessons.filter(l => l.type === 'information' || l.difficultyLevel === this.difficultyLevel || l.difficultyLevel === 'ALL')
+      return utils.lessonsForDifficulty.bind(this)(this.section)
     },
   },
   methods: {}

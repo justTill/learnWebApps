@@ -41,8 +41,8 @@ export default {
     },
     sectionPreview: function () {
       let updatedInformation = this.section.information
-      if (this.section.information.length > 100) {
-        updatedInformation = updatedInformation.substring(0, 100) + " ..."
+      if (this.section.information.length > 50) {
+        updatedInformation = updatedInformation.substring(0, 50) + " ..."
       }
       return updatedInformation
     },

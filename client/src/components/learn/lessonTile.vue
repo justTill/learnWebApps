@@ -1,14 +1,17 @@
 <template>
   <div>
-    <div class="lessonTitle">{{ this.lesson.lessonName }} <span class="doneIcon"
-                                                                v-if="lesson.done && lesson.type !== 'information'">&#10003;</span>
+    <div class="lessonTitle">
+      <img v-if="lesson.type ==='information'" src="../../assets/info.png" style="padding-bottom: 5px"
+           v-b-tooltip.hover.lefttop title="Informationseinheit">
+      <img v-else src="../../assets/lessons.png" style="padding-bottom: 5px" v-b-tooltip.hover.lefttop title="Aufgabe">
+      {{ lesson.lessonName }}
+      <span class="doneIcon" v-if="lesson.done && lesson.type !== 'information'">&#10003;</span>
     </div>
     <div class="lessonInformation">
       {{ lessonPreview }}
     </div>
   </div>
 </template>
-
 <script>
 
 import {mapGetters} from "vuex";

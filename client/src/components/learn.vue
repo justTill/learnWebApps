@@ -37,12 +37,14 @@
     <section-overview class="chapterContent"
                       v-else-if="selectedSection && !selectedLesson"
                       :section="selectedSection"
-                      :gotToLesson="goToLesson">
+                      :goToLesson="goToLesson">
     </section-overview>
     <lesson-view class="chapterContent"
                  v-else-if="selectedLesson"
                  :lesson="selectedLesson"
                  :previousLesson="previousLesson"
+                 :currentLessonIndex="currentLessonIndex"
+                 :numberOfLessons="numberOfLessons"
                  :nextLesson="nextLesson"
                  :goToLesson="goToLesson"
                  :goToLessonOverview="goToSection"
@@ -64,6 +66,7 @@ import NavButton from "@/components/utils/navButton";
 import LessonView from "@/components/learn/lessonView";
 import {backEndUrl} from "@/envVariables";
 import TitleHeader from "@/components/learn/titleHeader";
+import utils from '../shared/utils'
 
 export default {
   name: 'learn',
@@ -74,11 +77,11 @@ export default {
       selectedSection: null,
       selectedLesson: null,
       previousLesson: null,
+      currentLessonIndex: null,
+      numberOfLessons: null,
       nextLesson: null,
       selectedText: "",
       showNote: false,
-      difficultyLevel: "ALL",
-      codeMirrorMode: "DARK"
     }
   },
   computed: {
@@ -87,7 +90,8 @@ export default {
       'user',
       'notes',
       'ltiKey',
-      'codeMirrorTheme'
+      'codeMirrorTheme',
+      'difficultyLevel'
     ]),
     showSaveNote() {
       return this.showNote
@@ -111,12 +115,6 @@ export default {
     })
   },
   methods: {
-    changeDifficultyLevel() {
-      this.$store.commit('setDifficultyLevel', this.difficultyLevel)
-    },
-    changeCodeMirrorTheme() {
-      this.$store.commit('setCodeMirrorTheme', this.codeMirrorMode)
-    },
     saveMarkedTextAsNotes() {
       let note = {
         notesId: -1,
@@ -182,9 +180,11 @@ export default {
     goToLesson(updatedLesson) {
       this.previousLesson = null;
       this.nextLesson = null;
-      let currentLessonIndex = this.selectedSection.lessons.indexOf(updatedLesson)
-      this.nextLesson = this.selectedSection.lessons[currentLessonIndex + 1]
-      this.previousLesson = this.selectedSection.lessons[currentLessonIndex - 1]
+      let filteredLessons = utils.lessonsForDifficulty.bind(this)(this.selectedSection)
+      this.numberOfLessons = filteredLessons.length
+      this.currentLessonIndex = filteredLessons.indexOf(updatedLesson)
+      this.nextLesson = filteredLessons[this.currentLessonIndex + 1]
+      this.previousLesson = filteredLessons[this.currentLessonIndex - 1]
       this.selectedLesson = updatedLesson
     },
     lessonSolvedHandlerForCurrentChapter(lessonId, solved, userCode) {
