@@ -6,9 +6,9 @@
     </div>
     <div class="percentageBar"
          v-if="!user.isDefault && percentage.numberOfLessons !== 0 ">
-      <progress :value="percentage.lessonsSolved" :max="percentage.numberOfLessons">
+      <progress :value="lessonsSolved" :max="numberOfLessons">
       </progress>
-      <span> {{ percentage.lessonsSolved }}/{{ percentage.numberOfLessons }}</span>
+      <span> {{ lessonsSolved }}/{{ numberOfLessons }}</span>
     </div>
   </div>
 </template>
@@ -28,6 +28,21 @@ export default {
       'user',
       'difficultyLevel'
     ]),
+    numberOfLessons() {
+      return this.percentage().numberOfLessons
+    },
+    lessonsSolved() {
+      return this.percentage().lessonsSolved
+    },
+    sectionPreview: function () {
+      let updatedInformation = this.section.information
+      if (this.section.information.length > 50) {
+        updatedInformation = updatedInformation.substring(0, 50) + " ..."
+      }
+      return updatedInformation
+    },
+  },
+  methods: {
     percentage: function () {
       let numberOfInteractiveLessons = 0
       let numberOfLessonsDone = 0;
@@ -39,15 +54,7 @@ export default {
       }
       return {numberOfLessons: numberOfInteractiveLessons, lessonsSolved: numberOfLessonsDone}
     },
-    sectionPreview: function () {
-      let updatedInformation = this.section.information
-      if (this.section.information.length > 50) {
-        updatedInformation = updatedInformation.substring(0, 50) + " ..."
-      }
-      return updatedInformation
-    },
-  },
-  methods: {}
+  }
 }
 </script>
 <style>

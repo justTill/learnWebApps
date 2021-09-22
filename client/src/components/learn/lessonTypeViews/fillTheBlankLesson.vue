@@ -76,6 +76,12 @@ export default {
       return answerOptions
     },
     onDrop(event, dropzoneId) {
+      if (event.preventDefault) {
+        event.preventDefault();
+      }
+      if (event.stopPropagation) {
+        event.stopPropagation();
+      }
       this.errorMessage = "";
       if (dropzoneId !== -1) {
         let updatedAnswer = this.$el.querySelector("#" + event.dataTransfer.getData("Text"))

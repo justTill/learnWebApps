@@ -66,7 +66,7 @@ export default {
   computed: {
     prepareLessonTitle() {
 
-      return this.lesson.lessonName + " " + (this.currentLessonIndex + 1) + "/" + this.numberOfLessons
+      return this.lesson.lessonName + " (" + (this.currentLessonIndex + 1) + "/" + this.numberOfLessons + ")"
     },
     sanitizedLessonText: function () {
       return DOMPurify.sanitize(this.lesson.information);
