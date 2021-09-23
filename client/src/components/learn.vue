@@ -120,7 +120,12 @@ export default {
   },
   methods: {
     saveMarkedTextAsNotes() {
-      utils.saveNote.bind(this)(this.selectedText)
+      let prefix = this.selectedChapter ?
+          this.selectedChapter.chapterName + ": "
+          : this.selectedSection ?
+              this.selectedSection.sectionName + ": "
+              : this.selectedSection.sectionName + ": "
+      utils.saveNote.bind(this)(prefix + this.selectedText)
       this.showNote = true
       setTimeout(() => {
         this.showNote = false
