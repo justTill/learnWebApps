@@ -3,12 +3,12 @@
     <title-header :title="chapter.chapterName" :lesson="null" resetText="Fortschritt dieses Kapitel zurücksetzen ?"
                   :resetChapter="resetChapter">
     </title-header>
-    <div class="chapterArrangement">
-      <div class="navigateToChapter hoverEffect" v-if="hasPrevChapter">
+    <div class="overviewArrangement">
+      <div class="navigateToChapterOrSection hoverEffect" v-if="hasPrevChapter">
         <img src="../../assets/skip-prev.svg" width="30px" height="30px" v-b-tooltip.hover.lefttop
              title="zum vorherigen Kapitel" v-on:click="prevChapter">
       </div>
-      <div class="chapterContentOverview">
+      <div class="contentOverview">
         <div class="textContainer" ref="overViewText">
           <div class="overviewText" v-html="sanitizedChapterOverview">
           </div>
@@ -21,7 +21,7 @@
           </section-tile>
         </div>
       </div>
-      <div class="navigateToChapter hoverEffect" v-if="hasNextChapter">
+      <div class="navigateToChapterOrSection hoverEffect" v-if="hasNextChapter">
         <img src="../../assets/skip-next.svg" width="30px" height="30px" v-b-tooltip.hover.lefttop
              title="zum nächsten Kapitel" v-on:click="nextChapter">
       </div>
@@ -82,7 +82,7 @@ export default {
   overflow: scroll;
 }
 
-.chapterArrangement {
+.overviewArrangement {
   align-items: center;
   display: flex;
   align-content: center;
@@ -91,16 +91,17 @@ export default {
   margin-right: auto;
 }
 
-.navigateToChapter {
+.navigateToChapterOrSection {
   margin: 10px;
   display: block;
   width: 30px;
   height: 30px;
   background-color: var(--white);
   border: 1px solid black;
+  cursor: pointer;
 }
 
-.chapterContentOverview {
+.contentOverview {
   display: flex;
   align-content: center;
   flex-direction: column;

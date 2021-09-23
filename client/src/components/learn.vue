@@ -39,6 +39,8 @@
     <section-overview class="chapterContent"
                       v-else-if="selectedSection && !selectedLesson"
                       :section="selectedSection"
+                      :chapter="selectedChapter"
+                      :goToSection="goToSection"
                       :goToLesson="goToLesson">
     </section-overview>
     <lesson-view class="chapterContent"
