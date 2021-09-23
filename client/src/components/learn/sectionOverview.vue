@@ -35,7 +35,7 @@ import LessonTile from "@/components/learn/lessonTile";
 import TitleHeader from "@/components/learn/titleHeader";
 import DOMPurify from "dompurify";
 import {mapGetters} from "vuex";
-import utils from '../../shared/utils'
+import utils from "@/shared/utils";
 
 export default {
   name: 'sectionOverview',

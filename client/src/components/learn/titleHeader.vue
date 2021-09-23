@@ -71,6 +71,7 @@
 import {backEndUrl} from '@/envVariables'
 import {mapGetters} from "vuex";
 import HelpContent from "@/components/learn/helpContent";
+import utils from "@/shared/utils";
 
 export default {
   name: 'titleHeader',
@@ -95,26 +96,7 @@ export default {
   },
   methods: {
     addNote() {
-      let note = {
-        notesId: -1,
-        note: this.note
-      }
-      if (this.note) {
-        if (!this.user.isDefault) {
-          this.$http.post(backEndUrl + "/api/v1/users/notes/note/" + "?ltik=" + this.ltiKey, {note: this.selectedText}, {
-            withCredentials: true
-          }).then(res => {
-            note.notesId = res.data.id
-            this.$store.commit('addNotes', note)
-          }).catch(err => {
-            let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Die Notiz konnte leider nicht dauerhaft sondern nur temporär gespeichert werden, bitte versuchen Sie es später erneut"
-            this.$store.commit('setErrorMessage', errorMessage)
-            this.$store.commit('addNotes', note)
-          })
-        } else {
-          this.$store.commit('addNotes', note)
-        }
-      }
+      utils.saveNote.bind(this)(this.note)
     },
     openHelpModal() {
       this.$refs['help-modal'].show()

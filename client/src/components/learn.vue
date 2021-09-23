@@ -70,7 +70,7 @@ import NavButton from "@/components/utils/navButton";
 import LessonView from "@/components/learn/lessonView";
 import {backEndUrl} from "@/envVariables";
 import TitleHeader from "@/components/learn/titleHeader";
-import utils from '../shared/utils'
+import utils from "@/shared/utils";
 
 export default {
   name: 'learn',
@@ -120,24 +120,7 @@ export default {
   },
   methods: {
     saveMarkedTextAsNotes() {
-      let note = {
-        notesId: -1,
-        note: this.selectedText
-      }
-      if (!this.user.isDefault) {
-        this.$http.post(backEndUrl + "/api/v1/users/notes/note/" + "?ltik=" + this.ltiKey, {note: this.selectedText}, {
-          withCredentials: true
-        }).then(res => {
-          note.notesId = res.data.id
-          this.$store.commit('addNotes', note)
-        }).catch(err => {
-          let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Die Notiz konnte leider nicht dauerhaft sondern nur temporär gespeichert werden, bitte versuchen Sie es später erneut"
-          this.$store.commit('setErrorMessage', errorMessage)
-          this.$store.commit('addNotes', note)
-        })
-      } else {
-        this.$store.commit('addNotes', note)
-      }
+      utils.saveNote.bind(this)(this.selectedText)
       this.showNote = true
       setTimeout(() => {
         this.showNote = false
