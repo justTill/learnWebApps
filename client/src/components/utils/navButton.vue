@@ -1,7 +1,7 @@
 <template>
   <div @click="activate" :style="buttonStyles">
-    <span v-if="isSolved" style="color: var(--dark-green)">&#x2713;</span>
     {{ preparedName }}
+    <span v-if="isSolved" style="color: var(--dark-green)">&#x2713;</span>
   </div>
 </template>
 <script>

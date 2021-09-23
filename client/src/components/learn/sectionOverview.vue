@@ -101,7 +101,7 @@ export default {
 
 .overviewText {
   display: block;
-  min-width: 700px;
+  min-width: 550px;
   max-width: 1300px;
   background-color: var(--white);
   border: 1px solid black;

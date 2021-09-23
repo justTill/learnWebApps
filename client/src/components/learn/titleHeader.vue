@@ -21,7 +21,9 @@
         <div title="Hilfe" class="helpButton" v-on:click="openHelpModal" v-b-modal.modal-center
              variant="info" v-if="lesson.type !=='information'">
           <img title="Hilfe" alt="Hilfe" class="helpIcon" src="../../assets/help.png" v-b-tooltip.hover.lefttop>
-          <b-modal ref="help-modal" id="modal-center-help" centered title="Hilfe" ok-only ok-variant="success"
+          <b-modal ref="help-modal" id="modal-center-help" centered title="Hilfe" ok-variant="success"
+                   cancel-title="Schließen"
+                   cancel-variant="danger"
                    hide-header-close>
             <help-content class="my-4" :lesson="lesson"></help-content>
           </b-modal>

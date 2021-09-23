@@ -1,6 +1,6 @@
 <template>
   <div>
-    <title-header title="Deine Nachrichten"></title-header>
+    <title-header title="Deine gemeldeten Probleme"></title-header>
     <div class="messageContainer">
       <div v-for="(problem, index) in problems">
         <div class="problem hoverEffect"

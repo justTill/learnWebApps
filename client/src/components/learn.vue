@@ -14,6 +14,7 @@
         <nav-button class="navigationButton"
                     :onClickFunction="() => changeChapterAndSectionOnNavigationClick(chapter,null)"
                     :name="chapter.chapterName"
+                    :ref="'chapter-'+chapter.chapterId"
                     :chapter="chapter">
         </nav-button>
         <nav-button class="navigationSectionButton"
@@ -21,7 +22,7 @@
                     :name="section.sectionName"
                     v-if="selectedChapter && selectedChapter.chapterId === chapter.chapterId"
                     v-for="section in chapter.sections"
-                    :ref="'section-'+section.sectionId "
+                    :ref="'section-'+section.sectionId"
                     :section="section">
         </nav-button>
       </div>
@@ -30,7 +31,8 @@
     <chapter-overview class="chapterContent"
                       v-if="selectedChapter && !selectedSection && !selectedLesson"
                       :chapter="selectedChapter"
-                      :go-to-section="goToSection"
+                      :goToSection="goToSection"
+                      :goToChapter="goToChapter"
                       :resetChapter="resetChapterLessons">
     </chapter-overview>
 
@@ -169,6 +171,10 @@ export default {
         this.$refs['navigationMenu'].style.display = 'block'
         this.$refs['chapterNavigation'].style.display = 'none'
       }
+    },
+    goToChapter(chapter) {
+      this.changeChapterAndSectionOnNavigationClick(chapter, null)
+      this.$refs['chapter-' + chapter.chapterId][0].isActive = true;
     },
     goToSection(section) {
       if (section === null) {
@@ -323,7 +329,7 @@ export default {
 }
 
 .navigationSectionButton {
-  margin-left: 10px;
+  margin-left: 20px;
   font-size: medium;
 }
 
