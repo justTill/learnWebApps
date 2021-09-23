@@ -21,9 +21,37 @@
       </div>
     </div>
     <div class="settings homeSection hoverEffect">
-      <h1> Einstellungen</h1>
-      Für jeden gibt es Lerneinheiten. Egal ob du schon fortgeschritten bist oder gerade anfängst die
-      Konzepte zu lernen und zu verstehen. Daher kannst du hier die Schwierigkeit einstellen.
+      <h1> Benutzung</h1>
+      Ihr könnt verschiedenen Kapitel bearbeiten. (rechts in der Navigationsleiste zu sehen)
+      <br>
+      Jedes Kapitel besitzt verschiedenen Unterthemen, die wiederum verschiedene Informationseinheiten
+      (<img src="../../assets/info.png" style="padding-bottom: 5px">)
+      sowie Aufgaben (<img src="../../assets/lessons.png" style="padding-bottom: 5px">) beinhalten.
+      <br>
+      <br>
+      <b>Aufgaben</b>
+      <br>
+      Es gibt vier verschiedene Arten von Aufgaben
+      <ul>
+        <li><b>Single-Multiple-Choice-Aufgaben</b></li>
+        <li><b>Code Aufgaben:</b> Hier kannst du mehere Zeilen Code schreiben, der auch ausgefphrt und anahnd von Tests
+          überprüft wird
+          <ul>
+            <li> Das Textfeld in dem du dein Code schreibst soll im DarkMode sein? Hier kannst du es änderb</li>
+          </ul>
+          <div class="selectCodeTheme">
+            <select v-model="codeMirrorMode" v-on:change="changeCodeMirrorTheme">
+              <option value="LIGHT">Hell</option>
+              <option value="DARK">Dunkel</option>
+            </select>
+          </div>
+        </li>
+        <li><b>Code ergänzungsaufgaben:</b> Ergänze vorgegeben Code anhand deines Wissens</li>
+        <li><b>Lückentextaufgaben:</b> Ziehe die richtigen Lösungen mit Drag&Drop in die richtigen Lücken</li>
+      </ul>
+      <b>Schwierigkeistgrad</b>
+      <br>
+      Du willst nur Schwere oder Leichte Aufgaben ? Dann stelle hier den Schwierigkeistgrad ein!
       <div class="selectDifficulty">
         <select v-model="difficultyLevel" v-on:change="changeDifficultyLevel">
           <option value="ALL" selected>Alle</option>
@@ -32,13 +60,32 @@
           <option value="HARD">Schwer</option>
         </select>
       </div>
-      Du möchstes bei Programmieraufgaben den code lieber im Darkmode schreiben? Dann kannst du das hier ändern!
-      <div class="selectCodeTheme">
-        <select v-model="codeMirrorMode" v-on:change="changeCodeMirrorTheme">
-          <option value="LIGHT">Hell</option>
-          <option value="DARK">Dunkel</option>
-        </select>
-      </div>
+      <b>Notizen & Probleme & Hilfe</b>
+      <br>
+      Du möchtest Inhalte als Notizen speichern? Dann kannst du innerhalb eines Kapitels, Unterthema,Aufgabe oder
+      Informationseinheit den gewünschnten Text makieren und aus das "Notiz erstellen" pop Up klicken.
+      <br>
+      <br>
+      <b>Probleme & Hilfe</b>
+      <br>
+      Falls du Hilfe bei einer Aufgabe braucht kannst du auf das Icon
+      (<img title="Hilfe" alt="Hilfe" src="../../assets/help.png" height="24px" width="24px"
+            style="padding-bottom: 4px">) klicken.
+      <br>
+      Funktionieren Aufgaben nicht oder es gibt andere Probleme kannst du dem Dozenten dieses Melden
+      (<img title="Hilfe" alt="Hilfe" src="../../assets/report.png" height="24px" width="24px"
+            style="padding-bottom: 4px">)
+      <br>
+      <br>
+      <b>Fortschritt</b>
+      <br>
+      Es wird gespeichert ob du eine Aufgabe gelöst hast. Wenn du den den Kompletten Fortschritt oder den eines Kapitels
+      zurücksetzen möchtest kannst du auf das
+      (<img title="Hilfe" alt="Hilfe" src="../../assets/reset.png" height="24px" width="24px"
+            style="padding-bottom: 4px">) Icon klicken.
+      <br>
+      <br>
+      <button> Schon kanns los gehen: Jetzt Zum ersten Kapitel</button>
     </div>
   </div>
 </template>

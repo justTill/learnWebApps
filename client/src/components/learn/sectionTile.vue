@@ -8,7 +8,10 @@
          v-if="!user.isDefault && numberOfLessons !== 0 ">
       <progress :value="lessonsSolved" :max="numberOfLessons">
       </progress>
-      <span> {{ lessonsSolved }}/{{ numberOfLessons }}</span>
+      <span> {{ lessonsSolved }}/{{ numberOfLessons }} Aufgaben gelöst</span>
+    </div>
+    <div v-else class="percentageBar">
+      <span>Es sind keine Aufgaben vorhanden</span>
     </div>
   </div>
 </template>
