@@ -11,6 +11,7 @@
     <div class="errorMessage" v-for="error in errorMessages" :key="error">
       {{ error }}
     </div>
+    <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
     <div class="verificationInformation" v-html="sanitizedVerificationInformation"></div>
   </div>
 </template>
@@ -36,6 +37,7 @@ export default {
       userCode: this.lesson.userCode,
       isLoadingResults: false,
       errorMessages: [],
+      successMessage: "",
       cmOptions: this.codeMirrorOptions(),
     }
   },
@@ -53,24 +55,26 @@ export default {
   methods: {
     evaluate() {
       this.errorMessages = [];
+      this.successMessage = ""
       if (this.userCode) {
         let payload = {
           lessonId: this.lesson.lessonId,
           userCode: this.userCode,
         }
         this.isLoadingResults = true
-
         this.$http.post(backEndUrl + "/api/v1/lessons/lesson/coding/check", payload, {withCredentials: true})
             .then(response => {
               let testErrors = response.data.errors
               let isCorrect = testErrors.length === 0;
               this.errorMessages = testErrors
+              if (isCorrect) {
+                this.successMessage = this.lesson.feedback === null || this.lesson.feedback === '' ? "Du hast die Aufgabe erfolgreich gelöst" : this.lesson.feedback
+              }
               this.isLoadingResults = false
               this.solvedHandler(this.lesson.lessonId, isCorrect, this.userCode)
             })
             .catch(err => {
               this.isLoadingResults = false
-
               let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Aufgabe konnte nicht überprüft werden, bitte versuchen sie es Später erneut."
               this.$store.commit('setErrorMessage', errorMessage)
             })

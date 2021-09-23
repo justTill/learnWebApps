@@ -23,6 +23,7 @@
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
     <div class="errorMessage" v-if="errorMessage"> {{ errorMessage }}</div>
+    <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
   </div>
 </template>
 <script>
@@ -38,7 +39,8 @@ export default {
     return {
       errorMessage: "",
       userAnswer: this.getUserAnswers(),
-      answerOptions: this.getAnswersOptions()
+      answerOptions: this.getAnswersOptions(),
+      successMessage: ""
     }
   },
   methods: {
@@ -127,7 +129,9 @@ export default {
       }
       if (isCorrect) {
         this.errorMessage = ""
+        this.successMessage = this.lesson.feedback === null || this.lesson.feedback === '' ? "Du hast die Aufgabe erfolgreich gelöst" : this.lesson.feedback
       } else {
+        this.successMessage = ""
         let message = "Die Antwort ist leider nicht ganz korrekt"
         if (this.errorMessage === message) {
           this.errorMessage = "Diese Antwort ist leider auch nicht ganz korrekt"

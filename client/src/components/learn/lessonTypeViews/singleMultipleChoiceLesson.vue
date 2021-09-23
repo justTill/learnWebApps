@@ -9,6 +9,7 @@
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
     <div class="errorMessage" v-if="errorMessage"> {{ errorMessage }}</div>
+    <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
   </div>
 </template>
 <script>
@@ -24,6 +25,7 @@ export default {
     return {
       checkedAnswers: this.fillCheckAnswersIfIsDone(),
       errorMessage: "",
+      successMessage: "",
     }
   },
   methods: {
@@ -65,8 +67,11 @@ export default {
       }
       if (isCorrect) {
         this.errorMessage = "";
+        this.successMessage = this.lesson.feedback === null || this.lesson.feedback === '' ? "Du hast die Aufgabe erfolgreich gelöst" : this.lesson.feedback
+
       } else {
         this.errorMessage = "Die Antwort ist leider nicht ganz korrekt"
+        this.successMessage = ""
       }
       this.solvedHandler(this.lesson.lessonId, isCorrect, null)
     }
@@ -104,6 +109,20 @@ label > code {
   margin-bottom: 10px;
   border-top: 2px solid var(--red);
   border-bottom: 2px solid var(--red);
+}
+
+.successMessage {
+  text-align: center;
+  min-height: 60px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  padding-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: lightgreen;
+  border-top: 2px solid var(--bs-green);
+  border-bottom: 2px solid var(--bs-green);
+
 }
 
 .answerOptions {

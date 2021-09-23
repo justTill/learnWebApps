@@ -26,7 +26,6 @@
       <coding-lesson v-if="lesson.type==='codingLesson'" :lesson="lesson" :solvedHandler="solvedLesson"
                      :theme="codeMirrorTheme"></coding-lesson>
     </div>
-    <lesson-solved :feedback="lesson.feedback" v-if="lessonSolved"></lesson-solved>
   </div>
 </template>
 
@@ -39,12 +38,10 @@ import {backEndUrl} from '@/envVariables'
 import {mapGetters} from "vuex";
 import TitleHeader from "@/components/learn/titleHeader";
 import DOMPurify from "dompurify";
-import LessonSolved from "@/components/learn/lessonSolved";
 
 export default {
   name: 'lessonView',
   components: {
-    LessonSolved,
     TitleHeader, FillTheBlankLesson, CodeExtensionLesson, SingleMultipleChoiceLesson, CodingLesson
   },
   props: {
@@ -59,7 +56,6 @@ export default {
   },
   data: function () {
     return {
-      lessonSolved: false,
     }
   },
   computed: {
@@ -96,7 +92,6 @@ export default {
   methods: {
     solvedLesson(lessonId, isSolved, userCode) {
       this.lessonSolvedHandler(lessonId, isSolved, userCode)
-      this.lessonSolved = isSolved
       if (isSolved && !this.user.isDefault) {
         this.$http.post(backEndUrl + "/api/v1/lessons/lesson/solved" + "/?ltik=" + this.ltiKey, {
           lessonId: lessonId,

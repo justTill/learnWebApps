@@ -8,6 +8,8 @@
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
     <div class="errorMessage" v-if="errorMessage"> {{ errorMessage }}</div>
+    <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
+
   </div>
 </template>
 <script>
@@ -24,6 +26,7 @@ export default {
     return {
       errorMessage: "",
       inputs: [],
+      successMessage: "",
     }
   },
   computed: {
@@ -67,6 +70,7 @@ export default {
       })
       if (allAnswersCorrect) {
         this.errorMessage = ""
+        this.successMessage = this.lesson.feedback === null || this.lesson.feedback === '' ? "Du hast die Aufgabe erfolgreich gelöst" : this.lesson.feedback
         this.inputs = []
       } else {
         let message = "Die Antwort ist leider nicht ganz korrekt"
@@ -75,6 +79,7 @@ export default {
         } else {
           this.errorMessage = message
         }
+        this.errorMessage = "";
       }
       this.solvedHandler(this.lesson.lessonId, allAnswersCorrect, null)
     }
