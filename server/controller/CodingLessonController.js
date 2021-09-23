@@ -47,6 +47,7 @@ exports.saveEditCodingLesson = async function (req, res, next) {
     let lessonInformation = req.body.lessonInformation
     let verificationType = req.body.verificationType
     let verificationCode = req.body.verificationCode
+    let hints = req.body.hints
     let exampleSolution = req.body.exampleSolution
     let verificationInformation = req.body.verificationInformation
     let difficultyLevel = req.body.difficultyLevel
@@ -83,7 +84,7 @@ exports.saveEditCodingLesson = async function (req, res, next) {
             })
             return
         }
-        await lessonsRepository.insertOrUpdateCodingLesson(lessonId, codingLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, verificationType, verificationCode, exampleSolution, verificationInformation)
+        await lessonsRepository.insertOrUpdateCodingLesson(lessonId, codingLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, verificationType, verificationCode, exampleSolution, verificationInformation, hints ? hints : null)
             .then(result => {
                 res.redirect('/section/' + chapterId + '/' + updatedSectionId)
             })
@@ -104,6 +105,7 @@ exports.saveCreateCodingLesson = async function (req, res, next) {
     let verificationType = req.body.verificationtype
     let exampleSolution = req.body.examplesolution
     let verificationCode = req.body.verificationCode
+    let hints = req.body.hints
     let verificationInformation = req.body.verificationInformation
     let difficultyLevel = req.body.difficultyLevel
     let feedback = req.body.feedback === "" ? null : req.body.feedback
@@ -126,7 +128,7 @@ exports.saveCreateCodingLesson = async function (req, res, next) {
             data.codingErrorMessages = errorMessage
             res.render('sections/editSection', data)
         } else {
-            await lessonsRepository.insertOrUpdateCodingLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, verificationType, verificationCode, exampleSolution, verificationInformation)
+            await lessonsRepository.insertOrUpdateCodingLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, verificationType, verificationCode, exampleSolution, verificationInformation, hints ? hints : null)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + sectionId)
                 })

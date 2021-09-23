@@ -32,6 +32,7 @@ exports.saveCreateSingleMultipleChoiceLesson = async function (req, res, next) {
     let lessonNumber = req.body.lessonNumber
     let lessonInformation = req.body.lessonInformation
     let markedOptions = req.body.markedOptions
+    let hints = req.body.hints
     let difficultyLevel = req.body.difficultyLevel
     let feedback = req.body.feedback === "" ? null : req.body.feedback
     if (chapterId && sectionId && lessonName && lessonNumber && lessonInformation && markedOptions) {
@@ -51,7 +52,7 @@ exports.saveCreateSingleMultipleChoiceLesson = async function (req, res, next) {
             data.singleMultipleChoiceError = errorMessage
             res.render('sections/editSection', data)
         } else {
-            await lessonsRepository.insertOrUpdateSingleMultipleChoiceLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, markedOptions)
+            await lessonsRepository.insertOrUpdateSingleMultipleChoiceLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, markedOptions, hints ? hints : null)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + sectionId)
                 })
@@ -72,6 +73,7 @@ exports.saveEditSingleMultipleChoiceLesson = async function (req, res, next) {
     let lessonId = req.body.lessonId
     let lessonName = req.body.lessonName
     let lessonNumber = req.body.lessonNumber
+    let hints = req.body.hints
     let updatedLessonNumber = req.body.updatedLessonNumber
     let lessonInformation = req.body.lessonInformation
     let markedOptions = req.body.markedoptions
@@ -104,7 +106,7 @@ exports.saveEditSingleMultipleChoiceLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            await lessonsRepository.insertOrUpdateSingleMultipleChoiceLesson(lessonId, singleMultipleChoiceLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, markedOptions)
+            await lessonsRepository.insertOrUpdateSingleMultipleChoiceLesson(lessonId, singleMultipleChoiceLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, markedOptions, hints ? hints : null)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + updatedSectionId)
                 })

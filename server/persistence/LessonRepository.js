@@ -41,12 +41,12 @@ exports.findCodingBySectionId = async function (sectionId) {
 
 }
 
-exports.insertOrUpdateCodingLesson = async function (lessonId, codingLessonId, sectionId, lessonNumber, information, name, difficultyLevel, feedback, verificationType, verificationCode, exampleSolution, verificationInformation) {
+exports.insertOrUpdateCodingLesson = async function (lessonId, codingLessonId, sectionId, lessonNumber, information, name, difficultyLevel, feedback, verificationType, verificationCode, exampleSolution, verificationInformation, hints) {
     let result
     if (lessonId && codingLessonId) {
         result = await pool.query('BEGIN', err => {
-            let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4,difficultylevel=$5::difficultyleveltype, feedback=$6 WHERE id=$7";
-            pool.query(query, [sectionId, lessonNumber, information, name, difficultyLevel, feedback, lessonId])
+            let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4,difficultylevel=$5::difficultyleveltype, feedback=$6, hints=$7 WHERE id=$8";
+            pool.query(query, [sectionId, lessonNumber, information, name, difficultyLevel, feedback, hints, lessonId])
                 .then(res => {
                     let childUpdate = 'UPDATE "codingLessons" SET verificationtype=$1::verificationtype, verificationcode=$2, examplesolution=$3, verificationinformation=$4 WHERE id=$5'
                     pool.query(childUpdate, [verificationType, verificationCode, exampleSolution, verificationInformation, codingLessonId])
@@ -70,10 +70,10 @@ exports.insertOrUpdateCodingLesson = async function (lessonId, codingLessonId, s
                 })
         })
     } else {
-        let insertLessonQuery = "INSERT INTO lessons (sectionid, lessonnumber, information, name, difficultylevel, feedback) VALUES ($1, $2, $3, $4, $5::difficultyleveltype, $6) RETURNING id"
+        let insertLessonQuery = "INSERT INTO lessons (sectionid, lessonnumber, information, name, difficultylevel, feedback, hints) VALUES ($1, $2, $3, $4, $5::difficultyleveltype, $6, $7) RETURNING id"
         let insertCodingLessonQuery = 'INSERT INTO "codingLessons" (lessonid, verificationtype, verificationcode, examplesolution,verificationinformation)'
-        let query = 'WITH new_lesson AS (' + insertLessonQuery + '),v (a,b,c,d) as (VALUES($7::verificationtype, $8, $9, $10))' + insertCodingLessonQuery + ' SELECT new_lesson.id, a,b,c,d from v, new_lesson;'
-        result = await pool.query(query, [sectionId, lessonNumber, information, name, difficultyLevel, feedback, verificationType.toUpperCase(), verificationCode, exampleSolution, verificationInformation])
+        let query = 'WITH new_lesson AS (' + insertLessonQuery + '),v (a,b,c,d) as (VALUES($8::verificationtype, $9, $10, $11))' + insertCodingLessonQuery + ' SELECT new_lesson.id, a,b,c,d from v, new_lesson;'
+        result = await pool.query(query, [sectionId, lessonNumber, information, name, difficultyLevel, feedback, hints, verificationType.toUpperCase(), verificationCode, exampleSolution, verificationInformation])
             .then(res => {
                 return res
             }).catch(err => {
@@ -83,12 +83,12 @@ exports.insertOrUpdateCodingLesson = async function (lessonId, codingLessonId, s
     return result
 }
 
-exports.insertOrUpdateCodeExtensionLesson = async function (lessonId, codeExtensionLessonId, sectionId, lessonNumber, information, name, difficultyLevel, feedback, unfinishedCode, answers) {
+exports.insertOrUpdateCodeExtensionLesson = async function (lessonId, codeExtensionLessonId, sectionId, lessonNumber, information, name, difficultyLevel, feedback, unfinishedCode, answers, hints) {
     let result
     if (lessonId && codeExtensionLessonId) {
         result = pool.query('BEGIN', err => {
-            let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4, difficultylevel=$5::difficultyleveltype, feedback=$6 WHERE id=$7";
-            pool.query(query, [sectionId, lessonNumber, information, name, difficultyLevel, feedback, lessonId])
+            let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4, difficultylevel=$5::difficultyleveltype, feedback=$6, hints=$7 WHERE id=$8";
+            pool.query(query, [sectionId, lessonNumber, information, name, difficultyLevel, feedback, hints, lessonId])
                 .then(res => {
                     let childUpdate = 'UPDATE "codeExtensionLessons" SET unfinishedcode=$1, answers=$2 WHERE id=$3'
                     pool.query(childUpdate, [unfinishedCode, answers, codeExtensionLessonId])
@@ -112,10 +112,10 @@ exports.insertOrUpdateCodeExtensionLesson = async function (lessonId, codeExtens
                 })
         })
     } else {
-        let insertLessonQuery = "INSERT INTO lessons (sectionid, lessonnumber, information, name, difficultylevel, feedback) VALUES ($1, $2, $3, $4, $5::difficultyleveltype, $6) RETURNING id"
+        let insertLessonQuery = "INSERT INTO lessons (sectionid, lessonnumber, information, name, difficultylevel, feedback, hints) VALUES ($1, $2, $3, $4, $5::difficultyleveltype, $6, $7) RETURNING id"
         let insertCodingLessonQuery = 'INSERT INTO "codeExtensionLessons" (lessonid, unfinishedcode, answers)'
-        let query = 'WITH new_lesson AS (' + insertLessonQuery + '),v (a,b) as (VALUES($7, $8))' + insertCodingLessonQuery + ' SELECT new_lesson.id, a,b from v, new_lesson;'
-        result = pool.query(query, [sectionId, lessonNumber, information, name, difficultyLevel, feedback, unfinishedCode, answers])
+        let query = 'WITH new_lesson AS (' + insertLessonQuery + '),v (a,b) as (VALUES($8, $9))' + insertCodingLessonQuery + ' SELECT new_lesson.id, a,b from v, new_lesson;'
+        result = pool.query(query, [sectionId, lessonNumber, information, name, difficultyLevel, feedback, hints, unfinishedCode, answers])
             .then(res => {
                 return res
             }).catch(err => {
@@ -244,12 +244,12 @@ exports.findSingleMultipleChoiceBySectionId = async function (sectionId) {
     return result
 }
 
-exports.insertOrUpdateFillTheBlankLesson = async function (lessonId, fillTheBlankLessonId, sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, textWithBlanks, markedAnswers) {
+exports.insertOrUpdateFillTheBlankLesson = async function (lessonId, fillTheBlankLessonId, sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, textWithBlanks, markedAnswers, hints) {
     let result
     if (lessonId && fillTheBlankLessonId) {
         result = pool.query('BEGIN', err => {
-            let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4, difficultylevel=$5::difficultyleveltype, feedback=$6 WHERE id=$7";
-            pool.query(query, [sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, lessonId])
+            let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4, difficultylevel=$5::difficultyleveltype, feedback=$6, hints=$7 WHERE id=$8";
+            pool.query(query, [sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, hints, lessonId])
                 .then(res => {
                     let childUpdate = 'UPDATE "fillTheBlankLessons" SET textwithBlanks=$1, markedanswers=$2 WHERE id=$3'
                     pool.query(childUpdate, [textWithBlanks, markedAnswers, fillTheBlankLessonId])
@@ -273,10 +273,10 @@ exports.insertOrUpdateFillTheBlankLesson = async function (lessonId, fillTheBlan
                 })
         })
     } else {
-        let insertLessonQuery = "INSERT INTO lessons (sectionid, lessonnumber, information, name, difficultylevel, feedback) VALUES ($1, $2, $3, $4,$5::difficultyleveltype, $6) RETURNING id"
+        let insertLessonQuery = "INSERT INTO lessons (sectionid, lessonnumber, information, name, difficultylevel, feedback, hints) VALUES ($1, $2, $3, $4,$5::difficultyleveltype, $6, $7) RETURNING id"
         let insertCodingLessonQuery = 'INSERT INTO "fillTheBlankLessons" (lessonid, textwithBlanks, markedAnswers)'
-        let query = 'WITH new_lesson AS (' + insertLessonQuery + '),v (a,b) as (VALUES($7, $8))' + insertCodingLessonQuery + ' SELECT new_lesson.id, a,b from v, new_lesson;'
-        result = pool.query(query, [sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, textWithBlanks, markedAnswers])
+        let query = 'WITH new_lesson AS (' + insertLessonQuery + '),v (a,b) as (VALUES($8, $9))' + insertCodingLessonQuery + ' SELECT new_lesson.id, a,b from v, new_lesson;'
+        result = pool.query(query, [sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, hints, textWithBlanks, hints, markedAnswers])
             .then(res => {
                 return res
             }).catch(err => {
@@ -285,12 +285,12 @@ exports.insertOrUpdateFillTheBlankLesson = async function (lessonId, fillTheBlan
     }
     return result
 }
-exports.insertOrUpdateSingleMultipleChoiceLesson = async function (lessonId, singleMultipleChoiceLessonId, sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, markedOptions) {
+exports.insertOrUpdateSingleMultipleChoiceLesson = async function (lessonId, singleMultipleChoiceLessonId, sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, markedOptions, hints) {
     let result
     if (lessonId && singleMultipleChoiceLessonId) {
         result = pool.query('BEGIN', err => {
-            let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4, difficultylevel=$5::difficultyleveltype, feedback=$6 WHERE id=$7";
-            pool.query(query, [sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, lessonId])
+            let query = "UPDATE lessons SET sectionid=$1, lessonnumber=$2, information=$3, name=$4, difficultylevel=$5::difficultyleveltype, feedback=$6, hints=$7 WHERE id=$8";
+            pool.query(query, [sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, hints, lessonId])
                 .then(res => {
                     let childUpdate = 'UPDATE "singleMultipleChoiceLessons" SET markedoptions=$1 WHERE id=$2'
                     pool.query(childUpdate, [markedOptions, singleMultipleChoiceLessonId])
@@ -314,10 +314,10 @@ exports.insertOrUpdateSingleMultipleChoiceLesson = async function (lessonId, sin
                 })
         })
     } else {
-        let insertLessonQuery = "INSERT INTO lessons (sectionid, lessonnumber, information, name, difficultylevel, feedback) VALUES ($1, $2, $3, $4, $5::difficultyleveltype, $6) RETURNING id"
+        let insertLessonQuery = "INSERT INTO lessons (sectionid, lessonnumber, information, name, difficultylevel, feedback, hints) VALUES ($1, $2, $3, $4, $5::difficultyleveltype, $6, $7) RETURNING id"
         let insertCodingLessonQuery = 'INSERT INTO "singleMultipleChoiceLessons" (lessonid, markedoptions)'
-        let query = 'WITH new_lesson AS (' + insertLessonQuery + '),v (a) as (VALUES($7))' + insertCodingLessonQuery + ' SELECT new_lesson.id, a from v, new_lesson;'
-        result = pool.query(query, [sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, markedOptions])
+        let query = 'WITH new_lesson AS (' + insertLessonQuery + '),v (a) as (VALUES($8))' + insertCodingLessonQuery + ' SELECT new_lesson.id, a from v, new_lesson;'
+        result = pool.query(query, [sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, hints, markedOptions])
             .then(res => {
                 return res
             }).catch(err => {

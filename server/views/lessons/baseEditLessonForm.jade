@@ -25,6 +25,9 @@ select(class="form-select" name="difficultyLevel" required)
     option(value="MIDDLE" selected=lesson.difficultylevel == 'MIDDLE') Mittel
     option(value="HARD" selected=lesson.difficultylevel == 'HARD') Schwer
 br
+span.label(class="input-group-text") Hinweise / Tipps
+textarea(class="form-control" name="hints") #{lesson ? lesson.hints : ''}
+br
 span.label(class="input-group-text") Rückmeldung beim Erfolgreichen lösen
 textarea(class="form-control" name="feedback") #{lesson.feedback}
 br
