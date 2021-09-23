@@ -1,6 +1,21 @@
 <template>
   <div class="title">
     <div class="headerButtons">
+      <div title="Notiz erstellen" class="resetButton" v-if="this.$route.path ==='/notes'">
+        <img alt="notiz erstellen" class="reset" src="../../assets/addnote.svg" height="50" width="50"
+             v-on:click="openAddNoteModal">
+        <b-modal ref="add-note-modal" id="modal-center-add-note" centered title="Notiz erstellen"
+                 ok-variant="success"
+                 ok-title="Erstellen"
+                 @ok="addNote"
+                 cancel-title="Abbruch"
+                 cancel-variant="danger"
+                 hide-header-close>
+          <textarea class="problemArea" v-model="note"
+                    placeholder="Notiz schreiben">
+            </textarea>
+        </b-modal>
+      </div>
       <div title="Kapitel zurücksetzen" v-if="resetChapter" class="resetButton">
         <div title="Kapitel zurücksetzen" class="reset" v-on:click="openResetModal" v-b-modal.modal-center
              variant="info">
@@ -13,7 +28,10 @@
                    cancel-title="Abbruch"
                    cancel-variant="danger"
                    hide-header-close>
-            <div class="resetText">{{ resetText }}</div>
+            <textarea class="problemArea" v-model="problem"
+                      placeholder="Bitte beschreiben Sie das Problem für die aktuelle Aufgabe">
+
+            </textarea>
           </b-modal>
         </div>
       </div>
@@ -67,6 +85,7 @@ export default {
   data: function () {
     return {
       problem: "",
+      note: "",
     }
   }, computed: {
     ...mapGetters([
@@ -75,8 +94,33 @@ export default {
     ]),
   },
   methods: {
+    addNote() {
+      let note = {
+        notesId: -1,
+        note: this.note
+      }
+      if (this.note) {
+        if (!this.user.isDefault) {
+          this.$http.post(backEndUrl + "/api/v1/users/notes/note/" + "?ltik=" + this.ltiKey, {note: this.selectedText}, {
+            withCredentials: true
+          }).then(res => {
+            note.notesId = res.data.id
+            this.$store.commit('addNotes', note)
+          }).catch(err => {
+            let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Die Notiz konnte leider nicht dauerhaft sondern nur temporär gespeichert werden, bitte versuchen Sie es später erneut"
+            this.$store.commit('setErrorMessage', errorMessage)
+            this.$store.commit('addNotes', note)
+          })
+        } else {
+          this.$store.commit('addNotes', note)
+        }
+      }
+    },
     openHelpModal() {
       this.$refs['help-modal'].show()
+    },
+    openAddNoteModal() {
+      this.$refs['add-note-modal'].show()
     },
     openResetModal() {
       this.$refs['reset-modal'].show()

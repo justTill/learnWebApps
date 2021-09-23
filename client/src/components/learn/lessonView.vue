@@ -13,14 +13,13 @@
         <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'" :lesson="lesson"
                                :solvedHandler="solvedLesson"></fill-the-blank-lesson>
         <div class="lessonButtons">
-          <div class="prevButton" v-if="previousLesson" v-on:click="goToLesson(previousLesson)"> &#8592; Vorherige
-            Lerneinheit
+          <div class="prevButton"
+               v-on:click="previousLesson?goToLesson(previousLesson): goToLessonOverview(null)"> &#8592;
+            {{ prevLessonText }}
           </div>
-          <div class="prevButton" v-if="!previousLesson" v-on:click="goToLessonOverview(null)"> &#8592; Zur Übersicht
-          </div>
-          <div class="nextButton" v-if="nextLesson" v-on:click="goToLesson(nextLesson)"> Nächste Lerneinheit &#8594;
-          </div>
-          <div class="nextButton" v-if="!nextLesson" v-on:click="goToLessonOverview(null)"> Zur Übersicht &#8594;
+          <div class="nextButton"
+               v-on:click="nextLesson?goToLesson(nextLesson): goToLessonOverview(null)">
+            {{ nextLessonText }} &#8594;
           </div>
         </div>
       </div>
@@ -64,8 +63,25 @@ export default {
     }
   },
   computed: {
+    nextLessonText() {
+      if (this.nextLesson) {
+        if (this.nextLesson.type === "information") {
+          return "Zur nächsten Informationseinheit"
+        }
+        return "Zur nächsten Aufgabe"
+      }
+      return "Zur Übersicht"
+    },
+    prevLessonText() {
+      if (this.previousLesson) {
+        if (this.previousLesson.type === "information") {
+          return "Zur vorherigen Informationseinheit"
+        }
+        return "Zur vorherigen Aufgabe"
+      }
+      return "Zur Übersicht"
+    },
     prepareLessonTitle() {
-
       return this.lesson.lessonName + " (" + (this.currentLessonIndex + 1) + "/" + this.numberOfLessons + ")"
     },
     sanitizedLessonText: function () {
