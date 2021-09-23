@@ -1,16 +1,21 @@
 <template>
   <div class="lessonContainer">
-    <title-header :title="prepareLessonTitle" :lesson="lesson">
+    <title-header ref="titleHeader" :title="prepareLessonTitle" :lesson="lesson">
     </title-header>
     <div class="lessonTextContainer">
       <div class="lessonText">
         <div v-html="sanitizedLessonText"></div>
         <single-multiple-choice-lesson v-if="lesson.type==='singleMultipleChoiceLesson'"
                                        :lesson="lesson"
+                                       :openHint="openHint"
                                        :solvedHandler="solvedLesson"></single-multiple-choice-lesson>
-        <code-extension-lesson v-if="lesson.type==='codeExtensionLesson'" :lesson="lesson"
+        <code-extension-lesson v-if="lesson.type==='codeExtensionLesson'"
+                               :lesson="lesson"
+                               :openHint="openHint"
                                :solvedHandler="solvedLesson"></code-extension-lesson>
-        <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'" :lesson="lesson"
+        <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'"
+                               :lesson="lesson"
+                               :openHint="openHint"
                                :solvedHandler="solvedLesson"></fill-the-blank-lesson>
         <div class="lessonButtons">
           <div class="prevButton"
@@ -23,7 +28,9 @@
           </div>
         </div>
       </div>
-      <coding-lesson v-if="lesson.type==='codingLesson'" :lesson="lesson" :solvedHandler="solvedLesson"
+      <coding-lesson v-if="lesson.type==='codingLesson'"
+                     :openHint="openHint"
+                     :lesson="lesson" :solvedHandler="solvedLesson"
                      :theme="codeMirrorTheme"></coding-lesson>
     </div>
   </div>
@@ -90,6 +97,9 @@ export default {
     ]),
   },
   methods: {
+    openHint() {
+      this.$refs.titleHeader.openHelpModal()
+    },
     solvedLesson(lessonId, isSolved, userCode) {
       this.lessonSolvedHandler(lessonId, isSolved, userCode)
       if (isSolved && !this.user.isDefault) {

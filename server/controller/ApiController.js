@@ -322,6 +322,7 @@ function mapDefaultLesson(lesson) {
         difficultyLevel: lesson.difficultylevel,
         feedback: lesson.feedback,
         done: false,
+        hints: lesson.hints
     }
 }
 

@@ -11,6 +11,12 @@
     <div class="errorMessage" v-for="error in errorMessages" :key="error">
       {{ error }}
     </div>
+    <div class="errorMessage" v-if="errorMessages.length !== 0">
+      <div class="showHint hoverEffect">
+        <img src="../../../assets/hints.svg" title="Hinweis anzeigen" v-b-tooltip.hover.lefttop
+             v-on:click="openHint">
+      </div>
+    </div>
     <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
     <div class="verificationInformation" v-html="sanitizedVerificationInformation"></div>
   </div>
@@ -31,6 +37,7 @@ export default {
     theme: String,
     lesson: Object,
     solvedHandler: Function,
+    openHint: Function,
   },
   data: function () {
     return {

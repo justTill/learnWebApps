@@ -1,5 +1,11 @@
 <template>
   <div class="solutionContainer">
+    <div v-if="lesson.hints">
+      <b>Hinweise:</b>
+      <pre class="hints">
+      {{ lesson.hints }}
+    </pre>
+    </div>
     <div class="checkLesson showSolution" ref="showSolutionButton" v-on:click="showSolution"> Lösung anzeigen</div>
     <div class="solution" :id="'solution-'+lesson.type" v-if="lesson.type ===  'codingLesson'">
       <pre>
@@ -83,6 +89,11 @@ export default {
 <style>
 .solutionContainer {
 
+}
+
+.hints {
+  background-color: transparent;
+  white-space: pre-line;
 }
 
 .showSolution {

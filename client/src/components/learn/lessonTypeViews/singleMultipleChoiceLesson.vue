@@ -8,7 +8,14 @@
       <label :for="'option-'+index" v-html="sanitizedAnswers(option.possibleAnswer)"></label>
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
-    <div class="errorMessage" v-if="errorMessage"> {{ errorMessage }}</div>
+    <div class="errorMessage" v-if="errorMessage">
+      {{ errorMessage }}
+      <br>
+      <div class="showHint hoverEffect">
+        <img src="../../../assets/hints.svg" title="Hinweis anzeigen" v-b-tooltip.hover.lefttop
+             v-on:click="openHint">
+      </div>
+    </div>
     <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
   </div>
 </template>
@@ -19,7 +26,8 @@ export default {
   name: 'singleMultipleChoiceLesson',
   props: {
     lesson: Object,
-    solvedHandler: Function
+    solvedHandler: Function,
+    openHint: Function
   },
   data: function () {
     return {
@@ -86,6 +94,13 @@ export default {
   justify-content: center;
   flex-direction: column;
   text-align: center;
+}
+
+.showHint {
+  display: inline-block;
+  padding: 3px;
+  padding-left: 5px !important;
+  cursor: pointer;
 }
 
 .checkLesson:hover, .answerOptions:hover {

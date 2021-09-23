@@ -7,7 +7,14 @@
       </pre>
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
-    <div class="errorMessage" v-if="errorMessage"> {{ errorMessage }}</div>
+    <div class="errorMessage" v-if="errorMessage">
+      {{ errorMessage }}
+      <br>
+      <div class="showHint hoverEffect">
+        <img src="../../../assets/hints.svg" title="Hinweis anzeigen" v-b-tooltip.hover.lefttop
+             v-on:click="openHint">
+      </div>
+    </div>
     <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
 
   </div>
@@ -21,6 +28,7 @@ export default {
   props: {
     lesson: Object,
     solvedHandler: Function,
+    openHint: Function,
   },
   data: function () {
     return {
@@ -79,7 +87,7 @@ export default {
         } else {
           this.errorMessage = message
         }
-        this.errorMessage = "";
+        this.successMessage = "";
       }
       this.solvedHandler(this.lesson.lessonId, allAnswersCorrect, null)
     }
