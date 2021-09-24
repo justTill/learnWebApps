@@ -72,6 +72,29 @@ function getProblems() {
     })
 }
 
+function getCookieValue(name) {
+    let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    if (match && match[2]) {
+        return match[2]
+    }
+    return null
+}
+
+function setSettingsFromCookies() {
+    let codeTheme = getCookieValue("LearnWebAppsCodeTheme")
+    let difficulty = getCookieValue("LearnWebAppsDifficulty")
+    let codingHelp = getCookieValue("LearnWebAppsCodingHelp")
+    if (codeTheme && (codeTheme === 'DARK' || codeTheme === 'LIGHT')) {
+        this.$store.commit('setCodeTheme', codeTheme)
+    }
+    if (difficulty && (difficulty === 'EASY' || difficulty === 'MIDDLE' || difficulty === 'HARD')) {
+        this.$store.commit('setDifficultyLevel', difficulty)
+    }
+    if (codingHelp && (codingHelp === 'true' || codingHelp === 'false')) {
+        this.$store.commit('setCodeHelp', codingHelp === 'true')
+    }
+}
+
 new Vue({
     render: h => h(App),
     router,
@@ -83,5 +106,6 @@ new Vue({
         getChapters.bind(this)()
         getNotes.bind(this)()
         getProblems.bind(this)()
+        setSettingsFromCookies.bind(this)()
     },
 }).$mount('#app')

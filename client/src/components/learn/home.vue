@@ -133,7 +133,7 @@ export default {
   },
   methods: {
     changeCodeHelp(state) {
-      this.$store.commit('codeHelp', state.value)
+      this.$store.commit('setCodeHelp', state.value)
     },
   }
 }

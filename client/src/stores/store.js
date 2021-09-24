@@ -19,13 +19,16 @@ export const store = new Vuex.Store({
         setErrorMessage(state, message) {
             state.errorMessage = message
         },
-        codeHelp(state, bool) {
+        setCodeHelp(state, bool) {
+            document.cookie = 'LearnWebAppsCodingHelp=' + bool + ';'
             state.codeHelp = bool
         },
         setDifficultyLevel(state, level) {
+            document.cookie = 'LearnWebAppsDifficulty=' + level + ';'
             state.difficultyLevel = level
         },
         setCodeTheme(state, theme) {
+            document.cookie = 'LearnWebAppsCodeTheme=' + theme + ';'
             state.codeTheme = theme
         },
         setUserName(state, name) {
