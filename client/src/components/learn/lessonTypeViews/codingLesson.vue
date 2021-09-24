@@ -1,10 +1,12 @@
 <template>
   <div class="codingLessonContainer">
-    <codemirror ref="codeMirror"
-                :value="userCode"
-                :options="cmOptions"
-                @input="onCodeChange">
-    </codemirror>
+    <editor ref="codeEditorArea" id="codeEditorArea" v-model="userCode" @init="editorInit"
+            :theme="getTheme"
+            :options="getOptions"
+            lang="javascript"
+            height="360">
+
+    </editor>
     <button class="checkLesson" v-on:click="evaluate" :disabled="isLoadingResults">Aufgabe Überprüfen
       <div class="loader" v-if="isLoadingResults"></div>
     </button>
@@ -22,17 +24,13 @@
   </div>
 </template>
 <script>
-import {codemirror} from 'vue-codemirror'
-import 'codemirror/mode/javascript/javascript.js'
-import 'codemirror/theme/darcula.css'
-import 'codemirror/theme/duotone-light.css'
 import {mapGetters} from "vuex";
 import {backEndUrl} from "@/envVariables";
 import DOMPurify from "dompurify";
 
 export default {
   name: 'codingLesson',
-  components: {codemirror},
+  components: {editor: require('vue2-ace-editor')},
   props: {
     theme: String,
     lesson: Object,
@@ -52,6 +50,17 @@ export default {
     ...mapGetters([
       'user',
     ]),
+    getTheme() {
+      return this.theme === "DARK" ? "dracula" : "chrome"
+    },
+    getOptions() {
+      return {
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: true,
+        tabSize: 2
+      }
+    },
     sanitizedVerificationInformation() {
       return DOMPurify.sanitize(this.lesson.verificationInformation);
     },
@@ -60,6 +69,15 @@ export default {
     },
   },
   methods: {
+    editorInit: function (editor) {
+      require('brace/ext/language_tools') //language extension prerequsite...
+      require('brace/mode/html')
+      require('brace/mode/javascript')    //language
+      require('brace/mode/less')
+      require('brace/theme/chrome')
+      require('brace/theme/dracula')
+      require('brace/snippets/javascript') //snippet
+    },
     evaluate() {
       this.errorMessages = [];
       this.successMessage = ""
@@ -89,9 +107,6 @@ export default {
         this.errorMessages.push("Leere Code kann nicht abgeschickt werden")
       }
     },
-    onCodeChange(cm) {
-      this.userCode = cm
-    },
     codeMirrorOptions() {
       return {
         tabSize: 4,
@@ -111,9 +126,6 @@ export default {
   display: flex;
   justify-content: center;
   flex-direction: column;
-  border-radius: 2px;
-  border: 1px solid black;
-  background-color: var(--white);
   min-width: 400px;
   margin-bottom: 10px;
   margin-right: 20px;
