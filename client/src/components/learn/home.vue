@@ -39,13 +39,19 @@
           <ul>
             <li> Das Textfeld in dem du dein Code schreibst soll im DarkMode sein? Hier kannst du es änderb</li>
           </ul>
-          <div class="selectCodeTheme">
-            <select v-model="codeMirrorMode" v-on:change="changeCodeMirrorTheme">
-              <option value="LIGHT">Hell</option>
-              <option value="DARK">Dunkel</option>
-            </select>
-          </div>
         </li>
+        <div class="selectCodeTheme">
+          <select v-model="theme">
+            <option value="LIGHT">Hell</option>
+            <option value="DARK">Dunkel</option>
+          </select>
+        </div>
+        <ul>
+          <li>
+            Sollen dir beim schreiben von Code mögliche vorschläge gemacht werden?
+            <toggle-button :labels="{checked: 'On'}" :value="codeHelp" @change="changeCodeHelp"/>
+          </li>
+        </ul>
         <li><b>Code ergänzungsaufgaben:</b> Ergänze vorgegeben Code anhand deines Wissens</li>
         <li><b>Lückentextaufgaben:</b> Ziehe die richtigen Lösungen mit Drag&Drop in die richtigen Lücken</li>
       </ul>
@@ -53,7 +59,7 @@
       <br>
       Du willst nur Schwere oder Leichte Aufgaben ? Dann stelle hier den Schwierigkeistgrad ein!
       <div class="selectDifficulty">
-        <select v-model="difficultyLevel" v-on:change="changeDifficultyLevel">
+        <select v-model="levelOfDifficulty">
           <option value="ALL" selected>Alle</option>
           <option value="EASY">Leicht</option>
           <option value="MIDDLE">Mittel</option>
@@ -85,32 +91,49 @@
             style="padding-bottom: 4px">) Icon klicken.
       <br>
       <br>
-      <button> Schon kanns los gehen: Jetzt Zum ersten Kapitel</button>
+      <div class="startFirstChapter">
+        <button v-on:click="goToFirstChapter()"> Schon kanns los gehen: Jetzt Zum ersten Kapitel</button>
+      </div>
     </div>
   </div>
 </template>
 <script>
 import TitleHeader from "@/components/learn/titleHeader";
+import {mapGetters} from "vuex";
 
 export default {
   name: 'home',
   components: {TitleHeader},
   props: {
     resetAllLessons: Function,
-
+    goToFirstChapter: Function
   },
-  data: function () {
-    return {
-      difficultyLevel: "ALL",
-      codeMirrorMode: "LIGHT"
-    }
+  computed: {
+    ...mapGetters([
+      'codeHelp',
+      'codeTheme',
+      'difficultyLevel',
+    ]),
+    levelOfDifficulty: {
+      get() {
+        return this.difficultyLevel
+      },
+      set(value) {
+        this.$store.commit('setDifficultyLevel', value)
+      }
+    },
+    theme: {
+      get() {
+        return this.codeTheme
+      },
+      set(value) {
+        this.$store.commit('setCodeTheme', value)
+      }
+    },
   },
   methods: {
-    changeDifficultyLevel() {
-      this.$store.commit('setDifficultyLevel', this.difficultyLevel)
-    },
-    changeCodeMirrorTheme() {
-      this.$store.commit('setCodeMirrorTheme', this.codeMirrorMode)
+    changeCodeHelp(state) {
+      this.$store.commit('codeHelp', state.value)
     },
   }
 }
@@ -178,6 +201,21 @@ export default {
 .gif {
   width: 700px;
   height: auto;
+}
+
+.startFirstChapter {
+  text-align: center;
+}
+
+.startFirstChapter > button {
+  padding: 2px;
+  border-radius: 10px;
+  background-color: transparent;
+  border: 3px solid var(--dark-sky-blue);
+}
+
+.startFirstChapter > button:hover {
+  border: 3px solid var(--dark-blue);
 }
 
 .instructionBlock {

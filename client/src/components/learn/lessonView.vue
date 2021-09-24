@@ -31,7 +31,7 @@
       <coding-lesson v-if="lesson.type==='codingLesson'"
                      :openHint="openHint"
                      :lesson="lesson" :solvedHandler="solvedLesson"
-                     :theme="codeMirrorTheme"></coding-lesson>
+                     :theme="codeTheme"></coding-lesson>
     </div>
   </div>
 </template>
@@ -93,7 +93,7 @@ export default {
     ...mapGetters([
       'user',
       'ltiKey',
-      'codeMirrorTheme'
+      'codeTheme'
     ]),
   },
   methods: {

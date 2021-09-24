@@ -43,40 +43,39 @@ export default {
       isLoadingResults: false,
       errorMessages: [],
       successMessage: "",
-      cmOptions: this.codeMirrorOptions(),
     }
   },
   computed: {
     ...mapGetters([
       'user',
+      'codeHelp',
     ]),
     getTheme() {
       return this.theme === "DARK" ? "dracula" : "chrome"
     },
     getOptions() {
-      return {
-        enableBasicAutocompletion: true,
-        enableSnippets: true,
-        enableLiveAutocompletion: true,
-        tabSize: 2
+      let options = {}
+      if (this.codeHelp) {
+        options.enableBasicAutocompletion = true
+        options.enableSnippets = true
+        options.enableLiveAutocompletion = true
+        options.tabSize = true
       }
+      return options
     },
     sanitizedVerificationInformation() {
       return DOMPurify.sanitize(this.lesson.verificationInformation);
     },
-    codemirror() {
-      return this.$refs.codeMirror.codemirror
-    },
   },
   methods: {
-    editorInit: function (editor) {
-      require('brace/ext/language_tools') //language extension prerequsite...
+    editorInit: function () {
+      require('brace/ext/language_tools')
       require('brace/mode/html')
-      require('brace/mode/javascript')    //language
+      require('brace/mode/javascript')
       require('brace/mode/less')
       require('brace/theme/chrome')
       require('brace/theme/dracula')
-      require('brace/snippets/javascript') //snippet
+      require('brace/snippets/javascript')
     },
     evaluate() {
       this.errorMessages = [];
@@ -105,15 +104,6 @@ export default {
             })
       } else {
         this.errorMessages.push("Leere Code kann nicht abgeschickt werden")
-      }
-    },
-    codeMirrorOptions() {
-      return {
-        tabSize: 4,
-        mode: 'text/javascript',
-        theme: this.theme === "DARK" ? "darcula" : "duotone-light",
-        lineNumbers: true,
-        line: true,
       }
     },
   },
@@ -147,8 +137,8 @@ export default {
 .loader {
   display: inline-block;
   float: right;
-  border: 3px solid var(--white); /* Light grey */
-  border-top: 3px solid black; /* Blue */
+  border: 3px solid var(--white);
+  border-top: 3px solid black;
   border-radius: 50%;
   width: 25px;
   height: 25px;

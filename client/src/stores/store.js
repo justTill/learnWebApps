@@ -11,18 +11,22 @@ export const store = new Vuex.Store({
         problems: [],
         chapters: [],
         difficultyLevel: "ALL",
-        codeMirrorTheme: "LIGHT",
+        codeHelp: true,
+        codeTheme: "LIGHT",
         errorMessage: "",
     },
     mutations: {
         setErrorMessage(state, message) {
             state.errorMessage = message
         },
+        codeHelp(state, bool) {
+            state.codeHelp = bool
+        },
         setDifficultyLevel(state, level) {
             state.difficultyLevel = level
         },
-        setCodeMirrorTheme(state, theme) {
-            state.codeMirrorTheme = theme
+        setCodeTheme(state, theme) {
+            state.codeTheme = theme
         },
         setUserName(state, name) {
             state.userName = name
@@ -87,6 +91,9 @@ export const store = new Vuex.Store({
         chapters: state => {
             return store.state.chapters
         },
+        codeHelp: state => {
+            return store.state.codeHelp
+        },
         problems: state => {
             return store.state.problems
         },
@@ -96,8 +103,11 @@ export const store = new Vuex.Store({
         difficultyLevel: state => {
             return store.state.difficultyLevel
         },
+        codeTheme: state => {
+            return store.state.codeTheme
+        },
         codeMirrorTheme: state => {
-            return store.state.codeMirrorTheme
+            return store.state.codeTheme
         },
         errorMessage: state => {
             return store.state.errorMessage

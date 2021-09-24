@@ -22,7 +22,7 @@
     </div>
     <div class="solution" :id="'solution-'+lesson.type" v-else-if="lesson.type ===  'singleMultipleChoiceLesson'">
       <div v-for="answer in getCorrectFtbOrSmcAnswers()" class="answerOptions">
-        <label>{{ answer.possibleAnswer }}</label>
+        <label class="smcAnswer">{{ answer.possibleAnswer }}</label>
       </div>
     </div>
   </div>

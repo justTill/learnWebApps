@@ -5,7 +5,7 @@
              :value="sanitizedAnswers(option.possibleAnswer)"
              v-model="checkedAnswers"
              @change="removeErrormessage($event)">
-      <label :for="'option-'+index" v-html="sanitizedAnswers(option.possibleAnswer)"></label>
+      <label class="smcAnswer" :for="'option-'+index" v-html="sanitizedAnswers(option.possibleAnswer)"></label>
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
     <div class="errorMessage" v-if="errorMessage">
@@ -107,7 +107,7 @@ export default {
   cursor: pointer;
 }
 
-label > code {
+.smcAnswer > code {
   padding: 2px;
   border-radius: 5px;
   background-color: var(--davys-grey-light);
@@ -144,7 +144,7 @@ label > code {
   padding-bottom: 10px;
 }
 
-label {
+.smcAnswer {
   display: inline-block;
   margin: 10px;
   padding: 10px;
@@ -154,11 +154,11 @@ label {
   background-color: var(--darker-blue);
 }
 
-label:hover {
+.smcAnswer:hover {
   box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.8);
 }
 
-input[type=checkbox]:checked + label {
+input[type=checkbox]:checked + .smcAnswer {
   transition: box-shadow 200ms ease, transform 200ms ease;
   box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.8);
 }

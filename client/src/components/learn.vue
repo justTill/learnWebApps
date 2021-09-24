@@ -55,7 +55,8 @@
                  :lessonSolvedHandler="lessonSolvedHandlerForCurrentChapter">
 
     </lesson-view>
-    <home v-else class="chapterContent" :resetAllLessons="resetLessonsSolved"></home>
+    <home v-else class="chapterContent" :resetAllLessons="resetLessonsSolved"
+          :go-to-first-chapter="goToChapter"></home>
     <div v-else class="chapterContent">
     </div>
   </div>
@@ -94,7 +95,6 @@ export default {
       'user',
       'notes',
       'ltiKey',
-      'codeMirrorTheme',
       'difficultyLevel'
     ]),
     showSaveNote() {
@@ -106,15 +106,16 @@ export default {
     document.addEventListener('mouseup', event => {
       this.$el.querySelector('#createNotes').style.display = "none";
       let isHomePage = this.selectedSection === null && this.selectedChapter === null && this.selectedLesson === null
-      if (window.getSelection().toString() !== '' && this.$route.path.includes('') && !this.user.isDefault && !isHomePage) {
-        let classNames = window.getSelection().anchorNode.parentElement.className
-        if (!classNames.includes('CodeMirror')) {
-          let element = this.$el.querySelector('#createNotes')
-          element.style.display = "inline-block";
-          element.style.left = event.pageX + "px"
-          element.style.top = event.pageY - 100 + "px"
-          this.selectedText = window.getSelection().toString();
-        }
+      let isCodeArea = false
+      if (window.getSelection().anchorNode) {
+        isCodeArea = window.getSelection().anchorNode.id === 'codeEditorArea'
+      }
+      if (window.getSelection().toString() !== '' && this.$route.path.includes('') && !this.user.isDefault && !isHomePage && !isCodeArea) {
+        let element = this.$el.querySelector('#createNotes')
+        element.style.display = "inline-block";
+        element.style.left = event.pageX + "px"
+        element.style.top = event.pageY - 100 + "px"
+        this.selectedText = window.getSelection().toString();
       }
     })
   },
@@ -163,6 +164,9 @@ export default {
       }
     },
     goToChapter(chapter) {
+      if (!chapter) {
+        chapter = this.chapters[0]
+      }
       this.changeChapterAndSectionOnNavigationClick(chapter, null)
       this.$refs['chapter-' + chapter.chapterId][0].isActive = true;
     },
