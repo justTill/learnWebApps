@@ -14,10 +14,14 @@ export const store = new Vuex.Store({
         codeHelp: true,
         codeTheme: "LIGHT",
         errorMessage: "",
+        updatedProblems: false,
     },
     mutations: {
         setErrorMessage(state, message) {
             state.errorMessage = message
+        },
+        setUpdatedProblems(state, updated) {
+            state.updatedProblems = updated
         },
         setCodeHelp(state, bool) {
             document.cookie = 'LearnWebAppsCodingHelp=' + bool + ';'
@@ -114,6 +118,9 @@ export const store = new Vuex.Store({
         },
         errorMessage: state => {
             return store.state.errorMessage
+        },
+        updatedProblems: state => {
+            return store.state.updatedProblems
         }
     }
 })

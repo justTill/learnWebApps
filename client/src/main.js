@@ -60,14 +60,23 @@ function checkIfLtiKeyIsValid() {
     }
 }
 
-function getProblems() {
+function getProblems(isInitial) {
     let url = backEndUrl + "/api/v1/users/problems/"
     let key = this.$store.getters.ltiKey
     url = this.$store.getters.ltiKey ? url + "?ltik=" + key : url
     this.$http.get(url, {
         withCredentials: true
     }).then(result => {
-        this.$store.commit("setProblems", result.data.problems)
+        if (JSON.stringify(this.$store.getters.problems) !== JSON.stringify(result.data.problems)) {
+            this.$store.commit("setProblems", result.data.problems)
+            if (!isInitial) {
+                this.$store.commit("setUpdatedProblems", true)
+            }
+        } else {
+            if (!this.$store.getters.updatedProblems) {
+                this.$store.commit("setUpdatedProblems", false)
+            }
+        }
     }).catch(err => {
     })
 }
@@ -95,6 +104,10 @@ function setSettingsFromCookies() {
     }
 }
 
+function getProblemsPeriodically() {
+    setInterval(getProblems.bind(this, false), 1000 * 60 * 10)
+}
+
 new Vue({
     render: h => h(App),
     router,
@@ -105,7 +118,8 @@ new Vue({
         checkIfLtiKeyIsValid.bind(this)()
         getChapters.bind(this)()
         getNotes.bind(this)()
-        getProblems.bind(this)()
+        getProblems.bind(this)(true)
         setSettingsFromCookies.bind(this)()
+        getProblemsPeriodically.bind(this)()
     },
 }).$mount('#app')

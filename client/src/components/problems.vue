@@ -123,6 +123,9 @@ export default {
       this.displayAnswerIndex = index === this.displayAnswerIndex ? -1 : index
     }
   },
+  mounted() {
+    this.$store.commit('setUpdatedProblems', false)
+  }
 }
 </script>
 <style>
