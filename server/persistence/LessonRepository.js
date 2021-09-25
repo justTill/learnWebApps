@@ -276,7 +276,7 @@ exports.insertOrUpdateFillTheBlankLesson = async function (lessonId, fillTheBlan
         let insertLessonQuery = "INSERT INTO lessons (sectionid, lessonnumber, information, name, difficultylevel, feedback, hints) VALUES ($1, $2, $3, $4,$5::difficultyleveltype, $6, $7) RETURNING id"
         let insertCodingLessonQuery = 'INSERT INTO "fillTheBlankLessons" (lessonid, textwithBlanks, markedAnswers)'
         let query = 'WITH new_lesson AS (' + insertLessonQuery + '),v (a,b) as (VALUES($8, $9))' + insertCodingLessonQuery + ' SELECT new_lesson.id, a,b from v, new_lesson;'
-        result = pool.query(query, [sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, hints, textWithBlanks, hints, markedAnswers])
+        result = pool.query(query, [sectionId, lessonNumber, lessonInformation, name, difficultyLevel, feedback, hints, textWithBlanks, markedAnswers])
             .then(res => {
                 return res
             }).catch(err => {
