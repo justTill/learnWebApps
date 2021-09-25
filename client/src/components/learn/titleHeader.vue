@@ -97,6 +97,7 @@ export default {
   methods: {
     addNote() {
       utils.saveNote.bind(this)(this.note)
+      this.note = ""
     },
     openHelpModal() {
       this.$refs['help-modal'].show()

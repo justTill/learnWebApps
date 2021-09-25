@@ -5,6 +5,9 @@
   </div>
 </template>
 <script>
+import utils from "@/shared/utils";
+import {mapGetters} from "vuex";
+
 export default {
   name: "navButton",
   props: {
@@ -20,6 +23,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'difficultyLevel'
+    ]),
     preparedName() {
       let name = this.name
       if (this.isActive) {
@@ -33,7 +39,7 @@ export default {
             numberOfSectionsSolved++
           }
         }
-        this.isSolved = numberOfSectionsSolved === numberOfSections
+        this.isSolved = numberOfSectionsSolved === numberOfSections && numberOfSections !== 0
       }
       if (this.section) {
         this.isSolved = this.sectionSolved(this.section)
@@ -50,13 +56,16 @@ export default {
     sectionSolved(section) {
       let numberOfInteractiveLessons = 0
       let numberOfLessonsDone = 0;
-      for (let lesson of section.lessons) {
+      let lessons = utils.lessonsForDifficulty.bind(this)(section)
+      for (let lesson of lessons) {
         if (lesson.type !== 'information') {
           numberOfInteractiveLessons++
-          if (lesson.done) numberOfLessonsDone++
+          if (lesson.done) {
+            numberOfLessonsDone++
+          }
         }
       }
-      return numberOfInteractiveLessons === numberOfLessonsDone
+      return numberOfInteractiveLessons === numberOfLessonsDone && numberOfLessonsDone !== 0
     },
     activate() {
       this.onClickFunction()

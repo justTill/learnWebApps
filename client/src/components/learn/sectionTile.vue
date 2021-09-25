@@ -11,7 +11,7 @@
       <span> {{ lessonsSolved }}/{{ numberOfLessons }} Aufgaben gelöst</span>
     </div>
     <div v-else class="percentageBar">
-      <span>Es sind keine Aufgaben vorhanden</span>
+      <span style="font-size: small">Es gibt keine Aufgaben im der Sektion</span>
     </div>
   </div>
 </template>
@@ -19,6 +19,7 @@
 <script>
 
 import {mapGetters} from "vuex";
+import utils from "@/shared/utils";
 
 export default {
   name: 'sectionTile',
@@ -49,8 +50,9 @@ export default {
     percentage: function () {
       let numberOfInteractiveLessons = 0
       let numberOfLessonsDone = 0;
-      for (let lesson of this.section.lessons) {
-        if (lesson.type !== 'information' && (this.difficultyLevel === "ALL" || this.difficultyLevel === lesson.difficultyLevel)) {
+      let lessons = utils.lessonsForDifficulty.bind(this)(this.section)
+      for (let lesson of lessons) {
+        if (lesson.type !== 'information') {
           numberOfInteractiveLessons++
           if (lesson.done) numberOfLessonsDone++
         }

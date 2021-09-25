@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
     state: {
-        userName: "", //TODO: reset to "default"
+        userName: "Administrator", //TODO: reset to "default"
         ltiKey: "",
         notes: [],
         problems: [],
