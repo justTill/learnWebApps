@@ -47,7 +47,7 @@ ltis.setup(process.env.SESSION_KEY, // Key used to sign cookies and tokens
         devMode: false, // Set DevMode to true if the testing platform is in a different domain and https is not being used
         dynReg: {
             url: process.env.FRONTEND_URL + ':3080', // Tool Provider URL. Required field.
-            name: 'Tool Provider', // Tool Provider name. Required field.
+            name: 'Learn Web-Apps', // Tool Provider name. Required field.
             description: 'Tool Description', // Tool Provider description.
             redirectUris: [], // Additional redirection URLs. The main URL is added by default.
             customParameters: {}, // Custom parameters.

@@ -2,7 +2,7 @@ version: '3'
 services:
   node-server:
     restart: always
-    image: justtill/learn_web_apps:backend_latest
+    image: justtill/learn_web_apps:backend_latestv1
     build: ./server
     ports:
       - "3080:3080"
@@ -25,7 +25,7 @@ services:
       - db
   vue-nginx-client:
     restart: always
-    image: justtill/learn_web_apps:frontend_with_nginx_latest
+    image: justtill/learn_web_apps:frontend_with_nginx_latestv1
     container_name: learnWebAppsFrontendProd
     volumes:
       - media_volume:/usr/src/app/client/mediafiles
