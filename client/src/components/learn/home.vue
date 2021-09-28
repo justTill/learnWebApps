@@ -82,7 +82,7 @@
       <b>Probleme & Hilfe</b>
       <br>
       Falls du Hilfe bei einer Aufgabe braucht kannst du auf das Icon
-      (<img title="Hilfe" alt="Hilfe" src="../../assets/help.png" height="24px" width="24px"
+      (<img title="Hilfe" alt="Hilfe" src="../../assets/hints.svg" height="24px" width="24px"
             style="padding-bottom: 4px">) klicken.
       <br>
       Funktionieren Aufgaben nicht oder es gibt andere Probleme kannst du dem Dozenten dieses Melden

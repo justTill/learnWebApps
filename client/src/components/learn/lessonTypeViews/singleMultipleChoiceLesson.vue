@@ -78,8 +78,13 @@ export default {
         this.successMessage = this.lesson.feedback === null || this.lesson.feedback === '' ? "Du hast die Aufgabe erfolgreich gelöst" : this.lesson.feedback
 
       } else {
-        this.errorMessage = "Die Antwort ist leider nicht ganz korrekt"
         this.successMessage = ""
+        let message = "Die Antwort ist leider nicht ganz korrekt"
+        if (this.errorMessage === message) {
+          this.errorMessage = "Diese Antwort ist leider auch nicht ganz korrekt"
+        } else {
+          this.errorMessage = message
+        }
       }
       this.solvedHandler(this.lesson.lessonId, isCorrect, null)
     }
@@ -98,9 +103,12 @@ export default {
 
 .showHint {
   display: inline-block;
-  padding: 3px;
-  padding-left: 5px !important;
   cursor: pointer;
+}
+
+.showHint > img {
+  width: 30px;
+  height: 30px;
 }
 
 .checkLesson:hover, .answerOptions:hover {
