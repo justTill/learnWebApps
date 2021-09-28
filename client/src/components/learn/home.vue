@@ -28,7 +28,7 @@
       (<img src="../../assets/info.png" style="padding-bottom: 5px">)
       sowie Aufgaben (<img src="../../assets/lessons.png" style="padding-bottom: 5px">) beinhalten.
       <br>
-      Wenn du in der Kapitel oder Unterthemaansicht bisst kann du mit den Buttons
+      Wenn du in der Kapitel oder Unterthemaansicht bist kann du mit den Buttons
       (
       <img src="../../assets/skip-prev.svg" style="padding-bottom: 5px"> /
       <img src="../../assets/skip-next.svg" style="padding-bottom: 5px">
