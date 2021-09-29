@@ -72,7 +72,6 @@ export default {
       }
     },
     getUserAnswers(lesson) {
-      console.log("here")
       let answers = [];
       if (lesson.done) {
         lesson.answerOptions.forEach((option, index) => {
