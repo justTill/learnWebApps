@@ -58,6 +58,7 @@ export default {
       this.successMessage = ""
     },
     getUserAnswers() {
+      console.log(this.lesson.answerOptions)
       let answers = [];
       if (this.lesson.done) {
         this.lesson.answerOptions.forEach((option, index) => {

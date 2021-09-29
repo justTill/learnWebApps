@@ -90,7 +90,6 @@ exports.saveEditFillTheBlankLesson = async function (req, res, next) {
     let markedAnswers = req.body.markedAnswers
     let difficultyLevel = req.body.difficultyLevel
     let feedback = req.body.feedback === "" ? null : req.body.feedback
-    console.log(hints)
     if (chapterId && sectionId && difficultyLevel && updatedSectionId && fillTheBlankLessonId && updatedLessonNumber && lessonId && lessonName && lessonNumber && textWithBlanks && lessonInformation && markedAnswers) {
         let errorMessage = ""
         let lessonNumberOccupied = sectionId !== updatedSectionId ? await isLessonNumberOccupied(updatedLessonNumber, updatedSectionId) : await isLessonNumberOccupied(updatedLessonNumber, sectionId);
