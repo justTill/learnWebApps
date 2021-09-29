@@ -101,19 +101,23 @@ export default {
     ]),
   },
   methods: {
-    resetCurrentLesson() {
+    resetCurrentLesson(goToLesson) {
       if (this.lesson.type === 'singleMultipleChoiceLesson') {
         this.$refs.smcl.reset();
       } else if (this.lesson.type === 'codeExtensionLesson') {
         this.$refs.cel.reset();
       } else if (this.lesson.type === 'fillTheBlankLesson') {
-        this.$refs.ftbl.reset();
+        if (goToLesson.type === 'fillTheBlankLesson') {
+          this.$refs.ftbl.reset(goToLesson);
+        } else {
+          this.$refs.ftbl.reset();
+        }
       } else if (this.lesson.type === 'codingLesson') {
         this.$refs.cl.reset();
       }
     },
     goToLessonHandler(lesson) {
-      this.resetCurrentLesson();
+      this.resetCurrentLesson(lesson);
       this.goToLesson(lesson)
     },
     openHint() {

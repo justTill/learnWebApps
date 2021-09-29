@@ -350,12 +350,6 @@ function mapToOutputFillTheBlankLessons(lessons) {
         mappedLesson.type = LessonTypes.FILLTHEBLANK
         mappedLesson.textWithBlanks = lesson.textwithblanks
         mappedLesson.answerOptions = mapMarkedAnswers(lesson.markedanswers)
-        let answerNumber = 0;
-        for (let i = 0; i < mappedLesson.answerOptions.length; i++) {
-            let isCorrect = mappedLesson.answerOptions[i].isCorrect
-            mappedLesson.answerOptions[i].forInputNumber = isCorrect ? answerNumber++ : -1
-        }
-        mappedLesson.answerOptions = pseudoShuffle(mappedLesson.answerOptions)
         mappedLessons.push(mappedLesson)
     }
     return mappedLessons
