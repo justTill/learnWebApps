@@ -3,17 +3,18 @@
     <title-header title="Informationen" :reset-chapter="resetAllLessons"
                   resetText="Alle Fortschritt zurücksetzen ?"></title-header>
     <div class="explanation homeSection hoverEffect">
-      <h1> Web Apps Lernen</h1>
-      Mit dieser Anwendung kannst du die Konzepte, die dir in der Vorlesung "WebApps" vorgestellt wurden vertiefen und
+      <h1> Web-Apps lernen</h1>
+      Mit dieser Anwendung kannst du die Konzepte, die dir in der Vorlesung "Web-Apps" vorgestellt wurden vertiefen und
       üben.
       <br>
       <br>
-      Die Konzepte bilden die Grundlage zur Umsetzung komplexer clientseitiger Logik für WebApps. Daher ist es wichtig
+      Die Konzepte bilden die Grundlage zur Umsetzung komplexer, clientseitiger Logik für Web-Apps. Daher ist es
+      wichtig,
       diese zu verstehen und anwenden zu können.
       <br>
       <br>
-      Die Anwendung kannst du außerdem gut für die Klausur & Praktikums vorbereitung nutzen. Denn hier werden neben
-      angeboteten Übungen, wichtige Inhalte nochmal erläuter.
+      Die Anwendung kannst du außerdem gut für die Klausur- und Praktikumsvorbereitung nutzen. Denn hier werden neben
+      angeboteten Übungen wichtige Inhalte nochmal erläutern.
       <br>
       <br>
       <div class="instructionBlock">
@@ -22,32 +23,32 @@
     </div>
     <div class="settings homeSection hoverEffect">
       <h1> Benutzung</h1>
-      Ihr könnt verschiedenen Kapitel bearbeiten. (rechts in der Navigationsleiste zu sehen)
+      Ihr könnt verschiedene Kapitel bearbeiten (rechts in der Navigationsleiste zu sehen).
       <br>
-      Jedes Kapitel besitzt verschiedenen Unterthemen, die wiederum verschiedene Informationseinheiten
+      Jedes Kapitel besitzt verschiedene Unterthemen, die wiederum verschiedene Informationseinheiten
       (<img src="../../assets/info.png" style="padding-bottom: 5px">)
       sowie Aufgaben (<img src="../../assets/lessons.png" style="padding-bottom: 5px">) beinhalten.
       <br>
-      Ist in der Navigationsleiste ein (<span style="color: var(--dark-green)">&#x2713;</span>) zu sehen, bedeutet das,
-      dass du alle Aufgaben in dem Kapitel / Unterthemen gelöst hast
+      Ist in der Navigationsleiste ein (<span style="color: var(--dark-green)">&#x2713;</span>) zu sehen, bedeutet dies,
+      dass du alle Aufgaben in dem Kapitel / Unterthemen gelöst hast.
       <br>
-      Wenn du in der Kapitel oder Unterthemaansicht bist kann du mit den Buttons
+      Wenn du in der Kapitel- oder Unterthemenansicht bist, kannst du mit den Buttons
       (
       <img src="../../assets/skip-prev.svg" style="padding-bottom: 5px"> /
       <img src="../../assets/skip-next.svg" style="padding-bottom: 5px">
       )
-      zum vorherigen oder nächsten Kapitel/Unterthema springen
+      zum vorherigen oder nächsten Kapitel/Unterthema springen.
       <br>
       <br>
       <b>Aufgaben</b>
       <br>
-      Es gibt vier verschiedene Arten von Aufgaben
+      Es gibt vier verschiedene Arten von Aufgaben.
       <ul>
         <li><b>Single-Multiple-Choice-Aufgaben</b></li>
         <li><b>Code Aufgaben:</b> Hier kannst du mehere Zeilen Code schreiben, der auch ausgeführt und anhand von Tests
-          überprüft wird
+          überprüft wird.
           <ul>
-            <li> Das Textfeld in dem du dein Code schreibst soll im DarkMode sein? Hier kannst du es änder</li>
+            <li> Das Textfeld in dem du deinen Code schreibst, soll im Darkmode sein? Hier kannst du es ändern.</li>
           </ul>
         </li>
         <div class="selectCodeTheme">
@@ -58,16 +59,16 @@
         </div>
         <ul>
           <li>
-            Sollen dir beim schreiben von Code mögliche vorschläge gemacht werden?
+            Sollen dir beim Schreiben von Code mögliche Vorschläge gemacht werden?
             <toggle-button :labels="{checked: 'On'}" :value="codeHelp" @change="changeCodeHelp"/>
           </li>
         </ul>
-        <li><b>Code ergänzungsaufgaben:</b> Ergänze vorgegeben Code anhand deines Wissens</li>
-        <li><b>Lückentextaufgaben:</b> Ziehe die richtigen Lösungen mit Drag&Drop in die richtigen Lücken</li>
+        <li><b>Codeergänzungsaufgaben:</b> Ergänze vorgegeben Code anhand deines Wissens.</li>
+        <li><b>Lückentextaufgaben:</b> Ziehe die richtigen Lösungen mit Drag&Drop in die Lücken.</li>
       </ul>
-      <b>Schwierigkeistgrad</b>
+      <b>Schwierigkeitsgrad</b>
       <br>
-      Du willst nur Schwere oder Leichte Aufgaben ? Dann stelle hier den Schwierigkeistgrad ein!
+      Du willst nur schwere oder leichte Aufgaben? Dann stelle hier den Schwierigkeitsgrad ein!
       <div class="selectDifficulty">
         <select v-model="levelOfDifficulty">
           <option value="ALL" selected>Alle</option>
@@ -76,33 +77,34 @@
           <option value="HARD">Schwer</option>
         </select>
       </div>
-      <b>Notizen & Probleme & Hilfe</b>
+      <b>Notizen</b>
       <br>
-      Du möchtest Inhalte als Notizen speichern? Dann kannst du innerhalb eines Kapitels, Unterthema, Aufgabe oder
-      Informationseinheit den gewünschnten Text markieren und aus das "Notiz erstellen" pop Up klicken.
+      Du möchtest Inhalte als Notizen speichern? Dann kannst du innerhalb eines Kapitels, eines Unterthemas, einer
+      Aufgabe oder einer Informationseinheit den gewünschten Text markieren und auf das "Notiz erstellen" Pop-up
+      klicken.
       <br>
       <br>
       <b>Probleme & Hilfe</b>
       <br>
-      Falls du Hilfe bei einer Aufgabe braucht kannst du auf das Icon
+      Falls du Hilfe bei einer Aufgabe brauchst, kannst du auf das Icon
       (<img title="Hilfe" alt="Hilfe" src="../../assets/hints.svg" height="24px" width="24px"
             style="padding-bottom: 4px">) klicken.
       <br>
-      Funktionieren Aufgaben nicht oder es gibt andere Probleme kannst du dem Dozenten dieses Melden
+      Falls Aufgaben nicht funtkionieren oder es andere Probleme gibt, kannst du dies dem Dozenten melden
       (<img title="Hilfe" alt="Hilfe" src="../../assets/report.png" height="24px" width="24px"
-            style="padding-bottom: 4px">)
+            style="padding-bottom: 4px">).
       <br>
       <br>
       <b>Fortschritt</b>
       <br>
-      Es wird gespeichert ob du eine Aufgabe gelöst hast. Wenn du den dein kompletten Fortschritt oder den eines
-      Kapitels zurücksetzen möchtest kannst du auf das
+      Es wird gespeichert, ob du eine Aufgabe gelöst hast. Wenn du deinen kompletten Fortschritt oder den eines
+      Kapitels zurücksetzen möchtest, kannst du auf das
       (<img title="Hilfe" alt="Hilfe" src="../../assets/reset.png" height="24px" width="24px"
             style="padding-bottom: 4px">) Icon klicken.
       <br>
       <br>
       <div class="startFirstChapter">
-        <button v-on:click="goToFirstChapter()"> Schon kanns los gehen: Jetzt Zum ersten Kapitel</button>
+        <button v-on:click="goToFirstChapter()"> Schon kann's los gehen: Zum ersten Kapitel</button>
       </div>
     </div>
   </div>
