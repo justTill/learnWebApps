@@ -1,5 +1,5 @@
 <template>
-  <div class="fillTheBlankLessonContainer">
+  <div class="fillTheBlankLessonContainer" :key="rerender">
     <br>
     <div class="fillTheBlankTextContainer">
       <div class="fillTheBlankText" v-for="(element, index) in preparedFillTheBlankTest">
@@ -47,20 +47,34 @@ export default {
   data: function () {
     return {
       errorMessage: "",
-      userAnswer: this.getUserAnswers(),
-      answerOptions: this.getAnswersOptions(),
-      successMessage: ""
+      userAnswer: this.getUserAnswers(this.lesson),
+      answerOptions: this.getAnswersOptions(this.lesson),
+      successMessage: "",
+      rerender: 0
     }
   },
   methods: {
-    reset() {
+    reset(goToLesson) {
       this.errorMessage = ""
       this.successMessage = ""
+      this.resetStyles()
+      if (goToLesson) {
+        this.userAnswer = this.getUserAnswers(goToLesson)
+        this.answerOptions = this.getAnswersOptions(goToLesson)
+      }
+      this.rerender = this.rerender === 0 ? 1 : 0;
     },
-    getUserAnswers() {
+    resetStyles() {
+      let rightAnswers = this.lesson.answerOptions.filter(o => o.isCorrect)
+      for (let i = 0; i < rightAnswers.length; i++) {
+        let dropZone = this.$el.querySelector("#drop-" + i)
+        dropZone.style.backgroundColor = "#C2C9D6"
+      }
+    },
+    getUserAnswers(lesson) {
       let answers = [];
-      if (this.lesson.done) {
-        this.lesson.answerOptions.forEach((option, index) => {
+      if (lesson.done) {
+        lesson.answerOptions.forEach((option, index) => {
           if (option.isCorrect) {
             answers.push({
               answer: option.possibleAnswer,
@@ -71,10 +85,10 @@ export default {
       }
       return answers;
     },
-    getAnswersOptions() {
+    getAnswersOptions(lesson) {
       let answerOptions = []
-      this.lesson.answerOptions.forEach((option, index) => {
-        if (this.lesson.done) {
+      lesson.answerOptions.forEach((option, index) => {
+        if (lesson.done) {
           if (!option.isCorrect) {
             answerOptions.push({
               answer: option.possibleAnswer,
