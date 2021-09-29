@@ -28,12 +28,15 @@
       (<img src="../../assets/info.png" style="padding-bottom: 5px">)
       sowie Aufgaben (<img src="../../assets/lessons.png" style="padding-bottom: 5px">) beinhalten.
       <br>
+      Ist in der Navigationsleiste ein (<span style="color: var(--dark-green)">&#x2713;</span>) zu sehen, bedeutet das,
+      dass du alle Aufgaben in dem Kapitel / Unterthemen gelöst hast
+      <br>
       Wenn du in der Kapitel oder Unterthemaansicht bist kann du mit den Buttons
       (
       <img src="../../assets/skip-prev.svg" style="padding-bottom: 5px"> /
       <img src="../../assets/skip-next.svg" style="padding-bottom: 5px">
       )
-      zum vorherigen oder nächsten Kapitel/Unterthema
+      zum vorherigen oder nächsten Kapitel/Unterthema springen
       <br>
       <br>
       <b>Aufgaben</b>
@@ -41,10 +44,10 @@
       Es gibt vier verschiedene Arten von Aufgaben
       <ul>
         <li><b>Single-Multiple-Choice-Aufgaben</b></li>
-        <li><b>Code Aufgaben:</b> Hier kannst du mehere Zeilen Code schreiben, der auch ausgefphrt und anahnd von Tests
+        <li><b>Code Aufgaben:</b> Hier kannst du mehere Zeilen Code schreiben, der auch ausgeführt und anhand von Tests
           überprüft wird
           <ul>
-            <li> Das Textfeld in dem du dein Code schreibst soll im DarkMode sein? Hier kannst du es änderb</li>
+            <li> Das Textfeld in dem du dein Code schreibst soll im DarkMode sein? Hier kannst du es änder</li>
           </ul>
         </li>
         <div class="selectCodeTheme">
@@ -75,8 +78,8 @@
       </div>
       <b>Notizen & Probleme & Hilfe</b>
       <br>
-      Du möchtest Inhalte als Notizen speichern? Dann kannst du innerhalb eines Kapitels, Unterthema,Aufgabe oder
-      Informationseinheit den gewünschnten Text makieren und aus das "Notiz erstellen" pop Up klicken.
+      Du möchtest Inhalte als Notizen speichern? Dann kannst du innerhalb eines Kapitels, Unterthema, Aufgabe oder
+      Informationseinheit den gewünschnten Text markieren und aus das "Notiz erstellen" pop Up klicken.
       <br>
       <br>
       <b>Probleme & Hilfe</b>
@@ -92,8 +95,8 @@
       <br>
       <b>Fortschritt</b>
       <br>
-      Es wird gespeichert ob du eine Aufgabe gelöst hast. Wenn du den den Kompletten Fortschritt oder den eines Kapitels
-      zurücksetzen möchtest kannst du auf das
+      Es wird gespeichert ob du eine Aufgabe gelöst hast. Wenn du den dein kompletten Fortschritt oder den eines
+      Kapitels zurücksetzen möchtest kannst du auf das
       (<img title="Hilfe" alt="Hilfe" src="../../assets/reset.png" height="24px" width="24px"
             style="padding-bottom: 4px">) Icon klicken.
       <br>
