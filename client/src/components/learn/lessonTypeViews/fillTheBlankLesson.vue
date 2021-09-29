@@ -53,6 +53,10 @@ export default {
     }
   },
   methods: {
+    reset() {
+      this.errorMessage = ""
+      this.successMessage = ""
+    },
     getUserAnswers() {
       let answers = [];
       if (this.lesson.done) {

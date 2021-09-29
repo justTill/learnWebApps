@@ -64,6 +64,11 @@ export default {
     }
   },
   methods: {
+    reset() {
+      this.errorMessage = ""
+      this.inputs = []
+      this.successMessage = ""
+    },
     evaluate() {
       let elements = this.$el.querySelectorAll(".codeInput")
       let allAnswersCorrect = elements.length === this.lesson.answers.length;

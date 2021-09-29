@@ -5,7 +5,7 @@
       {{ sectionPreview }}
     </div>
     <div class="percentageBar"
-         v-if="!user.isDefault && numberOfLessons !== 0 ">
+         v-if="numberOfLessons !== 0 ">
       <progress :value="lessonsSolved" :max="numberOfLessons">
       </progress>
       <span> {{ lessonsSolved }}/{{ numberOfLessons }} Aufgaben gelöst</span>

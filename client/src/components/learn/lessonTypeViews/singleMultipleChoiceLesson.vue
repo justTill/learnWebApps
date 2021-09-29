@@ -37,6 +37,11 @@ export default {
     }
   },
   methods: {
+    reset() {
+      this.successMessage = ""
+      this.checkedAnswers = []
+      this.errorMessage = "";
+    },
     removeErrormessage(event) {
       this.errorMessage = "";
     },
@@ -76,7 +81,6 @@ export default {
       if (isCorrect) {
         this.errorMessage = "";
         this.successMessage = this.lesson.feedback === null || this.lesson.feedback === '' ? "Du hast die Aufgabe erfolgreich gelöst" : this.lesson.feedback
-
       } else {
         this.successMessage = ""
         let message = "Die Antwort ist leider nicht ganz korrekt"

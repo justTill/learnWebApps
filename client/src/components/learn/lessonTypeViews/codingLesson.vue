@@ -68,6 +68,12 @@ export default {
     },
   },
   methods: {
+    reset() {
+      this.userCode = ""
+      this.errorMessages = []
+      this.successMessage = ""
+      this.isLoadingResults = false
+    },
     editorInit: function () {
       require('brace/ext/language_tools')
       require('brace/mode/html')

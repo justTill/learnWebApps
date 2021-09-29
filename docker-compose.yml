@@ -13,7 +13,7 @@ services:
       - DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
       - SESSION_KEY=${SESSION_KEY}
       - SQL_HOST=db
-      - FRONTEND_URL=http://localhost:8080
+      - FRONTEND_URL=http://164.90.211.151:8080
       - SQL_PORT=5432
     volumes:
       - ./server:/usr/src/app/server
@@ -26,7 +26,7 @@ services:
       - "8080:8080"
     container_name: learnWebAppsFrontend
     environment:
-      - BACKENDURL=http://localhost:3080
+      - BACKENDURL=http://164.90.211.151:3080
     volumes:
       - ./client:/usr/src/app/client
       - /usr/src/app/client/node_modules

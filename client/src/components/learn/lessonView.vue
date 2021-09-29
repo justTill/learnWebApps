@@ -6,29 +6,33 @@
       <div class="lessonText">
         <div v-html="sanitizedLessonText"></div>
         <single-multiple-choice-lesson v-if="lesson.type==='singleMultipleChoiceLesson'"
+                                       ref="smcl"
                                        :lesson="lesson"
                                        :openHint="openHint"
                                        :solvedHandler="solvedLesson"></single-multiple-choice-lesson>
         <code-extension-lesson v-if="lesson.type==='codeExtensionLesson'"
+                               ref="cel"
                                :lesson="lesson"
                                :openHint="openHint"
                                :solvedHandler="solvedLesson"></code-extension-lesson>
         <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'"
+                               ref="ftbl"
                                :lesson="lesson"
                                :openHint="openHint"
                                :solvedHandler="solvedLesson"></fill-the-blank-lesson>
         <div class="lessonButtons">
           <div class="prevButton"
-               v-on:click="previousLesson?goToLesson(previousLesson): goToLessonOverview(null)"> &#8592;
+               v-on:click="previousLesson?goToLessonHandler(previousLesson): goToLessonOverview(null)"> &#8592;
             {{ prevLessonText }}
           </div>
           <div class="nextButton"
-               v-on:click="nextLesson?goToLesson(nextLesson): goToLessonOverview(null)">
+               v-on:click="nextLesson?goToLessonHandler(nextLesson): goToLessonOverview(null)">
             {{ nextLessonText }} &#8594;
           </div>
         </div>
       </div>
       <coding-lesson v-if="lesson.type==='codingLesson'"
+                     ref="cl"
                      :openHint="openHint"
                      :lesson="lesson" :solvedHandler="solvedLesson"
                      :theme="codeTheme"></coding-lesson>
@@ -97,6 +101,21 @@ export default {
     ]),
   },
   methods: {
+    resetCurrentLesson() {
+      if (this.lesson.type === 'singleMultipleChoiceLesson') {
+        this.$refs.smcl.reset();
+      } else if (this.lesson.type === 'codeExtensionLesson') {
+        this.$refs.cel.reset();
+      } else if (this.lesson.type === 'fillTheBlankLesson') {
+        this.$refs.ftbl.reset();
+      } else if (this.lesson.type === 'codingLesson') {
+        this.$refs.cl.reset();
+      }
+    },
+    goToLessonHandler(lesson) {
+      this.resetCurrentLesson();
+      this.goToLesson(lesson)
+    },
     openHint() {
       this.$refs.titleHeader.openHelpModal()
     },
