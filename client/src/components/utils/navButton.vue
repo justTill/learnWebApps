@@ -35,7 +35,7 @@ export default {
         let numberOfSections = this.chapter.sections.length
         let numberOfSectionsSolved = 0
         for (let section of this.chapter.sections) {
-          if (this.sectionSolved(section)) {
+          if (this.sectionSolved(section, true)) {
             numberOfSectionsSolved++
           }
         }
@@ -53,7 +53,7 @@ export default {
     }
   },
   methods: {
-    sectionSolved(section) {
+    sectionSolved(section, forChapter) {
       let numberOfInteractiveLessons = 0
       let numberOfLessonsDone = 0;
       let lessons = utils.lessonsForDifficulty.bind(this)(section)
@@ -64,6 +64,9 @@ export default {
             numberOfLessonsDone++
           }
         }
+      }
+      if (forChapter) {
+        return numberOfInteractiveLessons === numberOfLessonsDone
       }
       return numberOfInteractiveLessons === numberOfLessonsDone && numberOfLessonsDone !== 0
     },
