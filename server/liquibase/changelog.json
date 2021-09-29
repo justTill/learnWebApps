@@ -300,6 +300,15 @@
                       "nullable": true
                     }
                   }
+                },
+                {
+                  "column": {
+                    "name": "hints",
+                    "type": "text",
+                    "constraints": {
+                      "nullable": true
+                    }
+                  }
                 }
               ]
             }
