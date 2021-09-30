@@ -23,7 +23,6 @@ const Router = new VueRouter({
 
 Router.beforeEach((to, from, next) => {
     if (!hasQueryParams(to) && hasQueryParams(from)) {
-        console.log(to)
         next({name: to.name, query: from.query});
     } else {
         next()

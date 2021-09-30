@@ -12,7 +12,7 @@ export default {
             note: text
         }
         if (!this.user.isDefault) {
-            this.$http.post(backEndUrl + "/api/v1/users/notes/note/" + "?ltik=" + this.ltiKey, {note: this.selectedText}, {
+            this.$http.post(backEndUrl + "/api/v1/users/notes/note/" + "?ltik=" + this.ltiKey, {note: text}, {
                 withCredentials: true
             }).then(res => {
                 note.notesId = res.data.id
