@@ -11,11 +11,10 @@
       <span> {{ lessonsSolved }}/{{ numberOfLessons }} Aufgaben gelöst</span>
     </div>
     <div v-else class="percentageBar">
-      <span style="font-size: small">Es gibt keine Aufgaben im der Sektion</span>
+      <span style="font-size: small">Es gibt keine Aufgaben in dem Unterthema</span>
     </div>
   </div>
 </template>
-
 <script>
 
 import {mapGetters} from "vuex";

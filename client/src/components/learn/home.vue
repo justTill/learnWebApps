@@ -23,7 +23,7 @@
     </div>
     <div class="settings homeSection hoverEffect">
       <h1> Benutzung</h1>
-      Ihr könnt verschiedene Kapitel bearbeiten (rechts in der Navigationsleiste zu sehen).
+      Ihr könnt verschiedene Kapitel bearbeiten (links in der Navigationsleiste zu sehen).
       <br>
       Jedes Kapitel besitzt verschiedene Unterthemen, die wiederum verschiedene Informationseinheiten
       (<img src="../../assets/info.png" style="padding-bottom: 5px">)
@@ -53,8 +53,8 @@
         </li>
         <div class="selectCodeTheme">
           <select v-model="theme">
-            <option value="LIGHT">Hell</option>
-            <option value="DARK">Dunkel</option>
+            <option value="LIGHT">Helle IDE</option>
+            <option value="DARK">Dunkle IDE</option>
           </select>
         </div>
         <ul>
