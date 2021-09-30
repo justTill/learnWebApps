@@ -2,11 +2,10 @@ version: '3'
 services:
   backend:
     restart: always
-    image: justtill/learn_web_apps:backend_latestv1
-    build: ./server
+    image: # I need a Name
     ports:
       - "3080:3080"
-    container_name: learnWebAppsBackendProd
+    container_name: learnWebAppsBackend
     volumes:
       - ./server:/usr/src/app/server
       - /usr/src/app/server/node_modules
@@ -25,15 +24,12 @@ services:
       - db
   frontend:
     restart: always
-    image: justtill/learn_web_apps:frontend_with_nginx_latestv1
-    container_name: learnWebAppsFrontendProd
+    image: # I need a Name
+    container_name: learnWebAppsFrontend
     volumes:
       - media_volume:/usr/src/app/client/mediafiles
     environment:
       - BACKENDURL=${BACKEND_URL}
-    build:
-      context: ./client
-      dockerfile: Dockerfile-prod
     ports:
       - '80:80'
   db:
