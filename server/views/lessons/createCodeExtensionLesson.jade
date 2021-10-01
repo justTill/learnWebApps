@@ -16,7 +16,7 @@ block content
                             p #{codeExtensionErrorMessages}
                     form(class="modalForm" action="/saveCreateCodeExtensionLesson" method="post")
                         include ./baseCreateLessonForm
-                        span.label(class="input-group-text") Zu ergänzenden Code mit [input] als Lücken
+                        span.label(class="input-group-text") Zu ergänzenden Code mit [input] als Lücken (HTML)
                         textarea(class="form-control" name="unfinishedCode" required) #{lesson ? lesson.unfinishedcode : ''}
                         br
                         span.label(class="input-group-text") Antworten <br> (Pro Input eine Zeile. In richtiger Reihenfolge)

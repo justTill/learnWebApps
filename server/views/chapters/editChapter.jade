@@ -24,7 +24,7 @@ block content
                                 span.label(class="input-group-text") Kapitelname
                                 input(class="form-control" type="text" name="chapterName" required value="#{chapter.name}")
                                 br
-                                span.label(class="input-group-text") Übersichtstext
+                                span.label(class="input-group-text") Übersichtstext (HTML)
                                 textarea(class="form-control" name="overview" required) #{chapter.overview}
                                 br
                                 span.label(class="input-group-text") Kapitelnummer
@@ -62,10 +62,10 @@ block content
                                 span.label(class="input-group-text") Unterthemaname
                                 input(class="form-control" type="text" name="sectionName" required value="#{sectionData ? sectionData.name : ''}")
                                 br
-                                span.label(class="input-group-text") Übersichtstext
+                                span.label(class="input-group-text") Übersichtstext (HTML)
                                 textarea(class="form-control" name="information" required) #{sectionData ? sectionData.information : ''}
                                 br
-                                span.label(class="input-group-text") Unterhema nummer
+                                span.label(class="input-group-text") Unterhemanummer
                                 input(class="form-control" type="number" min=1 name="sectionNumber" required value="#{sectionData ? sectionData.sectionNumber : 1}")
                                 input(type="hidden" name="chapterId" value="#{chapter.id}")
                                 br

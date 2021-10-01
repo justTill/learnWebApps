@@ -20,7 +20,7 @@ block content
                                 span.label(class="input-group-text") Kapitelname
                                 input(class="form-control" type="text" name="chapterName" required value="#{chapterData ? chapterData.name : ''}")
                                 br
-                                span.label(class="input-group-text") Übersichtstext
+                                span.label(class="input-group-text") Übersichtstext (HTML)
                                 textarea(class="form-control" name="overview" required) #{chapterData ? chapterData.overview : ''}
                                 br
                                 span.label(class="input-group-text") Kapitelnummer

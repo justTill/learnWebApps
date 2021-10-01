@@ -6,7 +6,7 @@ br
 span.label(class="input-group-text") Aufgabennummer
 input(class="form-control" type="number" min=1 name="lessonNumber" required value="#{lesson ? lesson.lessonnumber : 1")
 br
-span.label(class="input-group-text") Informationen
+span.label(class="input-group-text") Informationen (HTML)
 textarea(class="form-control" name="lessonInformation" required) #{lesson ? lesson.information : ''}
 br
 span.label(class="input-group-text") Schwierigkeitsgrad
@@ -19,6 +19,6 @@ br
 span.label(class="input-group-text") Hinweise / Tipps
 textarea(class="form-control" name="hints") #{lesson ? lesson.hints : ''}
 br
-span.label(class="input-group-text") Rückmeldung beim Erfolgreichen lösen
+span.label(class="input-group-text") Rückmeldung nach dem Erfolgreichen lösen
 textarea(class="form-control" name="feedback") #{lesson ? lesson.feedback : ''}
 br
