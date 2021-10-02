@@ -1,7 +1,7 @@
 <template>
   <div class="singleMultipleChoiceLessonContainer">
     <div class="answerOptions" v-for="(option, index) in lesson.answerOptions">
-      <input type="checkbox" :id="'option-'+index" :ref="'option-'+index"
+      <input type="checkbox" :id="'option-'+index" :ref="'option-'+index" class="smcCheckBox"
              :value="sanitizedAnswers(option.possibleAnswer)"
              v-model="checkedAnswers"
              @change="removeErrormessage($event)">
@@ -115,7 +115,7 @@ export default {
   height: 30px;
 }
 
-.checkLesson:hover, .answerOptions:hover {
+.checkLesson:hover, .smcCheckBox:hover, .smcAnswer:hover {
   cursor: pointer;
 }
 

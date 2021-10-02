@@ -38,12 +38,6 @@ block content
                         div(class="modal-footer")
                             include ../files
 
-        each section in sections
-            div(class="tile chapterTile")
-                a(type="button" class="btn btn-danger deleteChapter"  href='/deleteSection/#{chapter.id}/#{section.id}') Löschen
-                a(type="button" class="btn btn-primary editChapter" href='/section/#{chapter.id}/#{section.id}') Bearbeiten
-                span #{section.name}
-
         div(class="tile")
             button(type="button" class="btn imgButton" data-toggle="modal" data-target="#createSection")
                 include ../../public/images/add-icon.svg
@@ -84,3 +78,9 @@ block content
                     $('#editChapter').modal('show');
                 }
             });
+
+        each section in sections
+            div(class="tile chapterTile")
+                a(type="button" class="btn btn-danger deleteChapter"  href='/deleteSection/#{chapter.id}/#{section.id}') Löschen
+                a(type="button" class="btn btn-primary editChapter" href='/section/#{chapter.id}/#{section.id}') Bearbeiten
+                span #{section.name}
