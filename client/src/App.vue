@@ -44,6 +44,12 @@ body, html {
   height: 100% !important;
 }
 
+@media only screen and (min-width: 1000px) {
+  body, html {
+    overflow: hidden;
+  }
+}
+
 .viewArea {
   height: 100%;
 }
@@ -54,6 +60,14 @@ body, html {
   color: var(--dark-blue);
   height: 100%;
   word-wrap: break-word;
+}
+
+pre {
+  overflow: hidden;
+}
+
+code {
+  overflow: hidden;
 }
 
 .hoverEffect {

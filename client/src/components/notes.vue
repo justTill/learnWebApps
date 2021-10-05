@@ -54,6 +54,7 @@ export default {
     ...mapGetters([
       'notes',
       'user',
+      'ltiKey',
       'errorMessage'
     ]),
     titleText() {
@@ -73,7 +74,7 @@ export default {
     },
     deleteNote(note) {
       if (!this.user.isDefault) {
-        this.$http.delete(backEndUrl + "/api/v1/users/notes/" + note.notesId, {
+        this.$http.delete(backEndUrl + "/api/v1/users/notes/" + note.notesId + "?ltik=" + this.ltiKey, {
           withCredentials: true
         }).then(response => {
           this.lastDeletedNote = note
@@ -120,7 +121,7 @@ export default {
         let payload = {
           note: note.note,
         }
-        this.$http.post(backEndUrl + "/api/v1/users/notes/note/" + note.notesId, payload, {
+        this.$http.post(backEndUrl + "/api/v1/users/notes/note/" + note.notesId + "?ltik=" + this.ltiKey, payload, {
           withCredentials: true
         }).then(response => {
         }).catch(err => {
@@ -134,9 +135,6 @@ export default {
 </script>
 <style>
 @import "../assets/cssVariables.css";
-
-.notesContainer {
-}
 
 @media only screen and (max-width: 400px) {
   .note {
@@ -160,20 +158,20 @@ export default {
 
 .changeNoteArea {
   display: inline-block;
-  position: absolute;
-  right: 10px;
+  float: right;
 }
 
 .note {
+  white-space: pre-line;
   position: relative;
   display: block;
   max-width: 600px;
   min-width: 400px;
   background-color: var(--white);
   margin: 10px auto 10px;
-  padding: 5px 10px 5px;
   border: 1px solid black;
   border-radius: 5px;
+  padding: 5px 10px 30px;
 }
 
 .revertDelete {

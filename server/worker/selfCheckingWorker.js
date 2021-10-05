@@ -15,6 +15,6 @@ const {parentPort, workerData} = require("worker_threads");
 async function execTests(userCode, verificationCode) {
     let AsyncFunction = Object.getPrototypeOf(async function () {
     }).constructor
-    let messages = await AsyncFunction(`'use strict'; let codeFromUser =arguments[0]; let errorMessagesForUser = []; ${userCode} ${verificationCode} return errorMessagesForUser;`)(userCode)
+    let messages = await AsyncFunction(`'use strict'; let codeFromUser=arguments[0]; let errorMessagesForUser = []; ${userCode} ${verificationCode} return errorMessagesForUser;`)(userCode)
     return messages;
 }

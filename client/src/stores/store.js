@@ -6,25 +6,40 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
     state: {
         userName: "default",
+        ltiKey: "",
         notes: [],
         problems: [],
         chapters: [],
         difficultyLevel: "ALL",
-        codeMirrorTheme: "DARK",
+        codeHelp: true,
+        codeTheme: "LIGHT",
         errorMessage: "",
+        updatedProblems: false,
     },
     mutations: {
         setErrorMessage(state, message) {
             state.errorMessage = message
         },
+        setUpdatedProblems(state, updated) {
+            state.updatedProblems = updated
+        },
+        setCodeHelp(state, bool) {
+            document.cookie = 'LearnWebAppsCodingHelp=' + bool + ';'
+            state.codeHelp = bool
+        },
         setDifficultyLevel(state, level) {
+            document.cookie = 'LearnWebAppsDifficulty=' + level + ';'
             state.difficultyLevel = level
         },
-        setCodeMirrorTheme(state, theme) {
-            state.codeMirrorTheme = theme
+        setCodeTheme(state, theme) {
+            document.cookie = 'LearnWebAppsCodeTheme=' + theme + ';'
+            state.codeTheme = theme
         },
         setUserName(state, name) {
             state.userName = name
+        },
+        setLtiKey(state, key) {
+            state.ltiKey = key
         },
         setNotes(state, notes) {
             state.notes = notes
@@ -77,8 +92,14 @@ export const store = new Vuex.Store({
                 isDefault: store.state.userName === "default"
             }
         },
+        ltiKey: state => {
+            return store.state.ltiKey
+        },
         chapters: state => {
             return store.state.chapters
+        },
+        codeHelp: state => {
+            return store.state.codeHelp
         },
         problems: state => {
             return store.state.problems
@@ -89,11 +110,17 @@ export const store = new Vuex.Store({
         difficultyLevel: state => {
             return store.state.difficultyLevel
         },
+        codeTheme: state => {
+            return store.state.codeTheme
+        },
         codeMirrorTheme: state => {
-            return store.state.codeMirrorTheme
+            return store.state.codeTheme
         },
         errorMessage: state => {
             return store.state.errorMessage
+        },
+        updatedProblems: state => {
+            return store.state.updatedProblems
         }
     }
 })

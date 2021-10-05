@@ -1,13 +1,22 @@
 <template>
   <div class="singleMultipleChoiceLessonContainer">
     <div class="answerOptions" v-for="(option, index) in lesson.answerOptions">
-      <input type="checkbox" :id="'option-'+index" :ref="'option-'+index"
+      <input type="checkbox" :id="'option-'+index" :ref="'option-'+index" class="smcCheckBox"
              :value="sanitizedAnswers(option.possibleAnswer)"
-             v-model="checkedAnswers">
-      <label :for="'option-'+index" v-html="sanitizedAnswers(option.possibleAnswer)"></label>
+             v-model="checkedAnswers"
+             @change="removeErrormessage($event)">
+      <label class="smcAnswer" :for="'option-'+index" v-html="sanitizedAnswers(option.possibleAnswer)"></label>
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
-    <div class="errorMessage" v-if="errorMessage"> {{ errorMessage }}</div>
+    <div class="errorMessage" v-if="errorMessage">
+      {{ errorMessage }}
+      <br>
+      <div class="showHint hoverEffect">
+        <img src="../../../assets/hints.svg" title="Hinweis anzeigen" v-b-tooltip.hover.lefttop
+             v-on:click="openHint">
+      </div>
+    </div>
+    <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
   </div>
 </template>
 <script>
@@ -17,15 +26,25 @@ export default {
   name: 'singleMultipleChoiceLesson',
   props: {
     lesson: Object,
-    solvedHandler: Function
+    solvedHandler: Function,
+    openHint: Function
   },
   data: function () {
     return {
       checkedAnswers: this.fillCheckAnswersIfIsDone(),
       errorMessage: "",
+      successMessage: "",
     }
   },
   methods: {
+    reset() {
+      this.successMessage = ""
+      this.checkedAnswers = []
+      this.errorMessage = "";
+    },
+    removeErrormessage(event) {
+      this.errorMessage = "";
+    },
     sanitizedAnswers(answer) {
       return DOMPurify.sanitize(answer)
     },
@@ -61,8 +80,15 @@ export default {
       }
       if (isCorrect) {
         this.errorMessage = "";
+        this.successMessage = this.lesson.feedback === null || this.lesson.feedback === '' ? "Du hast die Aufgabe erfolgreich gelöst" : this.lesson.feedback
       } else {
-        this.errorMessage = "Die Antwort ist leider nicht ganz korrekt"
+        this.successMessage = ""
+        let message = "Die Antwort ist leider nicht ganz korrekt"
+        if (this.errorMessage === message) {
+          this.errorMessage = "Diese Antwort ist leider auch nicht ganz korrekt"
+        } else {
+          this.errorMessage = message
+        }
       }
       this.solvedHandler(this.lesson.lessonId, isCorrect, null)
     }
@@ -79,17 +105,28 @@ export default {
   text-align: center;
 }
 
-.checkLesson:hover, .answerOptions:hover {
+.showHint {
+  display: inline-block;
   cursor: pointer;
 }
 
-label > code {
+.showHint > img {
+  width: 30px;
+  height: 30px;
+}
+
+.checkLesson:hover, .smcCheckBox:hover, .smcAnswer:hover {
+  cursor: pointer;
+}
+
+.smcAnswer > code {
   padding: 2px;
   border-radius: 5px;
   background-color: var(--davys-grey-light);
 }
 
 .errorMessage {
+  text-align: center;
   min-height: 60px;
   background-color: var(--light-red);
   padding-top: 25px;
@@ -101,24 +138,39 @@ label > code {
   border-bottom: 2px solid var(--red);
 }
 
+.successMessage {
+  text-align: center;
+  min-height: 60px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  padding-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: lightgreen;
+  border-top: 2px solid var(--bs-green);
+  border-bottom: 2px solid var(--bs-green);
+
+}
+
 .answerOptions {
   padding-bottom: 10px;
 }
 
-label {
+.smcAnswer {
   display: inline-block;
   margin: 10px;
   padding: 10px;
   border-radius: 10px;
   width: 90%;
-  background-color: var(--davys-grey-light);
+  color: var(--white);
+  background-color: var(--darker-blue);
 }
 
-label:hover {
+.smcAnswer:hover {
   box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.8);
 }
 
-input[type=checkbox]:checked + label {
+input[type=checkbox]:checked + .smcAnswer {
   transition: box-shadow 200ms ease, transform 200ms ease;
   box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.8);
 }

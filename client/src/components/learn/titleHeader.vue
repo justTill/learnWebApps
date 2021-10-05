@@ -1,51 +1,73 @@
 <template>
   <div class="title">
-    <h1> {{ title }}
-      <span class="doneIcon" v-if="lesson && lesson.type !== 'information' && lesson.done">&#10003;</span>
-    </h1>
-    <div title="Kapitel zurücksetzen" v-if="resetChapter" class="resetButton">
-      <div title="Kapitel zurücksetzen" class="reset" v-on:click="openResetModal" v-b-modal.modal-center
-           variant="info">
-        <img title="Kapitel zurücksetzen" alt="Kapitel zurücksetzen" class="resetIcon" src="../../assets/reset.png"
-             v-b-tooltip.hover.lefttop>
-        <b-modal ref="reset-modal" id="modal-center-reset" centered title="Kapitel zurücksetzen" ok-only
-                 ok-variant="danger"
-                 ok-title="Zurücksetzen"
-                 @ok="resetChapter"
-                 hide-header-close>
-          <div class="resetText">{{ resetText }}</div>
-        </b-modal>
-      </div>
-    </div>
-    <div v-if="lesson" class="helperButtons">
-      <div title="Hilfe" class="helpButton" v-on:click="openHelpModal" v-b-modal.modal-center
-           variant="info" v-if="lesson.type !=='information'">
-        <img title="Hilfe" alt="Hilfe" class="helpIcon" src="../../assets/help.png" v-b-tooltip.hover.lefttop>
-        <b-modal ref="help-modal" id="modal-center-help" centered title="Hilfe" ok-only ok-variant="success"
-                 hide-header-close>
-          <help-content class="my-4" :lesson="lesson"></help-content>
-        </b-modal>
-      </div>
-      <div v-if="!user.isDefault" title="Meldung" class="reportButton" v-on:click="openReportModal">
-        <img title="Problem Melden" alt="Hilfe" class="reportIcon" src="../../assets/report.png"
-             v-b-tooltip.hover.lefttop>
-        <b-modal ref="report-modal" id="modal-center-report" centered title="Problem Melden" hide-header-close
+    <div class="headerButtons">
+      <div title="Notiz erstellen" class="resetButton" v-if="this.$route.path ==='/notes'">
+        <img alt="notiz erstellen" class="reset" src="../../assets/addnote.svg" height="50" width="50"
+             v-on:click="openAddNoteModal">
+        <b-modal ref="add-note-modal" id="modal-center-add-note" centered title="Notiz erstellen"
                  ok-variant="success"
-                 ok-title="Problem melden"
-                 @ok="sendProblem"
-                 cancel-title="Abbruch" cancel-variant="danger">
-            <textarea class="problemArea" v-model="problem"
-                      placeholder="Bitte beschreiben Sie das Problem für der Aktuellen Aufgabe">
+                 ok-title="Erstellen"
+                 @ok="addNote"
+                 cancel-title="Abbruch"
+                 cancel-variant="danger"
+                 hide-header-close>
+          <textarea class="problemArea" v-model="note"
+                    placeholder="Notiz schreiben">
             </textarea>
         </b-modal>
       </div>
+      <div title="Kapitel zurücksetzen" v-if="resetChapter" class="resetButton">
+        <div title="Kapitel zurücksetzen" class="reset" v-on:click="openResetModal" v-b-modal.modal-center
+             variant="info">
+          <img title="Kapitel zurücksetzen" alt="Kapitel zurücksetzen" class="resetIcon" src="../../assets/reset.png"
+               v-b-tooltip.hover.lefttop>
+          <b-modal ref="reset-modal" id="modal-center-reset" centered title="Kapitel zurücksetzen"
+                   ok-variant="success"
+                   ok-title="Zurücksetzen"
+                   @ok="resetChapter"
+                   cancel-title="Abbruch"
+                   cancel-variant="danger"
+                   hide-header-close>
+          </b-modal>
+        </div>
+      </div>
+      <div v-if="lesson" class="helperButtons">
+        <div title="Hilfe" class="helpButton" v-on:click="openHelpModal" v-b-modal.modal-center
+             variant="info" v-if="lesson.type !=='information'">
+          <img title="Hilfe" alt="Hilfe" class="helpIcon" src="../../assets/hints.svg" v-b-tooltip.hover.lefttop>
+          <b-modal ref="help-modal" id="modal-center-help" centered title="Hilfe" ok-variant="success"
+                   cancel-title="Schließen"
+                   cancel-variant="danger"
+                   hide-header-close>
+            <help-content class="my-4" :lesson="lesson"></help-content>
+          </b-modal>
+        </div>
+        <div v-if="!user.isDefault" title="Meldung" class="reportButton" v-on:click="openReportModal">
+          <img title="Problem Melden" alt="Hilfe" class="reportIcon" src="../../assets/report.png"
+               v-b-tooltip.hover.lefttop>
+          <b-modal ref="report-modal" id="modal-center-report" centered title="Problem Melden" hide-header-close
+                   ok-variant="success"
+                   ok-title="Problem melden"
+                   @ok="sendProblem"
+                   cancel-title="Abbruch" cancel-variant="danger">
+            <textarea class="problemArea" v-model="problem"
+                      placeholder="Bitte beschreiben Sie das Problem für die aktuelle Aufgabe">
+            </textarea>
+          </b-modal>
+        </div>
+      </div>
     </div>
+    <h1>
+      <span class="doneIcon" v-if="lesson && lesson.type !== 'information' && lesson.done">&#10003;</span>
+      {{ title }}
+    </h1>
   </div>
 </template>
 <script>
 import {backEndUrl} from '@/envVariables'
 import {mapGetters} from "vuex";
 import HelpContent from "@/components/learn/helpContent";
+import utils from "@/shared/utils";
 
 export default {
   name: 'titleHeader',
@@ -60,15 +82,24 @@ export default {
   data: function () {
     return {
       problem: "",
+      note: "",
     }
   }, computed: {
     ...mapGetters([
-      'user'
+      'user',
+      'ltiKey'
     ]),
   },
   methods: {
+    addNote() {
+      utils.saveNote.bind(this)(this.note)
+      this.note = ""
+    },
     openHelpModal() {
       this.$refs['help-modal'].show()
+    },
+    openAddNoteModal() {
+      this.$refs['add-note-modal'].show()
     },
     openResetModal() {
       this.$refs['reset-modal'].show()
@@ -78,7 +109,7 @@ export default {
     },
     sendProblem() {
       if (this.problem !== "" && !this.user.isDefault) {
-        this.$http.post(backEndUrl + "/api/v1/users/problems/problem", {
+        this.$http.post(backEndUrl + "/api/v1/users/problems/problem" + "/?ltik=" + this.ltiKey, {
           problem: this.problem,
           lessonId: this.lesson.lessonId
         }, {
@@ -108,13 +139,17 @@ export default {
 }
 
 .title > h1 {
-  display: inline-block;
   padding: 18px;
 }
 
+.headerButtons {
+  display: inline-block;
+  margin-right: 30px;
+  float: right;
+}
+
 .title {
-  height: 80px;
-  position: relative;
+  min-height: 80px;
   text-align: center;
   background-color: var(--white);
   margin-bottom: 10px;
@@ -123,7 +158,6 @@ export default {
 }
 
 .helperButtons, .resetButton {
-  position: absolute;
   right: 30px;
   height: 80px;
   display: inline-flex;
@@ -140,8 +174,8 @@ export default {
 }
 
 .helpIcon, .resetIcon, .reportIcon {
-  width: 30px;
-  height: 30px;
+  width: 40px;
+  height: 40px;
   margin-left: 3px;
 }
 

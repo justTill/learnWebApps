@@ -3,12 +3,12 @@ extends ../layout
 block content
 
     if unansweredProblems.length !== 0
-        h1(class="headline") Auf neue Probleme Antworten
+        h1(class="headline") Neue Probleme
         div(class="tilesContainer")
             each problem in unansweredProblems
                 div(class="tile problemTile")
                     button(type="button" class="btn btn-primary editChapter" data-toggle="modal" data-target="#answerModal" data-problemlessonname="#{problem.lessonname}" data-problemmessage="#{problem.message}" data-problemid="#{problem.id}" data-problemmoodlename="#{problem.moodlename}" data-problemmoodleid="#{problem.moodleid}") Antworten
-                    span <b> #{problem.moodlename} </b> hat ein Problem beim Aufgabe <b> #{problem.lessonname} </b>
+                    span <b> #{problem.moodlename} </b> hat ein Problem bei Aufgabe <b> #{problem.lessonname} </b>
         div(class="modal fade" id="answerModal" tabindex="-1" role="dialog" aria-hidden="true")
             div(class="modal-dialog modal-dialog-centered" role="document")
                 div(class="modal-content")
@@ -27,6 +27,9 @@ block content
                             span.label(class="input-group-text") Antwort:
                             textarea(class="formAnswerText form-control" name="answer" value="" required)
                             button(class="btn btn-primary saveBt" type="submit") Senden
+                        form(class="problemForm" action="/deleteProblem" method="post")
+                            input(class="deleteProblemProblemId" type="hidden" name="problemId")
+                            button(class="btn btn-danger deleteProblemBt" type="submit") Löschen
         script.
             $('#answerModal').on('show.bs.modal', function (event) {
                 let button = $(event.relatedTarget)
@@ -39,14 +42,15 @@ block content
                 modal.find('.modal-title').text(problemMoodleName + " Antworten")
                 modal.find('.modalProblemId').val(problemId)
                 modal.find('.form-lessonName').text('Aufgabe: ' + problemLessonName)
-                modal.find('.form-message').text('Frage: ' + problemMessage)
+                modal.find('.form-message').text('Problem: ' + problemMessage)
                 modal.find('.modalProblemMoodleId').val(problemMoodleId)
+                modal.find('.deleteProblemProblemId').val(problemId)
             })
     else
         h1(class="headline") Es gibt keine neuen Probleme
 
     if unseenProblems.length !== 0
-        h1(class="headline") Probleme mit ungelesenen Nachrichten
+        h1(class="headline") Probleme mit ungelesenen Antworten
         each unseenProblem in unseenProblems
             div(class="tile problemTile")
                 button(class="btn btn-primary editChapter" type="button" data-toggle="modal" data-target="#problemEditModal"
@@ -56,14 +60,15 @@ block content
                     data-problemmoodlename="#{unseenProblem.moodleName}"
                     data-problemmoodleid="#{unseenProblem.moodleId}"
                     data-problemanswers="#{unseenProblem.answers}"
-                    data-problemnotificationid="#{unseenProblem.notificationId}") Problem bearbeiten
+                    data-markreadvisible="true"
+                    data-problemnotificationid="#{unseenProblem.notificationId}") erneut Antworten
                 span Problem von <b> #{unseenProblem.moodleName} </b> bei der Aufgabe <b> #{unseenProblem.lessonName}</b>
 
     else
         h1(class="headline") Es gibt keine beantworteten Probleme mit ungelesenen Nachrichten
 
     if answeredProblemKeys.length !== 0
-        h1(class="headline") Auf bereits gelesene/beantwortete Probleme Antworten
+        h1(class="headline") Bereits gelesene/beantwortete Probleme
     else
         h1 Es gibt noch keine Antworten auf Probleme die bearbeitet werden können
     each key in answeredProblemKeys
@@ -79,6 +84,7 @@ block content
                         data-problemmoodlename="#{problem.moodleName}"
                         data-problemmoodleid="#{problem.moodleId}"
                         data-problemanswers="#{problem.answers}"
+                        data-markreadvisible="false"
                         data-problemnotificationid="#{problem.notificationId}") Problem bearbeiten
                     span Problem von <b> #{problem.moodleName} </b> bei der Aufgabe <b> #{problem.lessonName}</b>
 
@@ -106,10 +112,10 @@ block content
                             span.label(class="input-group-text") Antwort:
                             textarea(class="form-control formNewAnswer" name="answer" value="" required placeholder="neue Antwort schreiben")
                             br
-                            button(class="btn btn-primary saveBt" type="submit") Speichern
-                        form(class="problemForm" action="/markAsRead" method="post")
+                            button(class="btn btn-primary saveBt" type="submit") Senden
+                        form(class="problemForm" action="/markAsRead" method="post" class="markAsRead")
                             input(class="markAsReadProblemId" type="hidden" name="problemId")
-                            button(class="btn btn-success readBt" type="submit") Als gelesen makieren
+                            button(class="btn btn-success readBt" type="submit") Als gelesen markieren
                         form(class="problemForm" action="/deleteProblem" method="post")
                             input(class="deleteAnswerProblemId" type="hidden" name="problemId")
                             button(class="btn btn-danger deleteProblemBt" type="submit") Löschen
@@ -124,13 +130,15 @@ block content
             let problemMessage = button.data('problemmessage')
             let problemNotificationId = button.data('problemnotificationid')
             let problemAnswers = button.data('problemanswers')
+            let displayMarkAsRead = button.data('markreadvisible')
             let modal = $(this)
+            modal.find('.markAsRead').css('display', displayMarkAsRead ? 'block' : 'none')
             modal.find('.modal-title').text("Antwort an " + problemMoodleName + " bearbeiten")
             modal.find('.editAnswerProblemId').val(problemId)
             modal.find('.editAnswerProblemMoodleId').val(problemMoodleId)
             modal.find('.editAnswerProblemNotificationId').val(problemNotificationId)
             modal.find('.formLessonName').text('Aufgabe: ' + problemLessonName)
-            modal.find('.formProblemText').text('Frage: ' + problemMessage)
+            modal.find('.formProblemText').text('Problem: ' + problemMessage)
             modal.find('.formAnswersText').text(problemAnswers)
             modal.find('.deleteAnswerProblemId').val(problemId)
             modal.find('.markAsReadProblemId').val(problemId)

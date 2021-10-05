@@ -24,7 +24,7 @@ block content
                         span.label(class="input-group-text") Aufgabennummer
                         input(class="form-control" type="number" min=1 name="lessonNumber" required value="#{lesson ? lesson.lessonnumber : 1")
                         br
-                        span.label(class="input-group-text") Informationen
+                        span.label(class="input-group-text") Informationen (HTML)
                         textarea(class="form-control" name="lessonInformation" required) #{lesson ? lesson.information : ''}
                         br
                         button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch

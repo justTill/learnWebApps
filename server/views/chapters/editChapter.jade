@@ -2,7 +2,7 @@ extends ../layout
 
 block content
     h1(class="headline") #{chapter.name}
-    h5(class="headline") Bearbeiten und neue Unterthemen erstellen
+    h5(class="headline") Kapitel bearbeiten und neue Unterthemen erstellen
     div(class="tilesContainer")
         div(class="tile")
             button(type="button" class="btn imgButton" data-toggle="modal" data-target="#editChapter")
@@ -24,7 +24,7 @@ block content
                                 span.label(class="input-group-text") Kapitelname
                                 input(class="form-control" type="text" name="chapterName" required value="#{chapter.name}")
                                 br
-                                span.label(class="input-group-text") Übersichtstext
+                                span.label(class="input-group-text") Übersichtstext (HTML)
                                 textarea(class="form-control" name="overview" required) #{chapter.overview}
                                 br
                                 span.label(class="input-group-text") Kapitelnummer
@@ -37,12 +37,6 @@ block content
                                 br
                         div(class="modal-footer")
                             include ../files
-
-        each section in sections
-            div(class="tile chapterTile")
-                a(type="button" class="btn btn-danger deleteChapter"  href='/deleteSection/#{chapter.id}/#{section.id}') Löschen
-                a(type="button" class="btn btn-primary editChapter" href='/section/#{chapter.id}/#{section.id}') Bearbeiten
-                span #{section.name}
 
         div(class="tile")
             button(type="button" class="btn imgButton" data-toggle="modal" data-target="#createSection")
@@ -62,10 +56,10 @@ block content
                                 span.label(class="input-group-text") Unterthemaname
                                 input(class="form-control" type="text" name="sectionName" required value="#{sectionData ? sectionData.name : ''}")
                                 br
-                                span.label(class="input-group-text") Übersichtstext
+                                span.label(class="input-group-text") Übersichtstext (HTML)
                                 textarea(class="form-control" name="information" required) #{sectionData ? sectionData.information : ''}
                                 br
-                                span.label(class="input-group-text") Unterhema nummer
+                                span.label(class="input-group-text") Unterhemanummer
                                 input(class="form-control" type="number" min=1 name="sectionNumber" required value="#{sectionData ? sectionData.sectionNumber : 1}")
                                 input(type="hidden" name="chapterId" value="#{chapter.id}")
                                 br
@@ -84,3 +78,9 @@ block content
                     $('#editChapter').modal('show');
                 }
             });
+
+        each section in sections
+            div(class="tile chapterTile")
+                a(type="button" class="btn btn-danger deleteChapter"  href='/deleteSection/#{chapter.id}/#{section.id}') Löschen
+                a(type="button" class="btn btn-primary editChapter" href='/section/#{chapter.id}/#{section.id}') Bearbeiten
+                span #{section.name}

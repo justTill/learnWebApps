@@ -16,10 +16,10 @@ block content
                             p #{fillTheBlankError}
                     form(class="modalForm" action="/saveCreateFillTheBlankLesson" method="post")
                         include baseCreateLessonForm
-                        span.label(class="input-group-text") Zu ergänzenden Text mit [input] als lücken
+                        span.label(class="input-group-text") Zu ergänzenden Text mit [input] als Lücken
                         textarea(class="form-control" name="textWithBlanks" required) #{lesson ? lesson.textWithBlanks : ''}
                         br
-                        span.label(class="input-group-text") Mögliche Antworte <br> pro Antwort eine Zeile: <br> mindestens so viele wie es Inputs gibt. <br> richtige antworten mit einem [X] makieren
+                        span.label(class="input-group-text") Mögliche Antworten: <br> Pro Antwort eine Zeile, <br> mindestens so viele wie es Inputs gibt. <br> Richtige Antworten mit einem [X] markieren
                         textarea(class="form-control" name="markedAnswers" required) #{lesson ? lesson.markedanswers : ''}
                         br
                         button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch

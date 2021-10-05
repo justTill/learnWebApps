@@ -300,6 +300,15 @@
                       "nullable": true
                     }
                   }
+                },
+                {
+                  "column": {
+                    "name": "hints",
+                    "type": "text",
+                    "constraints": {
+                      "nullable": true
+                    }
+                  }
                 }
               ]
             }
@@ -785,51 +794,6 @@
               "columnNames": "moodleid, lessonid",
               "constraintName": "solvedlessons_un",
               "tableName": "solvedLessons"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "changeSet": {
-        "id": "2",
-        "author": "till Pilarczyk",
-        "comment": "add Tables for LTI stuff ",
-        "changes": [
-          {
-            "createTable": {
-              "tableName": "ltiregistration",
-              "columns": [
-                {
-                  "column": {
-                    "name": "id",
-                    "type": "int",
-                    "autoIncrement": true,
-                    "constraints": {
-                      "primaryKey": true,
-                      "nullable": false
-                    }
-                  }
-                },
-                {
-                  "column": {
-                    "name": "consumerkey",
-                    "type": "varchar(255)",
-                    "constraints": {
-                      "nullable": false
-                    }
-                  }
-                },
-                {
-                  "column": {
-                    "name": "secretkey",
-                    "type": "varchar(255)",
-                    "constraints": {
-                      "nullable": false
-                    }
-                  }
-                }
-              ]
             }
           }
         ]

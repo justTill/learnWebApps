@@ -1,12 +1,12 @@
 <template>
   <div>
-    <title-header title="Deine Nachrichten"></title-header>
+    <title-header title="Deine gemeldeten Probleme"></title-header>
     <div class="messageContainer">
       <div v-for="(problem, index) in problems">
         <div class="problem hoverEffect"
              @mouseover="onHover(index)"
              @mouseleave="onHoverLeave(index)">
-          <span class="problemLessonName"><b>Aufgabe:</b> {{ problem.LessonName }}</span>
+          <span class="problemLessonName"><b>Aufgabe:</b> {{ problem.lessonName }}</span>
           <span class="problemMessage"><b>Problem:</b> <pre class="problemPre">{{ problem.problemMessage }}</pre></span>
           <div class="deleteProblem" v-if="problemAreaIndex === index" v-on:click="openDeleteProblemModal(problem)">
             <img src="../assets/delete.png" alt="Problem Löschen" title="Löschen" v-b-tooltip.hover.lefttop>
@@ -23,23 +23,17 @@
             <div v-else class="answer">
               Es gibt noch keine Antworten
             </div>
-            <div class="addAnswer" v-on:click="openAnswerOnProblemModal(problem)" v-if="problem.answers.length !== 0">
+            <div v-if="problem.answers.length !== 0">
+              <pre class="problemPre answerTextarea">
+                <textarea v-model="answer" placeholder="Antwort schreiben"></textarea>
+              </pre>
+            </div>
+            <div class="addAnswer" v-on:click="answerOnProblem(problem)" v-if="problem.answers.length !== 0">
               Antworten
             </div>
           </div>
         </div>
       </div>
-      <b-modal ref="answerProblem-modal" id="modal-center-answerProblem" centered title="Antworten"
-               ok-variant="success"
-               @ok="answerOnProblem"
-               cancel-variant="danger"
-               cancel-title="Abbruch"
-               ok-title="Antworten"
-               hide-header-close>
-        <textarea class="answerArea" v-model="answer">
-
-        </textarea>
-      </b-modal>
       <b-modal ref="deleteProblem-modal" id="modal-center-deleteProblem" centered title="Problem Löschen" ok-only
                ok-variant="danger"
                @ok="deleteProblem"
@@ -70,20 +64,27 @@ export default {
   computed: {
     ...mapGetters([
       'problems',
-      'user'
+      'user',
+      'ltiKey'
     ]),
   }, methods: {
-    answerOnProblem() {
+    answerOnProblem(problem) {
+      this.currentProblem = problem
       let payload = {
         problem: this.currentProblem,
         toBeAddedAnswer: this.answer
+      }
+      if (this.answer === "") {
+        let errorMessage = "Es dürfen keine leeren Antworten gesendet werden"
+        this.$store.commit('setErrorMessage', errorMessage)
+        return
       }
       if (!this.user.isDefault) {
         let requestPayload = {
           answer: this.answer,
           problemId: this.currentProblem.problemId
         }
-        this.$http.post(backEndUrl + "/api/v1/users/problems/answer/", requestPayload, {
+        this.$http.post(backEndUrl + "/api/v1/users/problems/answer/" + "?ltik=" + this.ltiKey, requestPayload, {
           withCredentials: true
         }).then(response => {
           this.$store.commit('addAnswerToProblem', payload)
@@ -94,11 +95,6 @@ export default {
       }
       this.answer = ""
     },
-    openAnswerOnProblemModal(problem) {
-      this.answer = ""
-      this.currentProblem = problem
-      this.$refs['answerProblem-modal'].show()
-    },
     onHover(index) {
       this.problemAreaIndex = index
     },
@@ -107,7 +103,7 @@ export default {
     },
     deleteProblem() {
       if (!this.user.isDefault) {
-        this.$http.delete(backEndUrl + "/api/v1/users/problems/" + this.currentProblem.problemId, {
+        this.$http.delete(backEndUrl + "/api/v1/users/problems/" + this.currentProblem.problemId + "?ltik=" + this.ltiKey, {
           withCredentials: true
         }).then(response => {
           this.$store.commit('deleteProblem', this.currentProblem)
@@ -127,6 +123,9 @@ export default {
       this.displayAnswerIndex = index === this.displayAnswerIndex ? -1 : index
     }
   },
+  mounted() {
+    this.$store.commit('setUpdatedProblems', false)
+  }
 }
 </script>
 <style>
@@ -148,9 +147,21 @@ export default {
   border-left: 1px solid var(--davys-grey);
   border-bottom: 1px solid var(--davys-grey);
   margin-left: 30px;
+  background-color: var(--light-gray) !important;
   margin-bottom: 10px !important;
   margin-right: 30px;
   padding-left: 10px;
+}
+
+.answerTextarea {
+  margin-right: 30px;
+  padding-left: 0px;
+  margin-left: 30px;
+}
+
+.answerTextarea > textarea {
+  width: 400px;
+  height: 80px !important;
 }
 
 .problemPre {

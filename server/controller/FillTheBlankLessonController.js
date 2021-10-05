@@ -39,6 +39,7 @@ exports.saveCreateFillTheBlankLesson = async function (req, res, next) {
     let lessonInformation = req.body.lessonInformation
     let textWithBlanks = req.body.textWithBlanks
     let markedAnswers = req.body.markedAnswers
+    let hints = req.body.hints
     let difficultyLevel = req.body.difficultyLevel
     let feedback = req.body.feedback === "" ? null : req.body.feedback
     if (chapterId && sectionId && textWithBlanks && difficultyLevel && lessonName && lessonNumber && lessonInformation && markedAnswers) {
@@ -60,7 +61,7 @@ exports.saveCreateFillTheBlankLesson = async function (req, res, next) {
             data.fillTheBlankError = errorMessage
             res.render('sections/editSection', data)
         } else {
-            await lessonsRepository.insertOrUpdateFillTheBlankLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, textWithBlanks, markedAnswers)
+            await lessonsRepository.insertOrUpdateFillTheBlankLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, textWithBlanks, markedAnswers, hints ? hints : null)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + sectionId)
                 })
@@ -82,6 +83,7 @@ exports.saveEditFillTheBlankLesson = async function (req, res, next) {
     let lessonId = req.body.lessonId
     let lessonName = req.body.lessonName
     let lessonNumber = req.body.lessonNumber
+    let hints = req.body.hints
     let updatedLessonNumber = req.body.updatedLessonNumber
     let lessonInformation = req.body.lessonInformation
     let textWithBlanks = req.body.textWithBlanks
@@ -116,7 +118,7 @@ exports.saveEditFillTheBlankLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            await lessonsRepository.insertOrUpdateFillTheBlankLesson(lessonId, fillTheBlankLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, textWithBlanks, markedAnswers)
+            await lessonsRepository.insertOrUpdateFillTheBlankLesson(lessonId, fillTheBlankLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, textWithBlanks, markedAnswers, hints ? hints : null)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + updatedSectionId)
                 })

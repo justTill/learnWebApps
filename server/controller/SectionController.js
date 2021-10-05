@@ -34,7 +34,7 @@ exports.saveNewSection = async function (req, res, next) {
         let chapter = await chapterRepository.findById(chapterId)
         if (numberOccupied) {
             res.render('chapters/editChapter', {
-                error: "Unterthema Nummer ist schon vergeben, bitte eine andere wählen",
+                error: "Unterthemanummer ist schon vergeben, bitte eine andere wählen",
                 sectionData: {name: name, information: information, sectionNumber: sectionNumber},
                 chapterId: chapterId,
                 chapter: chapter,
@@ -66,7 +66,7 @@ exports.saveEditedSection = async function (req, res, next) {
     if (updatedChapterId && sectionId && name && sectionNumber && currentChapterId && information && updatedSectionNumber) {
         let errorMessage = "";
         let sectionNumberOccupied = currentChapterId !== updatedChapterId ? await isSectionNumberOccupied(updatedSectionNumber, updatedChapterId) : await isSectionNumberOccupied(updatedSectionNumber, currentChapterId);
-        if ((sectionNumberOccupied && sectionNumber !== updatedSectionNumber) || (sectionNumberOccupied && currentChapterId !== updatedChapterId)) errorMessage = "Unterthema Nummer ist schon vergeben, bitte eine andere wählen"
+        if ((sectionNumberOccupied && sectionNumber !== updatedSectionNumber) || (sectionNumberOccupied && currentChapterId !== updatedChapterId)) errorMessage = "Unterthemanummer ist schon vergeben, bitte eine andere wählen"
         if (errorMessage) {
             let data = await getEditSectionData(sectionId, currentChapterId, null)
             data.editSectionErrorMessage = errorMessage

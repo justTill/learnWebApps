@@ -7,7 +7,16 @@
       </pre>
     </div>
     <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
-    <div class="errorMessage" v-if="errorMessage"> {{ errorMessage }}</div>
+    <div class="errorMessage" v-if="errorMessage">
+      {{ errorMessage }}
+      <br>
+      <div class="showHint hoverEffect">
+        <img src="../../../assets/hints.svg" title="Hinweis anzeigen" v-b-tooltip.hover.lefttop
+             v-on:click="openHint">
+      </div>
+    </div>
+    <div class="successMessage" v-if="successMessage"> {{ successMessage }}</div>
+
   </div>
 </template>
 <script>
@@ -19,11 +28,13 @@ export default {
   props: {
     lesson: Object,
     solvedHandler: Function,
+    openHint: Function,
   },
   data: function () {
     return {
       errorMessage: "",
       inputs: [],
+      successMessage: "",
     }
   },
   computed: {
@@ -53,6 +64,11 @@ export default {
     }
   },
   methods: {
+    reset() {
+      this.errorMessage = ""
+      this.inputs = []
+      this.successMessage = ""
+    },
     evaluate() {
       let elements = this.$el.querySelectorAll(".codeInput")
       let allAnswersCorrect = elements.length === this.lesson.answers.length;
@@ -67,8 +83,16 @@ export default {
       })
       if (allAnswersCorrect) {
         this.errorMessage = ""
+        this.successMessage = this.lesson.feedback === null || this.lesson.feedback === '' ? "Du hast die Aufgabe erfolgreich gelöst" : this.lesson.feedback
+        this.inputs = []
       } else {
-        this.errorMessage = "Die Antwort ist leider nicht ganz korrekt"
+        let message = "Die Antwort ist leider nicht ganz korrekt"
+        if (this.errorMessage === message) {
+          this.errorMessage = "Diese Antwort ist leider auch nicht ganz korrekt"
+        } else {
+          this.errorMessage = message
+        }
+        this.successMessage = "";
       }
       this.solvedHandler(this.lesson.lessonId, allAnswersCorrect, null)
     }

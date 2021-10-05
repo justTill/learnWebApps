@@ -2,7 +2,7 @@ version: '3'
 services:
   node-server:
     restart: always
-    image: learnwebappscomposeregistry.azurecr.io/node-server:latest
+    image: justtill/learn_web_apps:backend_latestv1
     build: ./server
     ports:
       - "3080:3080"
@@ -14,18 +14,19 @@ services:
       - DB_NAME=LearnWebappsProd
       - DB_CONTAINER_NAME=learnwebappsdbprod
       - SESSION_KEY=key
-      - FRONTEND_URL=http://learnwebappsapp.westeurope.azurecontainer.io
+      - FRONTEND_URL=http://164.90.211.151
       - SQL_HOST=db
       - SQL_PORT=5432
     depends_on:
       - db
   vue-nginx-client:
-    domainname: "learnwebappsapp"
     restart: always
-    image: learnwebappscomposeregistry.azurecr.io/vue-nginx-client:latest
+    image: justtill/learn_web_apps:frontend_with_nginx_latestv1
     container_name: learnwebappsfrontendprod
+    volumes:
+      - media_volume:/usr/src/app/client/mediafiles
     environment:
-      - BACKENDURL=http://learnwebappsapp.westeurope.azurecontainer.io:3080
+      - BACKENDURL=http://164.90.211.151:3080
     build:
       context: ./client
       dockerfile: Dockerfile-prod
@@ -35,9 +36,14 @@ services:
     restart: always
     image: postgres:11.0-alpine
     container_name: learnwebappsdbprod
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=prodUser
       - POSTGRES_PASSWORD=prodPW
       - POSTGRES_DB=LearnWebappsProd
     ports:
       - 5432:5432
+volumes:
+  postgres_data:
+  media_volume:

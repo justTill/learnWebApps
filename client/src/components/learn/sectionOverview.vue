@@ -2,17 +2,29 @@
   <div class="sectionOverviewContainer">
     <title-header :title="section.sectionName" :lesson="null">
     </title-header>
-    <div class="textContainer">
-      <div class="overviewText" v-html="sanitizedSectionInformation">
+    <div class="overviewArrangement">
+      <div class="navigateToChapterOrSection hoverEffect" v-if="hasPrevSection">
+        <img src="../../assets/skip-prev.svg" width="30px" height="30px" v-b-tooltip.hover.lefttop
+             title="zum vorherigen Unterthema" v-on:click="prevSection">
       </div>
-    </div>
-    <div class="lessons">
-      <lesson-tile class="lesson hoverEffect"
-                   v-for="lesson in lessonsForSelectedDifficultyLevel"
-                   v-on:click.native="gotToLesson(lesson)"
-                   :key="lesson.lessonNumber"
-                   :lesson="lesson">
-      </lesson-tile>
+      <div class="contentOverview">
+        <div class="textContainer">
+          <div class="overviewText" v-html="sanitizedSectionInformation">
+          </div>
+        </div>
+        <div class="lessons">
+          <lesson-tile class="lesson hoverEffect"
+                       v-for="lesson in lessonsForSelectedDifficultyLevel"
+                       v-on:click.native="goToLesson(lesson)"
+                       :key="lesson.lessonNumber"
+                       :lesson="lesson">
+          </lesson-tile>
+        </div>
+      </div>
+      <div class="navigateToChapterOrSection hoverEffect" v-if="hasNextSection">
+        <img src="../../assets/skip-next.svg" width="30px" height="30px" v-b-tooltip.hover.lefttop
+             title="zum nächsten Unterthema" v-on:click="nextSection">
+      </div>
     </div>
   </div>
 </template>
@@ -23,12 +35,15 @@ import LessonTile from "@/components/learn/lessonTile";
 import TitleHeader from "@/components/learn/titleHeader";
 import DOMPurify from "dompurify";
 import {mapGetters} from "vuex";
+import utils from "@/shared/utils";
 
 export default {
   name: 'sectionOverview',
   props: {
     section: Object,
-    gotToLesson: Function
+    goToLesson: Function,
+    goToSection: Function,
+    chapter: Object
   },
   components: {TitleHeader, LessonTile},
   computed: {
@@ -39,10 +54,25 @@ export default {
       return DOMPurify.sanitize(this.section.information)
     },
     lessonsForSelectedDifficultyLevel() {
-      return this.difficultyLevel === "ALL" || this.difficultyLevel === null ? this.section.lessons : this.section.lessons.filter(l => l.type === 'information' || l.difficultyLevel === this.difficultyLevel || l.difficultyLevel === 'ALL')
+      return utils.lessonsForDifficulty.bind(this)(this.section)
     },
+    hasPrevSection() {
+      let index = this.chapter.sections.indexOf(this.section)
+      return this.chapter.sections[index - 1]
+    },
+    hasNextSection() {
+      let index = this.chapter.sections.indexOf(this.section)
+      return this.chapter.sections[index + 1]
+    }
   },
-  methods: {}
+  methods: {
+    nextSection() {
+      this.goToSection(this.chapter.sections[this.chapter.sections.indexOf(this.section) + 1])
+    },
+    prevSection() {
+      this.goToSection(this.chapter.sections[this.chapter.sections.indexOf(this.section) - 1])
+    }
+  }
 }
 </script>
 <style>
@@ -100,7 +130,7 @@ export default {
 
 .overviewText {
   display: block;
-  min-width: 700px;
+  min-width: 550px;
   max-width: 1300px;
   background-color: var(--white);
   border: 1px solid black;

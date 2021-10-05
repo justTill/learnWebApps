@@ -33,6 +33,7 @@ exports.saveCreateCodeExtensionLesson = async function (req, res, next) {
     let lessonNumber = req.body.lessonNumber
     let lessonInformation = req.body.lessonInformation
     let unfinishedCode = req.body.unfinishedCode
+    let hints = req.body.hints
     let answers = req.body.answers
     let difficultyLevel = req.body.difficultyLevel
     let feedback = req.body.feedback === "" ? null : req.body.feedback
@@ -55,7 +56,7 @@ exports.saveCreateCodeExtensionLesson = async function (req, res, next) {
             data.codeExtensionErrorMessages = errorMessage
             res.render('sections/editSection', data)
         } else {
-            lessonsRepository.insertOrUpdateCodeExtensionLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, unfinishedCode, answers)
+            lessonsRepository.insertOrUpdateCodeExtensionLesson(null, null, sectionId, lessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, unfinishedCode, answers, hints ? hints : null)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + sectionId)
                 })
@@ -76,6 +77,7 @@ exports.saveEditCodeExtensionLesson = async function (req, res, next) {
     let lessonId = req.body.lessonId
     let lessonName = req.body.lessonName
     let lessonNumber = req.body.lessonNumber
+    let hints = req.body.hints
     let updatedLessonNumber = req.body.updatedLessonNumber
     let lessonInformation = req.body.lessonInformation
     let unfinishedCode = req.body.unfinishedCode
@@ -110,7 +112,7 @@ exports.saveEditCodeExtensionLesson = async function (req, res, next) {
                 files: files
             })
         } else {
-            await lessonsRepository.insertOrUpdateCodeExtensionLesson(lessonId, codeExtensionLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, unfinishedCode, answers)
+            await lessonsRepository.insertOrUpdateCodeExtensionLesson(lessonId, codeExtensionLessonId, updatedSectionId, updatedLessonNumber, lessonInformation, lessonName, difficultyLevel, feedback, unfinishedCode, answers, hints ? hints : null)
                 .then(result => {
                     res.redirect('/section/' + chapterId + '/' + updatedSectionId)
                 })

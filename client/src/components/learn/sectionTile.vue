@@ -5,17 +5,20 @@
       {{ sectionPreview }}
     </div>
     <div class="percentageBar"
-         v-if="!user.isDefault && percentage.numberOfLessons !== 0 ">
-      <progress :value="percentage.lessonsSolved" :max="percentage.numberOfLessons">
+         v-if="numberOfLessons !== 0 ">
+      <progress :value="lessonsSolved" :max="numberOfLessons">
       </progress>
-      <span> {{ percentage.lessonsSolved }}/{{ percentage.numberOfLessons }}</span>
+      <span> {{ lessonsSolved }}/{{ numberOfLessons }} Aufgaben gelöst</span>
+    </div>
+    <div v-else class="percentageBar">
+      <span style="font-size: small">Es gibt keine Aufgaben in dem Unterthema</span>
     </div>
   </div>
 </template>
-
 <script>
 
 import {mapGetters} from "vuex";
+import utils from "@/shared/utils";
 
 export default {
   name: 'sectionTile',
@@ -28,26 +31,34 @@ export default {
       'user',
       'difficultyLevel'
     ]),
+    numberOfLessons() {
+      return this.percentage().numberOfLessons
+    },
+    lessonsSolved() {
+      return this.percentage().lessonsSolved
+    },
+    sectionPreview: function () {
+      let updatedInformation = this.section.information
+      if (this.section.information.length > 50) {
+        updatedInformation = updatedInformation.substring(0, 50) + " ..."
+      }
+      return updatedInformation
+    },
+  },
+  methods: {
     percentage: function () {
       let numberOfInteractiveLessons = 0
       let numberOfLessonsDone = 0;
-      for (let lesson of this.section.lessons) {
-        if (lesson.type !== 'information' && (this.difficultyLevel === "ALL" || this.difficultyLevel === lesson.difficultyLevel)) {
+      let lessons = utils.lessonsForDifficulty.bind(this)(this.section)
+      for (let lesson of lessons) {
+        if (lesson.type !== 'information') {
           numberOfInteractiveLessons++
           if (lesson.done) numberOfLessonsDone++
         }
       }
       return {numberOfLessons: numberOfInteractiveLessons, lessonsSolved: numberOfLessonsDone}
     },
-    sectionPreview: function () {
-      let updatedInformation = this.section.information
-      if (this.section.information.length > 100) {
-        updatedInformation = updatedInformation.substring(0, 100) + " ..."
-      }
-      return updatedInformation
-    },
-  },
-  methods: {}
+  }
 }
 </script>
 <style>

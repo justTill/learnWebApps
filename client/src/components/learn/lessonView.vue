@@ -1,33 +1,42 @@
 <template>
   <div class="lessonContainer">
-    <title-header :title="lesson.lessonName" :lesson="lesson">
+    <title-header ref="titleHeader" :title="prepareLessonTitle" :lesson="lesson">
     </title-header>
     <div class="lessonTextContainer">
       <div class="lessonText">
         <div v-html="sanitizedLessonText"></div>
         <single-multiple-choice-lesson v-if="lesson.type==='singleMultipleChoiceLesson'"
+                                       ref="smcl"
                                        :lesson="lesson"
+                                       :openHint="openHint"
                                        :solvedHandler="solvedLesson"></single-multiple-choice-lesson>
-        <code-extension-lesson v-if="lesson.type==='codeExtensionLesson'" :lesson="lesson"
+        <code-extension-lesson v-if="lesson.type==='codeExtensionLesson'"
+                               ref="cel"
+                               :lesson="lesson"
+                               :openHint="openHint"
                                :solvedHandler="solvedLesson"></code-extension-lesson>
-      <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'" :lesson="lesson"
-                             :solvedHandler="solvedLesson"></fill-the-blank-lesson>
+        <fill-the-blank-lesson v-if="lesson.type==='fillTheBlankLesson'"
+                               ref="ftbl"
+                               :lesson="lesson"
+                               :openHint="openHint"
+                               :solvedHandler="solvedLesson"></fill-the-blank-lesson>
         <div class="lessonButtons">
-          <div class="prevButton" v-if="previousLesson" v-on:click="goToLesson(previousLesson)"> &#8592; Vorherige
-            Lerneinheit
+          <div class="prevButton"
+               v-on:click="previousLesson?goToLessonHandler(previousLesson): goToLessonOverview(null)"> &#8592;
+            {{ prevLessonText }}
           </div>
-          <div class="prevButton" v-if="!previousLesson" v-on:click="goToLessonOverview(null)"> &#8592; Zur Übersicht
-          </div>
-          <div class="nextButton" v-if="nextLesson" v-on:click="goToLesson(nextLesson)"> Nächste Lerneinheit &#8594;
-          </div>
-          <div class="nextButton" v-if="!nextLesson" v-on:click="goToLessonOverview(null)"> Zur Übersicht &#8594;
+          <div class="nextButton"
+               v-on:click="nextLesson?goToLessonHandler(nextLesson): goToLessonOverview(null)">
+            {{ nextLessonText }} &#8594;
           </div>
         </div>
       </div>
-      <coding-lesson v-if="lesson.type==='codingLesson'" :lesson="lesson" :solvedHandler="solvedLesson"
-                     :theme="codeMirrorTheme"></coding-lesson>
+      <coding-lesson v-if="lesson.type==='codingLesson'"
+                     ref="cl"
+                     :openHint="openHint"
+                     :lesson="lesson" :solvedHandler="solvedLesson"
+                     :theme="codeTheme"></coding-lesson>
     </div>
-    <lesson-solved :feedback="lesson.feedback" v-if="lessonSolved"></lesson-solved>
   </div>
 </template>
 
@@ -40,17 +49,17 @@ import {backEndUrl} from '@/envVariables'
 import {mapGetters} from "vuex";
 import TitleHeader from "@/components/learn/titleHeader";
 import DOMPurify from "dompurify";
-import LessonSolved from "@/components/learn/lessonSolved";
 
 export default {
   name: 'lessonView',
   components: {
-    LessonSolved,
     TitleHeader, FillTheBlankLesson, CodeExtensionLesson, SingleMultipleChoiceLesson, CodingLesson
   },
   props: {
     lesson: Object,
     previousLesson: Object,
+    currentLessonIndex: Number,
+    numberOfLessons: Number,
     nextLesson: Object,
     goToLesson: Function,
     goToLessonOverview: Function,
@@ -58,24 +67,66 @@ export default {
   },
   data: function () {
     return {
-      lessonSolved: false,
     }
   },
   computed: {
+    nextLessonText() {
+      if (this.nextLesson) {
+        if (this.nextLesson.type === "information") {
+          return "Zur nächsten Informationseinheit"
+        }
+        return "Zur nächsten Aufgabe"
+      }
+      return "Zur Übersicht"
+    },
+    prevLessonText() {
+      if (this.previousLesson) {
+        if (this.previousLesson.type === "information") {
+          return "Zur vorherigen Informationseinheit"
+        }
+        return "Zur vorherigen Aufgabe"
+      }
+      return "Zur Übersicht"
+    },
+    prepareLessonTitle() {
+      return this.lesson.lessonName + " (" + (this.currentLessonIndex + 1) + "/" + this.numberOfLessons + ")"
+    },
     sanitizedLessonText: function () {
       return DOMPurify.sanitize(this.lesson.information);
     },
     ...mapGetters([
       'user',
-      'codeMirrorTheme'
+      'ltiKey',
+      'codeTheme'
     ]),
   },
   methods: {
+    resetCurrentLesson(goToLesson) {
+      if (this.lesson.type === 'singleMultipleChoiceLesson') {
+        this.$refs.smcl.reset();
+      } else if (this.lesson.type === 'codeExtensionLesson') {
+        this.$refs.cel.reset();
+      } else if (this.lesson.type === 'fillTheBlankLesson') {
+        if (goToLesson.type === 'fillTheBlankLesson') {
+          this.$refs.ftbl.reset(goToLesson);
+        } else {
+          this.$refs.ftbl.reset();
+        }
+      } else if (this.lesson.type === 'codingLesson') {
+        this.$refs.cl.reset();
+      }
+    },
+    goToLessonHandler(lesson) {
+      this.resetCurrentLesson(lesson);
+      this.goToLesson(lesson)
+    },
+    openHint() {
+      this.$refs.titleHeader.openHelpModal()
+    },
     solvedLesson(lessonId, isSolved, userCode) {
       this.lessonSolvedHandler(lessonId, isSolved, userCode)
-      this.lessonSolved = isSolved
       if (isSolved && !this.user.isDefault) {
-        this.$http.post(backEndUrl + "/api/v1/lessons/lesson/solved", {
+        this.$http.post(backEndUrl + "/api/v1/lessons/lesson/solved" + "/?ltik=" + this.ltiKey, {
           lessonId: lessonId,
           userCode: userCode
         }, {
@@ -104,7 +155,7 @@ export default {
 pre {
   white-space: pre-wrap;
   word-wrap: break-word;
-  background-color: var(--davys-grey-light);
+  background-color: var(--light-gray);
   border-radius: 10px;
   padding-right: 10px;
   padding-left: 10px;
@@ -117,8 +168,10 @@ pre {
 }
 
 .lessonText {
-  display: block;
-  max-width: 600px;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  max-width: 900px;
   background-color: white;
   border: 1px solid black;
   border-radius: 2px;
@@ -145,8 +198,9 @@ pre {
 }
 
 .lessonButtons {
-  display: block;
-  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   height: 50px;
   bottom: 1px;
 }
@@ -154,15 +208,12 @@ pre {
 .nextButton {
   padding: 10px;
   display: inline-block;
-  right: 0px;
   color: var(--dark-green);
-  position: absolute;
 }
 
 .prevButton {
   padding: 10px;
   display: inline-block;
-  position: absolute;
   color: var(--dark-green);
 }
 

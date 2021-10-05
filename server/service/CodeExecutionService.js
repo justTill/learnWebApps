@@ -32,12 +32,18 @@ exports.runTestForCodingLesson = async function (codeLesson, userCode) {
                     }
                 })
         }
+    } else {
+        testResults.errors.push(["Could not run Code for security reasons"])
     }
     return testResults
 }
 
 function codeContainsForbiddenContent(code) {
-    return !code.includes('require') && !code.includes('exec')
+    return !code.includes('require')
+        && !code.includes('exec')
+        && !code.includes('import')
+        && !code.includes('process')
+        && !code.includes('process.env')
 }
 
 async function runTextExecutionWorker(worker) {

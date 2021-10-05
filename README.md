@@ -14,21 +14,13 @@ Node Server (with Express)
 Vue application
 
 ## Build and run locally
-create an env file in root directory
-
-``` touch .env```
-
-add environment variable that is needed
- 
-``` echo DB_CONTAINER_NAME=XXXX> .env```
- 
-to start docker setup run following command
+to build and start docker run following command
 
 ``` docker-compose up --build ```
 
 To create an admin fun following command and follow instructions on screen
 
- ```docker-compose exec node-server node createAdmin.js  ```
+ ```docker-compose exec backend node createAdmin.js  ```
  
 Our frontend can be accessed via: http://localhost:8080
 
@@ -42,7 +34,7 @@ Take down old volume
 ``` docker-compose down -v```
 
 create an env file in root directory ``` touch .env.prod```
-following Variables need to be defined: DB_CONTAINER_NAME SQL_USER SQL_PW DATABASE_NAME
+following Variables need to be defined: DB_CONTAINER_NAME SQL_USER SQL_PW DATABASE_NAME SESSION_KEY FRONTEND_URL BACKEND_URL
 
 Build Images
 
@@ -54,7 +46,7 @@ Backend is accessible via http://localhost:3080
 
 To create an admin fun following command and follow instructions on screen
 
- ```docker-compose -f docker-compose-prod.yml exec node-server node createAdmin.js  ```
+ ```docker-compose -f docker-compose-prod.yml exec backend node createAdmin.js  ```
 ## Licences
 To be determined
 

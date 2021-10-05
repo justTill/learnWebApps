@@ -7,19 +7,23 @@
       <div class="closeNavigationButton" v-on:click="openOrCloseChapterNavigation">&#10005;</div>
       <nav-button :onClickFunction="() => changeChapterAndSectionOnNavigationClick(null,null)"
                   class="navigationButton"
-                  :name="'Home'">
+                  :name="'Home'"
+                  ref="homeBtn">
       </nav-button>
       <div v-for="chapter in chapters" :key="chapter.chapterId">
         <nav-button class="navigationButton"
                     :onClickFunction="() => changeChapterAndSectionOnNavigationClick(chapter,null)"
-                    :name="chapter.chapterName">
+                    :name="chapter.chapterName"
+                    :ref="'chapter-'+chapter.chapterId"
+                    :chapter="chapter">
         </nav-button>
         <nav-button class="navigationSectionButton"
                     :onClickFunction="() => changeChapterAndSectionOnNavigationClick(chapter,section)"
                     :name="section.sectionName"
                     v-if="selectedChapter && selectedChapter.chapterId === chapter.chapterId"
                     v-for="section in chapter.sections"
-                    :ref="'section-'+section.sectionId ">
+                    :ref="'section-'+section.sectionId"
+                    :section="section">
         </nav-button>
       </div>
     </div>
@@ -27,26 +31,32 @@
     <chapter-overview class="chapterContent"
                       v-if="selectedChapter && !selectedSection && !selectedLesson"
                       :chapter="selectedChapter"
-                      :go-to-section="goToSection"
+                      :goToSection="goToSection"
+                      :goToChapter="goToChapter"
                       :resetChapter="resetChapterLessons">
     </chapter-overview>
 
     <section-overview class="chapterContent"
                       v-else-if="selectedSection && !selectedLesson"
                       :section="selectedSection"
-                      :gotToLesson="goToLesson">
+                      :chapter="selectedChapter"
+                      :goToSection="goToSection"
+                      :goToLesson="goToLesson">
     </section-overview>
     <lesson-view class="chapterContent"
                  v-else-if="selectedLesson"
                  :lesson="selectedLesson"
                  :previousLesson="previousLesson"
+                 :currentLessonIndex="currentLessonIndex"
+                 :numberOfLessons="numberOfLessons"
                  :nextLesson="nextLesson"
                  :goToLesson="goToLesson"
                  :goToLessonOverview="goToSection"
                  :lessonSolvedHandler="lessonSolvedHandlerForCurrentChapter">
 
     </lesson-view>
-    <home v-else class="chapterContent" :resetAllLessons="resetLessonsSolved"></home>
+    <home v-else class="chapterContent" :resetAllLessons="resetLessonsSolved"
+          :go-to-first-chapter="goToChapter"></home>
     <div v-else class="chapterContent">
     </div>
   </div>
@@ -61,6 +71,7 @@ import NavButton from "@/components/utils/navButton";
 import LessonView from "@/components/learn/lessonView";
 import {backEndUrl} from "@/envVariables";
 import TitleHeader from "@/components/learn/titleHeader";
+import utils from "@/shared/utils";
 
 export default {
   name: 'learn',
@@ -71,11 +82,11 @@ export default {
       selectedSection: null,
       selectedLesson: null,
       previousLesson: null,
+      currentLessonIndex: null,
+      numberOfLessons: null,
       nextLesson: null,
       selectedText: "",
       showNote: false,
-      difficultyLevel: "ALL",
-      codeMirrorMode: "DARK"
     }
   },
   computed: {
@@ -83,53 +94,39 @@ export default {
       'chapters',
       'user',
       'notes',
-      'codeMirrorTheme'
+      'ltiKey',
+      'difficultyLevel'
     ]),
     showSaveNote() {
       return this.showNote
     }
   },
   mounted() {
+    this.$refs.homeBtn.isActive = true
     document.addEventListener('mouseup', event => {
       this.$el.querySelector('#createNotes').style.display = "none";
-      if (window.getSelection().toString() !== '' && this.$route.path.includes('learn')) {
-        let classNames = window.getSelection().anchorNode.parentElement.className
-        if (!classNames.includes('CodeMirror')) {
-          let element = this.$el.querySelector('#createNotes')
-          element.style.display = "inline-block";
-          element.style.left = event.pageX + "px"
-          element.style.top = event.pageY - 100 + "px"
-          this.selectedText = window.getSelection().toString();
-        }
+      let isHomePage = this.selectedSection === null && this.selectedChapter === null && this.selectedLesson === null
+      let isCodeArea = false
+      if (window.getSelection().anchorNode) {
+        isCodeArea = window.getSelection().anchorNode.id === 'codeEditorArea'
+      }
+      if (window.getSelection().toString() !== '' && this.$route.path.includes('') && !this.user.isDefault && !isHomePage && !isCodeArea) {
+        let element = this.$el.querySelector('#createNotes')
+        element.style.display = "inline-block";
+        element.style.left = event.pageX + "px"
+        element.style.top = event.pageY - 100 + "px"
+        this.selectedText = window.getSelection().toString();
       }
     })
   },
   methods: {
-    changeDifficultyLevel() {
-      this.$store.commit('setDifficultyLevel', this.difficultyLevel)
-    },
-    changeCodeMirrorTheme() {
-      this.$store.commit('setCodeMirrorTheme', this.codeMirrorMode)
-    },
     saveMarkedTextAsNotes() {
-      let note = {
-        notesId: -1,
-        note: this.selectedText
-      }
-      if (!this.user.isDefault) {
-        this.$http.post(backEndUrl + "/api/v1/users/notes/note/", {note: this.selectedText}, {
-          withCredentials: true
-        }).then(res => {
-          note.notesId = res.data.id
-          this.$store.commit('addNotes', note)
-        }).catch(err => {
-          let errorMessage = "Es ist ein unerwarteter Fehler aufgetreten. Die Notiz konnte leider nicht dauerhaft sondern nur temporär gespeichert werden, bitte versuchen Sie es später erneut"
-          this.$store.commit('setErrorMessage', errorMessage)
-          this.$store.commit('addNotes', note)
-        })
-      } else {
-        this.$store.commit('addNotes', note)
-      }
+      let prefix = this.selectedChapter ?
+          this.selectedChapter.chapterName + ": "
+          : this.selectedSection ?
+              this.selectedSection.sectionName + ": "
+              : this.selectedSection.sectionName + ": "
+      utils.saveNote.bind(this)(prefix + this.selectedText)
       this.showNote = true
       setTimeout(() => {
         this.showNote = false
@@ -166,6 +163,13 @@ export default {
         this.$refs['chapterNavigation'].style.display = 'none'
       }
     },
+    goToChapter(chapter) {
+      if (!chapter) {
+        chapter = this.chapters[0]
+      }
+      this.changeChapterAndSectionOnNavigationClick(chapter, null)
+      this.$refs['chapter-' + chapter.chapterId][0].isActive = true;
+    },
     goToSection(section) {
       if (section === null) {
         section = this.selectedSection
@@ -176,9 +180,11 @@ export default {
     goToLesson(updatedLesson) {
       this.previousLesson = null;
       this.nextLesson = null;
-      let currentLessonIndex = this.selectedSection.lessons.indexOf(updatedLesson)
-      this.nextLesson = this.selectedSection.lessons[currentLessonIndex + 1]
-      this.previousLesson = this.selectedSection.lessons[currentLessonIndex - 1]
+      let filteredLessons = utils.lessonsForDifficulty.bind(this)(this.selectedSection)
+      this.numberOfLessons = filteredLessons.length
+      this.currentLessonIndex = filteredLessons.indexOf(updatedLesson)
+      this.nextLesson = filteredLessons[this.currentLessonIndex + 1]
+      this.previousLesson = filteredLessons[this.currentLessonIndex - 1]
       this.selectedLesson = updatedLesson
     },
     lessonSolvedHandlerForCurrentChapter(lessonId, solved, userCode) {
@@ -210,7 +216,7 @@ export default {
     },
     resetLessonsSolved() {
       if (!this.user.isDefault) {
-        this.$http.delete(backEndUrl + "/api/v1/lessons/lesson/solved/", {
+        this.$http.delete(backEndUrl + "/api/v1/lessons/lesson/solved/" + "?ltik=" + this.ltiKey, {
           withCredentials: true
         }).then(response => {
           return
@@ -234,7 +240,7 @@ export default {
     },
     resetChapterLessons() {
       if (!this.user.isDefault) {
-        this.$http.delete(backEndUrl + "/api/v1/lessons/lesson/solved/" + this.selectedChapter.chapterId + "/", {
+        this.$http.delete(backEndUrl + "/api/v1/lessons/lesson/solved/" + this.selectedChapter.chapterId + "/" + "?ltik=" + this.ltiKey, {
           withCredentials: true
         }).then(response => {
           return
@@ -317,7 +323,7 @@ export default {
 }
 
 .navigationSectionButton {
-  margin-left: 10px;
+  margin-left: 20px;
   font-size: medium;
 }
 

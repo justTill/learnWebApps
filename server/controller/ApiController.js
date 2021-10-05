@@ -3,8 +3,7 @@ var sectionRepository = require("../persistence/SectionRepository")
 var userRepository = require("../persistence/UserRepository")
 var lessonRepository = require("../persistence/LessonRepository")
 var codeExecutionService = require("../service/CodeExecutionService")
-var ltiController = require("../controller/LTIController")
-var lti = require("ims-lti")
+const lti = require('ltijs').Provider
 
 const LessonTypes = Object.freeze({
     INFORMATION: "information",
@@ -14,22 +13,33 @@ const LessonTypes = Object.freeze({
     SINGLEMULTIPLECHOICE: "singleMultipleChoiceLesson"
 })
 exports.getProblemsWithAnswers = async function (req, res, next) {
-    let moodleId = req.session.userId
-    let moodleName = req.session.userName
     let data = {problems: []}
-    if (moodleId && moodleName) {
-        let problemsWithAnswers = await userRepository.findProblemsAndAnswersByUser(moodleId, moodleName)
+    if (res.locals && res.locals.token && res.locals.token.user && res.locals.token.userInfo.name) {
+        let userId = res.locals.token.user;
+        let userName = res.locals.token.userInfo.name;
+        let problemsWithAnswers = await userRepository.findProblemsAndAnswersByUser(userId, userName)
         data.problems = mapToOutputProblem(problemsWithAnswers)
     }
     res.send(data)
 }
+exports.healthCheck = function (req, res, next) {
+    let body = {valid: false}
+    if (res.locals && res.locals.token && res.locals.token.user && res.locals.token.userInfo.name) {
+        let userName = res.locals.token.userInfo.name;
+        body.userName = userName
+        body.valid = true
+    }
+    res.send(body)
+}
 exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
     let data = {chapters: []}
     let moodleId = null
-    if (req.session.userId && req.session.userName) {
-        let user = await userRepository.findUserByMoodleIdAndMoodleName(req.session.userId, req.session.userName)
+    if (res.locals && res.locals.token && res.locals.token.user && res.locals.token.userInfo.name) {
+        let userId = res.locals.token.user;
+        let userName = res.locals.token.userInfo.name;
+        let user = await userRepository.findUserByMoodleIdAndMoodleName(userId, userName)
         if (user.length !== 0) {
-            moodleId = req.session.userId
+            moodleId = userId
         }
     }
     let chapters = await chapterRepository.findAll()
@@ -41,17 +51,17 @@ exports.getChapterDataWithSectionsAndLessons = async function (req, res, next) {
 }
 
 exports.saveSolvedLesson = async function (req, res, next) {
-    let lessonId = parseInt(req.body.lessonId)
-    let moodleId = req.session.userId
-    let moodleName = req.session.userName
+    let lessonId = req.body.lessonId
     let code = req.body.userCode
-    if (lessonId && moodleId && moodleName) {
-        let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+    if (lessonId && res.locals && res.locals.token && res.locals.token.user && res.locals.token.userInfo.name) {
+        let userId = res.locals.token.user;
+        let userName = res.locals.token.userInfo.name;
+        let user = await userRepository.findUserByMoodleIdAndMoodleName(userId, userName)
         if (user.length !== 0) {
-            userRepository.insertOrUpdateSolvedLessonOnConflict(lessonId, moodleId, code ? code : null)
+            userRepository.insertOrUpdateSolvedLessonOnConflict(lessonId, userId, code ? code : null)
                 .then(result => {
-                    calculatePercentageOfLessonsSolvedForUser(moodleId)
-                        .then(result => ltiController.updateGrade(req, result))
+                    updateGradeForUser(req, res, userId)
+                        .then(result => console.log(result))
                         .catch(err => console.log(err))
                     res.status(201).send({message: "Saved"})
                 })
@@ -66,10 +76,14 @@ exports.saveSolvedLesson = async function (req, res, next) {
     }
 }
 exports.deleteSolvedLessons = async function (req, res, next) {
-    let moodleId = req.session.userId
-    let moodleName = req.session.userName
-    let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
-    if (user.length !== 0) {
+    let user = []
+    let moodleId = null
+    if (res.locals && res.locals.token && res.locals.token.user && res.locals.token.userInfo.name) {
+        moodleId = res.locals.token.user;
+        let moodleName = res.locals.token.userInfo.name;
+        user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
+    }
+    if (user.length !== 0 && moodleId !== null) {
         if (!req.params.chapterId) {
             userRepository.deleteSolvedByMoodleId(moodleId)
                 .then(result => res.status(204).send({message: "deleted"})
@@ -112,9 +126,9 @@ exports.testCodingLesson = async function (req, res, next) {
 }
 exports.saveNotes = async function (req, res, next) {
     let note = req.body.note
-    if (note && req.session.userId && req.session.userName) {
-        let moodleId = req.session.userId
-        let moodleName = req.session.userName
+    if (note && res.locals && res.locals.token && res.locals.token.user && res.locals.token.userInfo.name) {
+        let moodleId = res.locals.token.user;
+        let moodleName = res.locals.token.userInfo.name;
         userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
             .then(result => {
                 if (result.length !== 0) {
@@ -145,19 +159,19 @@ exports.saveNotes = async function (req, res, next) {
 }
 exports.getNotes = async function (req, res, next) {
     let notes = []
-    let moodleId = req.session.userId
-    let moodleName = req.session.userName
-    if (moodleId && moodleName) {
+    if (res.locals && res.locals.token && res.locals.token.user && res.locals.token.userInfo.name) {
+        let moodleId = res.locals.token.user;
+        let moodleName = res.locals.token.userInfo.name;
         notes = await userRepository.findNotesByUser(moodleId, moodleName)
     }
     res.status(200).send({notes: mapToOutputNotes(notes)})
 }
 
 exports.deleteNote = async function (req, res, next) {
-    let moodleId = req.session.userId
-    let moodleName = req.session.userName
     let noteId = req.params.noteId
-    if (moodleId && moodleName && noteId) {
+    if (noteId && res.locals && res.locals.token && res.locals.token.user && res.locals.token.userInfo.name) {
+        let moodleId = res.locals.token.user;
+        let moodleName = res.locals.token.userInfo.name;
         userRepository.deleteNoteForUser(moodleId, moodleName, noteId).then(result => {
             res.status(204).send({message: "deleted"})
         }).catch(err => res.status(500).send({message: "unknown error try again later"}))
@@ -166,11 +180,11 @@ exports.deleteNote = async function (req, res, next) {
     }
 }
 exports.saveProblem = async function (req, res, next) {
-    let moodleId = req.session.userId
-    let moodleName = req.session.userName
     let lessonId = req.body.lessonId
     let problem = req.body.problem
-    if (moodleId && moodleName && problem && lessonId) {
+    if (problem && lessonId && res.locals && res.locals.token && res.locals.token.user && res.locals.token.userInfo.name) {
+        let moodleId = res.locals.token.user;
+        let moodleName = res.locals.token.userInfo.name;
         let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
         let lesson = await lessonRepository.findById(lessonId)
         if (user.length !== 0 && lesson.length !== 0) {
@@ -190,10 +204,10 @@ exports.saveProblem = async function (req, res, next) {
 }
 exports.saveAnswerForProblem = async function (req, res, next) {
     let problemId = req.body.problemId
-    let moodleId = req.session.userId
-    let moodleName = req.session.userName
     let answer = req.body.answer
-    if (problemId && moodleId && moodleName && answer) {
+    if (problemId && answer && res.locals && res.locals.token && res.locals.token.user && res.locals.token.userInfo.name) {
+        let moodleId = res.locals.token.user;
+        let moodleName = res.locals.token.userInfo.name;
         let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
         if (user.length !== 0) {
             userRepository.insertAnswerForProblemAndUser(problemId, moodleId, answer)
@@ -213,9 +227,9 @@ exports.saveAnswerForProblem = async function (req, res, next) {
 
 exports.deleteProblem = async function (req, res, next) {
     let problemId = req.params.problemId
-    let moodleId = req.session.userId
-    let moodleName = req.session.userName
-    if (problemId && moodleId && moodleName) {
+    if (problemId && res.locals && res.locals.token && res.locals.token.user && res.locals.token.userInfo.name) {
+        let moodleId = res.locals.token.user;
+        let moodleName = res.locals.token.userInfo.name;
         let user = await userRepository.findUserByMoodleIdAndMoodleName(moodleId, moodleName)
         if (user.length !== 0) {
             userRepository.deleteProblemById(problemId)
@@ -308,6 +322,7 @@ function mapDefaultLesson(lesson) {
         difficultyLevel: lesson.difficultylevel,
         feedback: lesson.feedback,
         done: false,
+        hints: lesson.hints
     }
 }
 
@@ -408,6 +423,7 @@ function mapToOutputProblem(problemsWithAnswers) {
                 problemMessage: problem.message,
                 answers: problem.answer ? [problem.answer] : [],
                 lessonId: problem.lessonid,
+                lessonName: problem.name,
                 createdAt: problem.createdat,
                 sender: problem.sender,
             })
@@ -438,4 +454,48 @@ async function calculatePercentageOfLessonsSolvedForUser(moodleId) {
         }
     }
     return numberOfSolvedLessons / numberOfSolvableLessons
+}
+async function updateGradeForUser(req, res, userId) {
+    let normedGrade = await calculatePercentageOfLessonsSolvedForUser(userId)
+    let shouldUpdateScore = true;
+    const idToken = res.locals.token
+    const gradeObj = {
+        userId: idToken.user,
+        scoreGiven: normedGrade * 100,
+        scoreMaximum: 100,
+        activityProgress: 'Completed',
+        gradingProgress: 'FullyGraded'
+    }
+    let lineItemId = idToken.platformContext.endpoint.lineitem // Attempting to retrieve it from idToken
+    if (!lineItemId) {
+        const response = await lti.Grade.getLineItems(idToken, {resourceLinkId: true})
+        const lineItems = response.lineItems
+        if (lineItems.length === 0) {
+            // Creating line item if there is none
+            console.log('Creating new line item')
+            const newLineItem = {
+                scoreMaximum: 100,
+                label: 'Grade',
+                tag: 'grade',
+                resourceLinkId: idToken.platformContext.resource.id
+            }
+            const lineItem = await lti.Grade.createLineItem(idToken, newLineItem)
+            lineItemId = lineItem.id
+        } else {
+            lineItemId = lineItems[0].id
+        }
+    }
+    const gradeResponse = await lti.Grade.getScores(idToken, lineItemId, {userId: idToken.user})
+    if (gradeResponse && gradeResponse.scores.length !== 0) {
+        for (let score of gradeResponse.scores) {
+            if (score.scoreOf === lineItemId) {
+                shouldUpdateScore = score.resultScore < normedGrade * 100;
+            }
+        }
+    }
+    if (!shouldUpdateScore) {
+        return {message: "current score is higher than to be updated score. No grading will take place"}
+    }
+    const responseGrade = await lti.Grade.submitScore(idToken, lineItemId, gradeObj)
+    return responseGrade
 }

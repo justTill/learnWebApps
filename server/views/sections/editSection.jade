@@ -2,7 +2,7 @@ extends ../layout
 
 block content
     h1(class="headline") #{section.name}
-    h5(class="headline") Bearbeiten und neue Aufgaben erstellen
+    h5(class="headline") Unterthema bearbeiten und neue Aufgaben erstellen
     div(class="tilesContainer")
         div(class="tile")
             button(type="button" class="btn imgButton" data-toggle="modal" data-target="#editSection")
@@ -21,13 +21,13 @@ block content
                             if editSectionErrorMessage
                                 p #{editSectionErrorMessage}
                         form(class="modalForm" action="/saveEditedSection" method="post")
-                            span.label(class="input-group-text") Name
+                            span.label(class="input-group-text") Unterthemaname
                             input(class="form-control" type="text" name="sectionName" required value="#{section.name}")
                             br
-                            span.label(class="input-group-text") Informationen
+                            span.label(class="input-group-text") Übersichtstext (HTML)
                             textarea(class="form-control" name="information" required) #{section.information }
                             br
-                            span.label(class="input-group-text") Unterhema nummer
+                            span.label(class="input-group-text") Unterhemanummer
                             input(class="form-control" type="number" min=1 name="updatedSectionNumber" required value="#{section.sectionnumber}")
                             input(type="hidden" name="sectionNumber" value="#{section.sectionnumber}")
                             br
@@ -59,7 +59,7 @@ block content
         div(class="tile iconTile")
             include ../../public/images/code-icon.svg
             br
-            span Code&nbsp;Aufgaben
+            span Codeaufgaben
         div(class="tile")
             include ../lessons/createCodingLesson
         each codeLesson in codingLessons
@@ -71,7 +71,7 @@ block content
         div(class="tile iconTile")
             include ../../public/images/code-extension-icon.svg
             br
-            span Code&nbsp;Ergänzungs&nbsp;Aufgaben
+            span Codeergänzungsaufgaben
         div(class="tile")
             include ../lessons/createCodeExtensionLesson
         each codeExtensionLesson in codeExtensionLessons
@@ -84,7 +84,7 @@ block content
         div(class="tile iconTile")
             include ../../public/images/fill-the-blank-icon.svg
             br
-            span Lückentext&nbsp;Aufagben
+            span Lückentextaufgaben
         div(class="tile")
             include ../lessons/createFillTheBlankLesson
         each fillTheBlankLesson in fillTheBlankLessons
@@ -97,7 +97,7 @@ block content
         div(class="tile iconTile")
             include ../../public/images/s-c-m-icon.svg
             br
-            span Single-Multiple-Choice&nbsp;Aufgaben
+            span Single-Multiple-Choiceaufgaben
         div(class="tile")
             include ../lessons/createSingleMultipleChoiceLesson
         each singleMultipleChoiceLesson in singleMultipleChoiceLessons

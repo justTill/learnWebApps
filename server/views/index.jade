@@ -2,7 +2,7 @@ extends layout
 
 block content
     if !isLoggedIn
-        form(action="/login" method="post")
+        form(action="/loginAdmin" method="post")
             div.input
                 span.label Username
                 br
@@ -14,46 +14,44 @@ block content
             div.actions
                 input(type="submit" value="Log In")
     else
-
         h1(class="headline") Informationen
         div(class="overview")
             div(class="tile informationTile")
                 a(type="button" class="btn createButton" href="manual" target="_blank")
                     include ../public/images/manual.svg
                     br
-                    span Anleitung Ansehen
-            div(class="tile informationTile")
-                h5 Hinweise für das Einpflegen von Lerninhalten
+                    span Anleitung ansehen
+        h1(class="headline") Hinweise für das Einpflegen von Lerninhalten
         div(class="overview")
             div(class="tile informationTile")
-                span Lerneinheiten sollten kurz, aufeinander aufbauend und in ihrer Schwierigkeit steigend sein.
+                span Lerneinheiten sollten kurz, aufeinander aufbauend und in ihrem Schwierigkeitsgrad steigend sein.
 
             div(class="tile informationTile")
-                span Den Lernenden muss bewusst gemacht werden, warum er diese Lerninhalte lernen soll und was von ihm erwartet wird.
+                span Den Lernenden muss bewusst gemacht werden, warum sie diese Lerninhalte lernen sollen und was von ihnen erwartet wird.
 
             div(class="tile informationTile")
-                span Bei Codeaufgaben soll beschrieben werden was genau überprüft wird.
+                span Bei Codeaufgaben soll genau beschrieben werden, was überprüft wird.
 
             div(class="tile informationTile")
-                span Variationen in den Lerneinheiten kann durch eine andere Formulierung erreicht werden. Es kann z.B. beschrieben werden, dass man XY für eine Firma programmieren soll.
+                span Variationen in den Lerneinheiten können durch verschiedene Formulierungen erreicht werden.
 
             div(class="tile informationTile")
-                span Variation kann ebenfalls durch das Weglassen von Erklärungen/Hinweisen erreicht werden, da die Studierenden so mit Problemen konfrontiert werden und die Lerninhalte selbst erforschen werden können.
+                span Variationen können auch durch das Weglassen von Erklärungen/Hinweisen erreicht werden. Die Studierenden werden so mit Problemen konfrontiert und können die Lerninhalte erforschen.
 
             div(class="tile informationTile")
-                span Rückmeldungen sollen positiv motivierend formuliert werden.
+                span Rückmeldungen sollen positiv und motivierend formuliert werden.
 
             div(class="tile informationTile")
-                span Lerneinheiten sollen in der ersten oder zweiten Person geschrieben..
+                span Lerneinheiten sollen in der ersten oder zweiten Person geschrieben werden.
 
             div(class="tile informationTile")
-                span In den Lerneinheiten sollen Metaphern, Analogien und Begriffe, die die Studierenden kennen verwenden.
+                span In den Lerneinheiten sollen Metaphern, Analogien und Begriffe, die den Studierenden bekannt sind, verwendet werden.
 
             div(class="tile informationTile")
                 span Ein wenig Humor kann auch in den Lerninhalten verwendet werden.
 
             div(class="tile informationTile")
-                span Falls es bestimmte Voraussetzungen zum Lösen einer Aufgabe gibt oder spezielles Wissen benötigt wird, sollen diese dem Studierenden vorher genannt werden.
+                span Falls es bestimmte Voraussetzungen zum Lösen einer Aufgabe gibt oder spezielles Wissen benötigt wird, soll dies vorher erwähnt werden.
 
             div(class="tile informationTile")
                 span Lerninhalte können durch unerwartete Inhalte, widersprüchliche Aussagen, Grafiken, Bilder und GIFs spannender gestaltet werden.

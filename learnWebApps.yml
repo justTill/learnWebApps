@@ -1,0 +1,49 @@
+version: '3'
+services:
+  backend:
+    restart: always
+    image: # I need a Name
+    ports:
+      - "3080:3080"
+    container_name: learnWebAppsBackend
+    volumes:
+      - ./server:/usr/src/app/server
+      - /usr/src/app/server/node_modules
+      - media_volume:/usr/src/app/server/mediafiles
+    environment:
+      - DATABASE=postgres
+      - DB_USER=${SQL_USER}
+      - DB_PASSWORD=${SQL_PW}
+      - DB_NAME=${DATABASE_NAME}
+      - DB_CONTAINER_NAME=${DB_CONTAINER_NAME}
+      - SESSION_KEY=${SESSION_KEY}
+      - SQL_HOST=db
+      - FRONTEND_URL=${FRONTEND_URL}
+      - SQL_PORT=5432
+    depends_on:
+      - db
+  frontend:
+    restart: always
+    image: # I need a Name
+    container_name: learnWebAppsFrontend
+    volumes:
+      - media_volume:/usr/src/app/client/mediafiles
+    environment:
+      - BACKENDURL=${BACKEND_URL}
+    ports:
+      - '80:80'
+  db:
+    restart: always
+    image: postgres:11.0-alpine
+    container_name: ${DB_CONTAINER_NAME}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=${SQL_USER}
+      - POSTGRES_PASSWORD=${SQL_PW}
+      - POSTGRES_DB=${DATABASE_NAME}
+    ports:
+      - 5432:5432
+volumes:
+  postgres_data:
+  media_volume:
