@@ -48,7 +48,7 @@ ltis.setup(process.env.SESSION_KEY, // Key used to sign cookies and tokens
         dynReg: {
             url: process.env.FRONTEND_URL + ':3080', // Tool Provider URL. Required field.
             name: 'Learn Web-Apps', // Tool Provider name. Required field.
-            description: 'Tool Description', // Tool Provider description.
+            description: 'An Interactive Learningapp for Students of the Module Web-Apps', // Tool Provider description.
             redirectUris: [], // Additional redirection URLs. The main URL is added by default.
             customParameters: {}, // Custom parameters.
             autoActivate: true // Whether or not dynamically registered Platforms should be automatically activated. Defaults to false.
