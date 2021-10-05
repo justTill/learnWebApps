@@ -11,8 +11,8 @@ then
     echo "PostgreSQL started"
 fi
 node liquibase.js
-npm run dev-nodemon
-#npm run start:prod
+#npm run dev-nodemon
+npm run start:prod
 #yarn node-liquibase --changeLogFile="./changelog.json" --url="jdbc:postgresql://localhost:5432/learnWebApps" --username="webAdmin" --password="defaultPasswort" --classpath=postgresql-42.2.20.jar update
 
 exec "$@"
