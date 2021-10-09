@@ -61,32 +61,28 @@ block content
                     data-problemmoodleid="#{unseenProblem.moodleId}"
                     data-problemanswers="#{unseenProblem.answers}"
                     data-markreadvisible="true"
-                    data-problemnotificationid="#{unseenProblem.notificationId}") erneut Antworten
-                span Problem von <b> #{unseenProblem.moodleName} </b> bei der Aufgabe <b> #{unseenProblem.lessonName}</b>
+                    data-problemnotificationid="#{unseenProblem.notificationId}") Erneut Antworten
+                span Problem von <b> #{unseenProblem.moodleName} </b> bei der Aufgabe: <b> #{unseenProblem.lessonName}</b>
 
     else
         h1(class="headline") Es gibt keine beantworteten Probleme mit ungelesenen Nachrichten
 
-    if answeredProblemKeys.length !== 0
+    if seenProblems.length !== 0
         h1(class="headline") Bereits gelesene/beantwortete Probleme
+        each problem in seenProblems
+            div(class="tile problemTile")
+                button(class="btn btn-primary editChapter" type="button" data-toggle="modal" data-target="#problemEditModal"
+                    data-problemlessonname="#{problem.lessonName}"
+                    data-problemmessage="#{problem.message}"
+                    data-problemid="#{problem.problemId}"
+                    data-problemmoodlename="#{problem.moodleName}"
+                    data-problemmoodleid="#{problem.moodleId}"
+                    data-problemanswers="#{problem.answers}"
+                    data-markreadvisible="false"
+                    data-problemnotificationid="#{problem.notificationId}") Problem bearbeiten
+                span Problem von <b> #{problem.moodleName} </b> bei der Aufgabe: <b> #{problem.lessonName}</b>
     else
         h1 Es gibt noch keine Antworten auf Probleme die bearbeitet werden können
-    each key in answeredProblemKeys
-        div(class="tilesContainer")
-            div(class="tile problemTile")
-                span(style="margin-top: 40px") Vom <b>#{key}</b>
-            each problem in answeredProblems.get(key)
-                div(class="tile problemTile")
-                    button(class="btn btn-primary editChapter" type="button" data-toggle="modal" data-target="#problemEditModal"
-                        data-problemlessonname="#{problem.lessonName}"
-                        data-problemmessage="#{problem.message}"
-                        data-problemid="#{problem.problemId}"
-                        data-problemmoodlename="#{problem.moodleName}"
-                        data-problemmoodleid="#{problem.moodleId}"
-                        data-problemanswers="#{problem.answers}"
-                        data-markreadvisible="false"
-                        data-problemnotificationid="#{problem.notificationId}") Problem bearbeiten
-                    span Problem von <b> #{problem.moodleName} </b> bei der Aufgabe <b> #{problem.lessonName}</b>
 
     div
         div(class="modal fade" id="problemEditModal" tabindex="-1" role="dialog" aria-hidden="true")
@@ -139,7 +135,7 @@ block content
             modal.find('.editAnswerProblemNotificationId').val(problemNotificationId)
             modal.find('.formLessonName').text('Aufgabe: ' + problemLessonName)
             modal.find('.formProblemText').text('Problem: ' + problemMessage)
-            modal.find('.formAnswersText').text(problemAnswers)
+            modal.find('.formAnswersText').text(problemAnswers.replaceAll(',', ''))
             modal.find('.deleteAnswerProblemId').val(problemId)
             modal.find('.markAsReadProblemId').val(problemId)
         })

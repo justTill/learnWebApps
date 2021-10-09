@@ -90,24 +90,10 @@ exports.showUserNotifications = async function (req, res, next) {
     let unansweredProblems = await userRepository.findUnansweredProblem()
     let answeredProblems = await userRepository.findAnsweredProblems()
     let mappedAnsweredProblems = mapAnsweredProblems(answeredProblems)
-    let answeredProblemsKey = []
-    let mappedProblems = new Map()
-    let unseenProblems = mappedAnsweredProblems.filter(p => !p.seen)
-    let seenProblems = mappedAnsweredProblems.filter(p => p.seen)
-    for (let problem of seenProblems) {
-        let dateString = new Date(problem.createdAt).toISOString().split('T')[0]
-        if (mappedProblems.has(dateString)) {
-            mappedProblems.get(dateString).push(problem)
-        } else {
-            answeredProblemsKey.push(dateString)
-            mappedProblems.set(dateString, [problem])
-        }
-    }
     res.render('users/notifications', {
-        answeredProblemKeys: answeredProblemsKey,
-        answeredProblems: mappedProblems,
         unansweredProblems: unansweredProblems,
-        unseenProblems: unseenProblems
+        seenProblems: mappedAnsweredProblems.filter(p => p.seen),
+        unseenProblems: mappedAnsweredProblems.filter(p => !p.seen)
     })
 }
 
