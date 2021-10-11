@@ -4,17 +4,11 @@
                   resetText="Alle Fortschritt zurücksetzen ?"></title-header>
     <div class="explanation homeSection hoverEffect">
       <h1> Web-Apps lernen</h1>
-      Mit dieser Anwendung kannst du die Konzepte, die dir in der Vorlesung "Web-Apps" vorgestellt wurden vertiefen und
-      üben.
-      <br>
-      <br>
-      Die Konzepte bilden die Grundlage zur Umsetzung komplexer, clientseitiger Logik für Web-Apps. Daher ist es
-      wichtig,
-      diese zu verstehen und anwenden zu können.
-      <br>
-      <br>
-      Die Anwendung kannst du außerdem gut für die Klausur- und Praktikumsvorbereitung nutzen. Denn hier werden neben
-      angeboteten Übungen wichtige Inhalte nochmal erläutern.
+      Mit dieser Anwendung kannst du die Konzepte, die dir in der Vorlesung "Web-Apps" vorgestellt wurden, vertiefen und
+      üben. Die Konzepte bilden die Grundlage zur Umsetzung komplexer, clientseitiger Logik für Web-Apps. Daher ist es
+      wichtig, diese zu verstehen und anwenden zu können. Die Anwendung kannst du außerdem gut für die Klausur- und
+      Praktikumsvorbereitung nutzen. Denn hier werden neben
+      angebotenen Übungen wichtige Inhalte nochmal erläutert.
       <br>
       <br>
       <div class="instructionBlock">
@@ -23,32 +17,37 @@
     </div>
     <div class="settings homeSection hoverEffect">
       <h1> Benutzung</h1>
-      Ihr könnt verschiedene Kapitel bearbeiten (links in der Navigationsleiste zu sehen).
+      Du kannst verschiedene Kapitel bearbeiten (links in der Navigationsleiste zu sehen).
       <br>
       Jedes Kapitel besitzt verschiedene Unterthemen, die wiederum verschiedene Informationseinheiten
       (<img src="../../assets/info.png" style="padding-bottom: 5px">)
       sowie Aufgaben (<img src="../../assets/lessons.png" style="padding-bottom: 5px">) beinhalten.
       <br>
       Ist in der Navigationsleiste ein (<span style="color: var(--dark-green)">&#x2713;</span>) zu sehen, bedeutet dies,
-      dass du alle Aufgaben in dem Kapitel / Unterthemen gelöst hast.
+      dass du alle Aufgaben in dem Kapitel / Unterthema gelöst hast.
+      <br>
+      Der Pfeil (&#8592;) zeigt dir an, in welchem Kapitel / Unterthema du dich gerade befindest.
       <br>
       Wenn du in der Kapitel- oder Unterthemenansicht bist, kannst du mit den Buttons
       (
       <img src="../../assets/skip-prev.svg" style="padding-bottom: 5px"> /
       <img src="../../assets/skip-next.svg" style="padding-bottom: 5px">
       )
-      zum vorherigen oder nächsten Kapitel/Unterthema springen.
+      zum vorherigen oder nächsten Kapitel / Unterthema springen.
       <br>
       <br>
       <b>Aufgaben</b>
       <br>
       Es gibt vier verschiedene Arten von Aufgaben.
       <ul>
-        <li><b>Single-Multiple-Choice-Aufgaben</b></li>
-        <li><b>Code Aufgaben:</b> Hier kannst du mehere Zeilen Code schreiben, der auch ausgeführt und anhand von Tests
+        <li><b>Single- und Multiple-Choice-Aufgaben:</b> Wähle die richtige bzw. richtigen Lösungen aus den vorgebenen
+          Antworten aus.
+
+        </li>
+        <li><b>Code Aufgaben:</b> Hier kannst du mehrere Zeilen Code schreiben, der auch ausgeführt und anhand von Tests
           überprüft wird.
           <ul>
-            <li> Das Textfeld in dem du deinen Code schreibst, soll im Darkmode sein? Hier kannst du es ändern.</li>
+            <li> Das Textfeld, in dem du deinen Code schreibst, soll im Darkmode sein? Hier kannst du es ändern.</li>
           </ul>
         </li>
         <div class="selectCodeTheme">
@@ -81,18 +80,19 @@
       <br>
       Du möchtest Inhalte als Notizen speichern? Dann kannst du innerhalb eines Kapitels, eines Unterthemas, einer
       Aufgabe oder einer Informationseinheit den gewünschten Text markieren und auf das "Notiz erstellen" Pop-up
-      klicken.
+      klicken. Die Notizen kannst du dir über den Reiter "Meine Notizen" in der horizontalen Navigationsleite anschauen.
       <br>
       <br>
       <b>Probleme & Hilfe</b>
       <br>
       Falls du Hilfe bei einer Aufgabe brauchst, kannst du auf das Icon
       (<img title="Hilfe" alt="Hilfe" src="../../assets/hints.svg" height="24px" width="24px"
-            style="padding-bottom: 4px">) klicken.
+            style="padding-bottom: 4px">) klicken, um dir Hinweise anzeigen zu lassen.
       <br>
-      Falls Aufgaben nicht funtkionieren oder es andere Probleme gibt, kannst du dies dem Dozenten melden
+      Falls Aufgaben nicht funktionieren oder es andere Probleme gibt, kannst du dies dem Dozenten melden
       (<img title="Hilfe" alt="Hilfe" src="../../assets/report.png" height="24px" width="24px"
-            style="padding-bottom: 4px">).
+            style="padding-bottom: 4px">). Deine gemeldeten Probleme und Antworten kannst du dir über den Reiter
+      "Gemeldete Probleme" anschauen.
       <br>
       <br>
       <b>Fortschritt</b>
