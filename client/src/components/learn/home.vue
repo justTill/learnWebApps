@@ -67,13 +67,13 @@
       </ul>
       <b>Schwierigkeitsgrad</b>
       <br>
-      Du willst nur schwere oder leichte Aufgaben? Dann stelle hier den Schwierigkeitsgrad ein!
+      Du willst nur schwierige oder einfache Aufgaben? Dann stelle hier den Schwierigkeitsgrad ein!
       <div class="selectDifficulty">
         <select v-model="levelOfDifficulty">
           <option value="ALL" selected>Alle</option>
-          <option value="EASY">Leicht</option>
+          <option value="EASY">Einfach</option>
           <option value="MIDDLE">Mittel</option>
-          <option value="HARD">Schwer</option>
+          <option value="HARD">Schwierig</option>
         </select>
       </div>
       <b>Notizen</b>

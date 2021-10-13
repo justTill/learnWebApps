@@ -7,7 +7,7 @@
              @change="removeErrormessage($event)">
       <label class="smcAnswer" :for="'option-'+index" v-html="sanitizedAnswers(option.possibleAnswer)"></label>
     </div>
-    <div class="checkLesson" v-on:click="evaluate">Aufgabe Überprüfen</div>
+    <div class="checkLesson" v-on:click="evaluate">Aufgabe überprüfen</div>
     <div class="errorMessage" v-if="errorMessage">
       {{ errorMessage }}
       <br>
@@ -80,12 +80,12 @@ export default {
       }
       if (isCorrect) {
         this.errorMessage = "";
-        this.successMessage = this.lesson.feedback === null || this.lesson.feedback === '' ? "Du hast die Aufgabe erfolgreich gelöst" : this.lesson.feedback
+        this.successMessage = this.lesson.feedback === null || this.lesson.feedback === '' ? "Du hast die Aufgabe erfolgreich gelöst." : this.lesson.feedback
       } else {
         this.successMessage = ""
-        let message = "Die Antwort ist leider nicht ganz korrekt"
+        let message = "Die Antwort ist leider nicht ganz korrekt."
         if (this.errorMessage === message) {
-          this.errorMessage = "Diese Antwort ist leider auch nicht ganz korrekt"
+          this.errorMessage = "Diese Antwort ist leider auch nicht ganz korrekt."
         } else {
           this.errorMessage = message
         }

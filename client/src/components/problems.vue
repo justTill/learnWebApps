@@ -1,6 +1,6 @@
 <template>
   <div>
-    <title-header title="Deine gemeldeten Probleme"></title-header>
+    <title-header :title="titleText"></title-header>
     <div class="messageContainer">
       <div v-for="(problem, index) in problems">
         <div class="problem hoverEffect"
@@ -67,6 +67,13 @@ export default {
       'user',
       'ltiKey'
     ]),
+    titleText() {
+      if (this.user.isDefault) {
+        return "Deine Notizen"
+      } else {
+        return this.user.userName + "'s gemeldete Problem"
+      }
+    },
   }, methods: {
     answerOnProblem(problem) {
       this.currentProblem = problem

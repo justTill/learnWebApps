@@ -7,7 +7,7 @@ block content
         div(class="modal-dialog modal-dialog-centered" role="document")
             div(class="modal-content")
                 div(class="modal-header")
-                    h5(class="modal-title") Code Ergänzungsaufagbe erstellen
+                    h5(class="modal-title") Codeergänzungsaufagbe erstellen
                     button(type="button" class="close" data-dismiss="modal" aria-label="Close")
                         span(aria-hidden="true") &times;
                 div(class="modal-body")
@@ -16,10 +16,10 @@ block content
                             p #{codeExtensionErrorMessages}
                     form(class="modalForm" action="/saveCreateCodeExtensionLesson" method="post")
                         include ./baseCreateLessonForm
-                        span.label(class="input-group-text") Zu ergänzenden Code mit [input] als Lücken (HTML)
+                        span.label(class="input-group-text") Zu ergänzender Code mit [input] als Lücken. (HTML)
                         textarea(class="form-control" name="unfinishedCode" required) #{lesson ? lesson.unfinishedcode : ''}
                         br
-                        span.label(class="input-group-text") Antworten <br> (Pro Input eine Zeile. In richtiger Reihenfolge)
+                        span.label(class="input-group-text") Pro Input eine Zeile in entsprechender Reihenfolge.
                         textarea(class="form-control" name="answers" required) #{lesson ? lesson.answers : ''}
                         br
                         button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch

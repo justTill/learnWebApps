@@ -1,16 +1,16 @@
 extends ../layout
 
 block content
-    h1(class="headline") Code extension Aufgabe bearbeiten
+    h1(class="headline") Codeergänzungsaufgabe bearbeiten
     div(class="editLessonTileContainer")
         div(class="editLessonTile")
             form(class="modalForm" action="/saveEditCodeExtensionLesson" method="post")
                 include ../formError
                 include baseEditLessonForm
-                span.label(class="input-group-text") Zu ergänzenden Code <br> [input] = zu füllende Lücke (HTML)
+                span.label(class="input-group-text") Zu ergänzender Code mit [input] als Lücken. (HTML)
                 textarea(class="form-control" name="unfinishedCode" required) #{lesson.unfinishedcode}
                 br
-                span.label(class="input-group-text") Antworten <br> 1x [Input] = 1 Zeile <br> Die Reihenfolge ist wichtig
+                span.label(class="input-group-text") Pro Input eine Zeile in entsprechender Reihenfolge.
                 textarea(class="form-control" name="answers" required) #{lesson.answers}
                 br
                 button(class="btn btn-primary saveBt" type="submit") Speichern

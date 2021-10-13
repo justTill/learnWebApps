@@ -7,7 +7,7 @@ block content
         div(class="modal-dialog modal-dialog-centered" role="document")
             div(class="modal-content")
                 div(class="modal-header")
-                    h5(class="modal-title") Lückentext Aufgabe erstellen
+                    h5(class="modal-title") Lückentextaufgabe erstellen
                     button(type="button" class="close" data-dismiss="modal" aria-label="Close")
                         span(aria-hidden="true") &times;
                 div(class="modal-body")
@@ -16,10 +16,10 @@ block content
                             p #{fillTheBlankError}
                     form(class="modalForm" action="/saveCreateFillTheBlankLesson" method="post")
                         include baseCreateLessonForm
-                        span.label(class="input-group-text") Zu ergänzenden Text mit [input] als Lücken
+                        span.label(class="input-group-text") Zu ergänzender Text mit [input] als Lücken
                         textarea(class="form-control" name="textWithBlanks" required) #{lesson ? lesson.textWithBlanks : ''}
                         br
-                        span.label(class="input-group-text") Mögliche Antworten: <br> Pro Antwort eine Zeile, <br> mindestens so viele wie es Inputs gibt. <br> Richtige Antworten mit einem [X] markieren
+                        span.label(class="input-group-text") Mögliche Antworten: <br> Pro Antwort eine Zeile. <br> Mindestens so viele Antworten wie Inputs. <br> Richtige Antworten mit einem [X] markieren.
                         textarea(class="form-control" name="markedAnswers" required) #{lesson ? lesson.markedanswers : ''}
                         br
                         button(type="button" class="btn btn-danger" data-dismiss="modal") Abbruch

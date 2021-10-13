@@ -7,7 +7,7 @@
             height="360">
 
     </editor>
-    <button class="checkLesson" v-on:click="evaluate" :disabled="isLoadingResults">Aufgabe Überprüfen
+    <button class="checkLesson" v-on:click="evaluate" :disabled="isLoadingResults">Aufgabe überprüfen
       <div class="loader" v-if="isLoadingResults"></div>
     </button>
     <div class="errorMessage" v-for="error in errorMessages" :key="error">
@@ -98,7 +98,7 @@ export default {
               let isCorrect = testErrors.length === 0;
               this.errorMessages = testErrors
               if (isCorrect) {
-                this.successMessage = this.lesson.feedback === null || this.lesson.feedback === '' ? "Du hast die Aufgabe erfolgreich gelöst" : this.lesson.feedback
+                this.successMessage = this.lesson.feedback === null || this.lesson.feedback === '' ? "Du hast die Aufgabe erfolgreich gelöst." : this.lesson.feedback
               }
               this.isLoadingResults = false
               this.solvedHandler(this.lesson.lessonId, isCorrect, this.userCode)

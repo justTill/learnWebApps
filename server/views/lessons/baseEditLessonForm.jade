@@ -23,7 +23,7 @@ select(class="form-select" name="difficultyLevel" required)
     option(value="ALL" selected=lesson && lesson.difficultylevel == 'ALL') Alle
     option(value="EASY" selected=lesson.difficultylevel == 'EASY') Einfach
     option(value="MIDDLE" selected=lesson.difficultylevel == 'MIDDLE') Mittel
-    option(value="HARD" selected=lesson.difficultylevel == 'HARD') Schwer
+    option(value="HARD" selected=lesson.difficultylevel == 'HARD') Schwierig
 br
 span.label(class="input-group-text") Hinweise / Tipps
 textarea(class="form-control" name="hints") #{lesson ? lesson.hints : ''}
