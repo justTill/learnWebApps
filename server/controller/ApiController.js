@@ -416,7 +416,7 @@ function mapToOutputProblem(problemsWithAnswers) {
     let mapped = new Map()
     for (let problem of problemsWithAnswers) {
         if (mapped.has(problem.id)) {
-            mapped.get(problem.id).answers.push(problem.answer)
+            mapped.get(problem.id).answers.unshift(problem.answer)
         } else {
             mapped.set(problem.id, {
                 problemId: problem.id,
