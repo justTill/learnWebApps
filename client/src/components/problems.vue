@@ -71,7 +71,7 @@ export default {
       if (this.user.isDefault) {
         return "Deine Notizen"
       } else {
-        return this.user.userName + "'s gemeldete Problem"
+        return this.user.userName + "'s gemeldete Probleme"
       }
     },
   }, methods: {

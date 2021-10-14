@@ -9,7 +9,7 @@
         {{ note.note }}
         <div class="changeNoteArea" v-if="changeAreaIndex === index">
           <div class="changeNoteButton" v-on:click="showChangeNoteModal(note)">
-            <img src="../assets/edit.png" alt="Notiz Bearbeiten" title="Bearbeiten" v-b-tooltip.hover.lefttop>
+            <img src="../assets/edit.png" alt="Notiz bearbeiten" title="Bearbeiten" v-b-tooltip.hover.lefttop>
           </div>
           <div class="changeNoteButton deleteNote" v-on:click="deleteNote(note)">
             <img src="../assets/delete.png" alt="Notiz Löschen" title="Löschen" v-b-tooltip.hover.lefttop>

@@ -7,7 +7,7 @@ block content
             form(class="modalForm" action="/saveEditSingleMultipleChoiceLesson" method="post")
                 include ../formError
                 include baseEditLessonForm
-                span.label(class="input-group-text") Mögliche Antworten <br> Richtige Lösungen mit [X] markieren
+                span.label(class="input-group-text") Mögliche Antworten <br> Richtige Lösungen mit [X] markieren.
                 textarea(class="form-control" name="markedoptions" required) #{lesson.markedoptions}
                 br
                 button(class="btn btn-primary saveBt" type="submit") Speichern

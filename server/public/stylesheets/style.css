@@ -60,6 +60,10 @@ a {
   text-align: center;
 }
 
+.modalForm > pre {
+  white-space: pre-wrap;
+}
+
 .saveBt {
   float: right;
 }
